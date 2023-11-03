@@ -10,6 +10,10 @@ import Logo from '../Logo'
 const getTokenLogoURL = (address: string) =>
   `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
 
+const getTokenLogoURL2 = (currency: any) => {
+  return currency?.tokenInfo?.logoURI || ''
+}
+
 const StyledEthereumLogo = styled.img<{ size: string }>`
   width: ${({ size }) => size};
   height: ${({ size }) => size};
@@ -38,10 +42,10 @@ export default function CurrencyLogo({
 
     if (currency instanceof Token) {
       if (currency instanceof WrappedTokenInfo) {
-        return [...uriLocations, getTokenLogoURL(currency.address)]
+        return [...uriLocations, getTokenLogoURL2(currency)]
       }
 
-      return [getTokenLogoURL(currency.address)]
+      return [getTokenLogoURL2(currency)]
     }
     return []
   }, [currency, uriLocations])

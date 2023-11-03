@@ -39,7 +39,7 @@ async function fetchChunk(
     throw error
   }
   if (resultsBlockNumber.toNumber() < minBlockNumber) {
-    console.debug(`Fetched results for old block number: ${resultsBlockNumber.toString()} vs. ${minBlockNumber}`)
+    // console.debug(`Fetched results for old block number: ${resultsBlockNumber.toString()} vs. ${minBlockNumber}`)
     throw new RetryableError('Fetched for old block number')
   }
   return { results: returnData, blockNumber: resultsBlockNumber.toNumber() }

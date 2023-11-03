@@ -19,7 +19,7 @@
       "symbol": "Label1",
       "decimals": 18,
       "chainId": 11155111,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d/logo.png"
+      "logoURI": "/images/tokens/label1.png"
     },
     {
       "name": "Label2 Token",
@@ -27,7 +27,7 @@
       "symbol": "Label2",
       "decimals": 18,
       "chainId": 11155111,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x737F98AC8cA59f2C68aD658E3C3d8C8963E40a4c/logo.png"
+      "logoURI": "/images/tokens/label2.png"
     },
     {
       "name": "Label3 Token",
@@ -35,7 +35,7 @@
       "symbol": "Label3",
       "decimals": 18,
       "chainId": 11155111,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xD46bA6D942050d489DBd938a2C909A5d5039A161/logo.png"
+      "logoURI": "/images/tokens/label3.png"
     }
 
     

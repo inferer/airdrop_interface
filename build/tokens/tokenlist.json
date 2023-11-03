@@ -1,0 +1,43 @@
+{
+  "name": "Uniswap Default List",
+  "timestamp": "2020-08-25T15:41:29.665Z",
+  "version": {
+    "major": 1,
+    "minor": 3,
+    "patch": 1
+  },
+  "tags": {},
+  "logoURI": "ipfs://QmNa8mQkrNKp1WEEeGjFezDmDeodkWRevGFN8JCV7b4Xir",
+  "keywords": [
+    "uniswap",
+    "default"
+  ],
+  "tokens": [
+    {
+      "name": "Label1 Token",
+      "address": "0x0dF1896b3204FBc0C495e5D18711ca263bB02258",
+      "symbol": "Label1",
+      "decimals": 18,
+      "chainId": 11155111,
+      "logoURI": "/images/tokens/label1.png"
+    },
+    {
+      "name": "Label2 Token",
+      "address": "0xF33Cc0500Be7B46f27CAC68edDcF45f446F80463",
+      "symbol": "Label2",
+      "decimals": 18,
+      "chainId": 11155111,
+      "logoURI": "/images/tokens/label2.png"
+    },
+    {
+      "name": "Label3 Token",
+      "address": "0xB117aca5A178708a9f3F77b8A670E1f0945B9937",
+      "symbol": "Label3",
+      "decimals": 18,
+      "chainId": 11155111,
+      "logoURI": "/images/tokens/label3.png"
+    }
+
+    
+  ]
+}
