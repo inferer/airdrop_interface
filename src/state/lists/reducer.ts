@@ -38,20 +38,18 @@ const initialState: ListsState = {
     }, {}),
     [DEFAULT_TOKEN_LIST_URL]: {
       error: null,
-      current: UNISWAP_DEFAULT_LIST,
+      current: null,
       loadingRequestId: null,
       pendingUpdate: null
     }
   },
-  selectedListUrl: undefined
+  selectedListUrl: DEFAULT_TOKEN_LIST_URL
 }
 
 export default createReducer(initialState, builder =>
   builder
     .addCase(fetchTokenList.pending, (state, { payload: { requestId, url } }) => {
       state.byUrl[url] = {
-        current: null,
-        pendingUpdate: null,
         ...state.byUrl[url],
         loadingRequestId: requestId,
         error: null
