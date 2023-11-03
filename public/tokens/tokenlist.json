@@ -14,53 +14,30 @@
   ],
   "tokens": [
     {
-      "name": "0xBitcoin Token",
-      "address": "0xB6eD7644C69416d67B522e20bC294A9a9B405B31",
-      "symbol": "0xBTC",
-      "decimals": 8,
-      "chainId": 1,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xB6eD7644C69416d67B522e20bC294A9a9B405B31/logo.png"
-    },
-    {
-      "name": "Aave Interest bearing DAI",
-      "address": "0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d",
-      "symbol": "aDAI",
+      "name": "Label1 Token",
+      "address": "0x0dF1896b3204FBc0C495e5D18711ca263bB02258",
+      "symbol": "Label1",
       "decimals": 18,
-      "chainId": 1,
+      "chainId": 11155111,
       "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xfC1E690f61EFd961294b3e1Ce3313fBD8aa4f85d/logo.png"
     },
     {
-      "name": "Amon",
-      "address": "0x737F98AC8cA59f2C68aD658E3C3d8C8963E40a4c",
-      "symbol": "AMN",
+      "name": "Label2 Token",
+      "address": "0xF33Cc0500Be7B46f27CAC68edDcF45f446F80463",
+      "symbol": "Label2",
       "decimals": 18,
-      "chainId": 1,
+      "chainId": 11155111,
       "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x737F98AC8cA59f2C68aD658E3C3d8C8963E40a4c/logo.png"
     },
     {
-      "name": "Ampleforth",
-      "address": "0xD46bA6D942050d489DBd938a2C909A5d5039A161",
-      "symbol": "AMPL",
-      "decimals": 9,
-      "chainId": 1,
+      "name": "Label3 Token",
+      "address": "0xB117aca5A178708a9f3F77b8A670E1f0945B9937",
+      "symbol": "Label3",
+      "decimals": 18,
+      "chainId": 11155111,
       "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xD46bA6D942050d489DBd938a2C909A5d5039A161/logo.png"
-    },
-    {
-      "name": "Aragon Network Juror",
-      "address": "0xcD62b1C403fa761BAadFC74C525ce2B51780b184",
-      "symbol": "ANJ",
-      "decimals": 18,
-      "chainId": 1,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xcD62b1C403fa761BAadFC74C525ce2B51780b184/logo.png"
-    },
-    {
-      "name": "Aragon Network Token",
-      "address": "0x960b236A07cf122663c4303350609A66A7B288C0",
-      "symbol": "ANT",
-      "decimals": 18,
-      "chainId": 1,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x960b236A07cf122663c4303350609A66A7B288C0/logo.png"
     }
+
     
   ]
 }
