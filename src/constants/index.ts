@@ -17,6 +17,10 @@ export const COMP = new Token(ChainId.MAINNET, '0xc00e94Cb662C3520282E6f57172140
 export const MKR = new Token(ChainId.MAINNET, '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2', 18, 'MKR', 'Maker')
 export const AMPL = new Token(ChainId.MAINNET, '0xD46bA6D942050d489DBd938a2C909A5d5039A161', 9, 'AMPL', 'Ampleforth')
 
+export const DAI_SEPOLIA = new Token(ChainId.SEPOLIA, '0xe34E39198F506BAb9142F88A1B8e6abfa2f280C7', 18, 'DAI', 'Dai Stablecoin')
+export const USDC_SEPOLIA = new Token(ChainId.SEPOLIA, '0xBba569f958E6D47D5B174Db9c4969d01d2b25b4e', 6, 'USDC', 'USD//C')
+export const USDT_SEPOLIA = new Token(ChainId.SEPOLIA, '0x374334f239F312CEB160FF3c49C5978d4bd4be4d', 6, 'USDT', 'Tether USD')
+
 const WETH_ONLY: ChainTokenList = {
   [ChainId.MAINNET]: [WETH[ChainId.MAINNET]],
   [ChainId.SEPOLIA]: [WETH[ChainId.SEPOLIA]],
@@ -25,7 +29,8 @@ const WETH_ONLY: ChainTokenList = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT, COMP, MKR]
+  [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT, COMP, MKR],
+  [ChainId.SEPOLIA]: [...WETH_ONLY[ChainId.SEPOLIA], DAI_SEPOLIA, USDC_SEPOLIA, USDT_SEPOLIA],
 }
 
 /**
@@ -41,13 +46,15 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
 // used for display in the default list when adding liquidity
 export const SUGGESTED_BASES: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT]
+  [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT],
+  [ChainId.SEPOLIA]: [...WETH_ONLY[ChainId.SEPOLIA], DAI_SEPOLIA, USDC_SEPOLIA, USDT_SEPOLIA],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT]
+  [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT],
+  [ChainId.SEPOLIA]: [...WETH_ONLY[ChainId.SEPOLIA], DAI_SEPOLIA, USDC_SEPOLIA, USDT_SEPOLIA],
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
@@ -58,6 +65,10 @@ export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } 
     ],
     [USDC, USDT],
     [DAI, USDT]
+  ],
+  [ChainId.SEPOLIA]: [
+    [USDC_SEPOLIA, USDT_SEPOLIA],
+    [DAI_SEPOLIA, USDT_SEPOLIA]
   ]
 }
 

@@ -11,7 +11,8 @@ const getTokenLogoURL = (address: string) =>
   `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
 
 const getTokenLogoURL2 = (currency: any) => {
-  return currency?.tokenInfo?.logoURI || ''
+  if (currency.symbol === 'WETH') return EthereumLogo
+  return `/images/tokens/${currency.symbol.toLocaleString()}.png`
 }
 
 const StyledEthereumLogo = styled.img<{ size: string }>`
