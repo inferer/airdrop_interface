@@ -38,25 +38,25 @@
       "logoURI": "/images/tokens/usdt.png"
     },
     {
-      "name": "Label1 Token",
-      "address": "0x0dF1896b3204FBc0C495e5D18711ca263bB02258",
-      "symbol": "Label1",
+      "name": "Infer Gambling",
+      "address": "0x89e50581ca3633c0a9080eb193Ea949Ccc07E245",
+      "symbol": "Gambling",
       "decimals": 18,
       "chainId": 11155111,
       "logoURI": "/images/tokens/label1.png"
     },
     {
-      "name": "Label2 Token",
-      "address": "0xF33Cc0500Be7B46f27CAC68edDcF45f446F80463",
-      "symbol": "Label2",
+      "name": "Infer Activity",
+      "address": "0x91f4f010B2e72e76ab7C4780D61e69D42BbE8Baf",
+      "symbol": "Activity",
       "decimals": 18,
       "chainId": 11155111,
       "logoURI": "/images/tokens/label2.png"
     },
     {
-      "name": "Label3 Token",
-      "address": "0xB117aca5A178708a9f3F77b8A670E1f0945B9937",
-      "symbol": "Label3",
+      "name": "Infer Social",
+      "address": "0x5101687A756f00A5F08a6aEA64b07B0ee0c408c5",
+      "symbol": "Social",
       "decimals": 18,
       "chainId": 11155111,
       "logoURI": "/images/tokens/label3.png"
