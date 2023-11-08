@@ -14,6 +14,30 @@
   ],
   "tokens": [
     {
+      "name": "Dai Stablecoin",
+      "address": "0xe34E39198F506BAb9142F88A1B8e6abfa2f280C7",
+      "symbol": "DAI",
+      "decimals": 18,
+      "chainId": 11155111,
+      "logoURI": "/images/tokens/dai.png"
+    },
+    {
+      "name": "USD//C",
+      "address": "0xBba569f958E6D47D5B174Db9c4969d01d2b25b4e",
+      "symbol": "USDC",
+      "decimals": 6,
+      "chainId": 11155111,
+      "logoURI": "/images/tokens/usdc.png"
+    },
+    {
+      "name": "Tether USD",
+      "address": "0x374334f239F312CEB160FF3c49C5978d4bd4be4d",
+      "symbol": "USDT",
+      "decimals": 18,
+      "chainId": 11155111,
+      "logoURI": "/images/tokens/usdt.png"
+    },
+    {
       "name": "Label1 Token",
       "address": "0x0dF1896b3204FBc0C495e5D18711ca263bB02258",
       "symbol": "Label1",
