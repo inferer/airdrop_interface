@@ -33,7 +33,7 @@
       "name": "Tether USD",
       "address": "0x374334f239F312CEB160FF3c49C5978d4bd4be4d",
       "symbol": "USDT",
-      "decimals": 18,
+      "decimals": 6,
       "chainId": 11155111,
       "logoURI": "/images/tokens/usdt.png"
     },
@@ -47,7 +47,7 @@
     },
     {
       "name": "Infer Activity",
-      "address": "0x91f4f010B2e72e76ab7C4780D61e69D42BbE8Baf",
+      "address": "0x8175F88E0438A2BD3E6304E4dA281EB7066F0929",
       "symbol": "Activity",
       "decimals": 18,
       "chainId": 11155111,
