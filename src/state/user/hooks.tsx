@@ -18,6 +18,7 @@ import {
   updateUserExpertMode,
   updateUserSlippageTolerance
 } from './actions'
+import { airdropV2, airdropV2Swap, getUserNonce } from './api'
 
 function serializeToken(token: Token): SerializedToken {
   return {
@@ -235,4 +236,60 @@ export function useTrackedTokenPairs(): [Token, Token][] {
 
     return Object.keys(keyed).map(key => keyed[key])
   }, [combinedList])
+}
+
+export function useAirdrop() {
+  const { account } = useActiveWeb3React() 
+  const handleAirdrop = useCallback(async () => {
+    if (account) {
+      const res = await getUserNonce(account)
+      
+      if (res.code === 0) {
+        const msg = `0x${Buffer.from(res.data.nonce, 'utf8').toString('hex')}`;
+        // @ts-ignore
+        const sign = await window.ethereum.request({
+          method: 'personal_sign',
+          params: [msg, account, 'Inferer'],
+        });
+        const totalAmount = '1000000000000000000000'
+        const airdropRes = await airdropV2(account, sign, totalAmount);
+        console.log(airdropRes)
+
+      }
+    }
+    
+  }, [
+    account,
+    getUserNonce,
+
+  ])
+  const handleAirdropSwap = useCallback(async () => {
+    if (account) {
+      const res = await getUserNonce(account)
+      
+      if (res.code === 0) {
+        const msg = `0x${Buffer.from(res.data.nonce, 'utf8').toString('hex')}`;
+        // @ts-ignore
+        const sign = await window.ethereum.request({
+          method: 'personal_sign',
+          params: [msg, account, 'Inferer'],
+        });
+        const amount = '282485875706214689'
+        const swpRes = await airdropV2Swap(account, sign, [account], [amount]);
+        console.log(swpRes)
+
+      }
+    }
+    
+  }, [
+    account,
+    getUserNonce,
+
+  ])
+
+  return {
+    handleAirdrop,
+    handleAirdropSwap
+  }
+  
 }
