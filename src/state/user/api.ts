@@ -8,7 +8,7 @@ export const getUserNonce = async (account: string) => {
 
 export const airdropV2 = async (account: string, sign: string, totalAmount: string, tokenAddress?: string, type?: number) => {
   
-  const res = await poster(`/api/airdrop/airdropV2`, { account, sign, totalAmount })
+  const res = await poster(`/api/airdrop/airdropV2`, { account, sign, totalAmount, tokenAddress })
 
   return res
 }

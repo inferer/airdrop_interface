@@ -240,8 +240,11 @@ export function useTrackedTokenPairs(): [Token, Token][] {
 
 export function useAirdrop() {
   const { account } = useActiveWeb3React() 
-  const handleAirdrop = useCallback(async () => {
+  const handleAirdrop = useCallback(async (algToken, totalAmount) => {
+    console.log(algToken, totalAmount + '000000000000000000', 111111)
+        // return
     if (account) {
+      
       const res = await getUserNonce(account)
       
       if (res.code === 0) {
@@ -251,8 +254,9 @@ export function useAirdrop() {
           method: 'personal_sign',
           params: [msg, account, 'Inferer'],
         });
-        const totalAmount = '1000000000000000000000'
-        const airdropRes = await airdropV2(account, sign, totalAmount);
+        // const totalAmount = '1000000000000000000000'
+        
+        const airdropRes = await airdropV2(account, sign, totalAmount + '000000000000000000', algToken);
         console.log(airdropRes)
 
       }
@@ -263,7 +267,7 @@ export function useAirdrop() {
     getUserNonce,
 
   ])
-  const handleAirdropSwap = useCallback(async () => {
+  const handleAirdropSwap = useCallback(async (algTokenAddress, airTokenAddress) => {
     if (account) {
       const res = await getUserNonce(account)
       
@@ -275,7 +279,7 @@ export function useAirdrop() {
           params: [msg, account, 'Inferer'],
         });
         const amount = '282485875706214689'
-        const swpRes = await airdropV2Swap(account, sign, [account], [amount]);
+        const swpRes = await airdropV2Swap(account, sign, [account], [amount], algTokenAddress, airTokenAddress);
         console.log(swpRes)
 
       }
