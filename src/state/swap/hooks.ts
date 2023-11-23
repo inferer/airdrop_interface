@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useV1Trade } from '../../data/V1'
 import { useActiveWeb3React } from '../../hooks'
-import { useCurrency } from '../../hooks/Tokens'
+import { useAirAllTokens, useCurrency } from '../../hooks/Tokens'
 import { useTradeExactIn, useTradeExactOut } from '../../hooks/Trades'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 import { isAddress } from '../../utils'
@@ -302,4 +302,25 @@ export function useDefaultsFromURLSearch():
   }, [dispatch, chainId])
 
   return result
+}
+
+export function useUserModeInputCurrency() {
+  const { chainId } = useActiveWeb3React()
+  const dispatch = useDispatch<AppDispatch>()
+
+  const handleReplaceSwapState = useCallback(( isProjectMode ) => {
+    if (!chainId) return
+    dispatch(
+      replaceSwapState({
+        typedValue: '',
+        field: Field.INPUT,
+        inputCurrencyId: isProjectMode ? 'ETH' : '',
+        outputCurrencyId: '',
+        recipient: null
+      })
+    )
+  }, [dispatch, chainId])
+
+  return { handleReplaceSwapState }
+
 }

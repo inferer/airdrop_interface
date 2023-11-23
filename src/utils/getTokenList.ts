@@ -1,8 +1,8 @@
 import { TokenList, TokenInfo } from '@uniswap/token-lists'
 
 import { NETWORK_CHAIN_ID } from '../connectors'
-import { ST_TOKEN_LIST, AIR_TOKEN_LIST } from '../constants/tokenList'
-import { AIR_TOKEN_LIST_URL } from '../constants/lists'
+import { ST_TOKEN_LIST, AIR_TOKEN_LIST, AIRLABEL_TOKEN_LIST } from '../constants/tokenList'
+import { AIRLABEL_TOKEN_LIST_URL, AIR_TOKEN_LIST_URL } from '../constants/lists'
 
 /**
  * Contains the logic for resolving a list URL to a validated token list
@@ -47,21 +47,20 @@ export function filterTokenByChainId(tokens: TokenInfo[]) {
 export async function getTokenListLocal(
   listUrl: string,
 ): Promise<any> {
-
+  let tokens = {}
   if (listUrl === AIR_TOKEN_LIST_URL) {
-    return {
-      ...template,
-      name: listUrl,
-      timestamp: new Date().toLocaleString(),
-      tokens: filterTokenByChainId(AIR_TOKEN_LIST)
-    }
+    tokens = filterTokenByChainId(AIR_TOKEN_LIST)
+  } else if (listUrl === AIRLABEL_TOKEN_LIST_URL) {
+    tokens = filterTokenByChainId(AIRLABEL_TOKEN_LIST)
   } else {
-    return {
-      ...template,
-      name: listUrl,
-      timestamp: new Date().toLocaleString(),
-      tokens: filterTokenByChainId(ST_TOKEN_LIST)
-    }
+    tokens = filterTokenByChainId(ST_TOKEN_LIST)
+  }
+
+  return {
+    ...template,
+    name: listUrl,
+    timestamp: new Date().toLocaleString(),
+    tokens: tokens
   }
   
 }

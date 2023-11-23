@@ -13,13 +13,14 @@ import { useActiveWeb3React } from '../../hooks'
 import { useDarkModeManager } from '../../state/user/hooks'
 import { useETHBalances } from '../../state/wallet/hooks'
 
-import { YellowCard } from '../Card'
+import { LightCard, YellowCard, BlueCard } from '../Card'
 import Settings from '../Settings'
 import Menu from '../Menu'
 
 import Row, { RowBetween } from '../Row'
 import Web3Status from '../Web3Status'
 import VersionSwitch from './VersionSwitch'
+import { Link } from 'react-router-dom'
 
 const HeaderFrame = styled.div`
   display: flex;
@@ -97,6 +98,14 @@ const NetworkCard = styled(YellowCard)`
   padding: 8px 12px;
 `
 
+const AirdropCard = styled(BlueCard)`
+  width: fit-content;
+  margin-right: 10px;
+  border-radius: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+`
+
 const UniIcon = styled.div`
   transition: transform 0.3s ease;
   :hover {
@@ -153,6 +162,15 @@ export default function Header() {
         <HeaderControls>
           <HeaderElement>
             <TestnetWrapper>
+              <Link to={'/airdrop'}>
+                <AirdropCard onClick={e => {
+                  e.stopPropagation()
+                  
+                }} >Airdrop</AirdropCard>
+              </Link>
+              
+            </TestnetWrapper>
+            <TestnetWrapper>
               {!isMobile && chainId && NETWORK_LABELS[chainId] && <NetworkCard>{NETWORK_LABELS[chainId]}</NetworkCard>}
             </TestnetWrapper>
             <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
@@ -165,7 +183,6 @@ export default function Header() {
             </AccountElement>
           </HeaderElement>
           <HeaderElementWrap>
-            {/* <VersionSwitch /> */}
             <Settings />
             <Menu />
           </HeaderElementWrap>

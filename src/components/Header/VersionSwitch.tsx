@@ -1,10 +1,12 @@
 import { stringify } from 'qs'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 import useToggledVersion, { Version } from '../../hooks/useToggledVersion'
 import { MouseoverTooltip } from '../Tooltip'
+import { useUserRoleMode } from '../../state/user/hooks'
+import { UserRoleMode } from '../../constants'
 
 const VersionLabel = styled.span<{ enabled: boolean }>`
   padding: 0.35rem 0.6rem;
@@ -25,7 +27,7 @@ interface VersionToggleProps extends React.ComponentProps<typeof Link> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const VersionToggle = styled(({ enabled, ...rest }: VersionToggleProps) => <Link {...rest} />)<VersionToggleProps>`
+const VersionToggle = styled.div<{ enabled: boolean }>`
   border-radius: 12px;
   opacity: ${({ enabled }) => (enabled ? 1 : 0.5)};
   cursor: ${({ enabled }) => (enabled ? 'pointer' : 'default')};
@@ -40,37 +42,36 @@ const VersionToggle = styled(({ enabled, ...rest }: VersionToggleProps) => <Link
   }
 `
 
-export default function VersionSwitch() {
-  const version = useToggledVersion()
-  const location = useLocation()
-  const query = useParsedQueryString()
-  const versionSwitchAvailable = location.pathname === '/swap' || location.pathname === '/send'
+const VersionToggleWap = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding-right: 100px;
+`
 
-  const toggleDest = useMemo(() => {
-    return versionSwitchAvailable
-      ? {
-          ...location,
-          search: `?${stringify({ ...query, use: version === Version.v1 ? undefined : Version.v1 })}`
-        }
-      : location
-  }, [location, query, version, versionSwitchAvailable])
+export default function VersionSwitch() {
+  const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
+
+  const location = useLocation()
+  const versionSwitchAvailable = location.pathname === '/swap'
 
   const handleClick = useCallback(
     e => {
       if (!versionSwitchAvailable) e.preventDefault()
+      toggleSetUserRoleMode()
     },
-    [versionSwitchAvailable]
+    [versionSwitchAvailable, toggleSetUserRoleMode]
   )
 
   const toggle = (
-    <VersionToggle enabled={versionSwitchAvailable} to={toggleDest} onClick={handleClick}>
-      <VersionLabel enabled={version === Version.v2 || !versionSwitchAvailable}>V2</VersionLabel>
-      <VersionLabel enabled={version === Version.v1 && versionSwitchAvailable}>V1</VersionLabel>
-    </VersionToggle>
+    <VersionToggleWap>
+      <VersionToggle enabled={versionSwitchAvailable} onClick={handleClick}>
+        <VersionLabel enabled={isProjectMode || !versionSwitchAvailable}>Project</VersionLabel>
+        <VersionLabel enabled={!isProjectMode && versionSwitchAvailable}>User</VersionLabel>
+      </VersionToggle>
+    </VersionToggleWap>
   )
   return versionSwitchAvailable ? (
     toggle
-  ) : (
-    <MouseoverTooltip text="This page is only compatible with Uniswap V2.">{toggle}</MouseoverTooltip>
-  )
+  ) : null
 }

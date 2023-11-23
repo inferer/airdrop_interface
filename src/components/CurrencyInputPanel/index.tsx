@@ -159,7 +159,7 @@ export default function CurrencyInputPanel({
   }, [setModalOpen])
 
   const payInput = useMemo(() => {
-    return id === 'swap-currency-input'
+    return id === 'swap-currency-input' || id === 'add-liquidity-input-tokena'
   }, [id])
 
   return (

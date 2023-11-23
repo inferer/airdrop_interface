@@ -14,15 +14,15 @@ export default function Pool() {
 
   const { handleAirdrop, handleAirdropSwap } = useAirdrop()
 
-  const [algToken1, setAlgToken1] = useState('0x13c85F531c614a4e6B2fF95171dE1C600DA83655')
+  const [algToken1, setAlgToken1] = useState('0x82c9DdA6a281e4a147eA9b29B87FbF2B3c2D633F')
   const [amount, setAmount] = useState('1000')
 
-  const [algToken, setAlgToken] = useState('0x13c85F531c614a4e6B2fF95171dE1C600DA83655')
-  const [airToken, setAirToken] = useState('0x72a99424410249D5ba34A49445691D4f88cFb47E')
+  const [algToken, setAlgToken] = useState('0x82c9DdA6a281e4a147eA9b29B87FbF2B3c2D633F')
+  const [airToken, setAirToken] = useState('0xd9E31AD67cca5E979aB2A845d6173dAe0d4006e0')
 
   return (
     <AirdropWrapper>
-      <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '90vw'}}>
+      <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100vw'}}>
         <AutoColumn gap="lg" justify="center">
           <div style={{display: 'flex', alignItems: 'center'}}>
             <div>AlgToken: </div>
@@ -48,6 +48,7 @@ export default function Pool() {
             </Text>
           </ButtonPrimary>
         </AutoColumn>
+        <div style={{width: 200}}></div>
         <AutoColumn gap="lg" justify="center">
           <div style={{display: 'flex', alignItems: 'center'}}>
             <div>AlgToken: </div>

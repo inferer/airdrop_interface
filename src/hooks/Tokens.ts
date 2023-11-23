@@ -1,9 +1,9 @@
 import { parseBytes32String } from '@ethersproject/strings'
 import { Currency, ETHER, Token, currencyEquals } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { useAirTokenList, useSelectedTokenList } from '../state/lists/hooks'
+import { useAirLabelTokenList, useAirTokenList, useSelectedTokenList } from '../state/lists/hooks'
 import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
-import { useUserAddedTokens } from '../state/user/hooks'
+import { useAddUserToken, useUserAddedTokens } from '../state/user/hooks'
 import { isAddress } from '../utils'
 
 import { useActiveWeb3React } from './index'
@@ -13,6 +13,33 @@ export function useAllTokens(): { [address: string]: Token } {
   const { chainId } = useActiveWeb3React()
   const userAddedTokens = useUserAddedTokens()
   const allTokens = useSelectedTokenList()
+  return useMemo(() => {
+    if (!chainId) return {}
+    return allTokens[chainId]
+    // const currentTokens = Object.values(allTokens[chainId])
+    // console.log(currentTokens)
+    // return (
+    //   userAddedTokens
+    //     // reduce into all ALL_TOKENS filtered by the current chain
+    //     .reduce<{ [address: string]: Token }>(
+    //       (tokenMap, token) => {
+    //         // console.log(tokenMap, token)
+    //         tokenMap[token.address] = token
+    //         return tokenMap
+    //       },
+    //       // must make a copy because reduce modifies the map, and we do not
+    //       // want to make a copy in every iteration
+    //       { ...allTokens[chainId] }
+    //     )
+    // )
+  }, [chainId, userAddedTokens, allTokens])
+}
+
+
+export function useAirAllTokens(): { [address: string]: Token } {
+  const { chainId } = useActiveWeb3React()
+  const userAddedTokens = useUserAddedTokens()
+  const allTokens = useAirTokenList()
 
   return useMemo(() => {
     if (!chainId) return {}
@@ -32,11 +59,10 @@ export function useAllTokens(): { [address: string]: Token } {
   }, [chainId, userAddedTokens, allTokens])
 }
 
-
-export function useAirAllTokens(): { [address: string]: Token } {
+export function useAirLabelAllTokens(): { [address: string]: Token } {
   const { chainId } = useActiveWeb3React()
   const userAddedTokens = useUserAddedTokens()
-  const allTokens = useAirTokenList()
+  const allTokens = useAirLabelTokenList()
 
   return useMemo(() => {
     if (!chainId) return {}
@@ -77,7 +103,10 @@ function parseStringOrBytes32(str: string | undefined, bytes32: string | undefin
 // otherwise returns the token
 export function useToken(tokenAddress?: string): Token | undefined | null {
   const { chainId } = useActiveWeb3React()
-  const tokens = useAllTokens()
+  const allTokens = useAllTokens()
+  const airLabelTokens = useAirLabelAllTokens()
+
+  const tokens = useMemo(() => ({ ...allTokens, ...airLabelTokens }), [allTokens, airLabelTokens])
 
   const address = isAddress(tokenAddress)
 
@@ -126,7 +155,8 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 }
 
 export function useCurrency(currencyId: string | undefined): Currency | null | undefined {
-  const isETH = currencyId?.toUpperCase() === 'ETH'
-  const token = useToken(isETH ? undefined : currencyId)
-  return isETH ? ETHER : token
+  // const isETH = currencyId?.toUpperCase() === 'ETH'
+  // const token = useToken(isETH ? undefined : currencyId)
+  // return isETH ? ETHER : token
+  return useToken(currencyId)
 }

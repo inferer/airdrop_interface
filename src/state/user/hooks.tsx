@@ -2,7 +2,7 @@ import { ChainId, Pair, Token } from '@uniswap/sdk'
 import flatMap from 'lodash.flatmap'
 import { useCallback, useMemo } from 'react'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
-import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../constants'
+import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS, UserRoleMode } from '../../constants'
 
 import { useActiveWeb3React } from '../../hooks'
 import { useAllTokens } from '../../hooks/Tokens'
@@ -16,9 +16,11 @@ import {
   updateUserDarkMode,
   updateUserDeadline,
   updateUserExpertMode,
-  updateUserSlippageTolerance
+  updateUserSlippageTolerance,
+  updateUserRoleMode
 } from './actions'
 import { airdropV2, airdropV2Swap, getUserNonce } from './api'
+import { useUserModeInputCurrency } from '../swap/hooks'
 
 function serializeToken(token: Token): SerializedToken {
   return {
@@ -53,6 +55,25 @@ export function useIsDarkMode(): boolean {
   )
 
   return userDarkMode === null ? matchesDarkMode : userDarkMode
+}
+
+export function useIsRoleProjectMode(): boolean {
+  const roleMode = useSelector<AppState, AppState['user']['userRoleMode']>(state => state.user.userRoleMode)
+  return useMemo(() => roleMode === UserRoleMode.PROJECT , [roleMode])
+}
+
+export function useUserRoleMode(): [boolean, () => void] {
+  const dispatch = useDispatch<AppDispatch>()
+  const { handleReplaceSwapState } = useUserModeInputCurrency()
+
+  const isProjectMode = useIsRoleProjectMode()
+
+  const toggleSetUserRoleMode = useCallback(() => {
+    dispatch(updateUserRoleMode({ userRoleMode: isProjectMode ? UserRoleMode.USER : UserRoleMode.PROJECT }))
+    handleReplaceSwapState(!isProjectMode)
+  }, [isProjectMode, dispatch, handleReplaceSwapState])
+
+  return [isProjectMode, toggleSetUserRoleMode]
 }
 
 export function useDarkModeManager(): [boolean, () => void] {
@@ -136,7 +157,6 @@ export function useRemoveUserAddedToken(): (chainId: number, address: string) =>
 export function useUserAddedTokens(): Token[] {
   const { chainId } = useActiveWeb3React()
   const serializedTokensMap = useSelector<AppState, AppState['user']['tokens']>(({ user: { tokens } }) => tokens)
-
   return useMemo(() => {
     if (!chainId) return []
     return Object.values(serializedTokensMap[chainId as ChainId] ?? {}).map(deserializeToken)
@@ -241,7 +261,6 @@ export function useTrackedTokenPairs(): [Token, Token][] {
 export function useAirdrop() {
   const { account } = useActiveWeb3React() 
   const handleAirdrop = useCallback(async (algToken, totalAmount) => {
-    console.log(algToken, totalAmount + '000000000000000000', 111111)
         // return
     if (account) {
       

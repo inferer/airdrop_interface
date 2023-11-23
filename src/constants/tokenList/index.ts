@@ -54,3 +54,24 @@ export const AIR_TOKEN_LIST: TokenInfo[] = [
     "logoURI": "/images/tokens/usdt.png"
   }
 ]
+
+
+
+export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
+  {
+    "name": "air-Activity",
+    "address": "0x82c9DdA6a281e4a147eA9b29B87FbF2B3c2D633F",
+    "symbol": "air-Activity",
+    "decimals": 18,
+    "chainId": 11155111,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "air-Social",
+    "address": "0x066192fe5661588aBB98512539Dc1a53127fa86c",
+    "symbol": "air-Social",
+    "decimals": 18,
+    "chainId": 11155111,
+    "logoURI": "/images/tokens/usdt.png"
+  }
+]

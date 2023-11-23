@@ -6,7 +6,7 @@ import { FixedSizeList } from 'react-window'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
-import { useAirAllTokens, useAllTokens, useToken } from '../../hooks/Tokens'
+import { useAirAllTokens, useAirLabelAllTokens, useAllTokens, useToken } from '../../hooks/Tokens'
 import { useSelectedListInfo } from '../../state/lists/hooks'
 import { CloseIcon, LinkStyledButton, TYPE } from '../../theme'
 import { isAddress } from '../../utils'
@@ -22,6 +22,8 @@ import SortButton from './SortButton'
 import { useTokenComparator } from './sorting'
 import { PaddedColumn, SearchInput, Separator } from './styleds'
 import AutoSizer from 'react-virtualized-auto-sizer'
+import { useIsRoleProjectMode } from '../../state/user/hooks'
+import { useLocation } from 'react-router-dom'
 
 interface CurrencySearchProps {
   isOpen: boolean
@@ -48,17 +50,35 @@ export function CurrencySearch({
   const { chainId } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
 
+  const isProjectMode  = useIsRoleProjectMode()
+  const location = useLocation()
+  const isSwap = location.pathname === '/swap'
+
   const fixedList = useRef<FixedSizeList>()
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [invertSearchOrder, setInvertSearchOrder] = useState<boolean>(false)
   const allTokens = useAllTokens()
-  const airAllTokens = useAirAllTokens()
-
-  console.log(airAllTokens, 333333)
+  const airLabelAllTokens = useAirLabelAllTokens()
 
   const currentAllTokens = useMemo(() => {
-    return payInput ? allTokens : airAllTokens
-  }, [allTokens, airAllTokens, payInput])
+    if (isSwap) {
+      if (isProjectMode) {
+        if (payInput) {
+          return allTokens
+        } else {
+          return airLabelAllTokens
+        }
+      } else {
+        if (payInput) {
+          return airLabelAllTokens
+        } else {
+          return allTokens
+        }
+      }
+      
+    }
+    return payInput ? allTokens : airLabelAllTokens
+  }, [allTokens, airLabelAllTokens, payInput, isProjectMode, isSwap])
 
   // if they input an address, use it
   const isAddressSearch = isAddress(searchQuery)
@@ -143,9 +163,7 @@ export function CurrencySearch({
     },
     [filteredSortedTokens, handleCurrencySelect, searchQuery]
   )
-
-  const selectedListInfo = useSelectedListInfo()
-
+  
   return (
     <Column style={{ width: '100%', flex: '1 1' }}>
       <PaddedColumn gap="14px">
@@ -183,7 +201,7 @@ export function CurrencySearch({
           {({ height }) => (
             <CurrencyList
               height={height}
-              showETH={showETH}
+              showETH={false}
               currencies={filteredSortedTokens}
               onCurrencySelect={handleCurrencySelect}
               otherCurrency={otherSelectedCurrency}

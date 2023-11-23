@@ -1,4 +1,4 @@
-import { INITIAL_ALLOWED_SLIPPAGE, DEFAULT_DEADLINE_FROM_NOW } from '../../constants'
+import { INITIAL_ALLOWED_SLIPPAGE, DEFAULT_DEADLINE_FROM_NOW, UserRoleMode } from '../../constants'
 import { createReducer } from '@reduxjs/toolkit'
 import { updateVersion } from '../global/actions'
 import {
@@ -12,7 +12,8 @@ import {
   updateUserDarkMode,
   updateUserExpertMode,
   updateUserSlippageTolerance,
-  updateUserDeadline
+  updateUserDeadline,
+  updateUserRoleMode
 } from './actions'
 
 const currentTimestamp = () => new Date().getTime()
@@ -46,6 +47,8 @@ export interface UserState {
   }
 
   timestamp: number
+
+  userRoleMode: UserRoleMode
 }
 
 function pairKey(token0Address: string, token1Address: string) {
@@ -60,11 +63,15 @@ export const initialState: UserState = {
   userDeadline: DEFAULT_DEADLINE_FROM_NOW,
   tokens: {},
   pairs: {},
-  timestamp: currentTimestamp()
+  timestamp: currentTimestamp(),
+  userRoleMode: UserRoleMode.PROJECT
 }
 
 export default createReducer(initialState, builder =>
   builder
+    .addCase(updateUserRoleMode, (state, action) => {
+      state.userRoleMode = action.payload.userRoleMode
+    })
     .addCase(updateVersion, state => {
       // slippage isnt being tracked in local storage, reset to default
       // noinspection SuspiciousTypeOfGuard
