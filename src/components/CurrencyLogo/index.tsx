@@ -12,7 +12,11 @@ const getTokenLogoURL = (address: string) =>
 
 const getTokenLogoURL2 = (currency: any) => {
   if (currency.symbol === 'WETH') return EthereumLogo
-  return `/images/tokens/${currency.symbol.toLowerCase()}.png`
+  let logoName = currency.symbol.toLowerCase()
+  if (currency.symbol.indexOf('air-') === 0) {
+    logoName = currency.symbol.slice(4).toLowerCase()
+  }
+  return `/images/tokens/${logoName}.png`
 }
 
 const StyledEthereumLogo = styled.img<{ size: string }>`

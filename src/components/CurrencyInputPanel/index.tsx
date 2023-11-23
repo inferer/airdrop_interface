@@ -1,5 +1,5 @@
 import { Currency, Pair } from '@uniswap/sdk'
-import React, { useState, useContext, useCallback } from 'react'
+import React, { useState, useContext, useCallback, useMemo } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { darken } from 'polished'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
@@ -158,6 +158,10 @@ export default function CurrencyInputPanel({
     setModalOpen(false)
   }, [setModalOpen])
 
+  const payInput = useMemo(() => {
+    return id === 'swap-currency-input'
+  }, [id])
+
   return (
     <InputPanel id={id}>
       <Container hideInput={hideInput}>
@@ -239,6 +243,7 @@ export default function CurrencyInputPanel({
           selectedCurrency={currency}
           otherSelectedCurrency={otherCurrency}
           showCommonBases={showCommonBases}
+          payInput={payInput}
         />
       )}
     </InputPanel>

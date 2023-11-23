@@ -6,7 +6,7 @@ import { FixedSizeList } from 'react-window'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
-import { useAllTokens, useToken } from '../../hooks/Tokens'
+import { useAirAllTokens, useAllTokens, useToken } from '../../hooks/Tokens'
 import { useSelectedListInfo } from '../../state/lists/hooks'
 import { CloseIcon, LinkStyledButton, TYPE } from '../../theme'
 import { isAddress } from '../../utils'
@@ -30,6 +30,7 @@ interface CurrencySearchProps {
   onCurrencySelect: (currency: Currency) => void
   otherSelectedCurrency?: Currency | null
   showCommonBases?: boolean
+  payInput?: boolean
   onChangeList: () => void
 }
 
@@ -38,6 +39,7 @@ export function CurrencySearch({
   onCurrencySelect,
   otherSelectedCurrency,
   showCommonBases,
+  payInput,
   onDismiss,
   isOpen,
   onChangeList
@@ -50,6 +52,13 @@ export function CurrencySearch({
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [invertSearchOrder, setInvertSearchOrder] = useState<boolean>(false)
   const allTokens = useAllTokens()
+  const airAllTokens = useAirAllTokens()
+
+  console.log(airAllTokens, 333333)
+
+  const currentAllTokens = useMemo(() => {
+    return payInput ? allTokens : airAllTokens
+  }, [allTokens, airAllTokens, payInput])
 
   // if they input an address, use it
   const isAddressSearch = isAddress(searchQuery)
@@ -74,8 +83,8 @@ export function CurrencySearch({
 
   const filteredTokens: Token[] = useMemo(() => {
     if (isAddressSearch) return searchToken ? [searchToken] : []
-    return filterTokens(Object.values(allTokens), searchQuery)
-  }, [isAddressSearch, searchToken, allTokens, searchQuery])
+    return filterTokens(Object.values(currentAllTokens), searchQuery)
+  }, [isAddressSearch, searchToken, currentAllTokens, searchQuery])
 
   const filteredSortedTokens: Token[] = useMemo(() => {
     if (searchToken) return [searchToken]
@@ -185,7 +194,7 @@ export function CurrencySearch({
         </AutoSizer>
       </div>
 
-      <Separator />
+      {/* <Separator />
       <Card>
         <RowBetween>
           {selectedListInfo.current ? (
@@ -208,7 +217,7 @@ export function CurrencySearch({
             {selectedListInfo.current ? 'Change' : 'Select a list'}
           </LinkStyledButton>
         </RowBetween>
-      </Card>
+      </Card> */}
     </Column>
   )
 }

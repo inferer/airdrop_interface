@@ -3,7 +3,7 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 
 import { fortmatic, injected, portis, walletconnect, walletlink } from '../connectors'
 
-export const ROUTER_ADDRESS = '0x77891eF17Dc381c27CeCBc08E801d5B3f5f0c3A4'
+export const ROUTER_ADDRESS = '0x01422911571683241F88aCDb075D8Ef3FF21737e'
 
 // a list of tokens by chain
 type ChainTokenList = {
@@ -17,9 +17,9 @@ export const COMP = new Token(ChainId.MAINNET, '0xc00e94Cb662C3520282E6f57172140
 export const MKR = new Token(ChainId.MAINNET, '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2', 18, 'MKR', 'Maker')
 export const AMPL = new Token(ChainId.MAINNET, '0xD46bA6D942050d489DBd938a2C909A5d5039A161', 9, 'AMPL', 'Ampleforth')
 
-export const DAI_SEPOLIA = new Token(ChainId.SEPOLIA, '0xe34E39198F506BAb9142F88A1B8e6abfa2f280C7', 18, 'DAI', 'Dai Stablecoin')
-export const USDC_SEPOLIA = new Token(ChainId.SEPOLIA, '0xBba569f958E6D47D5B174Db9c4969d01d2b25b4e', 6, 'USDC', 'USD//C')
-export const USDT_SEPOLIA = new Token(ChainId.SEPOLIA, '0x374334f239F312CEB160FF3c49C5978d4bd4be4d', 6, 'USDT', 'Tether USD')
+export const DAI_SEPOLIA = new Token(ChainId.SEPOLIA, '0x2C8dF20048860e0a88564D8c72EF38b2E5486B4D', 18, 'DAI', 'Dai Stablecoin')
+export const USDC_SEPOLIA = new Token(ChainId.SEPOLIA, '0x355781B18969F69401e759EEe848EA4696d44321', 6, 'USDC', 'USD//C')
+export const USDT_SEPOLIA = new Token(ChainId.SEPOLIA, '0x521957098aC7a7AC7eAa3631d10E640310873c00', 6, 'USDT', 'Tether USD')
 
 const WETH_ONLY: ChainTokenList = {
   [ChainId.MAINNET]: [WETH[ChainId.MAINNET]],

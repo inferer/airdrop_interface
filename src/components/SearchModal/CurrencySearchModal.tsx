@@ -15,6 +15,7 @@ interface CurrencySearchModalProps {
   onCurrencySelect: (currency: Currency) => void
   otherSelectedCurrency?: Currency | null
   showCommonBases?: boolean
+  payInput?: boolean
 }
 
 export default function CurrencySearchModal({
@@ -23,7 +24,8 @@ export default function CurrencySearchModal({
   onCurrencySelect,
   selectedCurrency,
   otherSelectedCurrency,
-  showCommonBases = false
+  showCommonBases = false,
+  payInput = true
 }: CurrencySearchModalProps) {
   const [listView, setListView] = useState<boolean>(false)
   const lastOpen = useLast(isOpen)
@@ -65,11 +67,6 @@ export default function CurrencySearchModal({
 
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={90} minHeight={listView ? 40 : noListSelected ? 0 : 80}>
-      {listView ? (
-        <ListSelect onDismiss={onDismiss} onBack={handleClickBack} />
-      ) : noListSelected ? (
-        <ListIntroduction onSelectList={handleSelectListIntroduction} />
-      ) : (
         <CurrencySearch
           isOpen={isOpen}
           onDismiss={onDismiss}
@@ -78,8 +75,8 @@ export default function CurrencySearchModal({
           selectedCurrency={selectedCurrency}
           otherSelectedCurrency={otherSelectedCurrency}
           showCommonBases={showCommonBases}
+          payInput={payInput}
         />
-      )}
     </Modal>
   )
 }

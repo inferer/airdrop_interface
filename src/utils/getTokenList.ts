@@ -1,11 +1,8 @@
-import { TokenList } from '@uniswap/token-lists'
-import schema from '@uniswap/token-lists/src/tokenlist.schema.json'
-import Ajv from 'ajv'
-import contenthashToUri from './contenthashToUri'
-import { parseENSAddress } from './parseENSAddress'
-import uriToHttp from './uriToHttp'
+import { TokenList, TokenInfo } from '@uniswap/token-lists'
 
-const tokenListValidator = new Ajv({ allErrors: true }).compile(schema)
+import { NETWORK_CHAIN_ID } from '../connectors'
+import { ST_TOKEN_LIST, AIR_TOKEN_LIST } from '../constants/tokenList'
+import { AIR_TOKEN_LIST_URL } from '../constants/lists'
 
 /**
  * Contains the logic for resolving a list URL to a validated token list
@@ -28,7 +25,43 @@ export default async function getTokenList(
       console.debug('Failed to fetch list', listUrl, error)
       
     }
+}
 
+const template = {
+  "name": "",
+  "timestamp": "",
+  "version": {
+    "major": 1
+  },
+  "tags": {},
+  "logoURI": "",
+  "keywords": [
+  ],
+  "tokens": [ ]
+}
 
-   
+export function filterTokenByChainId(tokens: TokenInfo[]) {
+  return tokens.filter(token => token.chainId === NETWORK_CHAIN_ID)
+}
+
+export async function getTokenListLocal(
+  listUrl: string,
+): Promise<any> {
+
+  if (listUrl === AIR_TOKEN_LIST_URL) {
+    return {
+      ...template,
+      name: listUrl,
+      timestamp: new Date().toLocaleString(),
+      tokens: filterTokenByChainId(AIR_TOKEN_LIST)
+    }
+  } else {
+    return {
+      ...template,
+      name: listUrl,
+      timestamp: new Date().toLocaleString(),
+      tokens: filterTokenByChainId(ST_TOKEN_LIST)
+    }
+  }
+  
 }

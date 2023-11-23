@@ -117,7 +117,7 @@ function CurrencyRow({
         <Text title={currency.name} fontWeight={500}>
           {currency.symbol}
         </Text>
-        <FadedSpan>
+        {/* <FadedSpan>
           {!isOnSelectedList && customAdded ? (
             <TYPE.main fontWeight={500}>
               Added by user
@@ -144,7 +144,7 @@ function CurrencyRow({
               </LinkStyledButton>
             </TYPE.main>
           ) : null}
-        </FadedSpan>
+        </FadedSpan> */}
       </Column>
       <TokenTags currency={currency} />
       <RowFixed style={{ justifySelf: 'flex-end' }}>
