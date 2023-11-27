@@ -60,7 +60,7 @@ export const AIR_TOKEN_LIST: TokenInfo[] = [
 export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   {
     "name": "air-Activity",
-    "address": "0x82c9DdA6a281e4a147eA9b29B87FbF2B3c2D633F",
+    "address": "0xd9E31AD67cca5E979aB2A845d6173dAe0d4006e0",
     "symbol": "air-Activity",
     "decimals": 18,
     "chainId": 11155111,
