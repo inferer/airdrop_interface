@@ -5,7 +5,9 @@ export const AirdropWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
-  justify-content: end;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding-right: 50px;
 `
 

@@ -96,8 +96,8 @@ export function CurrencySearch({
 
   const showETH: boolean = useMemo(() => {
     const s = searchQuery.toLowerCase().trim()
-    return s === '' || s === 'e' || s === 'et' || s === 'eth'
-  }, [searchQuery])
+    return (s === '' || s === 'e' || s === 'et' || s === 'eth') && isProjectMode
+  }, [searchQuery, isProjectMode])
 
   const tokenComparator = useTokenComparator(invertSearchOrder)
 
@@ -201,7 +201,7 @@ export function CurrencySearch({
           {({ height }) => (
             <CurrencyList
               height={height}
-              showETH={false}
+              showETH={showETH}
               currencies={filteredSortedTokens}
               onCurrencySelect={handleCurrencySelect}
               otherCurrency={otherSelectedCurrency}

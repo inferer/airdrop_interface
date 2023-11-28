@@ -36,14 +36,14 @@ const initialState: ListsState = {
       memo[listUrl] = NEW_LIST_STATE
       return memo
     }, {}),
-    [AIR_TOKEN_LIST_URL]: {
+    [DEFAULT_TOKEN_LIST_URL]: {
       error: null,
       current: null,
       loadingRequestId: null,
       pendingUpdate: null
     }
   },
-  selectedListUrl: AIR_TOKEN_LIST_URL
+  selectedListUrl: DEFAULT_TOKEN_LIST_URL
 }
 
 export default createReducer(initialState, builder =>

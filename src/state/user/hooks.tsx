@@ -297,7 +297,7 @@ export function useAirdrop() {
           method: 'personal_sign',
           params: [msg, account, 'Inferer'],
         });
-        const amount = '282485875706214689'
+        const amount = '28248587570621468900'
         const swpRes = await airdropV2Swap(account, sign, [account], [amount], algTokenAddress, airTokenAddress);
         console.log(swpRes)
 
