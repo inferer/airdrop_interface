@@ -177,3 +177,12 @@ export enum UserRoleMode {
   PROJECT,
   USER
 }
+
+
+export enum UserAction {
+  PROJECT_SWAP,
+  CREATE,
+  USER_SWAP,
+  USER_COLLECT,
+  
+}

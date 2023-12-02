@@ -67,11 +67,9 @@ export default function App({ children }: any) {
       </HeaderWrapper>
       <BodyWrapper>
         <Popups />
-        <VersionSwitch />
         <Web3ReactManager>
           { children}
         </Web3ReactManager>
-        <Marginer />
       </BodyWrapper>
     </AppWrapper>
   )

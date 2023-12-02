@@ -1,4 +1,4 @@
-import { INITIAL_ALLOWED_SLIPPAGE, DEFAULT_DEADLINE_FROM_NOW, UserRoleMode } from '../../constants'
+import { INITIAL_ALLOWED_SLIPPAGE, DEFAULT_DEADLINE_FROM_NOW, UserRoleMode, UserAction } from '../../constants'
 import { createReducer } from '@reduxjs/toolkit'
 import { updateVersion } from '../global/actions'
 import {
@@ -13,7 +13,8 @@ import {
   updateUserExpertMode,
   updateUserSlippageTolerance,
   updateUserDeadline,
-  updateUserRoleMode
+  updateUserRoleMode,
+  updateUserAction
 } from './actions'
 
 const currentTimestamp = () => new Date().getTime()
@@ -49,6 +50,8 @@ export interface UserState {
   timestamp: number
 
   userRoleMode: UserRoleMode
+
+  userAction: UserAction
 }
 
 function pairKey(token0Address: string, token1Address: string) {
@@ -64,11 +67,15 @@ export const initialState: UserState = {
   tokens: {},
   pairs: {},
   timestamp: currentTimestamp(),
-  userRoleMode: UserRoleMode.PROJECT
+  userRoleMode: UserRoleMode.PROJECT,
+  userAction: UserAction.PROJECT_SWAP
 }
 
 export default createReducer(initialState, builder =>
   builder
+    .addCase(updateUserAction, (state, action) => {
+      state.userAction = action.payload.userAction
+    })
     .addCase(updateUserRoleMode, (state, action) => {
       state.userRoleMode = action.payload.userRoleMode
     })

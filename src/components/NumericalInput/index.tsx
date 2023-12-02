@@ -6,18 +6,19 @@ const StyledInput = styled.input<{ error?: boolean; fontSize?: string; align?: s
   color: ${({ error, theme }) => (error ? theme.red1 : theme.text1)};
   width: 0;
   position: relative;
-  font-weight: 500;
+  font-weight: 600;
   outline: none;
   border: none;
   flex: 1 1 auto;
-  background-color: ${({ theme }) => theme.bg1};
-  font-size: ${({ fontSize }) => fontSize ?? '24px'};
+  background-color: rgba(0, 0, 0, 0);
+  font-size: ${({ fontSize }) => fontSize ?? '40px'};
   text-align: ${({ align }) => align && align};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 0px;
   -webkit-appearance: textfield;
+  font-family: Inter-SemiBold;
 
   ::-webkit-search-decoration {
     -webkit-appearance: none;

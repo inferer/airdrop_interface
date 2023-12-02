@@ -8,6 +8,8 @@ import Link from 'next/link'
 import { ArrowLeft } from 'react-feather'
 import { RowBetween } from '../Row'
 import QuestionHelper from '../QuestionHelper'
+import { useIsUserAction, useUserAction, useUserRoleMode } from '../../state/user/hooks'
+import { UserAction } from '../../constants'
 
 const Tabs = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -43,6 +45,35 @@ const StyledNavLink = styled.a<{
     color: ${({ theme }) => darken(0.1, theme.text1)};
   }
 `
+const NavLinkWrap = styled.span`
+  ${({ theme }) => theme.flexRowNoWrap}
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  border-radius: 3rem;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: ${({ theme }) => theme.text3};
+  font-size: 18px;
+  font-family: Inter-SemiBold;
+
+  &.${({ className }) => className} {
+    border-radius: 12px;
+    color: ${({ theme }) => theme.text1};
+  }
+
+  a:-webkit-any-link {
+    color: inherit;
+    text-decoration: none;
+    font-family: inherit;
+  }
+
+  :hover,
+  :focus {
+    color: ${({ theme }) => darken(0.1, theme.text1)};
+  }
+`
 
 const ActiveText = styled.div`
   font-weight: 500;
@@ -57,12 +88,18 @@ export function SwapPoolTabs({ active }: { active: 'swap' | 'pool' }) {
   const { t } = useTranslation()
   return (
     <Tabs style={{ marginBottom: '20px' }}>
-      <StyledNavLink id={`swap-nav-link`} href={'/swap'} className={active === 'swap' ? activeClassName : ''} >
+      <NavLinkWrap id={`swap-nav-link`} className={active === 'swap' ? activeClassName : ''}>
+        <Link href={'/swap'} >{t('swap')}</Link>
+      </NavLinkWrap>
+      <NavLinkWrap id={`pool-nav-link`} className={active === 'pool' ? activeClassName : ''}>
+        <Link href={'/pool'} >{t('pool')}</Link>
+      </NavLinkWrap>
+      {/* <StyledNavLink id={`swap-nav-link`} href={'/swap'} className={active === 'swap' ? activeClassName : ''} >
         {t('swap')}
       </StyledNavLink>
       <StyledNavLink id={`pool-nav-link`} href={'/pool'} className={active === 'pool' ? activeClassName : ''} >
         {t('pool')}
-      </StyledNavLink>
+      </StyledNavLink> */}
     </Tabs>
   )
 }
@@ -145,6 +182,54 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
       >
         {t('Tokens')}
       </StyledNavLink2>
+    </Tabs>
+  )
+}
+
+
+export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => void}) {
+  const { t } = useTranslation()
+  const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
+  const { userAction, setUserAction }  = useUserAction()
+  const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect } = useIsUserAction()
+
+  const handleTab = useCallback((action: UserAction) => {
+    setUserAction(action)
+    onClick && onClick(action)
+  }, [setUserAction, onClick])
+
+  return (
+    <Tabs style={{ justifyContent: 'flex-start', marginBottom: 25 }}>
+      {
+        isProjectMode ? (
+          <>
+            <StyledNavLink2 id={`swap-btn-click`} className={isProjectSwap ? 'airdrop' : ''}
+              onClick={() => handleTab(UserAction.PROJECT_SWAP)}
+            >
+              {t('Swap')}
+            </StyledNavLink2>
+            <StyledNavLink2 id={`create-btn-click`} className={isProjectCreate ?  'airdrop' : ''}
+              onClick={() => handleTab(UserAction.CREATE)}
+            >
+              {t('Create')}
+            </StyledNavLink2>
+          </>
+        ) : (
+          <>
+            <StyledNavLink2 id={`userswap-btn-click`} className={isUserSwap ? 'create' : ''}
+              onClick={() => handleTab(UserAction.USER_SWAP)}
+            >
+              {t('Swap')}
+            </StyledNavLink2>
+            <StyledNavLink2 id={`collect-btn-click`} className={isUserCollect ?  'airdrop' : ''}
+              onClick={() => handleTab(UserAction.USER_COLLECT)}
+            >
+              {t('Collect')}
+            </StyledNavLink2>
+          </>
+        )
+      }
+      
     </Tabs>
   )
 }

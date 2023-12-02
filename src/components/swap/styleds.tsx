@@ -145,3 +145,14 @@ export const SwapShowAcceptChanges = styled(AutoColumn)`
   border-radius: 12px;
   margin-top: 8px;
 `
+
+export const SwapBody = styled.div`
+  width: 627px;
+  min-height: 580px;
+  flex-shrink: 0;
+  flex-shrink: 0;
+  margin: 0 auto;
+  border-radius: 24px;
+  background: #FFF;
+  padding: 48px 68px;
+`

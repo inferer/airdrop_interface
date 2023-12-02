@@ -6,7 +6,7 @@ import { Text } from 'rebass'
 import styled from 'styled-components'
 
 import { useActiveWeb3React } from '../../hooks'
-import { useDarkModeManager } from '../../state/user/hooks'
+import { useDarkModeManager, useUserRoleMode } from '../../state/user/hooks'
 import { useETHBalances } from '../../state/wallet/hooks'
 
 import { LightCard, YellowCard, BlueCard } from '../Card'
@@ -17,7 +17,7 @@ import Row, { RowBetween } from '../Row'
 import Web3Status from '../Web3Status'
 import VersionSwitch from './VersionSwitch'
 import Link from 'next/link'
-import LazyImage from '../LazyImage'
+import LazyImage, { LazyImage2, LazyImage3 } from '../LazyImage'
 import { AirdropTokensTabs } from '../NavigationTabs'
 
 const HeaderFrame = styled.div`
@@ -159,9 +159,10 @@ const NETWORK_LABELS: { [chainId in ChainId]: string | null } = {
 
 export default function Header() {
   const { account, chainId } = useActiveWeb3React()
+  const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
 
-  const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
-  const [isDark] = useDarkModeManager()
+  // const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
+  // const [isDark] = useDarkModeManager()
 
   return (
     <HeaderFrame>
@@ -206,10 +207,12 @@ export default function Header() {
           </HeaderElementWrap> */}
           <HeaderElementWrap>
             <LazyImage src="/images/airdrop/add.svg" className='icon-add' />
-            <LazyImage src="/images/airdrop/project.svg" className='icon-role' />
+            <LazyImage2 src={ isProjectMode ? '/images/airdrop/project.svg' : '/images/airdrop/user.svg'} className='icon-role' />
           </HeaderElementWrap>
           <Web3Status />
-          <HeaderElementWrap>
+          <HeaderElementWrap
+            onClick={toggleSetUserRoleMode}
+          >
             <LazyImage src="/images/airdrop/qiehuan.svg" className='icon-qiehuan' />
           </HeaderElementWrap>
         </HeaderControls>

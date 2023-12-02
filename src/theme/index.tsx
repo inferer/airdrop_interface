@@ -191,13 +191,13 @@ export const TYPE = {
 
 export const FixedGlobalStyle = createGlobalStyle`
 html, input, textarea, button {
-  font-family: 'Inter-Regular', sans-serif;
+  font-family: Inter-Regular, sans-serif;
   letter-spacing: -0.018em;
   font-display: fallback;
 }
 @supports (font-variation-settings: normal) {
   html, input, textarea, button {
-    font-family: 'Inter-Regular', sans-serif;
+    font-family: Inter-Regular, sans-serif;
   }
 }
 
@@ -205,6 +205,8 @@ html,
 body {
   margin: 0;
   padding: 0;
+  font-family: Inter-Regular, sans-serif;
+  letter-spacing: -0.018em;
 }
 
 * {
@@ -213,6 +215,12 @@ body {
 
 button {
   user-select: none;
+}
+
+a:-webkit-any-link {
+  color: inherit;
+  text-decoration: none;
+  font-family: inherit;
 }
 
 html {
@@ -232,7 +240,6 @@ html {
 
 body {
   min-height: 100vh;
-  background-position: 0 -30vh;
   background-repeat: no-repeat;
   /* background-image: ${({ theme }) =>
     `radial-gradient(50% 50% at 50% 50%, ${transparentize(0.9, theme.primary1)} 0%, ${transparentize(

@@ -2,7 +2,7 @@ import { ChainId, Pair, Token } from '@uniswap/sdk'
 import flatMap from 'lodash.flatmap'
 import { useCallback, useMemo } from 'react'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
-import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS, UserRoleMode } from '../../constants'
+import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS, UserAction, UserRoleMode } from '../../constants'
 
 import { useActiveWeb3React } from '../../hooks'
 import { useAllTokens } from '../../hooks/Tokens'
@@ -17,7 +17,8 @@ import {
   updateUserDeadline,
   updateUserExpertMode,
   updateUserSlippageTolerance,
-  updateUserRoleMode
+  updateUserRoleMode,
+  updateUserAction
 } from './actions'
 import { airdropV2, airdropV2Swap, getUserNonce } from './api'
 import { useUserModeInputCurrency } from '../swap/hooks'
@@ -41,6 +42,47 @@ function deserializeToken(serializedToken: SerializedToken): Token {
     serializedToken.name
   )
 }
+
+export function useUserAction() {
+  const dispatch = useDispatch<AppDispatch>()
+
+  const userAction = useSelector<AppState, AppState['user']['userAction']>(state => state.user.userAction)
+
+  const setUserAction = useCallback((action: UserAction) => {
+    dispatch(updateUserAction({ userAction: action }))
+  }, [ dispatch, updateUserAction ])
+
+  return { userAction, setUserAction } 
+
+}
+
+export function useIsUserAction() {
+  const userAction = useSelector<AppState, AppState['user']['userAction']>(state => state.user.userAction)
+
+  const isProjectSwap = useMemo(() => {
+    return userAction === UserAction.PROJECT_SWAP
+  }, [userAction])
+
+  const isProjectCreate = useMemo(() => {
+    return userAction === UserAction.CREATE
+  }, [userAction])
+
+  const isUserSwap = useMemo(() => {
+    return userAction === UserAction.USER_SWAP
+  }, [userAction])
+
+  const isUserCollect = useMemo(() => {
+    return userAction === UserAction.USER_COLLECT
+  }, [userAction])
+
+  return {
+    isProjectSwap,
+    isProjectCreate,
+    isUserSwap,
+    isUserCollect
+  }
+}
+
 
 export function useIsDarkMode(): boolean {
   const { userDarkMode, matchesDarkMode } = useSelector<
@@ -70,11 +112,13 @@ export function useUserRoleMode(): [boolean, () => void] {
 
   const toggleSetUserRoleMode = useCallback(() => {
     dispatch(updateUserRoleMode({ userRoleMode: isProjectMode ? UserRoleMode.USER : UserRoleMode.PROJECT }))
+    dispatch(updateUserAction({ userAction: !isProjectMode ? UserAction.PROJECT_SWAP : UserAction.USER_SWAP }))
     handleReplaceSwapState(!isProjectMode)
   }, [isProjectMode, dispatch, handleReplaceSwapState])
 
   return [isProjectMode, toggleSetUserRoleMode]
 }
+
 
 export function useDarkModeManager(): [boolean, () => void] {
   const dispatch = useDispatch<AppDispatch>()

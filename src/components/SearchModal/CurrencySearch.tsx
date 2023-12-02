@@ -200,6 +200,7 @@ export function CurrencySearch({
         <AutoSizer disableWidth>
           {({ height }) => (
             <CurrencyList
+              payInput={payInput}
               height={height}
               showETH={showETH}
               currencies={filteredSortedTokens}

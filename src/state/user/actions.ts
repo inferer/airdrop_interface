@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit'
-import { UserRoleMode } from '../../constants'
+import { UserAction, UserRoleMode } from '../../constants'
 
 export interface SerializedToken {
   chainId: number
@@ -28,4 +28,6 @@ export const removeSerializedPair = createAction<{ chainId: number; tokenAAddres
   'user/removeSerializedPair'
 )
 
+
 export const updateUserRoleMode = createAction<{ userRoleMode: UserRoleMode }>('user/updateUserRoleMode')
+export const updateUserAction = createAction<{ userAction: UserAction }>('user/updateUserAction')

@@ -302,3 +302,35 @@ export function ButtonRadio({ active, ...rest }: { active?: boolean } & ButtonPr
     return <ButtonPrimary {...rest} />
   }
 }
+
+export const ButtonSwap = styled.div<{
+  padding?: string
+  width?: string
+  borderRadius?: string
+  altDisabledStyle?: boolean
+}>`
+  background: linear-gradient(108deg, rgba(63, 60, 255, 0.06) 24.12%, rgba(107, 190, 225, 0.06) 51.08%, rgba(138, 232, 153, 0.06) 75.88%);
+  width: ${({ width }) => (width ? width : '100%')};
+  height: 64px;
+  border-radius: ${({ borderRadius }) => borderRadius ? borderRadius : '12px'};
+  outline: none;
+  border: 1px solid transparent;
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  &:disabled {
+    cursor: auto;
+  }
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  > * {
+    user-select: none;
+  }
+`

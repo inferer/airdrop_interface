@@ -3,7 +3,7 @@ import { Currency, ETHER, Token, currencyEquals } from '@uniswap/sdk'
 import { useMemo } from 'react'
 import { useAirLabelTokenList, useAirTokenList, useSelectedTokenList } from '../state/lists/hooks'
 import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
-import { useAddUserToken, useUserAddedTokens } from '../state/user/hooks'
+import { useAddUserToken, useIsUserAction, useUserAddedTokens } from '../state/user/hooks'
 import { isAddress } from '../utils'
 
 import { useActiveWeb3React } from './index'
@@ -157,6 +157,22 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 export function useCurrency(currencyId: string | undefined): Currency | null | undefined {
   const isETH = currencyId?.toUpperCase() === 'ETH'
   const token = useToken(isETH ? undefined : currencyId)
-  return isETH ? ETHER : token
-  // return useToken(currencyId)
+  // return isETH ? ETHER : token
+  return useToken(currencyId)
+}
+
+export function useInputTokens() {
+  const allTokens = useAllTokens()
+  const airLabelAllTokens = useAirLabelAllTokens()
+
+  const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect } = useIsUserAction()
+
+  return useMemo(() => {
+    
+    if (isProjectSwap || isProjectCreate) return Object.values(allTokens) 
+      
+    return Object.values(airLabelAllTokens) 
+
+  }, [allTokens, airLabelAllTokens, isProjectSwap, isProjectCreate, isUserSwap, isUserCollect])
+
 }
