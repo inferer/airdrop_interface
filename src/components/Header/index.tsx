@@ -36,6 +36,11 @@ const HeaderFrame = styled.div`
     width: calc(100%);
     position: relative;
   `};
+
+  @media screen and (max-width: 1440px){
+    padding-left: 2.8125vw;
+    padding-right: 2.8125vw;
+  }
 `
 
 const HeaderElement = styled.div`
@@ -46,6 +51,7 @@ const HeaderElement = styled.div`
 const HeaderElementWrap = styled.div`
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 
   ${({ theme }) => theme.mediaWidth.upToSmall`
     margin-top: 0.5rem;
@@ -168,12 +174,11 @@ export default function Header() {
     <HeaderFrame>
       <RowBetween style={{ alignItems: 'flex-start' }} padding="1rem 1rem 0 1rem">
         <HeaderElement>
-          <Title href=".">
-            <UniIcon>
+          <Link href={'/'}>
+            <UniIcon className=' cursor-pointer'>
               <LazyImage src="/images/logo.png" alt="logo" />
             </UniIcon>
-            
-          </Title>
+          </Link>
           <TitleText>
             <AirdropTokensTabs />
             <LazyImage src="/images/assets/more.svg" className='more' alt="more" />

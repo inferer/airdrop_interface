@@ -137,7 +137,7 @@ const TextGrad1 = styled(Text)`
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
-  line-height: 24px; /* 150% */
+  line-height: normal; /* 150% */
   background: linear-gradient(135deg, #3F3CFF 6.8%, #6BBEE1 55.97%, #8AE899 101.2%);
   background-clip: text;
   -webkit-background-clip: text;

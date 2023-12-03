@@ -3,22 +3,22 @@ import styled from 'styled-components'
 import { escapeRegExp } from '../../utils'
 
 const StyledInput = styled.input<{ error?: boolean; fontSize?: string; align?: string }>`
-  color: ${({ error, theme }) => (error ? theme.red1 : theme.text1)};
-  width: 420px;
-  height: 41px;
+  color: ${({ theme }) => theme.text1};
+  width: 100%;
   position: relative;
-  font-weight: 500;
+  font-weight: 600;
   outline: none;
-  border: 1px solid gray;
+  border: none;
   flex: 1 1 auto;
-  background-color: ${({ theme }) => theme.bg1};
-  font-size: ${({ fontSize }) => fontSize ?? '16px'};
+  font-size: ${({ fontSize }) => fontSize ?? '32px'};
   text-align: ${({ align }) => align && align};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 0px;
   -webkit-appearance: textfield;
+  font-family: Inter-SemiBold;
+  margin-top: 8px;
 
   ::-webkit-search-decoration {
     -webkit-appearance: none;
@@ -34,7 +34,7 @@ const StyledInput = styled.input<{ error?: boolean; fontSize?: string; align?: s
   }
 
   ::placeholder {
-    color: ${({ theme }) => theme.text4};
+    color: rgba(0, 0, 0, 0.20);
   }
 `
 
@@ -67,14 +67,12 @@ export const Input = React.memo(function InnerInput({
         // replace commas with periods, because uniswap exclusively uses period as the decimal separator
         enforcer(event.target.value.replace(/,/g, '.'))
       }}
-      // universal input options
-      inputMode="decimal"
-      title="Token Amount"
+      title=""
       autoComplete="off"
       autoCorrect="off"
       // text-specific options
       type="text"
-      placeholder={placeholder || ''}
+      placeholder={placeholder || 'X'}
       spellCheck="false"
     />
   )

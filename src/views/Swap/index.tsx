@@ -1,3 +1,4 @@
+import router from 'next/router'
 import { CurrencyAmount, JSBI, Token, Trade } from '@uniswap/sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { ArrowDown, Type } from 'react-feather'
@@ -281,6 +282,12 @@ export default function Swap() {
     }
   }, [inputTokens, onCurrencySelection])
 
+  const handleAction = useCallback(() => {
+    if (isProjectCreate) {
+      router.push('/create')
+    }
+  }, [isProjectCreate])
+
   return (
     <>
       <TokenWarningModal
@@ -392,7 +399,7 @@ export default function Swap() {
             )}
           </AutoColumn>
           <BottomGrouping>
-            <ButtonSwap >
+            <ButtonSwap onClick={handleAction} >
               <TYPE.textGrad1 fontWeight={600} fontSize={20}>
                 {
                   (isProjectSwap || isUserSwap) ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'
