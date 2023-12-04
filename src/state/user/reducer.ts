@@ -61,7 +61,7 @@ function pairKey(token0Address: string, token1Address: string) {
 export const initialState: UserState = {
   userDarkMode: null,
   matchesDarkMode: false,
-  userExpertMode: false,
+  userExpertMode: true,
   userSlippageTolerance: INITIAL_ALLOWED_SLIPPAGE,
   userDeadline: DEFAULT_DEADLINE_FROM_NOW,
   tokens: {},

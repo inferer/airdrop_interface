@@ -38,15 +38,11 @@ import { currencyId } from '../../utils/currencyId'
 import { PoolPriceBar } from './PoolPriceBar'
 import { NETWORK_CHAIN_ID } from '../../connectors'
 
-export default function AddLiquidity({
-  match: {
-    params: { currencyIdA, currencyIdB }
-  },
-  history
-}: any) {
+export default function AddLiquidity() {
   const { account, chainId, library } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
-
+  const currencyIdA = '0x300f6B06211F490c2A5Fb5c7f634A3f6D636E355'
+  const currencyIdB = '0x3a1b55A11036B6B9056e6f53Cb76b22811f7d3Dd'
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
 
@@ -283,26 +279,26 @@ export default function AddLiquidity({
   const handleCurrencyASelect = useCallback(
     (currencyA: Currency) => {
       const newCurrencyIdA = currencyId(currencyA)
-      if (newCurrencyIdA === currencyIdB) {
-        history.push(`/add/${currencyIdB}/${currencyIdA}`)
-      } else {
-        history.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
-      }
+      // if (newCurrencyIdA === currencyIdB) {
+      //   history.push(`/add/${currencyIdB}/${currencyIdA}`)
+      // } else {
+      //   history.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
+      // }
     },
     [currencyIdB, history, currencyIdA]
   )
   const handleCurrencyBSelect = useCallback(
     (currencyB: Currency) => {
       const newCurrencyIdB = currencyId(currencyB)
-      if (currencyIdA === newCurrencyIdB) {
-        if (currencyIdB) {
-          history.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
-        } else {
-          history.push(`/add/${newCurrencyIdB}`)
-        }
-      } else {
-        history.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
-      }
+      // if (currencyIdA === newCurrencyIdB) {
+      //   if (currencyIdB) {
+      //     history.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
+      //   } else {
+      //     history.push(`/add/${newCurrencyIdB}`)
+      //   }
+      // } else {
+      //   history.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
+      // }
     },
     [currencyIdA, history, currencyIdB]
   )

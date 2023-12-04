@@ -2,16 +2,22 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { JSBI, Percent, Router, SwapParameters, Trade, TradeType } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { BIPS_BASE, DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from '../constants'
+import { BIPS_BASE, DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE, ROUTER_ADDRESS } from '../constants'
 import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { calculateGasMargin, getRouterContract, isAddress, shortenAddress } from '../utils'
 import isZero from '../utils/isZero'
 import v1SwapArguments from '../utils/v1SwapArguments'
 import { useActiveWeb3React } from './index'
-import { useV1ExchangeContract } from './useContract'
+import { useAirdropSenderContract, useV1ExchangeContract } from './useContract'
 import useENS from './useENS'
 import { Version } from './useToggledVersion'
+import { useDerivedSwapInfo } from '../state/swap/hooks'
+import { useCurrency } from './Tokens'
+import { getUSDTTokenFromAirToken } from '../utils/getTokenList'
+import { useApproveCallback } from './useApproveCallback'
+import { useCurrencyBalance } from '../state/wallet/hooks'
+import { AirdropSender_NETWORKS } from '../constants/airdropSender'
 
 export enum SwapCallbackState {
   INVALID,
@@ -43,7 +49,7 @@ type EstimatedSwapCall = SuccessfulCall | FailedCall
  * @param deadline the deadline for the trade
  * @param recipientAddressOrName
  */
-function useSwapCallArguments(
+export function useSwapCallArguments(
   trade: Trade | undefined, // trade to execute, required
   allowedSlippage: number = INITIAL_ALLOWED_SLIPPAGE, // in bips
   deadline: number = DEFAULT_DEADLINE_FROM_NOW, // in seconds from now
@@ -243,3 +249,4 @@ export function useSwapCallback(
     }
   }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, addTransaction])
 }
+

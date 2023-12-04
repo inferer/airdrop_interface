@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { ThemeContext } from 'styled-components'
 
 import {  TYPE } from '../../theme'
@@ -11,10 +11,31 @@ import LazyImage, { LazyImage2 } from '../../components/LazyImage'
 import Input from '../../components/TextInput/Input'
 import Select from './Select'
 import { Link } from '../../components/AppRouter'
+import { useCreateAirdrop, useCreateCallback } from '../../hooks/useAirdropSender'
+import { ApprovalState } from '../../hooks/useApproveCallback'
+import { AutoRow } from '../../components/Row'
+import Loader from '../../components/Loader'
+import { Token } from '@uniswap/sdk'
 
-export default function Pool() {
+export default function Create() {
   const theme = useContext(ThemeContext)
   const { account } = useActiveWeb3React()
+
+  const [content, setContent] = useState('https://twitter.com/intent/like?tweet_id=17203739135769 52121')
+
+  const {
+    args,
+    lockedAmount,
+    lockedCurrency,
+    lockedCurrencyAmount,
+    approvalState,
+    approve
+  } = useCreateCallback(undefined, undefined, undefined, null)
+
+
+  console.log(args, lockedAmount, lockedCurrency, approvalState)
+
+  const { handleCreateAirdrop } = useCreateAirdrop(args, lockedCurrency as Token ?? undefined)
 
 
   return (
@@ -37,12 +58,13 @@ export default function Pool() {
           <ItemBox style={{ marginTop: 20}}>
             <ItemTitle>offer</ItemTitle>
             <div className='flex justify-between items-center'>
-              <Input value={''} placeholder='10' onUserInput={function (input: string): void {
+              {/* <Input value={''} placeholder='10' onUserInput={function (input: string): void {
                 throw new Error('Function not implemented.')
-              } } />
+              } } /> */}
+              <div className=' text-[32px] font-fsemibold'>{lockedAmount}</div>
               <TokenInfo className='flex items-center mt-5 shrink-0'>
                 <LazyImage2 src='/images/airdrop/eth.svg' />
-                <div className='text-[20px] font-fsemibold ml-1'>ETH</div>
+                <div className='text-[20px] font-fsemibold ml-1'>{lockedCurrency?.symbol}</div>
               </TokenInfo>
             </div>
           </ItemBox>
@@ -82,8 +104,13 @@ export default function Pool() {
             <div className='mt-4'>
               <ItemTitle>Content</ItemTitle>
               <div className='mt-2 py-3 px-4 h-[90px] bg-[rgba(85,123,241,0.02)] rounded-lg overflow-auto'>
-                <textarea className=' w-full h-full bg-[rgba(85,123,241,0)] outline-none leading-6'>
-                https://twitter.com/intent/like?tweet_id=17203739135769 52121
+                <textarea className=' w-full h-full bg-[rgba(85,123,241,0)] outline-none leading-6'
+                  value={content}
+                  onChange={() => {
+
+                  }}
+                >
+                
                 </textarea>
               </div>
             </div>
@@ -97,7 +124,34 @@ export default function Pool() {
       </ItemWrap>
       <div className='flex justify-end mt-5'>
         <div className='w-[260px]'>
-          <ButtonSwap >
+          {
+            lockedCurrency &&
+            <ButtonSwap
+              onClick={approve}
+            >
+              <TYPE.textGrad1 fontWeight={600} fontSize={20}>
+                { approvalState === ApprovalState.PENDING ? (
+                    <AutoRow gap="6px" justify="center">
+                      Approving <Loader stroke="white" />
+                    </AutoRow>
+                  ) : approvalState === ApprovalState.APPROVED ? (
+                    'Approved'
+                  ) : (
+                    `Approve ${lockedCurrency?.symbol}`
+                  )
+                }
+              </TYPE.textGrad1>
+            </ButtonSwap>
+          }
+          
+        </div>
+        <div className='w-[260px]'>
+          <ButtonSwap 
+            onClick={e => {
+              e.stopPropagation()
+              handleCreateAirdrop('Airdrop1', 'Social', 'Twitter', 'Like', content)
+            }}
+          >
             <TYPE.textGrad1 fontWeight={600} fontSize={20}>
               {
                 'Confirm'

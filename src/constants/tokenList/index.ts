@@ -107,3 +107,19 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
     "logoURI": "/images/tokens/usdt.png"
   }
 ]
+
+export const GET_AIRUSDT_2_USDT = () => {
+  let pair: {[key: string]: string} = {}
+  AIR_TOKEN_LIST.map(token1 => {
+    const symbol = token1.symbol.slice(4)
+    const toUSDT = ST_TOKEN_LIST.find(token2 => token2.symbol === symbol)
+    if (token1.address) {
+      const key = (token1?.address || '') as string
+      // @ts-ignore
+      pair[key] = toUSDT?.address
+    }
+
+  })
+
+  return pair
+} 

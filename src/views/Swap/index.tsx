@@ -259,7 +259,6 @@ export default function Swap() {
 
   const handleInputSelect = useCallback(
     inputCurrency => {
-      console.log(inputCurrency)
       setApprovalSubmitted(false) // reset 2 step UI for approvals
       onCurrencySelection(Field.INPUT, inputCurrency)
     },
@@ -287,6 +286,7 @@ export default function Swap() {
       router.push('/create')
     }
   }, [isProjectCreate])
+
 
   return (
     <>
@@ -337,11 +337,11 @@ export default function Swap() {
                     color={currencies[Field.INPUT] && currencies[Field.OUTPUT] ? theme.primary1 : theme.text2}
                   />
                 </ArrowWrapper> */}
-                {recipient === null && !showWrap && isExpertMode ? (
+                {/* {recipient === null && !showWrap && isExpertMode ? (
                   <LinkStyledButton id="add-recipient-button" onClick={() => onChangeRecipient('')}>
                     + Add a send (optional)
                   </LinkStyledButton>
-                ) : null}
+                ) : null} */}
               </AutoRow>
             </AutoColumn>
             <CurrencyInputPanel
@@ -399,14 +399,14 @@ export default function Swap() {
             )}
           </AutoColumn>
           <BottomGrouping>
-            <ButtonSwap onClick={handleAction} >
+            {/* <ButtonSwap onClick={handleAction} >
               <TYPE.textGrad1 fontWeight={600} fontSize={20}>
                 {
                   (isProjectSwap || isUserSwap) ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'
                 }
               </TYPE.textGrad1>
-            </ButtonSwap>
-            {/* {!account ? (
+            </ButtonSwap> */}
+            {!account ? (
               <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
             ) : showWrap ? (
               <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>
@@ -438,6 +438,10 @@ export default function Swap() {
                 </ButtonConfirmed>
                 <ButtonError
                   onClick={() => {
+                    if (isProjectCreate) {
+                      handleAction()
+                      return
+                    }
                     if (isExpertMode) {
                       handleSwap()
                     } else {
@@ -460,13 +464,17 @@ export default function Swap() {
                   <Text fontSize={16} fontWeight={500}>
                     {priceImpactSeverity > 3 && !isExpertMode
                       ? `Price Impact High`
-                      : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
+                      : (isProjectSwap || isUserSwap) ? (`Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`) : isProjectCreate ? 'Create' : 'Collect' }
                   </Text>
                 </ButtonError>
               </RowBetween>
             ) : (
               <ButtonError
                 onClick={() => {
+                  if (isProjectCreate) {
+                    handleAction()
+                    return
+                  }
                   if (isExpertMode) {
                     handleSwap()
                   } else {
@@ -488,10 +496,10 @@ export default function Swap() {
                     ? swapInputError
                     : priceImpactSeverity > 3 && !isExpertMode
                     ? `Price Impact Too High`
-                    : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
+                    : (isProjectSwap || isUserSwap) ? (`Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`) : isProjectCreate ? 'Create' : 'Collect'}
                 </Text>
               </ButtonError>
-            )} */}
+            )}
             {showApproveFlow && <ProgressSteps steps={[approval === ApprovalState.APPROVED]} />}
             {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
             {betterTradeLinkVersion && <BetterTradeLink version={betterTradeLinkVersion} />}

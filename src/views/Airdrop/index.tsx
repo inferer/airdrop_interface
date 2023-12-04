@@ -14,11 +14,11 @@ export default function Pool() {
 
   const { handleAirdrop, handleAirdropSwap } = useAirdrop()
 
-  const [algToken1, setAlgToken1] = useState('0x13c85F531c614a4e6B2fF95171dE1C600DA83655')
+  const [algToken1, setAlgToken1] = useState('0x0060F0f8FB3e02eA7f798b643a783a69B06F21ca')
   const [amount, setAmount] = useState('1000')
 
-  const [algToken, setAlgToken] = useState('0x13c85F531c614a4e6B2fF95171dE1C600DA83655')
-  const [airToken, setAirToken] = useState('0x72a99424410249D5ba34A49445691D4f88cFb47E')
+  const [algToken, setAlgToken] = useState('0x0060F0f8FB3e02eA7f798b643a783a69B06F21ca')
+  const [airToken, setAirToken] = useState('0x3a1b55A11036B6B9056e6f53Cb76b22811f7d3Dd')
 
   return (
     <AirdropWrapper>
