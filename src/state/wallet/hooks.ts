@@ -1,11 +1,12 @@
 import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount } from '@uniswap/sdk'
 import { useMemo } from 'react'
 import ERC20_INTERFACE from '../../constants/abis/erc20'
-import { useAllTokens } from '../../hooks/Tokens'
+import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import { useActiveWeb3React } from '../../hooks'
 import { useMulticallContract } from '../../hooks/useContract'
 import { isAddress } from '../../utils'
 import { useSingleContractMultipleData, useMultipleContractSingleData } from '../multicall/hooks'
+import { getUSDTTokenFromAirToken } from '../../utils/getTokenList'
 
 /**
  * Returns a map of the given addresses to their eventually consistent ETH balances.
@@ -120,6 +121,13 @@ export function useCurrencyBalances(
 
 export function useCurrencyBalance(account?: string, currency?: Currency): CurrencyAmount | undefined {
   return useCurrencyBalances(account, [currency])[0]
+}
+
+export function useCurrencyBalanceUSDT(account?: string, currencyAirId?: string): CurrencyAmount | undefined {
+  const currencyId = currencyAirId && getUSDTTokenFromAirToken(currencyAirId)
+  const currency = useCurrency(currencyId)
+  return useCurrencyBalances(account, [currency ?? undefined])[0]
+  
 }
 
 // mimics useAllBalances

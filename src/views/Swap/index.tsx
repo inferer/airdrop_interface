@@ -265,8 +265,8 @@ export default function Swap() {
     [onCurrencySelection]
   )
 
-  const handleMaxInput = useCallback(() => {
-    maxAmountInput && onUserInput(Field.INPUT, maxAmountInput.toExact())
+  const handleMaxInput = useCallback((maxAmount?: string) => {
+    maxAmountInput && onUserInput(Field.INPUT, maxAmount ?? maxAmountInput.toExact())
   }, [maxAmountInput, onUserInput])
 
   const handleOutputSelect = useCallback(outputCurrency => onCurrencySelection(Field.OUTPUT, outputCurrency), [

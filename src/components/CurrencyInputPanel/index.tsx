@@ -2,7 +2,7 @@ import { Currency, Pair } from '@uniswap/sdk'
 import React, { useState, useContext, useCallback, useMemo } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { darken } from 'polished'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
+import { useCurrencyBalance, useCurrencyBalanceUSDT } from '../../state/wallet/hooks'
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import CurrencyLogo from '../CurrencyLogo'
 import DoubleCurrencyLogo from '../DoubleLogo'
@@ -118,7 +118,7 @@ const BalanceWrap = styled.div`
 interface CurrencyInputPanelProps {
   value: string
   onUserInput: (value: string) => void
-  onMax?: () => void
+  onMax?: (maxAmount?: string) => void
   showMaxButton: boolean
   label?: string
   onCurrencySelect?: (currency: Currency) => void
@@ -132,7 +132,7 @@ interface CurrencyInputPanelProps {
   showCommonBases?: boolean
 }
 
-export default function   CurrencyInputPanel({
+export default function  CurrencyInputPanel({
   value,
   onUserInput,
   onMax,
@@ -153,16 +153,30 @@ export default function   CurrencyInputPanel({
   const [modalOpen, setModalOpen] = useState(false)
   const { account } = useActiveWeb3React()
   const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
+  // @ts-ignore
+  const selectedCurrencyBalanceUSDT = useCurrencyBalanceUSDT(account ?? undefined, currency && currency.address)
   const theme = useContext(ThemeContext)
 
   const handleDismissSearch = useCallback(() => {
     setModalOpen(false)
   }, [setModalOpen])
 
+
   const payInput = useMemo(() => {
     return id === 'swap-currency-input' || id === 'add-liquidity-input-tokena'
   }, [id])
+
   const { isProjectCreate } = useIsUserAction()
+
+  const handleOnMax = useCallback(async () => {
+    if (onMax) {
+      if (isProjectCreate && payInput && selectedCurrencyBalanceUSDT) {
+        onMax(selectedCurrencyBalanceUSDT?.toExact())
+      } else {
+        onMax()
+      }
+    }
+  }, [onMax, isProjectCreate, payInput, selectedCurrencyBalanceUSDT])
   return (
     <InputPanel id={id} payInput={payInput}>
       <Container hideInput={hideInput}>
@@ -224,19 +238,28 @@ export default function   CurrencyInputPanel({
         <BalanceWrap>
             {account && (
               <TYPE.body
-                onClick={onMax}
+                onClick={handleOnMax}
                 color={theme.text1}
                 fontWeight={400}
                 fontSize={16}
                 style={{ display: 'inline', cursor: 'pointer' }}
               >
-                {!hideBalance && !!currency && selectedCurrencyBalance
+                {
+                  isProjectCreate && payInput 
+                    ? (!hideBalance && !!currency && selectedCurrencyBalanceUSDT
+                      ? 'Balance: ' + selectedCurrencyBalanceUSDT?.toSignificant(6)
+                      : ' -') 
+                    : (!hideBalance && !!currency && selectedCurrencyBalance
+                      ? 'Balance: ' + selectedCurrencyBalance?.toSignificant(6)
+                      : ' -')
+                }
+                {/* {!hideBalance && !!currency && selectedCurrencyBalance
                   ? 'Balance: ' + selectedCurrencyBalance?.toSignificant(6)
-                  : ' -'}
+                  : ' -'} */}
               </TYPE.body>
             )}
             {account && currency && label !== 'To' && (
-                <StyledBalanceMax onClick={onMax}>MAX</StyledBalanceMax>
+                <StyledBalanceMax onClick={handleOnMax}>MAX</StyledBalanceMax>
               )}
         </BalanceWrap>
       </Container>

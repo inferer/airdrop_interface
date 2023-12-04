@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
 import { useSelectedTokenList, WrappedTokenInfo } from '../../state/lists/hooks'
 import { useAddUserToken, useIsUserAction, useRemoveUserAddedToken } from '../../state/user/hooks'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
+import { useCurrencyBalance, useCurrencyBalanceUSDT } from '../../state/wallet/hooks'
 import { LinkStyledButton, TYPE } from '../../theme'
 import { useIsUserAddedToken } from '../../hooks/Tokens'
 import Column from '../Column'
@@ -101,6 +101,8 @@ function CurrencyRow({
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency)
   const customAdded = useIsUserAddedToken(currency)
   const balance = useCurrencyBalance(account ?? undefined, currency)
+  // @ts-ignore
+  const balanceUSDT = useCurrencyBalanceUSDT(account ?? undefined, currency.address)
 
   const removeToken = useRemoveUserAddedToken()
   const addToken = useAddUserToken()
@@ -151,7 +153,12 @@ function CurrencyRow({
       </Column>
       <TokenTags currency={currency} />
       <RowFixed style={{ justifySelf: 'flex-end' }}>
-        {balance ? <Balance balance={balance} /> : account ? <Loader /> : null}
+        {
+          payInputCreate 
+            ? (balanceUSDT ? <Balance balance={balanceUSDT} /> : account ? <Loader /> : null)
+            : (balance ? <Balance balance={balance} /> : account ? <Loader /> : null)
+        }
+        {/* {balance ? <Balance balance={balance} /> : account ? <Loader /> : null} */}
       </RowFixed>
     </MenuItem>
   )
