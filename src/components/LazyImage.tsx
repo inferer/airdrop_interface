@@ -15,7 +15,7 @@ const LazyImage: React.FC<LazyImageProps> = ({ src, className, alt, ...others}) 
   const { ref: inViewRef, inView, entry } = useInView({});
   useEffect(() => {
     if (inView && !imgSrc) {
-      setImgSrc(isDev ? src : `https://website-1315068501.cos.ap-nanjing.myqcloud.com/website_identity${src}`)
+      setImgSrc(isDev ? src : `https://website-1315068501.cos.ap-nanjing.myqcloud.com/airdrop_interface${src}`)
     }
     
   }, [inView, src, imgSrc])
@@ -41,7 +41,7 @@ export const LazyImage3: React.FC<LazyImageProps> = ({ src, className, ...others
     <img referrerPolicy="no-referrer" ref={inViewRef} src={imgSrc} className={ `transition-all ${!imgSrc ? 'opacity-0 ' : 'opacity-100 '} ${className}` } { ...others } alt="" onError={function() {
       if (imgSrc) {
         const errorPng = '/images/search/default.png'
-        setImgSrc(isDev ? errorPng : `https://website-1315068501.cos.ap-nanjing.myqcloud.com/website_identity${errorPng}`)
+        setImgSrc(isDev ? errorPng : `https://website-1315068501.cos.ap-nanjing.myqcloud.com/airdrop_interface${errorPng}`)
       }
     }} />
   )
@@ -52,7 +52,7 @@ export const LazyImage2: React.FC<LazyImageProps> = ({ src, className, ...others
   const { ref: inViewRef, inView, entry } = useInView({});
   useEffect(() => {
     if (inView) {
-      setImgSrc(isDev ? src : `https://website-1315068501.cos.ap-nanjing.myqcloud.com/website_identity${src}`)
+      setImgSrc(isDev ? src : `https://website-1315068501.cos.ap-nanjing.myqcloud.com/airdrop_interface${src}`)
     }
     
   }, [inView, src])

@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/node_modules/
 
 # testing
 /coverage
@@ -35,3 +36,5 @@ cypress/fixtures/example.json
 
 # next.js
 .next/
+next-env.d.ts
+cos.config.json
