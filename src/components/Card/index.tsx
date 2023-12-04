@@ -11,6 +11,7 @@ const Card = styled(Box)<{ padding?: string; border?: string; borderRadius?: str
   border: ${({ border }) => border};
   border-radius: ${({ borderRadius }) => borderRadius};
 `
+
 export default Card
 
 export const LightCard = styled(Card)`
@@ -45,7 +46,7 @@ const BlueCardStyled = styled(Card)`
   width: fit-content;
 `
 
-export const BlueCard = forwardRef(({ children, ...rest }: CardProps, ref: React.Ref<unknown> | undefined) => {
+export const BlueCard = ({ children, ...rest }: CardProps) => {
   return (
     <BlueCardStyled {...rest}>
       <Text fontWeight={500} color="#2172E5">
@@ -53,5 +54,7 @@ export const BlueCard = forwardRef(({ children, ...rest }: CardProps, ref: React
       </Text>
     </BlueCardStyled>
   )
-})
+}
+
+
 
