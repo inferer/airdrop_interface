@@ -80,7 +80,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 13885"
+    "start": "next start -p 13880"
   },
   "eslintConfig": {
     "extends": "react-app"
