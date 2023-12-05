@@ -20,6 +20,7 @@ import { Token } from '@uniswap/sdk'
 export default function Create() {
   const theme = useContext(ThemeContext)
   const { account } = useActiveWeb3React()
+  const [name, setName] = useState('')
 
   const [content, setContent] = useState('https://twitter.com/intent/like?tweet_id=17203739135769 52121')
 
@@ -32,8 +33,6 @@ export default function Create() {
     approve
   } = useCreateCallback(undefined, undefined, undefined, null)
 
-
-  console.log(args, lockedAmount, lockedCurrency, approvalState)
 
   const { handleCreateAirdrop } = useCreateAirdrop(args, lockedCurrency as Token ?? undefined)
 
@@ -51,9 +50,9 @@ export default function Create() {
         <div>
           <ItemBox>
             <ItemTitle>airdrop name</ItemTitle>
-            <Input value={''} onUserInput={function (input: string): void {
-              throw new Error('Function not implemented.')
-            } } />
+            <Input value={name} onUserInput={value => {
+              setName(value)
+            }} />
           </ItemBox>
           <ItemBox style={{ marginTop: 20}}>
             <ItemTitle>offer</ItemTitle>
@@ -149,7 +148,7 @@ export default function Create() {
           <ButtonSwap 
             onClick={e => {
               e.stopPropagation()
-              handleCreateAirdrop('Airdrop1', 'Social', 'Twitter', 'Like', content)
+              handleCreateAirdrop(name, 'Social', 'Twitter', 'Like', content)
             }}
           >
             <TYPE.textGrad1 fontWeight={600} fontSize={20}>

@@ -142,6 +142,9 @@ const TextGrad1 = styled(Text)`
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 export const TYPE = {

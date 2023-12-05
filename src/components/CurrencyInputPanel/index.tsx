@@ -258,7 +258,7 @@ export default function  CurrencyInputPanel({
                   : ' -'} */}
               </TYPE.body>
             )}
-            {account && currency && label !== 'To' && (
+            {account && currency && label !== 'You received' && (
                 <StyledBalanceMax onClick={handleOnMax}>MAX</StyledBalanceMax>
               )}
         </BalanceWrap>

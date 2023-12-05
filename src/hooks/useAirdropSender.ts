@@ -84,6 +84,10 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
 
       }
       const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit })
+      const receipt = tx.wait()
+      if (receipt.status) {
+        
+      }
       // await airdropSender.setRouter(ROUTER_ADDRESS)
       // const airdropManager = await airdropSender.airdropManager()
       // const router = await airdropSender.router()
