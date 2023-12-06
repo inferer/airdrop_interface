@@ -1,4 +1,5 @@
 import { Contract } from '@ethersproject/contracts'
+import { ethers } from 'ethers';
 import { getAddress } from '@ethersproject/address'
 import { AddressZero } from '@ethersproject/constants'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
@@ -7,6 +8,7 @@ import IUniswapV2Router02ABI from '@uniswap/v2-periphery/build/IUniswapV2Router0
 import { ROUTER_ADDRESS } from '../constants'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@uniswap/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
+import bscRpcProvider from './providers'
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -87,6 +89,15 @@ export function getContract(address: string, ABI: any, library: Web3Provider, ac
   return new Contract(address, ABI, getProviderOrSigner(library, account) as any)
 }
 
+// // account is optional
+// export function getContract2(address: string, ABI: any, library?: Web3Provider, account?: string): Contract {
+//   if (!isAddress(address) || address === AddressZero) {
+//     throw Error(`Invalid 'address' parameter '${address}'.`)
+//   }
+
+//   return new ethers.Contract(address, ABI, bscRpcProvider)
+// }
+
 // account is optional
 export function getRouterContract(_: number, library: Web3Provider, account?: string): Contract {
   return getContract(ROUTER_ADDRESS, IUniswapV2Router02ABI.abi, library, account)
@@ -99,4 +110,19 @@ export function escapeRegExp(string: string): string {
 export function isTokenOnList(defaultTokens: TokenAddressMap, currency?: Currency): boolean {
   if (currency === ETHER) return true
   return Boolean(currency instanceof Token && defaultTokens[currency.chainId]?.[currency.address])
+}
+
+export function addZero(m: number) {
+  return m < 10 ? '0' + m : m;
+}
+export function transformTime(timestamp: number) {
+  var time = new Date(timestamp);
+  var y = time.getFullYear();
+  var M = time.getMonth() + 1;
+  var d = time.getDate();
+  var h = time.getHours();
+  var m = time.getMinutes();
+  var s = time.getSeconds();
+
+  return addZero(h) + ':' + addZero(m) + ' ' + addZero(M) + "/" + addZero(d) + ' ' + y;
 }

@@ -67,3 +67,11 @@ export async function getTokenListLocal(
 export function getUSDTTokenFromAirToken(address: string) {
   return GET_AIRUSDT_2_USDT()[address]
 }
+
+export function getUSDTTokenByAddress(address: string) {
+  return ST_TOKEN_LIST.find(token => token.address.toLowerCase() === address.toLowerCase())
+}
+
+export function getLabelTokenByAddress(address: string) {
+  return AIRLABEL_TOKEN_LIST.find(token => token.address.toLowerCase() === address.toLowerCase())
+}

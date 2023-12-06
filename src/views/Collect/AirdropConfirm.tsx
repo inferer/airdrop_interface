@@ -1,16 +1,29 @@
 
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import LazyImage from "../../components/LazyImage";
 import { FlexCenter, LabelText } from "./styleds";
 import { ButtonSwap } from "../../components/Button";
 import { TYPE } from "../../theme";
+import { useAirdropList, useAirdropList0 } from "../../state/airdrop/hooks";
+import router from 'next/router'
+import { useAirdropManager } from "../../hooks/useAirdropManager";
 
 const AirdropConfirm: React.FC<{
 
 }> = () => {
+  const { handleGetAirdropOne } = useAirdropManager()
+  useEffect(() => {
+    if (router.query.id && router.query.id[0]) {
+      handleGetAirdropOne(Number(router.query.id[0]))
+    }
+  }, [router.query])
+  const airdrop = useAirdropList0(router.query.id && router.query.id[0])
+
+  console.log(airdrop)
+
   return (
     <div className="p-5">
-      <div className=" text-[36px] font-fsemibold leading-[42px]">Azuki new users plan</div>
+      <div className=" text-[36px] font-fsemibold leading-[42px]">{airdrop.name}</div>
       <div className="flex items-start mt-11">
         <div className="w-[420px]">
           <div className="flex items-center">
@@ -19,7 +32,7 @@ const AirdropConfirm: React.FC<{
             </div>
             <div>
               <div className="text-[rgba(63,60,255,0.8)] text-[16px] font-fmedium rounded-lg bg-[rgba(63,60,255,0.05)] px-2">
-                <FlexCenter>Social</FlexCenter>
+                <FlexCenter>{airdrop.label}</FlexCenter>
               </div>
             </div>
           </div>
@@ -36,7 +49,7 @@ const AirdropConfirm: React.FC<{
               <LabelText>Expire On</LabelText>
             </div>
             <div>
-              30/11/2023 22:50
+              {airdrop.expireOn}
             </div>
           </div>
         </div>
@@ -47,8 +60,10 @@ const AirdropConfirm: React.FC<{
               <LabelText>Fund</LabelText>
             </div>
             <div className="flex items-baseline">
-              <div className=" font-fmedium text-[22px]">1,000 </div>
-              <div className="text-[16px] ml-2">USDC</div>
+              <div className=" font-fmedium text-[22px]">
+                {airdrop.offerLocked}
+              </div>
+              <div className="text-[16px] ml-2">{airdrop.offerToken?.symbol}</div>
             </div>
           </div>
           <div className="flex items-center mt-5">
@@ -56,7 +71,7 @@ const AirdropConfirm: React.FC<{
               <LabelText>Action</LabelText>
             </div>
             <div className="py-[2px] px-[10px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)]">
-              <span className=" text-[16px] font-fsemibold">Like</span>
+              <span className=" text-[16px] font-fsemibold">{airdrop.action}</span>
             </div>
           </div>
         </div>
@@ -64,7 +79,7 @@ const AirdropConfirm: React.FC<{
       <div className="mt-8">
         <LabelText>Content</LabelText>
         <div className="p-4 rounded-xl bg-[rgba(85,123,241,0.03)] font-fnormal h-[100px] mt-3">
-          https://twitter.com/intent/like?tweet_id=17203739135769 52121
+          {airdrop.content}
         </div>
       </div>
       <div className="p-4 rounded-xl bg-[rgba(123,120,255,0.04)] font-fnormal mt-3">

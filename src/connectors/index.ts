@@ -7,7 +7,7 @@ import { PortisConnector } from '@web3-react/portis-connector'
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
 
-const NETWORK_URL = process.env.NEXT_PUBLIC_NETWORK_URL
+export const NETWORK_URL = process.env.NEXT_PUBLIC_NETWORK_URL
 const FORMATIC_KEY = process.env.NEXT_PUBLIC_FORTMATIC_KEY
 const PORTIS_ID = process.env.NEXT_PUBLIC_PORTIS_ID
 

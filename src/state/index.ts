@@ -9,6 +9,7 @@ import mint from './mint/reducer'
 import lists from './lists/reducer'
 import burn from './burn/reducer'
 import multicall from './multicall/reducer'
+import airdrop from './airdrop/reducer'
 
 const PERSISTED_KEYS: string[] = ['transactions']
 
@@ -21,7 +22,8 @@ const store = configureStore({
     mint,
     burn,
     multicall,
-    lists
+    lists,
+    airdrop
   },
   // middleware: [...getDefaultMiddleware({ thunk: false }), save({ states: PERSISTED_KEYS })],
   middleware: [...getDefaultMiddleware({ thunk: false })],

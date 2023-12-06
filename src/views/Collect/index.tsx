@@ -8,14 +8,15 @@ import LazyImage, { LazyImage2 } from '../../components/LazyImage'
 import AirdropList from './AirdropList'
 import router from 'next/router'
 import AirdropConfirm from './AirdropConfirm'
-import { useGetAirdropWithLoadingIndicator } from '../../hooks/useAirdropSender'
+import { useAirdropManager } from '../../hooks/useAirdropManager'
 
 function Collect() {
   const theme = useContext(ThemeContext)
   const { account } = useActiveWeb3React()
 
   // useGetAirdropWithLoadingIndicator()
-  console.log(router.query)
+  
+  
   const isAirdropConfirm = router.query.id
 
   const handleToPage = useCallback(() => {
