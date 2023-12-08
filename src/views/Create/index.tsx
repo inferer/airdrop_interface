@@ -29,8 +29,11 @@ export default function Create() {
     lockedAmount,
     lockedCurrency,
     lockedCurrencyAmount,
+    outputAmount,
     approvalState,
-    approve
+    approve,
+    approvalStateLabel,
+    approveLabel
   } = useCreateCallback(undefined, undefined, undefined, null)
 
 
@@ -122,28 +125,51 @@ export default function Create() {
         </div>
       </ItemWrap>
       <div className='flex justify-end mt-5'>
-        <div className='w-[260px]'>
+        
           {
             lockedCurrency &&
-            <ButtonSwap
-              onClick={approve}
-            >
-              <TYPE.textGrad1 fontWeight={600} fontSize={20}>
-                { approvalState === ApprovalState.PENDING ? (
-                    <AutoRow gap="6px" justify="center">
-                      Approving <Loader stroke="white" />
-                    </AutoRow>
-                  ) : approvalState === ApprovalState.APPROVED ? (
-                    'Approved'
-                  ) : (
-                    `Approve ${lockedCurrency?.symbol}`
-                  )
-                }
-              </TYPE.textGrad1>
-            </ButtonSwap>
+            <div className='w-[260px]'>
+              <ButtonSwap
+                onClick={approve}
+              >
+                <TYPE.textGrad1 fontWeight={600} fontSize={20}>
+                  { approvalState === ApprovalState.PENDING ? (
+                      <AutoRow gap="6px" justify="center">
+                        Approving <Loader stroke="white" />
+                      </AutoRow>
+                    ) : approvalState === ApprovalState.APPROVED ? (
+                      'Approved ' + lockedCurrency?.symbol
+                    ) : (
+                      `Approve ${lockedCurrency?.symbol}`
+                    )
+                  }
+                </TYPE.textGrad1>
+              </ButtonSwap>
+            </div>
           }
-          
-        </div>
+        
+          {
+            outputAmount &&
+            <div className='w-[260px]'>
+              <ButtonSwap
+                onClick={approveLabel}
+              >
+                <TYPE.textGrad1 fontWeight={600} fontSize={20}>
+                  { approvalStateLabel === ApprovalState.PENDING ? (
+                      <AutoRow gap="6px" justify="center">
+                        Approving <Loader stroke="white" />
+                      </AutoRow>
+                    ) : approvalStateLabel === ApprovalState.APPROVED ? (
+                      'Approved ' + outputAmount?.currency?.symbol
+                    ) : (
+                      `Approve ${outputAmount?.currency?.symbol}`
+                    )
+                  }
+                </TYPE.textGrad1>
+              </ButtonSwap>
+            </div>
+          }
+        
         <div className='w-[260px]'>
           <ButtonSwap 
             onClick={e => {

@@ -285,6 +285,9 @@ export default function Swap() {
     if (isProjectCreate) {
       router.push('/create')
     }
+    if (isUserCollect) {
+      router.push('/collect')
+    }
   }, [isProjectCreate])
 
 
@@ -399,14 +402,16 @@ export default function Swap() {
             )}
           </AutoColumn>
           <BottomGrouping>
-            {/* <ButtonSwap onClick={handleAction} >
-              <TYPE.textGrad1 fontWeight={600} fontSize={20}>
-                {
-                  (isProjectSwap || isUserSwap) ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'
-                }
-              </TYPE.textGrad1>
-            </ButtonSwap> */}
-            {!account ? (
+            {
+              isUserCollect ?
+                <ButtonSwap onClick={handleAction} >
+                  <TYPE.textGrad1 fontWeight={600} fontSize={20}>
+                    {
+                      (isProjectSwap || isUserSwap) ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'
+                    }
+                  </TYPE.textGrad1>
+                </ButtonSwap> :
+            !account ? (
               <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
             ) : showWrap ? (
               <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>

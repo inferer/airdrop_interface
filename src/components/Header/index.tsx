@@ -211,7 +211,7 @@ export default function Header() {
             <Menu />
           </HeaderElementWrap> */}
           <HeaderElementWrap>
-            <LazyImage src="/images/airdrop/add.svg" className='icon-add' />
+            <LazyImage2 src={ isProjectMode ? "/images/airdrop/add.svg" : "/images/airdrop/menus.svg" } className='icon-add' />
             <LazyImage2 src={ isProjectMode ? '/images/airdrop/project.svg' : '/images/airdrop/user.svg'} className='icon-role' />
           </HeaderElementWrap>
           <Web3Status />
