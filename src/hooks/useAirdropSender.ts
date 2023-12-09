@@ -1,3 +1,4 @@
+import router from 'next/router'
 import { BigNumber } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { Currency, Token, Trade } from '@uniswap/sdk'
@@ -12,7 +13,6 @@ import { useApproveCallback } from './useApproveCallback'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import { AirdropSender_NETWORKS } from '../constants/airdropSender'
 import { useSwapCallArguments } from './useSwapCallback'
-
 
 
 export function useCreateCallback(
@@ -95,7 +95,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit })
       const receipt = tx.wait()
       if (receipt.status) {
-        
+        router.push('/collect')
       }
       // await airdropSender.setRouter(ROUTER_ADDRESS)
       // const airdropManager = await airdropSender.airdropManager()

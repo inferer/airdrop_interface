@@ -210,12 +210,22 @@ export default function Header() {
               <Web3Status />
             </AccountElement> */}
           </HeaderElement>
+          <HeaderElement>
+            <AirdropCard style={{width: 150}}>
+              <Link href={'/collect'}>Airdrop List</Link>
+            </AirdropCard>
+          </HeaderElement>
+          <HeaderElement>
+            <AirdropCard style={{width: 150}}>
+              <Link href={'/tasks'}>Ongoing airdrops</Link>
+            </AirdropCard>
+          </HeaderElement>
           {/* <HeaderElementWrap>
             <Settings />
             <Menu />
           </HeaderElementWrap> */}
           <HeaderElementWrap>
-            <div
+            {/* <div
               onClick={e => {
                 e.stopPropagation()
                 if (isProjectMode) {
@@ -227,7 +237,7 @@ export default function Header() {
             >
               <LazyImage2
                 src={ isProjectMode ? "/images/airdrop/add.svg" : "/images/airdrop/menus.svg" } className='icon-add' />
-            </div>
+            </div> */}
             
             <LazyImage2 src={ isProjectMode ? '/images/airdrop/project.svg' : '/images/airdrop/user.svg'} className='icon-role' />
           </HeaderElementWrap>
