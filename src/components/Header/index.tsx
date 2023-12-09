@@ -176,7 +176,7 @@ export default function Header() {
     <HeaderFrame>
       <RowBetween style={{ alignItems: 'flex-start' }} padding="1rem 1rem 0 1rem">
         <HeaderElement>
-          <Link href={'/'}>
+          <Link href={'/swap'}>
             <UniIcon className=' cursor-pointer'>
               <LazyImage src="/images/logo.png" alt="logo" />
             </UniIcon>

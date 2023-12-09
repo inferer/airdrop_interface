@@ -75,7 +75,6 @@ export function CurrencySearch({
           return allTokens
         }
       }
-      
     }
     return payInput ? allTokens : airLabelAllTokens
   }, [allTokens, airLabelAllTokens, payInput, isProjectMode, isSwap])
