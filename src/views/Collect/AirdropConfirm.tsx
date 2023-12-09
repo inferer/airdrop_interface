@@ -7,12 +7,12 @@ import { TYPE } from "../../theme";
 import { useAirdropList, useAirdropList0 } from "../../state/airdrop/hooks";
 import router from 'next/router'
 import { useAirdropManager } from "../../hooks/useAirdropManager";
-import { useConfirmTask } from "../../hooks/useAirdropSender";
+import { useAirdropReceiver } from "../../hooks/useAirdropReceiver";
 
 const AirdropConfirm: React.FC<{
 
 }> = () => {
-  const { handleConfirmTask } = useConfirmTask()
+  const { handleConfirmTask } = useAirdropReceiver()
   const { handleGetAirdropOne } = useAirdropManager()
   useEffect(() => {
     if (router.query.id && router.query.id[0]) {

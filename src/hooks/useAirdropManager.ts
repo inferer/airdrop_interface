@@ -167,8 +167,10 @@ export function useAirdropManager() {
     if (multi && airdropManager && account) {
       let userAirdropConfirmed = await getUserAirdropConfirmed2(airdropManager, account) 
       const userConfirmedIds = userAirdropConfirmed.map((item: { airdropId: any; }) => item.airdropId)
+      console.log(userAirdropConfirmed)
       const list = await getAirdropList(multi, userConfirmedIds)
-      const newList = list.map((item, index) => ({ ...item, ...userAirdropConfirmed[index]}))
+      const tempConfirmed = userAirdropConfirmed.reverse()
+      const newList = list.map((item, index) => ({ ...item, ...tempConfirmed[index]}))
       dispatch(updateUserAirdropConfirmed({ airdropList: newList as any }))
     }
   }, [multi, airdropManager, account])

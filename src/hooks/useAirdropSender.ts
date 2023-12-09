@@ -11,7 +11,7 @@ import { useCurrency } from './Tokens'
 import { getUSDTTokenFromAirToken } from '../utils/getTokenList'
 import { useApproveCallback } from './useApproveCallback'
 import { useCurrencyBalance } from '../state/wallet/hooks'
-import { AirdropSender_NETWORKS } from '../constants/airdropSender'
+import { AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury'
 import { useSwapCallArguments } from './useSwapCallback'
 
 
@@ -49,8 +49,8 @@ export function useCreateCallback(
     return '0'
   }, [args, lockedCurrency])
 
-  const [approvalState, approve] = useApproveCallback(lockedCurrencyAmount,  chainId && AirdropSender_NETWORKS[chainId])
-  const [approvalStateLabel, approveLabel] = useApproveCallback(v2Trade?.outputAmount,  chainId && AirdropSender_NETWORKS[chainId])
+  const [approvalState, approve] = useApproveCallback(lockedCurrencyAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
+  const [approvalStateLabel, approveLabel] = useApproveCallback(v2Trade?.outputAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
   return {
     args,
     lockedAmount,
@@ -93,7 +93,8 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
 
       }
       const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit })
-      const receipt = tx.wait()
+      const receipt = await tx.wait()
+
       if (receipt.status) {
         router.push('/collect')
       }
@@ -109,59 +110,3 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
   }
 }
 
-
-export function useConfirmTask() {
-  const { account, chainId, library } = useActiveWeb3React()
-  const airdropSender: Contract | null = useAirdropSenderContract()
-
-
-  const handleConfirmTask = useCallback(async (
-    airdropId: string,
-    amount: string
-  ) => {
-    if (airdropSender && account) {
-      
-      const _amount = BigNumber.from(amount).mul(BigNumber.from(10).pow(18)).toString()
-
-      let gasLimit = '5000000'
-      try {
-        const gasEstimate = await airdropSender.estimateGas['confirmTask'](airdropId, _amount)
-        gasLimit = gasEstimate.toString()
-      } catch (error) {
-
-      }
-      const tx = await airdropSender.confirmTask(airdropId, _amount, { gasPrice: '1000000000', gasLimit: gasLimit })
-      const receipt = tx.wait()
-      if (receipt.status) {
-        alert('Success')
-      }
-    }
-  }, [airdropSender, account])
-
-  const handleCompleteTask = useCallback(async (
-    airdropIds: string[],
-  ) => {
-    if (airdropSender && account) {
-      if (airdropIds.length <= 0) {
-        alert('no checked')
-        return
-      }
-      let gasLimit = '5000000'
-      try {
-        const gasEstimate = await airdropSender.estimateGas['completeTask'](airdropIds)
-        gasLimit = gasEstimate.toString()
-      } catch (error) {
-
-      }
-      const tx = await airdropSender.completeTask(airdropIds, { gasPrice: '1000000000', gasLimit: gasLimit })
-      const receipt = tx.wait()
-      if (receipt.status) {
-        alert('Success')
-      }
-    }
-  }, [airdropSender, account])
-  return {
-    handleConfirmTask,
-    handleCompleteTask
-  }
-}

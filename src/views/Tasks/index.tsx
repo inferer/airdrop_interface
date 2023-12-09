@@ -7,14 +7,14 @@ import { CollectBody, TitleWrap } from './styleds'
 import LazyImage, { LazyImage2 } from '../../components/LazyImage'
 import TaskList from './TaskList'
 import router from 'next/router'
-import { useConfirmTask } from '../../hooks/useAirdropSender'
+import { useAirdropReceiver } from '../../hooks/useAirdropReceiver'
 import { ButtonSwap } from '../../components/Button'
 
 function Collect() {
   const theme = useContext(ThemeContext)
   const { account } = useActiveWeb3React()
 
-  const { handleCompleteTask } = useConfirmTask()
+  const { handleCompleteTask } = useAirdropReceiver()
 
   const [ids, setIds] = useState<string[]>([])
   const handleOnChecked = (keys: string[]) => {

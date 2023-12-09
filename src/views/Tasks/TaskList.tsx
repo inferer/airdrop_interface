@@ -97,10 +97,10 @@ const AirdropList: React.FC<{
                             <span className=" text-[16px] font-fsemibold">Like</span>
                           </div>
                         </TableCell>
-                        <TableCell className="w-[80px]">
+                        <TableCell className="w-[74px]">
                           <div className="flex justify-center w-full">
                             {
-                              airdrop.completed ? <div className=" text-gray-400">Completed</div> : <CheckBox onChange={checked => handleChecked(airdrop.airdropId, checked)} /> 
+                              airdrop.completed ? <div className=" text-gray-400 text-sm">Completed</div> : <CheckBox onChange={checked => handleChecked(airdrop.airdropId, checked)} /> 
                             }
                             
                           </div>

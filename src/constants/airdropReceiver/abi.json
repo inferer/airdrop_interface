@@ -96,27 +96,30 @@
   {
     "inputs": [
       {
-        "internalType": "string[]",
-        "name": "_baseInfo",
-        "type": "string[]"
-      },
-      {
-        "internalType": "address[]",
-        "name": "_offer_label_token",
-        "type": "address[]"
-      },
-      {
         "internalType": "uint256[]",
-        "name": "_offer_label_locked",
+        "name": "_airdropIds",
         "type": "uint256[]"
-      },
-      {
-        "internalType": "uint64",
-        "name": "_duration",
-        "type": "uint64"
       }
     ],
-    "name": "createAirdrop",
+    "name": "completeTask",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_airdropId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "confirmTask",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -171,6 +174,19 @@
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "router",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
