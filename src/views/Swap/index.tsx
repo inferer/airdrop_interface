@@ -289,7 +289,7 @@ export default function Swap() {
     if (isUserCollect) {
       router.push('/collect')
     }
-  }, [isProjectCreate])
+  }, [isProjectCreate, isUserCollect])
 
 
   return (
