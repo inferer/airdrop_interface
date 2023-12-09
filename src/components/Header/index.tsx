@@ -20,6 +20,8 @@ import Link from 'next/link'
 import LazyImage, { LazyImage2, LazyImage3 } from '../LazyImage'
 import { AirdropTokensTabs } from '../NavigationTabs'
 
+import router from 'next/router'
+
 const HeaderFrame = styled.div`
   display: flex;
   align-items: center;
@@ -187,12 +189,14 @@ export default function Header() {
         <HeaderControls>
           <HeaderElement>
             <TestnetWrapper>
-              <Link href={'/airdrop'}>
+              
                 <AirdropCard onClick={e => {
                   e.stopPropagation()
                   
-                }} >Airdrop</AirdropCard>
-              </Link>
+                }} >
+                  <Link href={'/airdrop'}>Airdrop</Link>
+                  
+                </AirdropCard>
             </TestnetWrapper>
             {/* <TestnetWrapper>
               {!isMobile && chainId && NETWORK_LABELS[chainId] && <NetworkCard>{NETWORK_LABELS[chainId]}</NetworkCard>}
@@ -211,7 +215,20 @@ export default function Header() {
             <Menu />
           </HeaderElementWrap> */}
           <HeaderElementWrap>
-            <LazyImage2 src={ isProjectMode ? "/images/airdrop/add.svg" : "/images/airdrop/menus.svg" } className='icon-add' />
+            <div
+              onClick={e => {
+                e.stopPropagation()
+                if (isProjectMode) {
+
+                } else {
+                  router.push('/tasks')
+                }
+              }}
+            >
+              <LazyImage2
+                src={ isProjectMode ? "/images/airdrop/add.svg" : "/images/airdrop/menus.svg" } className='icon-add' />
+            </div>
+            
             <LazyImage2 src={ isProjectMode ? '/images/airdrop/project.svg' : '/images/airdrop/user.svg'} className='icon-role' />
           </HeaderElementWrap>
           <Web3Status />

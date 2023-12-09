@@ -282,6 +282,7 @@ export default function Swap() {
   }, [inputTokens, onCurrencySelection])
 
   const handleAction = useCallback(() => {
+    console.log(isProjectCreate, isUserCollect)
     if (isProjectCreate) {
       router.push('/create')
     }

@@ -17,3 +17,7 @@ export function useAirdropList0(airdropId: string | undefined) {
   }, [airdropListOne, airdropId])
 }
 
+export function useUserAirdropConfirmedList() {
+  return useSelector<AppState, AppState['airdrop']['userAirdropConfirmedList']>(state => state.airdrop.userAirdropConfirmedList)
+}
+

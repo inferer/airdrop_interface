@@ -82,7 +82,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       const route = args[2]
       const offer_label_token = [lockedToken.address, route[0], route[route.length - 1], account]
       const offer_label_locked = [args[0], args[1]]
-      const duration = 24 * 60 * 60
+      const duration = 7 * 24 * 60 * 60
 
       console.log(baseInfo, offer_label_token, offer_label_locked, duration)
       let gasLimit = '5000000'
@@ -138,7 +138,30 @@ export function useConfirmTask() {
     }
   }, [airdropSender, account])
 
+  const handleCompleteTask = useCallback(async (
+    airdropIds: string[],
+  ) => {
+    if (airdropSender && account) {
+      if (airdropIds.length <= 0) {
+        alert('no checked')
+        return
+      }
+      let gasLimit = '5000000'
+      try {
+        const gasEstimate = await airdropSender.estimateGas['completeTask'](airdropIds)
+        gasLimit = gasEstimate.toString()
+      } catch (error) {
+
+      }
+      const tx = await airdropSender.completeTask(airdropIds, { gasPrice: '1000000000', gasLimit: gasLimit })
+      const receipt = tx.wait()
+      if (receipt.status) {
+        alert('Success')
+      }
+    }
+  }, [airdropSender, account])
   return {
-    handleConfirmTask
+    handleConfirmTask,
+    handleCompleteTask
   }
 }

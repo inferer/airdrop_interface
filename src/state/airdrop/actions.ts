@@ -17,9 +17,11 @@ export interface IAirdrop {
   duration: string,
   startTimestamp: string,
   expireOn: string,
-  claimed: string
+  claimed: string,
+  completed?: boolean
 }
 
 
 export const updateAirdropList = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateAirdropList')
 export const updateAirdropListOne = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateAirdropListOne')
+export const updateUserAirdropConfirmed = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateUserAirdropConfirmed')

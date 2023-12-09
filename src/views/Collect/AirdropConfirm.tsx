@@ -103,7 +103,7 @@ const AirdropConfirm: React.FC<{
           <ButtonSwap 
             onClick={e => {
               e.stopPropagation()
-              handleConfirmTask(airdrop.airdropId, '1000')
+              handleConfirmTask(airdrop.airdropId, parseInt((Number(airdrop.labelLocked) / 5).toString(10)).toString())
             }}
           >
             <TYPE.textGrad1 fontWeight={600} fontSize={20}>

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useMulticallContract } from "./useContract";
+import { useAirdropManagerContract, useMulticallContract } from "./useContract";
 import { BigNumber, Contract } from "ethers";
 import { AirdropManager_ABI, AirdropManager_NETWORKS } from "../constants/airdropManager";
 import { NETWORK_CHAIN_ID } from "../connectors";
@@ -10,12 +10,12 @@ import { transformTime } from "../utils";
 import router from 'next/router'
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../state";
-import { updateAirdropList, updateAirdropListOne } from "../state/airdrop/actions";
+import { updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed } from "../state/airdrop/actions";
+import { useActiveWeb3React } from ".";
 
 export const getAirdropManagerAddress = () => {
   return AirdropManager_NETWORKS[NETWORK_CHAIN_ID as ChainId]
 }
-
 
 export const getAirdropLength = async (multi: Contract) => {
 
@@ -27,7 +27,7 @@ export const getAirdropLength = async (multi: Contract) => {
     })
 
   const [ currentAirdropId ] = await multicall(multi, AirdropManager_ABI, calls)
-  return currentAirdropId[0]?.toString()
+  return currentAirdropId ? currentAirdropId[0]?.toString() : 0
 }
 
 export const getAirdropList = async (multi: Contract, airdropLength: number | number[]) => {
@@ -97,10 +97,56 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
 
 }
 
+export const getUserAirdropConfirmed = async (multi: Contract, account: string) => {
+  const calls = []
+    calls.push({
+      address: getAirdropManagerAddress(),
+      name: 'getUserAirdropConfirmed',
+      params: [account]
+    })
+
+  const userAirdropConfirmed = await multicall(multi, AirdropManager_ABI, calls)
+  return userAirdropConfirmed[0] && userAirdropConfirmed[0][0] && userAirdropConfirmed[0][0][0] ? userAirdropConfirmed.map((item: any[]) => {
+    const tempItem = item[0][0]
+    if (tempItem) {
+      return {
+        completed: tempItem.completed,
+        airdropId: tempItem[1]?.toString(),
+        userAddress: tempItem[2],
+        amount: tempItem[3]?.toString(),
+        confirmedTimestamp: tempItem[4]?.toString()
+      }
+    }
+  }) : []
+}
+
+export const getUserAirdropConfirmed2 = async (airdropManager: Contract, account: string) => {
+  const calls = []
+    calls.push({
+      address: getAirdropManagerAddress(),
+      name: 'getUserAirdropConfirmed',
+      params: [account]
+    })
+  const userAirdropConfirmed = await airdropManager.getUserAirdropConfirmed(account)
+
+  return userAirdropConfirmed && userAirdropConfirmed[0] ? userAirdropConfirmed.map((item: any) => {
+    const tempItem = item
+    return {
+      completed: tempItem.completed,
+      airdropId: tempItem[1]?.toString(),
+      userAddress: tempItem[2],
+      amount: tempItem[3]?.toString(),
+      confirmedTimestamp: tempItem[4]?.toString()
+    }
+  }) : []
+}
+
 export function useAirdropManager() {
   const dispatch = useDispatch<AppDispatch>()
+  const { account } = useActiveWeb3React()
 
   const multi = useMulticallContract()
+  const airdropManager = useAirdropManagerContract()
 
   const handleGetAirdropList = useCallback(async () => {
     if (multi) {
@@ -116,6 +162,16 @@ export function useAirdropManager() {
       dispatch(updateAirdropListOne({ airdropList: list as any }))
     }
   }, [multi])
+
+  const handleGetUserAirdropConfirmed = useCallback(async () => {
+    if (multi && airdropManager && account) {
+      let userAirdropConfirmed = await getUserAirdropConfirmed2(airdropManager, account) 
+      const userConfirmedIds = userAirdropConfirmed.map((item: { airdropId: any; }) => item.airdropId)
+      const list = await getAirdropList(multi, userConfirmedIds)
+      const newList = list.map((item, index) => ({ ...item, ...userAirdropConfirmed[index]}))
+      dispatch(updateUserAirdropConfirmed({ airdropList: newList as any }))
+    }
+  }, [multi, airdropManager, account])
 
   useEffect(() => {
     const fetch = async () => {
@@ -137,7 +193,8 @@ export function useAirdropManager() {
 
   return {
     handleGetAirdropList,
-    handleGetAirdropOne
+    handleGetAirdropOne,
+    handleGetUserAirdropConfirmed
   }
 
 }

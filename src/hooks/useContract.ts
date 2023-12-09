@@ -14,6 +14,7 @@ import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../consta
 import { getContract } from '../utils'
 import { useActiveWeb3React } from './index'
 import { AirdropSender_ABI, AirdropSender_NETWORKS } from '../constants/airdropSender'
+import { AirdropManager_ABI, AirdropManager_NETWORKS } from '../constants/airdropManager'
 
 // returns null on errors
 function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
@@ -85,6 +86,11 @@ export function useMulticallContract(): Contract | null {
 export function useAirdropSenderContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && AirdropSender_NETWORKS[chainId], AirdropSender_ABI, true)
+}
+
+export function useAirdropManagerContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && AirdropManager_NETWORKS[chainId], AirdropManager_ABI, true)
 }
 
 export function useSocksController(): Contract | null {
