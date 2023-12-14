@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { darken } from 'polished'
 import { useTranslation } from 'react-i18next'
-
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import { ArrowLeft } from 'react-feather'
@@ -188,6 +188,7 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
 
 
 export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => void}) {
+  const router = useRouter()
   const { t } = useTranslation()
   const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
   const { userAction, setUserAction }  = useUserAction()
@@ -195,7 +196,12 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
 
   const handleTab = useCallback((action: UserAction) => {
     setUserAction(action)
-    onClick && onClick(action)
+    if (action === UserAction.USER_COLLECT) {
+      router.push('/search')
+    } else {
+      onClick && onClick(action)
+    }
+    
   }, [setUserAction, onClick])
 
   return (
@@ -230,6 +236,41 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
         )
       }
       
+    </Tabs>
+  )
+}
+
+export function SwapCollectTabs({ onClick }: { onClick?: (type: UserAction) => void}) {
+  const router = useRouter()
+  const { t } = useTranslation()
+  const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
+  const { userAction, setUserAction }  = useUserAction()
+  const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect } = useIsUserAction()
+
+  const handleTab = useCallback((action: UserAction) => {
+    setUserAction(action)
+    if (action === UserAction.USER_COLLECT) {
+      router.push('/search')
+    } 
+    if (action === UserAction.USER_SWAP) {
+      router.push('/swap')
+    } 
+  }, [setUserAction, onClick])
+
+  return (
+    <Tabs style={{ justifyContent: 'flex-start', marginBottom: 25 }}>
+      <>
+        <StyledNavLink2 id={`userswap-btn-click`} className={''}
+          onClick={() => handleTab(UserAction.USER_SWAP)}
+        >
+          {t('Swap')}
+        </StyledNavLink2>
+        <StyledNavLink2 id={`collect-btn-click`} className={'airdrop'}
+          onClick={() => handleTab(UserAction.USER_COLLECT)}
+        >
+          {t('Collect')}
+        </StyledNavLink2>
+      </>
     </Tabs>
   )
 }

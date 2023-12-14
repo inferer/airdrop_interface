@@ -23,7 +23,7 @@ function Collect() {
     if (isAirdropConfirm) {
       router.push('/collect')
     } else {
-      router.push('/swap')
+      router.push('/search')
     }
   }, [router, isAirdropConfirm])
 

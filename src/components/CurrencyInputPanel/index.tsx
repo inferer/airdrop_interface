@@ -69,11 +69,16 @@ const StyledDropDown = styled.svg<{ selected: boolean }>`
   }
 `
 
-const InputPanel = styled.div<{ hideInput?: boolean, payInput?: boolean }>`
+const InputPanel = styled.div<{ hideInput?: boolean, payInput?: boolean, id: string }>`
   ${({ theme }) => theme.flexColumnNoWrap}
   position: relative;
   border-radius: 12px;
-  background: ${({ payInput }) => ( payInput ? 'linear-gradient(96deg, rgba(63, 60, 255, 0.06) 0%, rgba(107, 190, 225, 0.06) 101.71%)' : 'linear-gradient(135deg, rgba(107, 190, 225, 0.06) 0%, rgba(138, 232, 153, 0.06) 100%)' )} ;
+  background: ${({ payInput, id }) => ( id === 'swap-currency-input' || 
+                                        id === 'add-liquidity-input-tokena' || 
+                                        id === 'collect-currency-output' || 
+                                        id === 'userswap-currency-output'
+    ? 'linear-gradient(96deg, rgba(63, 60, 255, 0.06) 0%, rgba(107, 190, 225, 0.06) 101.71%)' 
+    : 'linear-gradient(135deg, rgba(107, 190, 225, 0.06) 0%, rgba(138, 232, 153, 0.06) 100%)' )} ;
   z-index: 1;
 `
 
@@ -90,7 +95,7 @@ const StyledTokenName = styled.span<{ active?: boolean }>`
 `
 
 const StyledBalanceMax = styled.span`
-  color: #49BCFF;
+  color: #8AE899;
   font-family: Inter-SemiBold;
   font-size: 16px;
   font-style: normal;
@@ -164,10 +169,10 @@ export default function  CurrencyInputPanel({
 
 
   const payInput = useMemo(() => {
-    return id === 'swap-currency-input' || id === 'add-liquidity-input-tokena'
+    return id === 'swap-currency-input' || id === 'add-liquidity-input-tokena' || id === 'collect-currency-input'
   }, [id])
 
-  const { isProjectCreate } = useIsUserAction()
+  const { isProjectCreate, isProjectSwap } = useIsUserAction()
 
   const handleOnMax = useCallback(async () => {
     if (onMax) {

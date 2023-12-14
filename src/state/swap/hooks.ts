@@ -18,6 +18,7 @@ import { SwapState } from './reducer'
 import useToggledVersion from '../../hooks/useToggledVersion'
 import { useUserSlippageTolerance } from '../user/hooks'
 import { computeSlippageAdjustedAmounts } from '../../utils/prices'
+import { getAirTokenFromAlgToken } from '../../utils/getTokenList'
 
 export function useSwapState(): AppState['swap'] {
   return useSelector<AppState, AppState['swap']>(state => state.swap)
@@ -214,6 +215,85 @@ export function useDerivedSwapInfo(): {
     v2Trade: v2Trade ?? undefined,
     inputError,
     v1Trade
+  }
+}
+// from the current swap inputs, compute the best trade and return it.
+export function useCollectSwapInfo(): {
+  currencies: { [field in Field]?: Currency }
+  currencyBalances: { [field in Field]?: CurrencyAmount }
+  parsedAmount: CurrencyAmount | undefined
+  parsedAmountOUTPUT: CurrencyAmount | undefined
+  parsedAmountOUTPUTDerived: CurrencyAmount | undefined
+  inputError?: string
+} {
+  const { account } = useActiveWeb3React()
+  const score = 1.25
+  const {
+    independentField,
+    typedValue,
+    [Field.INPUT]: { currencyId: inputCurrencyId },
+    [Field.OUTPUT]: { currencyId: outputCurrencyId },
+    recipient
+  } = useSwapState()
+
+  const inputCurrency = useCurrency(inputCurrencyId)
+
+  const outputCurrency = useCurrency(getAirTokenFromAlgToken(inputCurrencyId))
+  const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
+    inputCurrency ?? undefined,
+    outputCurrency ?? undefined
+  ])
+
+  const isExactIn: boolean = independentField === Field.INPUT
+  const parsedAmount = tryParseAmount(typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
+
+
+  const parsedAmountOUTPUT = tryParseAmount((Number(typedValue) * score).toString(), (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
+  const parsedAmountOUTPUTDerived = tryParseAmount((Number(typedValue) / score).toString(), (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
+
+  const currencyBalances = {
+    [Field.INPUT]: relevantTokenBalances[0],
+    [Field.OUTPUT]: relevantTokenBalances[1]
+  }
+
+  const currencies: { [field in Field]?: Currency } = {
+    [Field.INPUT]: inputCurrency ?? undefined,
+    [Field.OUTPUT]: outputCurrency ?? undefined
+  }
+
+  // get link to trade on v1, if a better rate exists
+
+  let inputError: string | undefined
+  if (!account) {
+    inputError = 'Connect Wallet'
+  }
+
+  if (!parsedAmount) {
+    inputError = inputError ?? 'Enter an amount'
+  }
+
+  if (!currencies[Field.INPUT] || !currencies[Field.OUTPUT]) {
+    inputError = inputError ?? 'Select a token'
+  }
+
+
+  // compare input balance to max input based on version
+  const [balanceIn, amountIn] = [
+    currencyBalances[Field.INPUT],
+    parsedAmount
+  ]
+
+  if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
+    inputError = 'Insufficient ' + amountIn.currency.symbol + ' balance'
+  }
+
+  return {
+    currencies,
+    currencyBalances,
+    parsedAmount,
+    parsedAmountOUTPUT,
+    parsedAmountOUTPUTDerived,
+    inputError,
   }
 }
 
