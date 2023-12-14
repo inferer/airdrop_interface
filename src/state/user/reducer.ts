@@ -14,12 +14,14 @@ import {
   updateUserSlippageTolerance,
   updateUserDeadline,
   updateUserRoleMode,
-  updateUserAction
+  updateUserAction,
+  updateRightMenu
 } from './actions'
 
 const currentTimestamp = () => new Date().getTime()
 
 export interface UserState {
+  showRightMenu: boolean,
   // the timestamp of the last updateVersion action
   lastUpdateVersionTimestamp?: number
 
@@ -51,7 +53,7 @@ export interface UserState {
 
   userRoleMode: UserRoleMode
 
-  userAction: UserAction
+  userAction: UserAction,
 }
 
 function pairKey(token0Address: string, token1Address: string) {
@@ -59,6 +61,7 @@ function pairKey(token0Address: string, token1Address: string) {
 }
 
 export const initialState: UserState = {
+  showRightMenu: false,
   userDarkMode: null,
   matchesDarkMode: false,
   userExpertMode: true,
@@ -73,6 +76,9 @@ export const initialState: UserState = {
 
 export default createReducer(initialState, builder =>
   builder
+    .addCase(updateRightMenu, (state, action) => {
+      state.showRightMenu = action.payload.show
+    })
     .addCase(updateUserAction, (state, action) => {
       state.userAction = action.payload.userAction
     })

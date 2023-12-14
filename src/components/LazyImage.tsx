@@ -8,7 +8,8 @@ export interface LazyImageProps {
   others?: {[key: string]: string}
 }
 
-const isDev = process.env.NODE_ENV === 'development'
+// const isDev = process.env.NODE_ENV === 'development'
+const isDev = true
 
 const LazyImage: React.FC<LazyImageProps> = ({ src, className, alt, ...others}) => {
   const [imgSrc, setImgSrc] = useState('')

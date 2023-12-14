@@ -1,8 +1,13 @@
 // import IndexPage from "../views/Swap";
 import Router from "next/router"
+import { useEffect } from "react"
 
 const IndexPage = () => {
-  Router.push('/swap')
+
+  useEffect(() => {
+    Router.push('/swap')
+  }, [])
+  
   return null
 }
 

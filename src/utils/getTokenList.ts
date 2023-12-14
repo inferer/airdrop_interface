@@ -1,8 +1,8 @@
 import { TokenList, TokenInfo } from '@uniswap/token-lists'
 
 import { NETWORK_CHAIN_ID } from '../connectors'
-import { ST_TOKEN_LIST, AIR_TOKEN_LIST, AIRLABEL_TOKEN_LIST, GET_AIRUSDT_2_USDT } from '../constants/tokenList'
-import { AIRLABEL_TOKEN_LIST_URL, AIR_TOKEN_LIST_URL } from '../constants/lists'
+import { ST_TOKEN_LIST, AIR_TOKEN_LIST, AIRLABEL_TOKEN_LIST, GET_AIRUSDT_2_USDT, ALGLABEL_TOKEN_LIST } from '../constants/tokenList'
+import { AIRLABEL_TOKEN_LIST_URL, AIR_TOKEN_LIST_URL, ALGLABEL_TOKEN_LIST_URL } from '../constants/lists'
 
 /**
  * Contains the logic for resolving a list URL to a validated token list
@@ -52,6 +52,8 @@ export async function getTokenListLocal(
     tokens = filterTokenByChainId(AIR_TOKEN_LIST)
   } else if (listUrl === AIRLABEL_TOKEN_LIST_URL) {
     tokens = filterTokenByChainId(AIRLABEL_TOKEN_LIST)
+  } else if (listUrl === ALGLABEL_TOKEN_LIST_URL) {
+    tokens = filterTokenByChainId(ALGLABEL_TOKEN_LIST)
   } else {
     tokens = filterTokenByChainId(ST_TOKEN_LIST)
   }

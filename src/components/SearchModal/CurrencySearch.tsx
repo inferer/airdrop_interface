@@ -6,7 +6,7 @@ import { FixedSizeList } from 'react-window'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
-import { useAirAllTokens, useAirLabelAllTokens, useAllTokens, useToken } from '../../hooks/Tokens'
+import { useAirAllTokens, useAirLabelAllTokens, useAlgLabelAllTokens, useAllTokens, useToken } from '../../hooks/Tokens'
 import { useSelectedListInfo } from '../../state/lists/hooks'
 import { CloseIcon, LinkStyledButton, TYPE } from '../../theme'
 import { isAddress } from '../../utils'
@@ -22,7 +22,7 @@ import SortButton from './SortButton'
 import { useTokenComparator } from './sorting'
 import { PaddedColumn, SearchInput, Separator } from './styleds'
 import AutoSizer from 'react-virtualized-auto-sizer'
-import { useIsRoleProjectMode } from '../../state/user/hooks'
+import { useIsRoleProjectMode, useIsUserAction } from '../../state/user/hooks'
 import { useLocation } from '../../hooks/useLocation'
 
 interface CurrencySearchProps {
@@ -49,7 +49,7 @@ export function CurrencySearch({
   const { t } = useTranslation()
   const { chainId } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
-
+  const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect } = useIsUserAction()
   const isProjectMode  = useIsRoleProjectMode()
   const location = useLocation()
   const isSwap = location.pathname === '/swap'
@@ -59,25 +59,32 @@ export function CurrencySearch({
   const [invertSearchOrder, setInvertSearchOrder] = useState<boolean>(false)
   const allTokens = useAllTokens()
   const airLabelAllTokens = useAirLabelAllTokens()
+  const algLabelAllTokens = useAlgLabelAllTokens()
 
   const currentAllTokens = useMemo(() => {
     if (isSwap) {
-      if (isProjectMode) {
+      if (isProjectSwap || isProjectCreate) {
         if (payInput) {
           return allTokens
         } else {
           return airLabelAllTokens
         }
-      } else {
+      } if (isUserSwap) {
         if (payInput) {
           return airLabelAllTokens
         } else {
           return allTokens
+        }
+      } if (isUserCollect) {
+        if (payInput) {
+          return algLabelAllTokens
+        } else {
+          return airLabelAllTokens
         }
       }
     }
     return payInput ? allTokens : airLabelAllTokens
-  }, [allTokens, airLabelAllTokens, payInput, isProjectMode, isSwap])
+  }, [allTokens, airLabelAllTokens, algLabelAllTokens, payInput, isProjectMode, isSwap, isProjectSwap, isProjectCreate, isUserSwap, isUserCollect])
 
   // if they input an address, use it
   const isAddressSearch = isAddress(searchQuery)

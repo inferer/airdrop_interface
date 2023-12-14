@@ -98,10 +98,12 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       if (receipt.status) {
         router.push('/collect')
       }
-      // await airdropSender.setRouter(ROUTER_ADDRESS)
       // const airdropManager = await airdropSender.airdropManager()
-      // const router = await airdropSender.router()
-      // console.log(airdropManager, router)
+      // const airdropAssetTreasury = await airdropSender.airdropAssetTreasury()
+
+      // await airdropSender.setAirdropManager('0xeA7e608Dc26040751191Bd7F55FD33DA92BaAB82')
+      // await airdropSender.setAirdropAssetTreasury('0x59E56cDc025083c8D2cd6E01FAD0c56174c735E9')
+      // console.log(airdropManager, airdropAssetTreasury)
     }
   }, [airdropSender, account, args, lockedToken])
 

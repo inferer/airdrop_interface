@@ -9,7 +9,7 @@
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "airdropId",
         "type": "uint256"
@@ -40,7 +40,7 @@
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "airdropId",
         "type": "uint256"
@@ -49,6 +49,18 @@
         "indexed": true,
         "internalType": "address",
         "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "algToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "airToken",
         "type": "address"
       },
       {
@@ -212,8 +224,23 @@
         "type": "uint256"
       },
       {
+        "internalType": "address",
+        "name": "algToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "airToken",
+        "type": "address"
+      },
+      {
         "internalType": "uint64",
         "name": "confirmedTimestamp",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint64",
+        "name": "completedTimestamp",
         "type": "uint64"
       }
     ],
@@ -252,13 +279,18 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
       },
       {
         "internalType": "address",
-        "name": "user",
+        "name": "algToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "airToken",
         "type": "address"
       }
     ],
@@ -433,8 +465,23 @@
             "type": "uint256"
           },
           {
+            "internalType": "address",
+            "name": "algToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "airToken",
+            "type": "address"
+          },
+          {
             "internalType": "uint64",
             "name": "confirmedTimestamp",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "completedTimestamp",
             "type": "uint64"
           }
         ],
@@ -503,8 +550,23 @@
             "type": "uint256"
           },
           {
+            "internalType": "address",
+            "name": "algToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "airToken",
+            "type": "address"
+          },
+          {
             "internalType": "uint64",
             "name": "confirmedTimestamp",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "completedTimestamp",
             "type": "uint64"
           }
         ],
@@ -578,8 +640,23 @@
             "type": "uint256"
           },
           {
+            "internalType": "address",
+            "name": "algToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "airToken",
+            "type": "address"
+          },
+          {
             "internalType": "uint64",
             "name": "confirmedTimestamp",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "completedTimestamp",
             "type": "uint64"
           }
         ],
@@ -697,8 +774,23 @@
         "type": "uint256"
       },
       {
+        "internalType": "address",
+        "name": "algToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "airToken",
+        "type": "address"
+      },
+      {
         "internalType": "uint64",
         "name": "confirmedTimestamp",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint64",
+        "name": "completedTimestamp",
         "type": "uint64"
       }
     ],
@@ -741,8 +833,23 @@
         "type": "uint256"
       },
       {
+        "internalType": "address",
+        "name": "algToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "airToken",
+        "type": "address"
+      },
+      {
         "internalType": "uint64",
         "name": "confirmedTimestamp",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint64",
+        "name": "completedTimestamp",
         "type": "uint64"
       }
     ],

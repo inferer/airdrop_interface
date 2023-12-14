@@ -16,6 +16,7 @@ import getLibrary from '../utils/getLibrary'
 import dynamic from 'next/dynamic'
 
 
+
 const Web3ReactProviderDefault = dynamic(
   () => import('./DefaultProvider'),
   { ssr: false }
@@ -34,6 +35,7 @@ function Updaters() {
 }
 
 const PageRoot = ({ children }: any) => {
+
   useEffect(() => {
     if ('ethereum' in window) {
       ;(window.ethereum as any).autoRefreshOnNetworkChange = false

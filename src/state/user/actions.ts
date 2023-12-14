@@ -31,3 +31,4 @@ export const removeSerializedPair = createAction<{ chainId: number; tokenAAddres
 
 export const updateUserRoleMode = createAction<{ userRoleMode: UserRoleMode }>('user/updateUserRoleMode')
 export const updateUserAction = createAction<{ userAction: UserAction }>('user/updateUserAction')
+export const updateRightMenu = createAction<{ show: boolean }>('user/updateRightMenu')

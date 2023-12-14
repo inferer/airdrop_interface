@@ -1,7 +1,7 @@
 import { parseBytes32String } from '@ethersproject/strings'
 import { Currency, ETHER, Token, currencyEquals } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { useAirLabelTokenList, useAirTokenList, useSelectedTokenList } from '../state/lists/hooks'
+import { useAirLabelTokenList, useAirTokenList, useAlgLabelTokenList, useSelectedTokenList } from '../state/lists/hooks'
 import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
 import { useAddUserToken, useIsUserAction, useUserAddedTokens } from '../state/user/hooks'
 import { isAddress } from '../utils'
@@ -45,14 +45,11 @@ export function useAirAllTokens(): { [address: string]: Token } {
     if (!chainId) return {}
     return (
       userAddedTokens
-        // reduce into all ALL_TOKENS filtered by the current chain
         .reduce<{ [address: string]: Token }>(
           (tokenMap, token) => {
             tokenMap[token.address] = token
             return tokenMap
           },
-          // must make a copy because reduce modifies the map, and we do not
-          // want to make a copy in every iteration
           { ...allTokens[chainId] }
         )
     )
@@ -68,14 +65,31 @@ export function useAirLabelAllTokens(): { [address: string]: Token } {
     if (!chainId) return {}
     return (
       userAddedTokens
-        // reduce into all ALL_TOKENS filtered by the current chain
         .reduce<{ [address: string]: Token }>(
           (tokenMap, token) => {
             tokenMap[token.address] = token
             return tokenMap
           },
-          // must make a copy because reduce modifies the map, and we do not
-          // want to make a copy in every iteration
+          { ...allTokens[chainId] }
+        )
+    )
+  }, [chainId, userAddedTokens, allTokens])
+}
+
+export function useAlgLabelAllTokens(): { [address: string]: Token } {
+  const { chainId } = useActiveWeb3React()
+  const userAddedTokens = useUserAddedTokens()
+  const allTokens = useAlgLabelTokenList()
+
+  return useMemo(() => {
+    if (!chainId) return {}
+    return (
+      userAddedTokens
+        .reduce<{ [address: string]: Token }>(
+          (tokenMap, token) => {
+            tokenMap[token.address] = token
+            return tokenMap
+          },
           { ...allTokens[chainId] }
         )
     )
@@ -164,15 +178,15 @@ export function useCurrency(currencyId: string | undefined): Currency | null | u
 export function useInputTokens() {
   const allTokens = useAllTokens()
   const airLabelAllTokens = useAirLabelAllTokens()
+  const algLabelAllTokens = useAlgLabelAllTokens()
 
   const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect } = useIsUserAction()
 
   return useMemo(() => {
-    
     if (isProjectSwap || isProjectCreate) return Object.values(allTokens) 
-      
-    return Object.values(airLabelAllTokens) 
+    if (isUserSwap) return Object.values(airLabelAllTokens)
+    return Object.values(algLabelAllTokens) 
 
-  }, [allTokens, airLabelAllTokens, isProjectSwap, isProjectCreate, isUserSwap, isUserCollect])
+  }, [allTokens, airLabelAllTokens, algLabelAllTokens, isProjectSwap, isProjectCreate, isUserSwap, isUserCollect])
 
 }

@@ -1,9 +1,12 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect } from 'react'
 
 import styled from 'styled-components'
 import Header from '../components/Header'
 import Popups from '../components/Popups'
 import Web3ReactManager from '../components/Web3ReactManager'
+import { useRouter } from 'next/router'
+import { useUserRoleMode } from '../state/user/hooks'
+import RightMenu from '../components/RightMenu'
 
 
 const AppWrapper = styled.div`
@@ -43,6 +46,25 @@ const Marginer = styled.div`
 `
 
 export default function App({ children }: any) {
+
+  const router = useRouter()
+  const [isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
+  
+  // useEffect(() => {
+  //   if (
+  //     router.pathname === '/swap' ||
+  //     router.pathname === '/create'
+  //   ) {
+  //     if (!isProjectMode) {
+  //       toggleSetUserRoleMode()
+  //     }
+  //   } else {
+  //     if (isProjectMode) {
+  //       toggleSetUserRoleMode()
+  //     }
+  //   }
+  // }, [router, isProjectMode, toggleSetUserRoleMode])
+
   return (
     <AppWrapper>
       <HeaderWrapper>
@@ -54,6 +76,7 @@ export default function App({ children }: any) {
           { children}
         </Web3ReactManager>
       </BodyWrapper>
+      <RightMenu />
     </AppWrapper>
   )
 }

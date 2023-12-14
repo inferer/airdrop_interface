@@ -37,12 +37,13 @@ import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
 import { currencyId } from '../../utils/currencyId'
 import { PoolPriceBar } from './PoolPriceBar'
 import { NETWORK_CHAIN_ID } from '../../connectors'
+import { AIRLABEL_TOKEN_LIST } from '../../constants/tokenList'
 
 export default function AddLiquidity() {
   const { account, chainId, library } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
   const currencyIdA = '0x300f6B06211F490c2A5Fb5c7f634A3f6D636E355'
-  const currencyIdB = '0x3a1b55A11036B6B9056e6f53Cb76b22811f7d3Dd'
+  const currencyIdB = AIRLABEL_TOKEN_LIST[0].address
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
 

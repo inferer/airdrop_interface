@@ -6,7 +6,7 @@ import { Text } from 'rebass'
 import styled from 'styled-components'
 
 import { useActiveWeb3React } from '../../hooks'
-import { useDarkModeManager, useUserRoleMode } from '../../state/user/hooks'
+import { useDarkModeManager, useShowRightMenu, useUserRoleMode } from '../../state/user/hooks'
 import { useETHBalances } from '../../state/wallet/hooks'
 
 import { LightCard, YellowCard, BlueCard } from '../Card'
@@ -168,6 +168,7 @@ const NETWORK_LABELS: { [chainId in ChainId]: string | null } = {
 export default function Header() {
   const { account, chainId } = useActiveWeb3React()
   const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
+  const { showRightMenu, toggleShowRightMenu } = useShowRightMenu()
 
   // const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
   // const [isDark] = useDarkModeManager()
@@ -225,25 +226,11 @@ export default function Header() {
             <Menu />
           </HeaderElementWrap> */}
           <HeaderElementWrap>
-            {/* <div
-              onClick={e => {
-                e.stopPropagation()
-                if (isProjectMode) {
-
-                } else {
-                  router.push('/tasks')
-                }
-              }}
-            >
-              <LazyImage2
-                src={ isProjectMode ? "/images/airdrop/add.svg" : "/images/airdrop/menus.svg" } className='icon-add' />
-            </div> */}
-            
             <LazyImage2 src={ isProjectMode ? '/images/airdrop/project.svg' : '/images/airdrop/user.svg'} className='icon-role' />
           </HeaderElementWrap>
           <Web3Status />
           <HeaderElementWrap
-            onClick={toggleSetUserRoleMode}
+            onClick={toggleShowRightMenu}
           >
             <LazyImage src="/images/airdrop/qiehuan.svg" className='icon-qiehuan' />
           </HeaderElementWrap>

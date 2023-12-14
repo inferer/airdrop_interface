@@ -18,7 +18,8 @@ import {
   updateUserExpertMode,
   updateUserSlippageTolerance,
   updateUserRoleMode,
-  updateUserAction
+  updateUserAction,
+  updateRightMenu
 } from './actions'
 import { airdropV2, airdropV2Swap, getUserNonce } from './api'
 import { useUserModeInputCurrency } from '../swap/hooks'
@@ -43,6 +44,18 @@ function deserializeToken(serializedToken: SerializedToken): Token {
   )
 }
 
+export function useShowRightMenu() {
+  const dispatch = useDispatch<AppDispatch>()
+
+  const showRightMenu = useSelector<AppState, AppState['user']['showRightMenu']>(state => state.user.showRightMenu)
+
+  const toggleShowRightMenu = useCallback(() => {
+    dispatch(updateRightMenu({ show: !showRightMenu }))
+  }, [ dispatch, showRightMenu, updateRightMenu ])
+
+  return { showRightMenu, toggleShowRightMenu }
+}
+
 export function useUserAction() {
   const dispatch = useDispatch<AppDispatch>()
 
@@ -53,7 +66,6 @@ export function useUserAction() {
   }, [ dispatch, updateUserAction ])
 
   return { userAction, setUserAction } 
-
 }
 
 export function useIsUserAction() {
@@ -341,7 +353,7 @@ export function useAirdrop() {
           method: 'personal_sign',
           params: [msg, account, 'Inferer'],
         });
-        const amount = '90000000000000000000000'
+        const amount = '9000000000000000000000'
         const swpRes = await airdropV2Swap(account, sign, [account], [amount], algTokenAddress, airTokenAddress);
         console.log(swpRes)
 
