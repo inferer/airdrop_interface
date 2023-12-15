@@ -174,3 +174,19 @@ export const GET_ALGTOKEN_2_AIRTOKEN = () => {
 
   return pair
 } 
+
+export const GET_AIRTOKEN_2_ALGTOKEN = () => {
+  let pair: {[key: string]: string} = {}
+  AIRLABEL_TOKEN_LIST.map(token1 => {
+    const symbol = token1.symbol.slice(4)
+    const toUSDT = ALGLABEL_TOKEN_LIST.find(token2 => token2.symbol.slice(4) === symbol)
+    if (token1.address) {
+      const key = (token1?.address || '') as string
+      // @ts-ignore
+      pair[key] = toUSDT?.address
+    }
+
+  })
+
+  return pair
+} 

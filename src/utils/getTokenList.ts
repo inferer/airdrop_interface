@@ -1,7 +1,7 @@
 import { TokenList, TokenInfo } from '@uniswap/token-lists'
 
 import { NETWORK_CHAIN_ID } from '../connectors'
-import { ST_TOKEN_LIST, AIR_TOKEN_LIST, AIRLABEL_TOKEN_LIST, GET_AIRUSDT_2_USDT, ALGLABEL_TOKEN_LIST, GET_ALGTOKEN_2_AIRTOKEN } from '../constants/tokenList'
+import { ST_TOKEN_LIST, AIR_TOKEN_LIST, AIRLABEL_TOKEN_LIST, GET_AIRUSDT_2_USDT, ALGLABEL_TOKEN_LIST, GET_ALGTOKEN_2_AIRTOKEN, GET_AIRTOKEN_2_ALGTOKEN } from '../constants/tokenList'
 import { AIRLABEL_TOKEN_LIST_URL, AIR_TOKEN_LIST_URL, ALGLABEL_TOKEN_LIST_URL } from '../constants/lists'
 
 /**
@@ -72,6 +72,10 @@ export function getUSDTTokenFromAirToken(address: string) {
 
 export function getAirTokenFromAlgToken(address?: string) {
   return GET_ALGTOKEN_2_AIRTOKEN()[address || '']
+}
+
+export function getALgTokenFromAirToken(address?: string) {
+  return GET_AIRTOKEN_2_ALGTOKEN()[address || '']
 }
 
 export function getUSDTTokenByAddress(address: string) {

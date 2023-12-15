@@ -1,20 +1,30 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "./Table";
 import LazyImage from "../../components/LazyImage";
 import { useAirdropList } from "../../state/airdrop/hooks";
-import router from "next/router";
+import { useRouter } from "next/router";
 import { useAirdropManager } from "../../hooks/useAirdropManager";
+import { getALgTokenFromAirToken } from "../../utils/getTokenList";
 
 const AirdropList: React.FC<{
 
 }> = () => {
+  const router = useRouter()
+
+  const [algToken, setAlgToken] = useState('')
+
   const { handleGetAirdropList } = useAirdropManager()
   const airdropList = useAirdropList()
 
   useEffect(() => {
-    handleGetAirdropList()
-  }, [])
+    let _algToken = ''
+    if (router.query.id) {
+      _algToken = router.query.id[0]
+    }
+    setAlgToken(_algToken)
+    handleGetAirdropList(_algToken)
+  }, [router])
 
 
   return (
@@ -50,7 +60,8 @@ const AirdropList: React.FC<{
                   return (
                     <TableRow key={airdrop.airdropId} 
                       onClick={() => {
-                        router.push(`/collect/${airdrop.airdropId}`)
+                        const _algToken = getALgTokenFromAirToken(airdrop.labelToken.address)
+                        router.push(`/collect/${algToken || _algToken}/${airdrop.airdropId}`)
                       }}
                     >
                       <>

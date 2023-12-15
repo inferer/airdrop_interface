@@ -212,11 +212,6 @@ export default function Header() {
             </AccountElement> */}
           </HeaderElement>
           <HeaderElement>
-            <AirdropCard style={{width: 110}}>
-              <Link href={'/collect'}>Airdrop List</Link>
-            </AirdropCard>
-          </HeaderElement>
-          <HeaderElement>
             <AirdropCard style={{width: 150}}>
               <Link href={'/tasks'}>Ongoing airdrops</Link>
             </AirdropCard>

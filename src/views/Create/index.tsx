@@ -44,7 +44,9 @@ export default function Create() {
     <CreateBody>
       <TitleWrap>
         <Link to="/swap">
+          <div>
           <LazyImage className='icon-left cursor-pointer' src="/images/airdrop/arrow-left.svg" />
+          </div>
         </Link>
         
         <TYPE.textGrad1 fontSize={32} fontWeight={600}>Create the airdrop</TYPE.textGrad1>

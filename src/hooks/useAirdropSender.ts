@@ -41,7 +41,6 @@ export function useCreateCallback(
   }
   const lockedCurrency = useCurrency(lockedToken)
   const lockedCurrencyAmount = useCurrencyBalance(account ?? undefined, lockedCurrency ?? undefined)
-  // const lockedAmount = lockedCurrencyAmount?.divide(BigInt(10 ** (lockedCurrency?.decimals ?? 18 ) )).toFixed(3)
   const lockedAmount = useMemo(() => {
     if (args[0] && lockedCurrency) {
       return BigNumber.from(parseInt(args[0], 16)).div(10 ** lockedCurrency?.decimals).toString()
@@ -93,15 +92,16 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
 
       }
       const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit })
+      console.log(tx)
       const receipt = await tx.wait()
-
+      console.log(receipt)
       if (receipt.status) {
         router.push('/collect')
       }
       // const airdropManager = await airdropSender.airdropManager()
       // const airdropAssetTreasury = await airdropSender.airdropAssetTreasury()
 
-      // await airdropSender.setAirdropManager('0xeA7e608Dc26040751191Bd7F55FD33DA92BaAB82')
+      // await airdropSender.setAirdropManager('0x59B79C2F408b207Cc178d19d2df5567c0E42801a')
       // await airdropSender.setAirdropAssetTreasury('0x59E56cDc025083c8D2cd6E01FAD0c56174c735E9')
       // console.log(airdropManager, airdropAssetTreasury)
     }

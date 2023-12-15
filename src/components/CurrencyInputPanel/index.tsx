@@ -23,7 +23,7 @@ const InputRow = styled.div<{ selected: boolean }>`
 
 const CurrencySelect = styled.button<{ selected: boolean }>`
   align-items: center;
-  padding: 4px 12px;
+  padding: 0px 12px;
   height: 32px;
   font-size: 20px;
   font-weight: 600;
@@ -220,9 +220,9 @@ export default function  CurrencyInputPanel({
           >
             <Aligner>
               {pair ? (
-                <DoubleCurrencyLogo currency0={pair.token0} currency1={pair.token1} size={24} margin={true} />
+                <DoubleCurrencyLogo currency0={pair.token0} currency1={pair.token1} size={20} margin={true} />
               ) : currency ? (
-                <CurrencyLogo currency={currency} size={'24px'} />
+                <CurrencyLogo currency={currency} size={'20px'} />
               ) : null}
               {pair ? (
                 <StyledTokenName className="pair-name-container">

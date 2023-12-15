@@ -20,23 +20,26 @@ import {
   useSwapActionHandlers,
   useSwapState
 } from '../../state/swap/hooks'
-import { useExpertModeManager, useIsUserAction, useUserDeadline, useUserRoleMode, useUserSlippageTolerance } from '../../state/user/hooks'
+import { useExpertModeManager, useIsUserAction, useUserAction, useUserDeadline, useUserRoleMode, useUserSlippageTolerance } from '../../state/user/hooks'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import { TYPE } from '../../theme'
 import Score from './Score'
 import Units from './Units'
+import { UserAction } from '../../constants'
 
 
 export default function Swap() {
   const { account } = useActiveWeb3React()
   // toggle wallet when disconnected
   const toggleWalletModal = useWalletModalToggle()
+  const { userAction, setUserAction }  = useUserAction()
   const [isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
   useEffect(() => {
     if (isProjectMode) {
       toggleSetUserRoleMode()
     }
+    setUserAction(UserAction.USER_COLLECT)
   }, [isProjectMode])
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
@@ -108,15 +111,16 @@ export default function Swap() {
 
   const handleAction = useCallback(() => {
     if (isUserCollect) {
-      router.push('/collect')
+      const inputCurrency = currencies[Field.INPUT]
+      // @ts-ignore
+      router.push(`/collect/${inputCurrency.address}`)
     }
-  }, [isProjectCreate, isUserCollect])
+  }, [isUserCollect, currencies])
 
 
   return (
     <>
       <SwapBody>
-        {/* <SwapPoolTabs active={'swap'} /> */}
         <SwapCollectTabs />
         <Wrapper id="collect-page">
           <AutoColumn gap={'md'}>

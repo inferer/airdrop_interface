@@ -8,20 +8,29 @@ import { useAirdropList, useAirdropList0 } from "../../state/airdrop/hooks";
 import router from 'next/router'
 import { useAirdropManager } from "../../hooks/useAirdropManager";
 import { useAirdropReceiver } from "../../hooks/useAirdropReceiver";
+import { getTokenLogoURL2 } from "../../components/CurrencyLogo";
+import { ApprovalState } from "../../hooks/useApproveCallback";
+import { AutoRow } from "../../components/Row";
+import { Loader } from "react-feather";
 
 const AirdropConfirm: React.FC<{
 
 }> = () => {
-  const { handleConfirmTask } = useAirdropReceiver()
+
+  const { 
+    handleConfirmTask,
+    algTokenCurrency,
+    approvalState, 
+    approve 
+  } = useAirdropReceiver(router.query.id && router.query.id[0])
   const { handleGetAirdropOne } = useAirdropManager()
   useEffect(() => {
-    if (router.query.id && router.query.id[0]) {
-      handleGetAirdropOne(Number(router.query.id[0]))
+    if (router.query.id && router.query.id[1]) {
+      handleGetAirdropOne(Number(router.query.id[1]))
     }
   }, [router.query])
-  const airdrop = useAirdropList0(router.query.id && router.query.id[0])
+  const airdrop = useAirdropList0(router.query.id && router.query.id[1])
 
-  console.log(airdrop)
 
   return (
     <div className="p-5">
@@ -76,6 +85,19 @@ const AirdropConfirm: React.FC<{
               <span className=" text-[16px] font-fsemibold">{airdrop.action}</span>
             </div>
           </div>
+          <div className="flex items-center mt-5">
+            <div className="w-[160px] shrink-0">
+              <LabelText>Paid</LabelText>
+            </div>
+            {
+              airdrop.labelToken && 
+              <div className="py-[2px] px-[10px] h-[34px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)]">
+                <LazyImage src={getTokenLogoURL2(airdrop.labelToken)} className="w-5 h-5 mr-1" />
+                <span className=" text-[16px] font-fsemibold">{airdrop.labelToken?.symbol}</span>
+              </div>
+            }
+            
+          </div>
         </div>
       </div>
       <div className="mt-8">
@@ -99,11 +121,32 @@ const AirdropConfirm: React.FC<{
             <div className="text-[rgba(0,0,0,0.60)] text-[20px] font-fsemibold">Cancel</div>
           </ButtonSwap>
         </div>
+        {
+          algTokenCurrency &&
+          <div className='w-[260px]'>
+            <ButtonSwap
+              onClick={approve}
+            >
+              <TYPE.textGrad1 fontWeight={600} fontSize={20}>
+                { approvalState === ApprovalState.PENDING ? (
+                    <AutoRow gap="6px" justify="center">
+                      Approving <Loader stroke="white" />
+                    </AutoRow>
+                  ) : approvalState === ApprovalState.APPROVED ? (
+                    'Approved ' + algTokenCurrency?.symbol
+                  ) : (
+                    `Approve ${algTokenCurrency?.symbol}`
+                  )
+                }
+              </TYPE.textGrad1>
+            </ButtonSwap>
+          </div>
+        }
         <div className='w-[260px]'>
           <ButtonSwap 
             onClick={e => {
               e.stopPropagation()
-              handleConfirmTask(airdrop.airdropId, parseInt((Number(airdrop.labelLocked) / 5).toString(10)).toString())
+              handleConfirmTask(airdrop.airdropId, airdrop.labelToken.address)
             }}
           >
             <TYPE.textGrad1 fontWeight={600} fontSize={20}>

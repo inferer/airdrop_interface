@@ -243,9 +243,7 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
 export function SwapCollectTabs({ onClick }: { onClick?: (type: UserAction) => void}) {
   const router = useRouter()
   const { t } = useTranslation()
-  const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
   const { userAction, setUserAction }  = useUserAction()
-  const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect } = useIsUserAction()
 
   const handleTab = useCallback((action: UserAction) => {
     setUserAction(action)

@@ -10,11 +10,11 @@ import Logo from '../Logo'
 const getTokenLogoURL = (address: string) =>
   `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
 
-const getTokenLogoURL2 = (currency: any) => {
-  if (currency.symbol === 'WETH') return EthereumLogo.src
-  let logoName = currency.symbol.toLowerCase()
-  if (currency.symbol?.indexOf('air-') === 0 || currency.symbol?.indexOf('alg-') === 0) {
-    logoName = currency.symbol.slice(4).toLowerCase()
+export const getTokenLogoURL2 = (currency: any) => {
+  if (currency?.symbol === 'WETH') return EthereumLogo.src
+  let logoName = currency?.symbol?.toLowerCase()
+  if (currency?.symbol?.indexOf('air-') === 0 || currency?.symbol?.indexOf('alg-') === 0) {
+    logoName = currency?.symbol?.slice(4).toLowerCase()
   }
   return `/images/tokens/${logoName}.png`
 }
