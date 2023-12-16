@@ -74,7 +74,10 @@ const AirdropList: React.FC<{
                     >
                       <>
                         <TableCell className="flex-1 w-[250px]">
-                          <div className=' text-[16px] text-black'><span className="">{airdrop.name}</span></div>
+                          <div className=' text-[16px] text-black'>
+                            <span className="">{airdrop.name}</span>
+                            <div className=" text-gray-400">airdropId: {airdrop.airdropId}</div>
+                          </div>
                         </TableCell>
                         <TableCell className="w-[135px] ">
                           <div className="bg-[rgba(63,60,255,0.05)] rounded-lg h-[35px] px-[8px] flex items-center justify-center text-[rgba(63,60,255,0.80)] font-fmedium text-[16px]">
@@ -99,6 +102,7 @@ const AirdropList: React.FC<{
                         </TableCell>
                         <TableCell className="w-[74px]">
                           <div className="flex justify-center w-full">
+                            
                             {
                               airdrop.completed ? <div className=" text-gray-400 text-sm">Completed</div> : <CheckBox onChange={checked => handleChecked(airdrop.airdropId, checked)} /> 
                             }

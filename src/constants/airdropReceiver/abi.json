@@ -96,6 +96,11 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_userAddress",
+        "type": "address"
+      },
+      {
         "internalType": "uint256[]",
         "name": "_airdropIds",
         "type": "uint256[]"

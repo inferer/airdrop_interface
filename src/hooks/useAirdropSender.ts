@@ -13,6 +13,7 @@ import { useApproveCallback } from './useApproveCallback'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import { AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury'
 import { useSwapCallArguments } from './useSwapCallback'
+import { useAddPopup } from '../state/application/hooks'
 
 
 export function useCreateCallback(
@@ -67,7 +68,6 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
   const { account, chainId, library } = useActiveWeb3React()
   const airdropSender: Contract | null = useAirdropSenderContract()
 
-
   const handleCreateAirdrop = useCallback(async (
     name: string,
     label: string,
@@ -85,6 +85,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
 
       console.log(baseInfo, offer_label_token, offer_label_locked, duration)
       let gasLimit = '5000000'
+
       try {
         const gasEstimate = await airdropSender.estimateGas['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration)
         gasLimit = gasEstimate.toString()
@@ -101,7 +102,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       // const airdropManager = await airdropSender.airdropManager()
       // const airdropAssetTreasury = await airdropSender.airdropAssetTreasury()
 
-      // await airdropSender.setAirdropManager('0x59B79C2F408b207Cc178d19d2df5567c0E42801a')
+      // await airdropSender.setAirdropManager('0xF127f051d9E06a4Af12e7EB2741319ded8D803db')
       // await airdropSender.setAirdropAssetTreasury('0x59E56cDc025083c8D2cd6E01FAD0c56174c735E9')
       // console.log(airdropManager, airdropAssetTreasury)
     }

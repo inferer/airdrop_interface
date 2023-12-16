@@ -58,12 +58,12 @@ export function useAirdropReceiver(algToken?: string) {
       // await airdropReceiver.setAirdropAssetTreasury('0x92B97ea7dE7BEc9C6F75F9a450979F33098fB32a')
       try {
         console.log(airdropIds)
-        const gasEstimate = await airdropReceiver.estimateGas['completeTask'](airdropIds)
+        const gasEstimate = await airdropReceiver.estimateGas['completeTask'](account, airdropIds)
         gasLimit = gasEstimate.toString()
       } catch (error) {
         console.log(error)
       }
-      const tx = await airdropReceiver.completeTask(airdropIds, { gasPrice: '1000000000', gasLimit: gasLimit })
+      const tx = await airdropReceiver.completeTask(account, airdropIds, { gasPrice: '1000000000', gasLimit: gasLimit })
       const receipt = tx.wait()
       if (receipt.status) {
         alert('Success')
