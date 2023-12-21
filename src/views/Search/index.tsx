@@ -1,18 +1,14 @@
 import router from 'next/router'
 import { CurrencyAmount, JSBI, Token, Trade } from '@uniswap/sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import ReactGA from 'react-ga'
-import { ThemeContext } from 'styled-components'
-import { ButtonError, ButtonLight, ButtonPrimary, ButtonConfirmed, ButtonSwap } from '../../components/Button'
+import {  ButtonLight, ButtonSwap } from '../../components/Button'
 import { AutoColumn } from '../../components/Column'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import { SwapCollectTabs } from '../../components/NavigationTabs'
-import { AutoRow, RowBetween } from '../../components/Row'
 import { BottomGrouping, SwapBody, Wrapper } from '../../components/swap/styleds'
 
 import { useActiveWeb3React } from '../../hooks'
 import { useCurrency, useInputTokens } from '../../hooks/Tokens'
-import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { Field } from '../../state/swap/actions'
 import {
@@ -20,16 +16,16 @@ import {
   useSwapActionHandlers,
   useSwapState
 } from '../../state/swap/hooks'
-import { useExpertModeManager, useIsUserAction, useUserAction, useUserDeadline, useUserRoleMode, useUserSlippageTolerance } from '../../state/user/hooks'
+import {  useIsUserAction, useUserAction, useUserRoleMode } from '../../state/user/hooks'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
-import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import { TYPE } from '../../theme'
 import Score from './Score'
 import Units from './Units'
 import { UserAction } from '../../constants'
+import { useAccountLabelScore } from '../../hooks/useAirdropTokenScore'
 
 
-export default function Swap() {
+export default function Search() {
   const { account } = useActiveWeb3React()
   // toggle wallet when disconnected
   const toggleWalletModal = useWalletModalToggle()
@@ -117,6 +113,7 @@ export default function Swap() {
     }
   }, [isUserCollect, currencies])
 
+  const accountScore = useAccountLabelScore(account || '', currencies[Field.INPUT]?.symbol?.slice(4) || '' )
 
   return (
     <>
@@ -135,7 +132,7 @@ export default function Swap() {
               otherCurrency={currencies[Field.OUTPUT]}
               id="collect-currency-input"
             />
-            <Score />
+            <Score score={accountScore} />
             <CurrencyInputPanel
               value={formattedAmounts[Field.OUTPUT]}
               onUserInput={handleTypeOutput}

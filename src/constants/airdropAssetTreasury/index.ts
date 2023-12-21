@@ -3,10 +3,8 @@ import AirdropAssetTreasury_ABI from './abi.json'
 
 const AirdropAssetTreasury_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '',
-  // [ChainId.SEPOLIA]: '0xd92E80085F0F38E8e9a4FB6E7e35D88f9E4B0aE1',
-  // [ChainId.SEPOLIA]: '0x930DC1B788d2e7Ec1E6c8D25075feb8Ee5891f4C',
-  // [ChainId.SEPOLIA]: '0x92B97ea7dE7BEc9C6F75F9a450979F33098fB32a',
-  [ChainId.SEPOLIA]: '0x59E56cDc025083c8D2cd6E01FAD0c56174c735E9',
+  // [ChainId.SEPOLIA]: '0x59E56cDc025083c8D2cd6E01FAD0c56174c735E9',
+  [ChainId.SEPOLIA]: '0x09f53e8196fB855678C9A46B445f7a9e6f43CEEf',
 }
 
 export { AirdropAssetTreasury_ABI, AirdropAssetTreasury_NETWORKS }

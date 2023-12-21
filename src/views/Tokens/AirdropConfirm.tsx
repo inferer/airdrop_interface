@@ -4,7 +4,7 @@ import LazyImage from "../../components/LazyImage";
 import { FlexCenter, LabelText } from "./styleds";
 import { ButtonSwap } from "../../components/Button";
 import { TYPE } from "../../theme";
-import { useAirdropList0 } from "../../state/airdrop/hooks";
+import { useAirdropList, useAirdropList0 } from "../../state/airdrop/hooks";
 import router from 'next/router'
 import { useAirdropManager } from "../../hooks/useAirdropManager";
 import { useAirdropReceiver } from "../../hooks/useAirdropReceiver";
@@ -12,15 +12,12 @@ import { getTokenLogoURL2 } from "../../components/CurrencyLogo";
 import { ApprovalState } from "../../hooks/useApproveCallback";
 import { AutoRow } from "../../components/Row";
 import { Loader } from "react-feather";
-import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
-import { useActiveWeb3React } from "../../hooks";
 
 const AirdropConfirm: React.FC<{
 
 }> = () => {
-  const { account } = useActiveWeb3React()
+
   const { 
-    confirmStatus,
     handleConfirmTask,
     algTokenCurrency,
     approvalState, 
@@ -33,7 +30,7 @@ const AirdropConfirm: React.FC<{
     }
   }, [router.query])
   const airdrop = useAirdropList0(router.query.id && router.query.id[1])
-  const accountScore = useAccountLabelScore(account || '', airdrop.labelToken?.symbol?.slice(4) || '' )
+
 
   return (
     <div className="p-5">
@@ -94,17 +91,9 @@ const AirdropConfirm: React.FC<{
             </div>
             {
               airdrop.labelToken && 
-              <div className="flex items-center">
-                <div className="py-[2px] px-[10px] h-[34px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)]">
-                  <LazyImage src={getTokenLogoURL2(airdrop.labelToken)} className="w-5 h-5 mr-1" />
-                  <span className=" text-[16px] font-fsemibold">{airdrop.labelToken?.symbol}</span>
-                </div>
-                <div className="pl-2">
-                  x {accountScore || '1'}
-                </div>
-                <div className="pl-2">
-                  x {airdrop.unit}
-                </div>
+              <div className="py-[2px] px-[10px] h-[34px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)]">
+                <LazyImage src={getTokenLogoURL2(airdrop.labelToken)} className="w-5 h-5 mr-1" />
+                <span className=" text-[16px] font-fsemibold">{airdrop.labelToken?.symbol}</span>
               </div>
             }
             
@@ -141,7 +130,7 @@ const AirdropConfirm: React.FC<{
               <TYPE.textGrad1 fontWeight={600} fontSize={20}>
                 { approvalState === ApprovalState.PENDING ? (
                     <AutoRow gap="6px" justify="center">
-                      Approving <Loader />
+                      Approving <Loader stroke="white" />
                     </AutoRow>
                   ) : approvalState === ApprovalState.APPROVED ? (
                     'Approved ' + algTokenCurrency?.symbol
@@ -157,12 +146,12 @@ const AirdropConfirm: React.FC<{
           <ButtonSwap 
             onClick={e => {
               e.stopPropagation()
-              handleConfirmTask(airdrop.airdropId, airdrop.labelToken.address, airdrop.labelToken?.symbol?.slice(4) || '', accountScore)
+              handleConfirmTask(airdrop.airdropId, airdrop.labelToken.address)
             }}
           >
             <TYPE.textGrad1 fontWeight={600} fontSize={20}>
               {
-                confirmStatus === 1 ? <Loader /> : 'Confirm'
+                'Confirm'
               }
             </TYPE.textGrad1>
           </ButtonSwap>

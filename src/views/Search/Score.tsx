@@ -10,7 +10,9 @@ const ScoreItem = ({
   )
 }
 
-const Score = () => {
+const Score = ({
+  score
+}: { score: number}) => {
   return (
     <div className=" border border-[#F5F5F5] rounded-xl px-4 h-[58px]">
       <div className="flex items-center h-full">
@@ -21,7 +23,7 @@ const Score = () => {
           <ScoreItem />
           <ScoreItem />
         </div>
-        <div className=" text-base font-fbold text-[#49BCFF] ml-3">1.25x</div>
+        <div className=" text-base font-fbold text-[#49BCFF] ml-3">{score}x</div>
       </div>
     </div>
   )

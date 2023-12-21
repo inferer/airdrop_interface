@@ -94,6 +94,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "airdropTokenScore",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -127,6 +140,16 @@
         "internalType": "address",
         "name": "_airToken",
         "type": "address"
+      },
+      {
+        "internalType": "uint8",
+        "name": "score",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "proof",
+        "type": "bytes32[]"
       }
     ],
     "name": "confirmTask",
@@ -221,6 +244,19 @@
       }
     ],
     "name": "setAirdropManager",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_airdropTokenScore",
+        "type": "address"
+      }
+    ],
+    "name": "setAirdropTokenScore",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

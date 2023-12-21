@@ -17,6 +17,7 @@ import { useActiveWeb3React } from './index'
 import { AirdropSender_ABI, AirdropSender_NETWORKS } from '../constants/airdropSender'
 import { AirdropReceiver_ABI, AirdropReceiver_NETWORKS } from '../constants/airdropReceiver'
 import { AirdropManager_ABI, AirdropManager_NETWORKS } from '../constants/airdropManager'
+import { AirdropTokenScore_ABI, AirdropTokenScore_NETWORKS } from '../constants/airdropTokenScore'
 
 // returns null on errors
 function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
@@ -102,6 +103,11 @@ export function useAirdropReceiverContract(): Contract | null {
 export function useAirdropManagerContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && AirdropManager_NETWORKS[chainId], AirdropManager_ABI, true)
+}
+
+export function useAirdropTokenScoreContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && AirdropTokenScore_NETWORKS[chainId], AirdropTokenScore_ABI, true)
 }
 
 export function useSocksController(): Contract | null {

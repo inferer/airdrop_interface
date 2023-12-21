@@ -39,7 +39,9 @@ export default function Create() {
 
   const { handleCreateAirdrop } = useCreateAirdrop(args, lockedCurrency as Token ?? undefined)
 
-
+  const label = useMemo(() => {
+    return outputAmount?.currency?.symbol?.slice(4) || ''
+  }, [outputAmount])
   return (
     <CreateBody>
       <TitleWrap>
@@ -76,7 +78,7 @@ export default function Create() {
             <ItemBox width={180}>
               <ItemTitle>pool</ItemTitle>
               <div className=' text-[14px] font-fsemibold mt-2 p-4'>
-                Social
+                {label}
               </div>
             </ItemBox>
             <ItemBox width={180}>
@@ -102,6 +104,12 @@ export default function Create() {
                 <ItemTitle>Action</ItemTitle>
                 <div className='mt-2'>
                   <Select title='Like' />
+                </div>
+              </div>
+              <div className='ml-[64px]'>
+                <ItemTitle>Offer per unit</ItemTitle>
+                <div className='mt-2'>
+                  <Select title='2X' />
                 </div>
               </div>
             </div>
@@ -176,7 +184,11 @@ export default function Create() {
           <ButtonSwap 
             onClick={e => {
               e.stopPropagation()
-              handleCreateAirdrop(name, 'Social', 'Twitter', 'Like', content)
+              if (!name) {
+                alert('Airdrop name is empty!')
+                return
+              }
+              handleCreateAirdrop(name, label, 'Twitter', 'Like', '2', content)
             }}
           >
             <TYPE.textGrad1 fontWeight={600} fontSize={20}>

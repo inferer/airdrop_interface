@@ -85,3 +85,11 @@ export function getUSDTTokenByAddress(address: string) {
 export function getLabelTokenByAddress(address: string) {
   return AIRLABEL_TOKEN_LIST.find(token => token.address.toLowerCase() === address.toLowerCase())
 }
+
+export function getAlgLabelTokenByAddress(address: string) {
+  return ALGLABEL_TOKEN_LIST.find(token => token.address.toLowerCase() === address.toLowerCase())
+}
+
+export function getAlgTokenByLabel(label: string) {
+  return ALGLABEL_TOKEN_LIST.find(token => token.symbol.slice(4) === label)
+}

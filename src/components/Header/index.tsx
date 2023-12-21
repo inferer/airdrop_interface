@@ -195,7 +195,7 @@ export default function Header() {
                   e.stopPropagation()
                   
                 }} >
-                  <Link href={'/airdrop'}>Airdrop</Link>
+                  <Link href={'/tokens'}>Airdrop</Link>
                   
                 </AirdropCard>
             </TestnetWrapper>

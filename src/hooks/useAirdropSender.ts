@@ -34,11 +34,12 @@ export function useCreateCallback(
 
   const swapCalls = useSwapCallArguments(v2Trade, allowedSlippage, deadline, recipientAddressOrName)
   let lockedToken
+  let lockedTokenAir
   let args: any = []
   if (swapCalls[0]) {
     args = swapCalls[0]?.parameters?.args
-    // console.log(parseInt(args[0], 16))
-    lockedToken = getUSDTTokenFromAirToken(args[2][0])
+    lockedTokenAir = args[2][0]
+    lockedToken = getUSDTTokenFromAirToken(lockedTokenAir)
   }
   const lockedCurrency = useCurrency(lockedToken)
   const lockedCurrencyAmount = useCurrencyBalance(account ?? undefined, lockedCurrency ?? undefined)
@@ -73,6 +74,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
     label: string,
     channel: string,
     action: string,
+    unint: string,
     content: string
   ) => {
     if (airdropSender && account && lockedToken) {
@@ -80,7 +82,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       const baseInfo = [name, label, channel, action, content]
       const route = args[2]
       const offer_label_token = [lockedToken.address, route[0], route[route.length - 1], account]
-      const offer_label_locked = [args[0], args[1]]
+      const offer_label_locked = [args[0], '0', args[1], unint]
       const duration = 7 * 24 * 60 * 60
 
       console.log(baseInfo, offer_label_token, offer_label_locked, duration)

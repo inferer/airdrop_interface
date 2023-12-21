@@ -60,7 +60,7 @@ export const AIR_TOKEN_LIST: TokenInfo[] = [
 export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   {
     "name": "air-Social",
-    "address": "0xC831dF46B509428894D55fa7a6aA04Ca6727355E",
+    "address": "0xc021C5268aeE94ebBd318Ea8DB4e0b50ccE4AD16",
     "symbol": "air-Social",
     "decimals": 18,
     "chainId": 11155111,
@@ -68,7 +68,7 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "air-Sport",
-    "address": "0xEbda34FBfFe3e2115c859e9fbfc3FCeC7552dE65",
+    "address": "0x4b4E8A920e396FBb89Ff393ff9F5A767daAb9987",
     "symbol": "air-Sport",
     "decimals": 18,
     "chainId": 11155111,
@@ -76,7 +76,7 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "air-Game",
-    "address": "0xF2c0A16dee9fE894E9A28bF8A7bE2Fe487458Bf2",
+    "address": "0xebc1A018185d3cD251F7c9D9C3D546ece1764AFD",
     "symbol": "air-Game",
     "decimals": 18,
     "chainId": 11155111,
@@ -84,7 +84,7 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "air-Art",
-    "address": "0xC2C75CF11A1885f58f5d79Df25D8Fa91fD67e051",
+    "address": "0x58C5b3582dbA2d16B8ba40e1b303EEeD73799faB",
     "symbol": "air-Art",
     "decimals": 18,
     "chainId": 11155111,
@@ -92,8 +92,16 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "air-Finance",
-    "address": "0xDf1cD4DF0553442df4Fc589d14b75B49c864c21f",
+    "address": "0x838B8AB3336c8d7944e0Ad47C501407c34910eD5",
     "symbol": "air-Finance",
+    "decimals": 18,
+    "chainId": 11155111,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "air-Shopping",
+    "address": "0x718f9ca36D58E7a922B5959C6DdD7455b3A9E3a4",
+    "symbol": "air-Shopping",
     "decimals": 18,
     "chainId": 11155111,
     "logoURI": "/images/tokens/usdt.png"
@@ -103,7 +111,7 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
 export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   {
     "name": "alg-Social",
-    "address": "0x7c24f3587be3a7b09b75236203b0E91C89AD6E74",
+    "address": "0xdCbC46a80492A1db9533EBd4e3dCe7831B09F103",
     "symbol": "alg-Social",
     "decimals": 18,
     "chainId": 11155111,
@@ -111,7 +119,7 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "alg-Sport",
-    "address": "0xC266112f0c57CF5e7281402Cf9170713Db92b61E",
+    "address": "0x201f8391F31143A7416AE8F4C7C31B85024c00Ba",
     "symbol": "alg-Sport",
     "decimals": 18,
     "chainId": 11155111,
@@ -119,7 +127,7 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "alg-Game",
-    "address": "0xf2ED4E48527a347d5da819F02Db3FfA223412aB2",
+    "address": "0x4cF48D72aAB636BD2De2e8a141677d5538502fF2",
     "symbol": "alg-Game",
     "decimals": 18,
     "chainId": 11155111,
@@ -127,7 +135,7 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "alg-Art",
-    "address": "0xfC991A79f8B365ACD908a735Df3b126E3f93De88",
+    "address": "0xA08a40a8CeF6011885BA9BD65D446226f9E796Be",
     "symbol": "alg-Art",
     "decimals": 18,
     "chainId": 11155111,
@@ -135,8 +143,16 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "alg-Finance",
-    "address": "0x5119AEB6bD65E000a53f373Eb5C84FaaeBc782c3",
+    "address": "0xb8366e5Bc44cd4DC1DE4FcC36774324FE1d3C680",
     "symbol": "alg-Finance",
+    "decimals": 18,
+    "chainId": 11155111,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "alg-Shopping",
+    "address": "0xf88DDd9259B05bE8339Aea6aA94E90df7fE94881",
+    "symbol": "alg-Shopping",
     "decimals": 18,
     "chainId": 11155111,
     "logoURI": "/images/tokens/usdt.png"
@@ -190,3 +206,4 @@ export const GET_AIRTOKEN_2_ALGTOKEN = () => {
 
   return pair
 } 
+

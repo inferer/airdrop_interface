@@ -1,17 +1,19 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { IAirdrop, updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed } from './actions'
+import { IAirdrop, IAlgAirdrop, updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed, updateUserAlgAirdropList } from './actions'
 
 
 export interface AirdropState {
   airdropList: IAirdrop[]
   airdropListOne: IAirdrop[]
-  userAirdropConfirmedList: IAirdrop[]
+  userAirdropConfirmedList: IAirdrop[],
+  userAlgAirdropList: IAlgAirdrop []
 }
 
 const initialState: AirdropState = {
   airdropList: [],
   airdropListOne: [],
-  userAirdropConfirmedList: []
+  userAirdropConfirmedList: [],
+  userAlgAirdropList: []
 }
 
 export default createReducer<AirdropState>(initialState, builder => {
@@ -23,6 +25,9 @@ export default createReducer<AirdropState>(initialState, builder => {
   })
   builder.addCase(updateUserAirdropConfirmed, (state, { payload: { airdropList } }) => {
     state.userAirdropConfirmedList = airdropList
+  })
+  builder.addCase(updateUserAlgAirdropList, (state, { payload: { algAirdropList } }) => {
+    state.userAlgAirdropList = algAirdropList
   })
 }
   
