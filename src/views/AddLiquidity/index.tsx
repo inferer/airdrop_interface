@@ -38,12 +38,18 @@ import { currencyId } from '../../utils/currencyId'
 import { PoolPriceBar } from './PoolPriceBar'
 import { NETWORK_CHAIN_ID } from '../../connectors'
 import { AIRLABEL_TOKEN_LIST } from '../../constants/tokenList'
+import { useRouter } from 'next/router'
 
 export default function AddLiquidity() {
   const { account, chainId, library } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
-  const currencyIdA = '0x300f6B06211F490c2A5Fb5c7f634A3f6D636E355'
-  const currencyIdB = AIRLABEL_TOKEN_LIST[0].address
+  const router = useRouter()
+  // const currencyIdA = '0x300f6B06211F490c2A5Fb5c7f634A3f6D636E355'
+  // const currencyIdB = AIRLABEL_TOKEN_LIST[0].address
+  
+  console.log(router.query)
+  const currencyIdA = router.query.address && router.query.address[0]
+  const currencyIdB = router.query.address && router.query.address[1]
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
 
@@ -280,26 +286,31 @@ export default function AddLiquidity() {
   const handleCurrencyASelect = useCallback(
     (currencyA: Currency) => {
       const newCurrencyIdA = currencyId(currencyA)
-      // if (newCurrencyIdA === currencyIdB) {
-      //   history.push(`/add/${currencyIdB}/${currencyIdA}`)
-      // } else {
-      //   history.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
-      // }
+      if (newCurrencyIdA === currencyIdB) {
+        // history.push(`/add/${currencyIdB}/${currencyIdA}`)
+        router.push(`/add/${currencyIdB}/${currencyIdA}`)
+      } else {
+        // history.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
+        router.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
+      }
     },
     [currencyIdB, history, currencyIdA]
   )
   const handleCurrencyBSelect = useCallback(
     (currencyB: Currency) => {
       const newCurrencyIdB = currencyId(currencyB)
-      // if (currencyIdA === newCurrencyIdB) {
-      //   if (currencyIdB) {
-      //     history.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
-      //   } else {
-      //     history.push(`/add/${newCurrencyIdB}`)
-      //   }
-      // } else {
-      //   history.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
-      // }
+      if (currencyIdA === newCurrencyIdB) {
+        if (currencyIdB) {
+          // history.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
+          router.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
+        } else {
+          // history.push(`/add/${newCurrencyIdB}`)
+          router.push(`/add/${newCurrencyIdB}`)
+        }
+      } else {
+        // history.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
+        router.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
+      }
     },
     [currencyIdA, history, currencyIdB]
   )

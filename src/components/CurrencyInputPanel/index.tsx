@@ -169,7 +169,7 @@ export default function  CurrencyInputPanel({
 
 
   const payInput = useMemo(() => {
-    return id === 'swap-currency-input' || id === 'add-liquidity-input-tokena' || id === 'collect-currency-input'
+    return id === 'swap-currency-input' || id === 'add-liquidity-input-tokena' || id === 'collect-currency-input' || id === 'userswap-currency-input'
   }, [id])
 
   const { isProjectCreate, isProjectSwap } = useIsUserAction()

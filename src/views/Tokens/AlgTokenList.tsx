@@ -10,6 +10,7 @@ import { IAlgAirdrop } from "../../state/airdrop/actions";
 import { useCurrency } from "../../hooks/Tokens";
 import { useCurrencyBalance } from "../../state/wallet/hooks";
 import { useActiveWeb3React } from "../../hooks";
+import CurrencyLogo from "../../components/CurrencyLogo";
 
 const AlgTokenListItem: React.FC<{
   algAirdrop: IAlgAirdrop
@@ -31,7 +32,11 @@ const AlgTokenListItem: React.FC<{
       <>
         <TableCell className="flex-1 w-[120px] ">
           <div className="h-[35px] flex items-center justify-center font-fsemibold text-[16px]">
-            { algAirdrop.token?.symbol }
+            { algTokenCurrency && <CurrencyLogo currency={algTokenCurrency} /> } 
+            <div className="pl-2">
+              { algAirdrop.token?.symbol }
+            </div>
+            
           </div>
         </TableCell>
         <TableCell className="w-[130px] ">

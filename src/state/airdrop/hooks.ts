@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, AppState } from '../index'
-import { IAirdrop } from './actions'
+import { IAirdrop, IAlgAirdrop } from './actions'
 
 
 export function useAirdropList() {
@@ -23,5 +23,12 @@ export function useUserAirdropConfirmedList() {
 
 export function useUserAlgAirdropList() {
   return useSelector<AppState, AppState['airdrop']['userAlgAirdropList']>(state => state.airdrop.userAlgAirdropList)
+}
+
+export function useAlgAirdrop(address: string) {
+  const userAlgAirdropList = useUserAlgAirdropList()
+  return useMemo(() => {
+    return userAlgAirdropList.find(algDrop => algDrop.token?.address?.toLowerCase() === address.toLowerCase()) || ({} as IAlgAirdrop)
+  }, [userAlgAirdropList, address])
 }
 

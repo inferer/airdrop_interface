@@ -1,27 +1,29 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "./Table";
-import { useUserAlgAirdropList } from "../../state/airdrop/hooks";
 import { useRouter } from "next/router";
 import { useAirdropTokenScore } from "../../hooks/useAirdropTokenScore";
-import { IAlgAirdrop } from "../../state/airdrop/actions";
-import { useAirLabelAllTokens, useCurrency } from "../../hooks/Tokens";
+import { useAlgLabelAllTokens, useCurrency } from "../../hooks/Tokens";
 import { useCurrencyBalance } from "../../state/wallet/hooks";
 import { useActiveWeb3React } from "../../hooks";
 import { Currency } from "@uniswap/sdk";
 import CurrencyLogo from "../../components/CurrencyLogo";
+import { useAlgAirdrop } from "../../state/airdrop/hooks";
 
 const AlgTokenListItem: React.FC<{
-  airToken: Currency
+  algToken: Currency,
+  claim?: (label: string, tokenAddress: string) => void
 }> = ({
-  airToken,
+  algToken,
+  claim
 }) => {
   const { account } = useActiveWeb3React()
-  // const algTokenCurrency = useCurrency(algAirdrop.token.address)
-  // const algTokenCurrencyAmount = useCurrencyBalance(account ?? undefined, algTokenCurrency ?? undefined)
-  const balance = useCurrencyBalance(account ?? undefined, airToken)
+  const balance = useCurrencyBalance(account ?? undefined, algToken)
+  // @ts-ignore
+  const algAirdrop = useAlgAirdrop(algToken.address)
+
   return (
-    <TableRow key={airToken.symbol} 
+    <TableRow key={algToken.symbol} 
       onClick={() => {
         
       }}
@@ -29,9 +31,9 @@ const AlgTokenListItem: React.FC<{
       <>
         <TableCell className="flex-1 w-[120px] ">
           <div className="h-[35px] flex items-center justify-center font-fsemibold text-[16px]">
-            <CurrencyLogo currency={airToken} />
+            <CurrencyLogo currency={algToken} />
             <div className="pl-2">
-              { airToken?.symbol }
+              { algToken?.symbol }
             </div>
             
           </div>
@@ -41,10 +43,22 @@ const AlgTokenListItem: React.FC<{
         </TableCell>
         <TableCell className="w-[150px]">
           <div className="flex items-center">
-            <span>{1000}</span>
+            <span>{algAirdrop.unclaimed}</span>
+            {
+              Number(algAirdrop.unclaimed) > 0 && 
+              <button className=" border border-gray-300 p-1 rounded ml-2"
+                onClick={e => {
+                  e.stopPropagation()
+                  claim && claim(algAirdrop.token.symbol || '', algAirdrop.token.address)
+                }}
+              >Claim</button>
+            }
             
           </div>
           
+        </TableCell>
+        <TableCell className="w-[150px]">
+          <span>{algAirdrop.tokenAmount}</span>
         </TableCell>
         
       </>
@@ -53,16 +67,25 @@ const AlgTokenListItem: React.FC<{
 }
 
 
-const AirTokenList: React.FC<{
+const AlgTokenList: React.FC<{
 
 }> = () => {
-
+  const { account } = useActiveWeb3React()
   const router = useRouter()
-  const airLabelAllTokens = useAirLabelAllTokens()
+  const algLabelAllTokens = useAlgLabelAllTokens()
 
-  const airTokenList = useMemo(() => {
-    return Object.values(airLabelAllTokens)
-  }, [airLabelAllTokens])
+  const { handleGetAlgTokenList, handleClaim } = useAirdropTokenScore()
+
+  const algTokenList = useMemo(() => {
+    return Object.values(algLabelAllTokens)
+  }, [algLabelAllTokens])
+
+  useEffect(() => {
+
+    handleGetAlgTokenList()
+
+  }, [account])
+
 
   return (
     <div>
@@ -77,16 +100,19 @@ const AirTokenList: React.FC<{
                 <span>Balance</span> 
               </TableHeadCell>
               <TableHeadCell className="w-[150px] ">
-                <span>Details</span> 
+                <span>Supplied</span> 
+              </TableHeadCell>
+              <TableHeadCell className="w-[150px]">
+                <span>Supply (next week)</span>
               </TableHeadCell>
             </>
           </TableHead>
           <TableBody>
             <>
               {
-                airTokenList.map(airToken => {
+                algTokenList.map(algToken => {
                   return (
-                    <AlgTokenListItem key={airToken?.address} airToken={airToken} />
+                    <AlgTokenListItem key={algToken?.address} algToken={algToken} />
                     
                   )
                 })
@@ -101,4 +127,4 @@ const AirTokenList: React.FC<{
   )
 }
 
-export default AirTokenList
+export default AlgTokenList

@@ -4,22 +4,14 @@ import {  TYPE } from '../../theme'
 
 import { useActiveWeb3React } from '../../hooks'
 import { CollectBody, TitleWrap } from './styleds'
-import AlgTokenList from './AlgTokenList'
+import AlgTokenList from './AlgTokenList2'
 import router from 'next/router'
 import AirTokenList from './AirTokenList'
 
-function Collect() {
+function Tokens() {
   const theme = useContext(ThemeContext)
   const { account } = useActiveWeb3React()
 
-  const isAirdropConfirm = router.query.id && router.query.id[1]
-  const handleToPage = useCallback(() => {
-    if (isAirdropConfirm && router.query?.id) {
-      router.push(`/collect/${router.query?.id[0]}`)
-    } else {
-      router.push('/search')
-    }
-  }, [router, isAirdropConfirm])
 
   return (
     <div className='w-[1440px] mx-auto flex'>
@@ -37,4 +29,4 @@ function Collect() {
   )
 }
 
-export default React.memo(Collect)
+export default React.memo(Tokens)
