@@ -19,7 +19,7 @@ const AirdropList: React.FC<{
   const airdropList = useUserAirdropConfirmedList()
 
   useEffect(() => {
-    handleGetAirdropList()
+    // handleGetAirdropList()
     handleGetUserAirdropConfirmed()
   }, [account])
   
