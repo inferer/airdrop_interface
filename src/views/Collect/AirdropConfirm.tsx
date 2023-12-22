@@ -11,7 +11,7 @@ import { useAirdropReceiver } from "../../hooks/useAirdropReceiver";
 import { getTokenLogoURL2 } from "../../components/CurrencyLogo";
 import { ApprovalState } from "../../hooks/useApproveCallback";
 import { AutoRow } from "../../components/Row";
-import { Loader } from "react-feather";
+import Loader from '../../components/Loader'
 import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
 import { useActiveWeb3React } from "../../hooks";
 

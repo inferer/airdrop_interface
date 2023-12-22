@@ -37,7 +37,7 @@ export default function Create() {
   } = useCreateCallback(undefined, undefined, undefined, null)
 
 
-  const { handleCreateAirdrop } = useCreateAirdrop(args, lockedCurrency as Token ?? undefined)
+  const { createStatus, handleCreateAirdrop } = useCreateAirdrop(args, lockedCurrency as Token ?? undefined)
 
   const label = useMemo(() => {
     return outputAmount?.currency?.symbol?.slice(4) || ''
@@ -145,7 +145,7 @@ export default function Create() {
                 <TYPE.textGrad1 fontWeight={600} fontSize={20}>
                   { approvalState === ApprovalState.PENDING ? (
                       <AutoRow gap="6px" justify="center">
-                        Approving <Loader stroke="white" />
+                        Approving <Loader />
                       </AutoRow>
                     ) : approvalState === ApprovalState.APPROVED ? (
                       'Approved ' + lockedCurrency?.symbol
@@ -167,7 +167,7 @@ export default function Create() {
                 <TYPE.textGrad1 fontWeight={600} fontSize={20}>
                   { approvalStateLabel === ApprovalState.PENDING ? (
                       <AutoRow gap="6px" justify="center">
-                        Approving <Loader stroke="white" />
+                        Approving <Loader />
                       </AutoRow>
                     ) : approvalStateLabel === ApprovalState.APPROVED ? (
                       'Approved ' + outputAmount?.currency?.symbol
@@ -193,7 +193,7 @@ export default function Create() {
           >
             <TYPE.textGrad1 fontWeight={600} fontSize={20}>
               {
-                'Confirm'
+                createStatus === 1 ? <Loader /> : 'Confirm'
               }
             </TYPE.textGrad1>
           </ButtonSwap>

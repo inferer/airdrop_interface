@@ -9,12 +9,13 @@ import TaskList from './TaskList'
 import router from 'next/router'
 import { useAirdropReceiver } from '../../hooks/useAirdropReceiver'
 import { ButtonSwap } from '../../components/Button'
+import Loader from '../../components/Loader'
 
 function Collect() {
   const theme = useContext(ThemeContext)
   const { account } = useActiveWeb3React()
 
-  const { handleCompleteTask } = useAirdropReceiver()
+  const { completeStatus, handleCompleteTask } = useAirdropReceiver()
 
   const [ids, setIds] = useState<string[]>([])
   const handleOnChecked = (keys: string[]) => {
@@ -43,7 +44,7 @@ function Collect() {
             >
               <TYPE.textGrad1 fontWeight={600} fontSize={20}>
                 {
-                  'Confirm'
+                  completeStatus === 1 ? <Loader /> : 'Confirm'
                 }
               </TYPE.textGrad1>
             </ButtonSwap>

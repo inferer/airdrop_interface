@@ -32,6 +32,7 @@ export function useAirdropReceiver(algToken?: string) {
   const [approvalState, approve] = useApproveCallback(algTokenCurrencyAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
 
   const [confirmStatus, setConfirmStatus] = useState(0)
+  const [completeStatus, setCompleteStatus] = useState(0)
 
   const handleConfirmTask = useCallback(async (
     airdropId: string,
@@ -63,9 +64,9 @@ export function useAirdropReceiver(algToken?: string) {
         console.log(error)
       }
       const tx = await airdropReceiver.confirmTask(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, { gasPrice: '1000000000', gasLimit: gasLimit })
-      const receipt = tx.wait()
+      const receipt = await tx.wait()
       if (receipt.status) {
-        handleGetUserAirdropConfirmed()
+        
         alert('Success')
       }
       setConfirmStatus(2)
@@ -85,6 +86,7 @@ export function useAirdropReceiver(algToken?: string) {
         alert('no checked')
         return
       }
+      setCompleteStatus(1)
       let gasLimit = '5000000'
       // await airdropReceiver.setAirdropAssetTreasury('0x92B97ea7dE7BEc9C6F75F9a450979F33098fB32a')
       try {
@@ -95,15 +97,18 @@ export function useAirdropReceiver(algToken?: string) {
         console.log(error)
       }
       const tx = await airdropReceiver.completeTask(account, airdropIds, { gasPrice: '1000000000', gasLimit: gasLimit })
-      const receipt = tx.wait()
+      const receipt = await tx.wait()
       if (receipt.status) {
+        handleGetUserAirdropConfirmed()
         alert('Success')
       }
+      setCompleteStatus(2)
     }
   }, [airdropReceiver, account])
   return {
     confirmStatus,
     handleConfirmTask,
+    completeStatus,
     handleCompleteTask,
     algTokenCurrency,
     approvalState,

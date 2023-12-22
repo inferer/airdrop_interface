@@ -2,7 +2,7 @@ import router from 'next/router'
 import { BigNumber } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { Currency, Token, Trade } from '@uniswap/sdk'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE, ROUTER_ADDRESS } from '../constants'
 import { useActiveWeb3React } from './index'
 import { useAirdropSenderContract } from './useContract'
@@ -68,6 +68,7 @@ export function useCreateCallback(
 export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
   const { account, chainId, library } = useActiveWeb3React()
   const airdropSender: Contract | null = useAirdropSenderContract()
+  const [createStatus, setCreateStatus] = useState(0)
 
   const handleCreateAirdrop = useCallback(async (
     name: string,
@@ -78,6 +79,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
     content: string
   ) => {
     if (airdropSender && account && lockedToken) {
+      setCreateStatus(1)
       console.log(lockedToken, args)
       const baseInfo = [name, label, channel, action, content]
       const route = args[2]
@@ -98,6 +100,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       console.log(tx)
       const receipt = await tx.wait()
       console.log(receipt)
+      setCreateStatus(2)
       if (receipt.status) {
         router.push('/collect')
       }
@@ -111,6 +114,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
   }, [airdropSender, account, args, lockedToken])
 
   return {
+    createStatus,
     handleCreateAirdrop,
   }
 }
