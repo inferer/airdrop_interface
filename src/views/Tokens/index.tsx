@@ -4,11 +4,8 @@ import {  TYPE } from '../../theme'
 
 import { useActiveWeb3React } from '../../hooks'
 import { CollectBody, TitleWrap } from './styleds'
-import LazyImage, { LazyImage2 } from '../../components/LazyImage'
 import AlgTokenList from './AlgTokenList'
 import router from 'next/router'
-import AirdropConfirm from './AirdropConfirm'
-import { useAirdropManager } from '../../hooks/useAirdropManager'
 import AirTokenList from './AirTokenList'
 
 function Collect() {
