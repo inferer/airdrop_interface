@@ -112,7 +112,7 @@ const AlgTokenList: React.FC<{
               {
                 algTokenList.map(algToken => {
                   return (
-                    <AlgTokenListItem key={algToken?.address} algToken={algToken} />
+                    <AlgTokenListItem key={algToken?.address} algToken={algToken} claim={handleClaim} />
                     
                   )
                 })

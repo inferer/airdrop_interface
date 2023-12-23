@@ -127,6 +127,78 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_userAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_airdropIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "completeTask2",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_userAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_airdropIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "completeTask3",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_userAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_airdropIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "completeTask4",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_userAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_airdropIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "completeTask5",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "_airdropId",
         "type": "uint256"
@@ -153,72 +225,6 @@
       }
     ],
     "name": "confirmTask",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_airdropId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_algToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_airToken",
-        "type": "address"
-      },
-      {
-        "internalType": "uint8",
-        "name": "score",
-        "type": "uint8"
-      },
-      {
-        "internalType": "bytes32[]",
-        "name": "proof",
-        "type": "bytes32[]"
-      }
-    ],
-    "name": "confirmTask2",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_airdropId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_algToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_airToken",
-        "type": "address"
-      },
-      {
-        "internalType": "uint8",
-        "name": "score",
-        "type": "uint8"
-      },
-      {
-        "internalType": "bytes32[]",
-        "name": "proof",
-        "type": "bytes32[]"
-      }
-    ],
-    "name": "confirmTask3",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

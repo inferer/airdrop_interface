@@ -86,3 +86,6 @@
 
           </Provider>
         </Web3ReactProviderDefault>
+
+
+        https://eth.public-rpc.com

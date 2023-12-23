@@ -11,6 +11,8 @@ import { useAirdropReceiver } from '../../hooks/useAirdropReceiver'
 import { ButtonSwap } from '../../components/Button'
 import Loader from '../../components/Loader'
 
+// http://36.26.92.165:13884/api/airdrop-manager/completeTask?userAddress=0xfba7fE606D2253BDD2955f8a8fEC240A4c6f279a&airdropId=6
+
 function Collect() {
   const theme = useContext(ThemeContext)
   const { account } = useActiveWeb3React()
@@ -34,7 +36,7 @@ function Collect() {
         <CollectBody>
           <TaskList onChecked={handleOnChecked} />
         </CollectBody>
-        <div className=" flex justify-end">
+        {/* <div className=" flex justify-end">
           <div className='w-[260px]'>
             <ButtonSwap 
               onClick={e => {
@@ -49,7 +51,7 @@ function Collect() {
               </TYPE.textGrad1>
             </ButtonSwap>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   )

@@ -66,7 +66,7 @@ export function useAirdropReceiver(algToken?: string) {
       const tx = await airdropReceiver.confirmTask(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, { gasPrice: '1000000000', gasLimit: gasLimit })
       const receipt = await tx.wait()
       if (receipt.status) {
-        
+        router.push('/tasks')
         alert('Success')
       }
       setConfirmStatus(2)
@@ -96,13 +96,21 @@ export function useAirdropReceiver(algToken?: string) {
       } catch (error) {
         console.log(error)
       }
-      const tx = await airdropReceiver.completeTask(account, airdropIds, { gasPrice: '1000000000', gasLimit: gasLimit })
-      const receipt = await tx.wait()
-      if (receipt.status) {
-        handleGetUserAirdropConfirmed()
-        alert('Success')
+      console.log('gasLimit: ', gasLimit)
+      try {
+        const tx = await airdropReceiver.completeTask(account, airdropIds, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const receipt = await tx.wait()
+        if (receipt.status) {
+          handleGetUserAirdropConfirmed()
+          alert('Success')
+        }
+        setCompleteStatus(2)
+
+      } catch (error) {
+        setCompleteStatus(-1)
+        console.log(error)
       }
-      setCompleteStatus(2)
+      
     }
   }, [airdropReceiver, account])
   return {

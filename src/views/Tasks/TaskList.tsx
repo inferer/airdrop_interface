@@ -35,7 +35,7 @@ const AirdropList: React.FC<{
     onChecked && onChecked(checkList)
     setCheckList(checkList)
   }, [checkList])
-
+  console.log(airdropList[0])
   return (
     <div>
       <Table>
@@ -81,7 +81,7 @@ const AirdropList: React.FC<{
                         </TableCell>
                         <TableCell className="w-[135px] ">
                           <div className="bg-[rgba(63,60,255,0.05)] rounded-lg h-[35px] px-[8px] flex items-center justify-center text-[rgba(63,60,255,0.80)] font-fmedium text-[16px]">
-                            Social
+                            {airdrop.label}
                           </div>
                         </TableCell>
                         {/* <TableCell className="w-[120px] ">
