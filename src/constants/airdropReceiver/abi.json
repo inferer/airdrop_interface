@@ -127,78 +127,6 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_userAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "_airdropIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "completeTask2",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_userAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "_airdropIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "completeTask3",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_userAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "_airdropIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "completeTask4",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_userAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "_airdropIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "completeTask5",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint256",
         "name": "_airdropId",
         "type": "uint256"
@@ -354,12 +282,43 @@
   {
     "inputs": [
       {
+        "internalType": "bool",
+        "name": "_firest",
+        "type": "bool"
+      }
+    ],
+    "name": "setUserCompleteFirst",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "newOwner",
         "type": "address"
       }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_userAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_airdropIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "userCompleteTask",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

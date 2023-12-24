@@ -35,7 +35,7 @@ const AirdropList: React.FC<{
     onChecked && onChecked(checkList)
     setCheckList(checkList)
   }, [checkList])
-  console.log(airdropList[0])
+  
   return (
     <div>
       <Table>

@@ -9,19 +9,20 @@ import AirdropList from './AirdropList'
 import router from 'next/router'
 import AirdropConfirm from './AirdropConfirm'
 import { useAirdropManager } from '../../hooks/useAirdropManager'
+import { useIsRoleProjectMode } from '../../state/user/hooks'
 
 function Collect() {
   const theme = useContext(ThemeContext)
   const { account } = useActiveWeb3React()
-
+  const isProjectMode = useIsRoleProjectMode()
   const isAirdropConfirm = router.query.id && router.query.id[1]
   const handleToPage = useCallback(() => {
     if (isAirdropConfirm && router.query?.id) {
       router.push(`/collect/${router.query?.id[0]}`)
     } else {
-      router.push('/search')
+      router.push( isProjectMode ? '/create' : '/search')
     }
-  }, [router, isAirdropConfirm])
+  }, [router, isAirdropConfirm, isProjectMode])
 
   return (
     <div className='w-[1217px] mx-auto'>

@@ -27,6 +27,7 @@ export const getAirdropLength = async (multi: Contract) => {
     })
 
   const [ currentAirdropId ] = await multicall(multi, AirdropManager_ABI, calls)
+
   return currentAirdropId ? currentAirdropId[0]?.toString() : 0
 }
 
@@ -144,12 +145,12 @@ export const getUserAirdropConfirmed2 = async (airdropManager: Contract, account
 
   return userAirdropConfirmed && userAirdropConfirmed[0] ? userAirdropConfirmed.map((item: any) => {
     const tempItem = item
+    console.log(tempItem)
     return {
       completed: tempItem.completed,
-      airdropId: tempItem[1]?.toString(),
-      userAddress: tempItem[2],
-      amount: tempItem[3]?.toString(),
-      confirmedTimestamp: tempItem[4]?.toString()
+      airdropId: tempItem[2]?.toString(),
+      userAddress: tempItem[3],
+      confirmedTimestamp: tempItem[8]?.toString()
     }
   }) : []
 }
@@ -188,8 +189,7 @@ export function useAirdropManager() {
   const handleGetUserAirdropConfirmed = useCallback(async () => {
     if (multi && airdropManager && account) {
       let userAirdropConfirmed = await getUserAirdropConfirmed2(airdropManager, account) 
-      const userConfirmedIds = userAirdropConfirmed.map((item: { airdropId: any; }) => item.airdropId)
-      
+      const userConfirmedIds = userAirdropConfirmed.map((item: { airdropId: any; }) => item.airdropId).filter((airdropId: string) => parseInt(airdropId) > 0)
       const list = await getAirdropList(multi, userConfirmedIds)
       const tempConfirmed = userAirdropConfirmed.reverse()
       const newList = list.map((item, index) => ({ ...item, ...tempConfirmed[index]}))

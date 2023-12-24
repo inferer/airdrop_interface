@@ -63,12 +63,17 @@ export function useAirdropReceiver(algToken?: string) {
       } catch (error) {
         console.log(error)
       }
-      const tx = await airdropReceiver.confirmTask(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, { gasPrice: '1000000000', gasLimit: gasLimit })
-      const receipt = await tx.wait()
-      if (receipt.status) {
-        router.push('/tasks')
-        alert('Success')
+      try {
+        const tx = await airdropReceiver.confirmTask(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const receipt = await tx.wait()
+        if (receipt.status) {
+          router.push('/tasks')
+          alert('Success')
+        }
+      } catch (error) {
+        console.log(error)
       }
+      
       setConfirmStatus(2)
       // const airdropAssetTreasury = await airdropReceiver.airdropAssetTreasury()
       // const airdropManager = await airdropReceiver.airdropManager()
@@ -79,6 +84,7 @@ export function useAirdropReceiver(algToken?: string) {
   }, [airdropReceiver, account, getAccountScoreProof])
 
   const handleCompleteTask = useCallback(async (
+    userAddress: string,
     airdropIds: string[],
   ) => {
     if (airdropReceiver && account) {
@@ -91,17 +97,17 @@ export function useAirdropReceiver(algToken?: string) {
       // await airdropReceiver.setAirdropAssetTreasury('0x92B97ea7dE7BEc9C6F75F9a450979F33098fB32a')
       try {
         console.log(airdropIds)
-        const gasEstimate = await airdropReceiver.estimateGas['completeTask'](account, airdropIds)
+        const gasEstimate = await airdropReceiver.estimateGas['completeTask'](userAddress, airdropIds)
         gasLimit = gasEstimate.toString()
       } catch (error) {
         console.log(error)
       }
       console.log('gasLimit: ', gasLimit)
       try {
-        const tx = await airdropReceiver.completeTask(account, airdropIds, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await airdropReceiver.completeTask(userAddress, airdropIds, { gasPrice: '1000000000', gasLimit: gasLimit })
         const receipt = await tx.wait()
         if (receipt.status) {
-          handleGetUserAirdropConfirmed()
+          // handleGetUserAirdropConfirmed()
           alert('Success')
         }
         setCompleteStatus(2)
