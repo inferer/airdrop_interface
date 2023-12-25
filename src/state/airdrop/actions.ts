@@ -37,3 +37,4 @@ export const updateAirdropList = createAction<{ airdropList: IAirdrop[] }>('aird
 export const updateAirdropListOne = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateAirdropListOne')
 export const updateUserAirdropConfirmed = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateUserAirdropConfirmed')
 export const updateUserAlgAirdropList = createAction<{ algAirdropList: IAlgAirdrop[] }>('airdrop/updateUserAlgAirdropList')
+export const updateUserLabelScore = createAction<{ key: string, score: number }>('airdrop/updateUserLabelScore')

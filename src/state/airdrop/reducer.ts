@@ -1,19 +1,21 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { IAirdrop, IAlgAirdrop, updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed, updateUserAlgAirdropList } from './actions'
+import { IAirdrop, IAlgAirdrop, updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed, updateUserAlgAirdropList, updateUserLabelScore } from './actions'
 
 
 export interface AirdropState {
   airdropList: IAirdrop[]
   airdropListOne: IAirdrop[]
   userAirdropConfirmedList: IAirdrop[],
-  userAlgAirdropList: IAlgAirdrop []
+  userAlgAirdropList: IAlgAirdrop [],
+  userLabelScore: {[key: string]: number}
 }
 
 const initialState: AirdropState = {
   airdropList: [],
   airdropListOne: [],
   userAirdropConfirmedList: [],
-  userAlgAirdropList: []
+  userAlgAirdropList: [],
+  userLabelScore: {}
 }
 
 export default createReducer<AirdropState>(initialState, builder => {
@@ -28,6 +30,9 @@ export default createReducer<AirdropState>(initialState, builder => {
   })
   builder.addCase(updateUserAlgAirdropList, (state, { payload: { algAirdropList } }) => {
     state.userAlgAirdropList = algAirdropList
+  })
+  builder.addCase(updateUserLabelScore, (state, { payload: { key, score } }) => {
+    state.userLabelScore[key] = score
   })
 }
   

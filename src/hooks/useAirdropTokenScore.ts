@@ -11,9 +11,10 @@ import { NETWORK_CHAIN_ID } from "../connectors";
 import { ChainId, Token } from "@uniswap/sdk";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../state";
-import { updateUserAlgAirdropList } from "../state/airdrop/actions";
+import { updateUserAlgAirdropList, updateUserLabelScore } from "../state/airdrop/actions";
 import { getAlgLabelTokenByAddress, getAlgTokenByLabel } from "../utils/getTokenList";
 import { fetcher } from "../utils/axios";
+import { useUserLabelScore } from "../state/airdrop/hooks";
 
 export const getAirdropTokenScoreAddress = () => {
   return AirdropTokenScore_NETWORKS[NETWORK_CHAIN_ID as ChainId]
@@ -33,7 +34,7 @@ export const getAccountScore = async (account: string, label: string) => {
   if (res.code === 0 && res.data) {
     return res.data
   }
-  return {}
+  return { score: '0' }
 }
 
 export const getUserTokenClaim = async (multi: Contract, tokenList: Token[], account: string) => {
@@ -118,19 +119,27 @@ export function useAirdropTokenScore() {
 }
 
 export function useAccountLabelScore(account: string, label: string) {
+  const dispatch = useDispatch<AppDispatch>()
   const [score, setScore] = useState(0)
 
+  const userScore = useUserLabelScore(account, label)
   useEffect(() => {
     if (account && label) {
-      if (getAlgTokenByLabel(label)) {
+      if (userScore >= 0) {
+        setScore(userScore)
+      } else
+      if (getAlgTokenByLabel(label) && userScore < 0) {
         getAccountScore(account, label)
         .then(res => {
-          setScore(Number(res.score))
+          const score = Number(res.score) < 0 ? 0 : Number(res.score)
+          setScore(score)
+          dispatch(updateUserLabelScore({key: `${account?.toLocaleLowerCase()}_${label?.toLocaleLowerCase()}`, score: score}))
+          
         })
       }
       
     }
-  }, [account, label, getAlgTokenByLabel])
+  }, [account, label, getAlgTokenByLabel, userScore])
 
   return score
 }

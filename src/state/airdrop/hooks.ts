@@ -32,3 +32,14 @@ export function useAlgAirdrop(address: string) {
   }, [userAlgAirdropList, address])
 }
 
+export function useUserLabelScore(account: string, label: string) {
+  const userLabelScore = useSelector<AppState, AppState['airdrop']['userLabelScore']>(state => state.airdrop.userLabelScore)
+
+  return useMemo(() => {
+    if (!account || !label) return -1
+    const score = userLabelScore[`${account?.toLocaleLowerCase()}_${label?.toLocaleLowerCase()}`]
+    return score === undefined ? -1 : Number(score)
+  }, [account, label])
+
+}
+

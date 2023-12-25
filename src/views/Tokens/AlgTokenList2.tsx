@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "./Table";
 import { useRouter } from "next/router";
-import { useAirdropTokenScore } from "../../hooks/useAirdropTokenScore";
+import { useAccountLabelScore, useAirdropTokenScore } from "../../hooks/useAirdropTokenScore";
 import { useAlgLabelAllTokens, useCurrency } from "../../hooks/Tokens";
 import { useCurrencyBalance } from "../../state/wallet/hooks";
 import { useActiveWeb3React } from "../../hooks";
@@ -21,6 +21,7 @@ const AlgTokenListItem: React.FC<{
   const balance = useCurrencyBalance(account ?? undefined, algToken)
   // @ts-ignore
   const algAirdrop = useAlgAirdrop(algToken.address)
+  const accountScore = useAccountLabelScore(account || '', algToken?.symbol?.slice(4) || '' )
 
   return (
     <TableRow key={algToken.symbol} 
@@ -43,16 +44,22 @@ const AlgTokenListItem: React.FC<{
         </TableCell>
         <TableCell className="w-[150px]">
           <div className="flex items-center">
-            <span>{algAirdrop.unclaimed}</span>
             {
-              Number(algAirdrop.unclaimed) > 0 && 
-              <button className=" border border-gray-300 p-1 rounded ml-2"
-                onClick={e => {
-                  e.stopPropagation()
-                  claim && claim(algAirdrop.token.symbol || '', algAirdrop.token.address)
-                }}
-              >Claim</button>
+              accountScore > 0 && 
+              <>
+              <span>{algAirdrop.unclaimed}</span>
+              {
+                Number(algAirdrop.unclaimed) > 0 && 
+                <button className=" border border-gray-300 p-1 rounded ml-2"
+                  onClick={e => {
+                    e.stopPropagation()
+                    claim && claim(algAirdrop.token.symbol || '', algAirdrop.token.address)
+                  }}
+                >Claim</button>
+              }
+              </>
             }
+            
             
           </div>
           

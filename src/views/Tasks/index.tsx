@@ -18,7 +18,7 @@ function Collect() {
   const theme = useContext(ThemeContext)
   const { account } = useActiveWeb3React()
 
-  const { completeStatus, handleCompleteTask } = useAirdropReceiver()
+  const { completeStatus, handleUserCompleteTask, handleConfirmCompleteTask } = useAirdropReceiver()
 
   const [ids, setIds] = useState<string[]>([])
   const handleOnChecked = (keys: string[]) => {
@@ -60,13 +60,18 @@ function Collect() {
           
         </CollectBody>
         {
-          account === '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea' && 
+          
           <div className=" flex justify-end">
             <div className='w-[260px]'>
               <ButtonSwap 
                 onClick={e => {
                   e.stopPropagation()
-                  handleCompleteTask(userAddress, [airdropId])
+                  if (account === '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea') {
+                    handleConfirmCompleteTask(userAddress, [airdropId])
+                  } else {
+                    handleUserCompleteTask(ids)
+                  }
+                  
                 }}
               >
                 <TYPE.textGrad1 fontWeight={600} fontSize={20}>

@@ -8,13 +8,21 @@ import { useCurrency } from './Tokens'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import { useApproveCallback } from './useApproveCallback'
 import { AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury'
-import { fetcher } from '../utils/axios'
+import { fetcher, poster } from '../utils/axios'
 import { getAlgTokenByLabel } from '../utils/getTokenList'
 import { useAirdropManager } from './useAirdropManager'
 
 
 export const getAccountScoreProof = async (account: string, label: string) => {
   const res = await fetcher(`/api/airdrop/getScoreProof`, { account, label })
+  if (res.code === 0 && res.data) {
+    return res.data.hexProof || []
+  }
+  return []
+}
+
+export const confirmCompleteAirdrop = async (account: string, airdropIds: string[]) => {
+  const res = await poster(`/api/airdrop-manager/confirmCompleteTask`, { account, airdropIds })
   if (res.code === 0 && res.data) {
     return res.data.hexProof || []
   }
@@ -83,7 +91,26 @@ export function useAirdropReceiver(algToken?: string) {
     }
   }, [airdropReceiver, account, getAccountScoreProof])
 
-  const handleCompleteTask = useCallback(async (
+  const handleUserCompleteTask = useCallback(async (
+    airdropIds: string[],
+  ) => {
+    if (account) {
+      if (airdropIds.length <= 0) {
+        alert('no checked')
+        return
+      }
+      setCompleteStatus(1)
+      try {
+        const res = await confirmCompleteAirdrop(account, airdropIds)
+        setCompleteStatus(2)
+      } catch(error) {
+        console.log(error)
+        setCompleteStatus(-1)
+      }
+      
+    }
+  }, [ account])
+  const handleConfirmCompleteTask = useCallback(async (
     userAddress: string,
     airdropIds: string[],
   ) => {
@@ -123,7 +150,8 @@ export function useAirdropReceiver(algToken?: string) {
     confirmStatus,
     handleConfirmTask,
     completeStatus,
-    handleCompleteTask,
+    handleUserCompleteTask,
+    handleConfirmCompleteTask,
     algTokenCurrency,
     approvalState,
     approve
