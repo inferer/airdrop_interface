@@ -18,10 +18,10 @@ const Score = ({
       <div className="flex items-center h-full">
         <div className="text-[rgba(0,0,0,0.40)] text-[16px] font-fsemibold">Score</div>
         <div className="flex items-center ml-[70px]">
-          <ScoreItem active />
-          <ScoreItem />
-          <ScoreItem />
-          <ScoreItem />
+          <ScoreItem active={score >= 1} />
+          <ScoreItem active={score > 1.25} />
+          <ScoreItem active={score > 1.5} />
+          <ScoreItem active={score > 1.75} />
         </div>
         <div className=" text-base font-fbold text-[#49BCFF] ml-3">{score}x</div>
       </div>

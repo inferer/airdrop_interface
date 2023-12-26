@@ -43,6 +43,26 @@ body {
 .table__body .table__row:hover {
   background-color: rgba(85, 123, 241, 0.04);
 }
-
+.css-t3ipsp-control,
+.css-13cymwt-control {
+  border-width: 0 !important;
+  background-color: rgba(0,0,0,0)!important;
+  min-height: auto !important;
+}
+.css-qbdosj-Input {
+  font-size: 16px !important;
+}
+.css-1xc3v61-indicatorContainer {
+  color: #000 !important;
+}
+.css-t3ipsp-control:hover{
+  border-width: 0;
+}
+.css-1u9des2-indicatorSeparator {
+  display: none !important;
+}
+.basic-single {
+  width: 100% !important;
+}
 
 

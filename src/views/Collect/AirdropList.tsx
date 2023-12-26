@@ -1,8 +1,8 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "./Table";
 import LazyImage from "../../components/LazyImage";
-import { useAirdropList } from "../../state/airdrop/hooks";
+import { useAirdropList, useMaxUnits } from "../../state/airdrop/hooks";
 import { useRouter } from "next/router";
 import { useAirdropManager } from "../../hooks/useAirdropManager";
 import { getALgTokenFromAirToken } from "../../utils/getTokenList";
@@ -16,7 +16,10 @@ const AirdropList: React.FC<{
 
   const { handleGetAirdropList } = useAirdropManager()
   const airdropList = useAirdropList()
-
+  const maxUnits = useMaxUnits()
+  const filterAirdropList = useMemo(() => {
+    return airdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits)
+  }, [maxUnits, airdropList])
   useEffect(() => {
     let _algToken = ''
     if (router.query.id) {
@@ -25,7 +28,6 @@ const AirdropList: React.FC<{
     setAlgToken(_algToken)
     handleGetAirdropList(_algToken)
   }, [router])
-
 
   return (
     <div>
@@ -56,7 +58,7 @@ const AirdropList: React.FC<{
           <TableBody>
             <>
               {
-                airdropList.map(airdrop => {
+                filterAirdropList.map(airdrop => {
                   return (
                     <TableRow key={airdrop.airdropId} 
                       onClick={() => {
@@ -74,7 +76,7 @@ const AirdropList: React.FC<{
                           </div>
                         </TableCell>
                         <TableCell className="w-[120px] ">
-                          <span className="text-[#79D0C4] font-fmedium">2x</span> 
+                          <span className="text-[#79D0C4] font-fmedium">{airdrop.unit}x</span> 
                         </TableCell>
                         <TableCell className="w-[200px]">
                           <span>{airdrop.offerLocked} {airdrop.offerToken.symbol}</span>
@@ -83,10 +85,10 @@ const AirdropList: React.FC<{
                           <span>{airdrop.expireOn}</span>
                         </TableCell>
                         <TableCell className="w-[140px]">
-                          <div className="w-[93px] h-[36px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)] px-2">
-                            <LazyImage src="/images/channel/twitter.svg" className=" w-5 h-5 rounded-full" />
-                            <div className="w-[1px] h-[14px] bg-[rgba(0,0,0,0.06)]"></div>
-                            <span className=" text-[16px] font-fsemibold">Like</span>
+                          <div className="min-w-[93px] h-[36px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)] px-2">
+                            <LazyImage src="/images/channel/twitter.svg" className=" w-5 h-5 rounded-full shrink-0" />
+                            <div className="w-[1px] h-[14px] bg-[rgba(0,0,0,0.06)] shrink-0"></div>
+                            <span className=" shrink-0 text-[16px] font-fsemibold">{airdrop.action}</span>
                           </div>
                         </TableCell>
                       </>

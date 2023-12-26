@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, AppState } from '../index'
-import { IAirdrop, IAlgAirdrop } from './actions'
+import { IAirdrop, IAlgAirdrop, updateMaxUnits } from './actions'
 
 
 export function useAirdropList() {
@@ -43,3 +43,13 @@ export function useUserLabelScore(account: string, label: string) {
 
 }
 
+export function useMaxUnits() {
+  return useSelector<AppState, AppState['airdrop']['maxUnits']>(state => state.airdrop.maxUnits)
+}
+
+export function useUpdateMaxUnits() {
+  const dispatch = useDispatch<AppDispatch>()
+  return useCallback((units: number) => {
+    dispatch(updateMaxUnits({ units }))
+  }, [dispatch])
+}

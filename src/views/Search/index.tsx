@@ -140,6 +140,7 @@ export default function Search() {
               showMaxButton={false}
               currency={currencies[Field.OUTPUT]}
               otherCurrency={currencies[Field.INPUT]}
+              disableCurrencySelect={true}
               id="collect-currency-output"
             />
             <Units />

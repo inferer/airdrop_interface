@@ -10,12 +10,16 @@ import { CreateBody, ItemBox, ItemCenter, ItemTitle, ItemWrap, TitleWrap, TokenI
 import LazyImage, { LazyImage2 } from '../../components/LazyImage'
 import Input from '../../components/TextInput/Input'
 import Select from './Select'
+import SelectInput from './Select2'
 import { Link } from '../../components/AppRouter'
 import { useCreateAirdrop, useCreateCallback } from '../../hooks/useAirdropSender'
 import { ApprovalState } from '../../hooks/useApproveCallback'
 import { AutoRow } from '../../components/Row'
 import Loader from '../../components/Loader'
 import { Token } from '@uniswap/sdk'
+import { TWITTER_UNIT } from '../../constants'
+
+
 
 export default function Create() {
   const theme = useContext(ThemeContext)
@@ -36,12 +40,19 @@ export default function Create() {
     approveLabel
   } = useCreateCallback(undefined, undefined, undefined, null)
 
-
   const { createStatus, handleCreateAirdrop } = useCreateAirdrop(args, lockedCurrency as Token ?? undefined)
 
   const label = useMemo(() => {
     return outputAmount?.currency?.symbol?.slice(4) || ''
   }, [outputAmount])
+
+  const [action, setAction] = useState<string>('like')
+  const handleChange = (data: any) => {
+    console.log(data)
+    setAction(data.value)
+  }
+
+
   return (
     <CreateBody>
       <TitleWrap>
@@ -96,20 +107,35 @@ export default function Create() {
             <div className='flex w-full'>
               <div>
                 <ItemTitle>Channel</ItemTitle>
-                <div className='mt-2'>
+                <div className='mt-2 font-fmedium'>
                   <Select title='Twitter' />
                 </div>
               </div>
-              <div className='ml-[64px]'>
+              <div className='ml-[40px]'>
                 <ItemTitle>Action</ItemTitle>
-                <div className='mt-2'>
-                  <Select title='Like' />
+                <div className='mt-2 font-fmedium'>
+                  <SelectInput onChange={handleChange} />
                 </div>
               </div>
-              <div className='ml-[64px]'>
+              <div className='ml-[34px]'>
+                <div className='mt-1'>
+                  <LazyImage src='/images/airdrop/to.svg' />
+                </div>
+                
+              </div>
+              <div className='ml-[34px] shrink-0'>
                 <ItemTitle>Offer per unit</ItemTitle>
                 <div className='mt-2'>
-                  <Select title='2X' />
+                  {/* <Select title='2X' /> */}
+                  <div className='flex items-center justify-between font-fsemibold text-[16px] py-3 px-4 bg-[rgba(85,123,241,0.02)] rounded-[8px]'>
+                    <div>{TWITTER_UNIT[action]} x</div>
+                    <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
+                      <LazyImage src='/images/airdrop/airdrop_icon.svg' />
+                      <div className=' font-fmedium text-[#A1CEA8]'>
+                        {outputAmount?.currency?.symbol}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -188,7 +214,7 @@ export default function Create() {
                 alert('Airdrop name is empty!')
                 return
               }
-              handleCreateAirdrop(name, label, 'Twitter', 'Like', '2', content)
+              handleCreateAirdrop(name, label, 'Twitter', action, TWITTER_UNIT[action], content)
             }}
           >
             <TYPE.textGrad1 fontWeight={600} fontSize={20}>

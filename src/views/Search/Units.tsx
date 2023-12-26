@@ -1,28 +1,65 @@
+import { useMaxUnits, useUpdateMaxUnits } from "../../state/airdrop/hooks";
 import LazyImage from "../../components/LazyImage";
-import React from "react";
+import React, { useCallback, useState } from "react";
 
 const ScoreItem = ({
-  active
-}: { active?: boolean}) => {
+  active,
+  onClick
+}: { active?: boolean, onClick?: () => void}) => {
   return (
-    <div className={`${active ? 'bg-[rgba(73,91,255,0.30)]' : 'bg-[#FAFAFA]'}  w-[82px] h-3 rounded-sm mr-1`}>
+    <div 
+      onClick={e => {
+        e.stopPropagation()
+        onClick && onClick()
+      }}
+      className={`${active ? 'bg-[rgba(73,91,255,0.30)]' : 'bg-[#FAFAFA]'}  w-[82px] h-3 rounded-sm mr-1 cursor-pointer`}>
 
     </div>
   )
 }
 
 const Units = () => {
+  const [unit, setUnit] = useState(1)
+
+  const updateMaxUnits = useUpdateMaxUnits()
+  const maxUnits = useMaxUnits()
+
+  const handleOnClick = useCallback((_unit: number) => {
+    if (_unit <= unit && _unit > 1) {
+      setUnit(_unit - 1)
+      updateMaxUnits(_unit - 1)
+    } else {
+      setUnit(_unit)
+      updateMaxUnits(_unit)
+    }
+    
+  }, [unit])
   return (
     <div className=" border border-[#F5F5F5] rounded-xl px-4 h-[58px]">
       <div className="flex items-center h-full">
         <LazyImage src="/images/airdrop/unit.svg" />
         <div className="text-[rgba(0,0,0,0.40)] text-[16px] font-fsemibold ml-1">Max units</div>
         <div className="flex items-center ml-[21px]">
-          <ScoreItem active />
-          <ScoreItem active />
-          <ScoreItem />
+          <ScoreItem 
+            active={maxUnits >= 1} 
+            onClick={() => {
+              handleOnClick(1)
+            }}
+          />
+          <ScoreItem
+            active={maxUnits >= 2}  
+            onClick={() => {
+              handleOnClick(2)
+            }}
+          />
+          <ScoreItem 
+            active={maxUnits >= 3} 
+            onClick={() => {
+              handleOnClick(3)
+            }}
+          />
         </div>
-        <div className=" text-base font-fbold text-[#495BFF] ml-3">2x</div>
+        <div className=" text-base font-fbold text-[#495BFF] ml-3">{maxUnits}x</div>
       </div>
     </div>
   )

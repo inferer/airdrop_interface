@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../state";
 import { updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed } from "../state/airdrop/actions";
 import { useActiveWeb3React } from ".";
+import { useMaxUnits } from "../state/airdrop/hooks";
 
 export const getAirdropManagerAddress = () => {
   return AirdropManager_NETWORKS[NETWORK_CHAIN_ID as ChainId]

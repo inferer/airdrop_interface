@@ -186,3 +186,9 @@ export enum UserAction {
   USER_COLLECT,
   
 }
+
+export const TWITTER_UNIT: {[key: string]: string} = {
+  like: '1',
+  follow: '2',
+  comment: '3'
+}
