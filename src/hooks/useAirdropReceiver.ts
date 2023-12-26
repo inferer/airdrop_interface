@@ -23,10 +23,7 @@ export const getAccountScoreProof = async (account: string, label: string) => {
 
 export const confirmCompleteAirdrop = async (account: string, airdropIds: string[]) => {
   const res = await poster(`/api/airdrop-manager/confirmCompleteTask`, { account, airdropIds })
-  if (res.code === 0 && res.data) {
-    return res.data.hexProof || []
-  }
-  return []
+  return res
 }
 
 
@@ -102,7 +99,14 @@ export function useAirdropReceiver(algToken?: string) {
       setCompleteStatus(1)
       try {
         const res = await confirmCompleteAirdrop(account, airdropIds)
+        if (res.code === 0) {
+          handleGetUserAirdropConfirmed()
+          alert('Success')
+        } else {
+          alert(res.message)
+        }
         setCompleteStatus(2)
+        
       } catch(error) {
         console.log(error)
         setCompleteStatus(-1)
@@ -132,6 +136,7 @@ export function useAirdropReceiver(algToken?: string) {
       console.log('gasLimit: ', gasLimit)
       try {
         const tx = await airdropReceiver.completeTask(userAddress, airdropIds, { gasPrice: '1000000000', gasLimit: gasLimit })
+        console.log(tx)
         const receipt = await tx.wait()
         if (receipt.status) {
           // handleGetUserAirdropConfirmed()
