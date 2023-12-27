@@ -1,5 +1,5 @@
 
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import LazyImage from "../../components/LazyImage";
 import { FlexCenter, LabelText } from "./styleds";
 import { ButtonSwap } from "../../components/Button";
@@ -26,14 +26,28 @@ const AirdropConfirm: React.FC<{
     approvalState, 
     approve 
   } = useAirdropReceiver(router.query.id && router.query.id[0])
-  const { handleGetAirdropOne } = useAirdropManager()
+  const { handleGetAirdropOne, handleGetUserTaskConfirmed } = useAirdropManager()
+
   useEffect(() => {
     if (router.query.id && router.query.id[1]) {
       handleGetAirdropOne(Number(router.query.id[1]))
     }
   }, [router.query])
+
+
   const airdrop = useAirdropList0(router.query.id && router.query.id[1])
   const accountScore = useAccountLabelScore(account || '', airdrop.labelToken?.symbol?.slice(4) || '' )
+
+  const [userTaskConfirmed, setUserTaskConfirmed] = useState<any>({})
+
+  useEffect(() => {
+    if (account && airdrop) {
+      handleGetUserTaskConfirmed(airdrop.airdropId)
+        .then(res => {
+          setUserTaskConfirmed(res)
+        })
+    }
+  }, [account, airdrop])
 
   return (
     <div className="p-5">
@@ -157,6 +171,14 @@ const AirdropConfirm: React.FC<{
           <ButtonSwap 
             onClick={e => {
               e.stopPropagation()
+              if (Number(userTaskConfirmed.airdropId) > 0) {
+                alert('此任务已经领取')
+                return
+              }
+              if (approvalState !== ApprovalState.APPROVED) {
+                alert('Please approve token!')
+                return
+              }
               handleConfirmTask(airdrop.airdropId, airdrop.labelToken.address, airdrop.labelToken?.symbol?.slice(4) || '', accountScore)
             }}
           >

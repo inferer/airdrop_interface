@@ -17,7 +17,7 @@ const initialState: AirdropState = {
   userAirdropConfirmedList: [],
   userAlgAirdropList: [],
   userLabelScore: {},
-  maxUnits: 1
+  maxUnits: 3
 }
 
 export default createReducer<AirdropState>(initialState, builder => {

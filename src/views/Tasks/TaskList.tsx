@@ -94,10 +94,10 @@ const AirdropList: React.FC<{
                           <span>{airdrop.expireOn}</span>
                         </TableCell>
                         <TableCell className="w-[140px]">
-                          <div className="w-[93px] h-[36px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)] px-2">
-                            <LazyImage src="/images/channel/twitter.svg" className=" w-5 h-5 rounded-full" />
-                            <div className="w-[1px] h-[14px] bg-[rgba(0,0,0,0.06)]"></div>
-                            <span className=" text-[16px] font-fsemibold">Like</span>
+                          <div className="min-w-[93px] h-[36px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)] px-2">
+                            <LazyImage src="/images/channel/twitter.svg" className=" w-5 h-5 rounded-full shrink-0" />
+                            <div className="w-[1px] h-[14px] mx-2 bg-[rgba(0,0,0,0.06)] shrink-0"></div>
+                            <span className=" text-[16px] font-fsemibold shrink-0">{airdrop.action}</span>
                           </div>
                         </TableCell>
                         <TableCell className="w-[74px]">

@@ -101,7 +101,7 @@ export function useAirdropReceiver(algToken?: string) {
         const res = await confirmCompleteAirdrop(account, airdropIds)
         if (res.code === 0) {
           handleGetUserAirdropConfirmed()
-          alert('Success')
+          alert('airdrop确认完成, 合约状态已更新，同时airt token 已转发')
         } else {
           alert(res.message)
         }
@@ -113,7 +113,7 @@ export function useAirdropReceiver(algToken?: string) {
       }
       
     }
-  }, [ account])
+  }, [ account, handleGetUserAirdropConfirmed])
   const handleConfirmCompleteTask = useCallback(async (
     userAddress: string,
     airdropIds: string[],

@@ -214,6 +214,10 @@ export default function Create() {
                 alert('Airdrop name is empty!')
                 return
               }
+              if (approvalState !== ApprovalState.APPROVED || approvalStateLabel !== ApprovalState.APPROVED) {
+                alert('Please approve token!')
+                return
+              }
               handleCreateAirdrop(name, label, 'Twitter', action, TWITTER_UNIT[action], content)
             }}
           >

@@ -126,27 +126,20 @@ export const getUserAirdropConfirmed = async (multi: Contract, account: string) 
     if (tempItem) {
       return {
         completed: tempItem.completed,
-        airdropId: tempItem[1]?.toString(),
-        userAddress: tempItem[2],
-        amount: tempItem[3]?.toString(),
-        confirmedTimestamp: tempItem[4]?.toString()
+        airdropId: tempItem[2]?.toString(),
+        userAddress: tempItem[3],
+        amount: tempItem[4]?.toString(),
+        confirmedTimestamp: tempItem[8]?.toString()
       }
     }
   }) : []
 }
 
 export const getUserAirdropConfirmed2 = async (airdropManager: Contract, account: string) => {
-  const calls = []
-    calls.push({
-      address: getAirdropManagerAddress(),
-      name: 'getUserAirdropConfirmed',
-      params: [account]
-    })
   const userAirdropConfirmed = await airdropManager.getUserAirdropConfirmed(account)
 
   return userAirdropConfirmed && userAirdropConfirmed[0] ? userAirdropConfirmed.map((item: any) => {
     const tempItem = item
-    console.log(tempItem)
     return {
       completed: tempItem.completed,
       airdropId: tempItem[2]?.toString(),
@@ -154,6 +147,18 @@ export const getUserAirdropConfirmed2 = async (airdropManager: Contract, account
       confirmedTimestamp: tempItem[8]?.toString()
     }
   }) : []
+}
+
+export const getUserTaskConfirmed = async (airdropManager: Contract, airdropId: string, account: string) => {
+  const userTaskConfirmed = await airdropManager.getUserTaskConfirmed(airdropId, account)
+  const tempItem = userTaskConfirmed
+  return {
+    completed: tempItem.completed,
+    airdropId: tempItem[2]?.toString(),
+    userAddress: tempItem[3],
+    amount: tempItem[4]?.toString(),
+    confirmedTimestamp: tempItem[8]?.toString()
+  }
 }
 
 export function useAirdropManager() {
@@ -198,6 +203,13 @@ export function useAirdropManager() {
     }
   }, [multi, airdropManager, account])
 
+  const handleGetUserTaskConfirmed = useCallback(async (airdropId: string) => {
+    if (airdropManager && account) {
+      let userTaskConfirmed = await getUserTaskConfirmed(airdropManager, airdropId, account) 
+      return userTaskConfirmed
+    }
+  }, [airdropManager, account])
+
   useEffect(() => {
     const fetch = async () => {
       if (multi) {
@@ -219,7 +231,8 @@ export function useAirdropManager() {
   return {
     handleGetAirdropList,
     handleGetAirdropOne,
-    handleGetUserAirdropConfirmed
+    handleGetUserAirdropConfirmed,
+    handleGetUserTaskConfirmed
   }
 
 }
