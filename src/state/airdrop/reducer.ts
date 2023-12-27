@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { IAirdrop, IAlgAirdrop, updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed, updateUserAlgAirdropList, updateUserLabelScore, updateMaxUnits } from './actions'
+import { IAirdrop, IAlgAirdrop, updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed, updateUserAlgAirdropList, updateUserLabelScore, updateMaxUnits, updateAirTokenPercent } from './actions'
 
 
 export interface AirdropState {
@@ -8,7 +8,8 @@ export interface AirdropState {
   userAirdropConfirmedList: IAirdrop[],
   userAlgAirdropList: IAlgAirdrop [],
   userLabelScore: {[key: string]: number},
-  maxUnits: number
+  maxUnits: number,
+  airTokenPercent: number,
 }
 
 const initialState: AirdropState = {
@@ -17,7 +18,8 @@ const initialState: AirdropState = {
   userAirdropConfirmedList: [],
   userAlgAirdropList: [],
   userLabelScore: {},
-  maxUnits: 3
+  maxUnits: 3,
+  airTokenPercent: 0
 }
 
 export default createReducer<AirdropState>(initialState, builder => {
@@ -39,6 +41,7 @@ export default createReducer<AirdropState>(initialState, builder => {
   builder.addCase(updateMaxUnits, (state, { payload: { units} }) => {
     state.maxUnits = units
   })
-}
-  
-)
+  builder.addCase(updateAirTokenPercent, (state, { payload: { percent} }) => {
+    state.airTokenPercent = percent
+  })
+})

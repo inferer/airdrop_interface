@@ -14,6 +14,8 @@ import DropDown from '../../assets/images/dropdown.svg'
 import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import { useIsUserAction } from '../../state/user/hooks'
+import LazyImage from '../LazyImage'
+import { useAirTokenPercent } from '../../state/airdrop/hooks'
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -114,7 +116,7 @@ const StyledBalanceMax = styled.span`
 
 const BalanceWrap = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   padding: 0 16px 26px;
 
@@ -135,6 +137,7 @@ interface CurrencyInputPanelProps {
   otherCurrency?: Currency | null
   id: string
   showCommonBases?: boolean
+  airPercent?: number
 }
 
 export default function  CurrencyInputPanel({
@@ -151,7 +154,7 @@ export default function  CurrencyInputPanel({
   hideInput = false,
   otherCurrency,
   id,
-  showCommonBases
+  showCommonBases,
 }: CurrencyInputPanelProps) {
   const { t } = useTranslation()
 
@@ -183,6 +186,24 @@ export default function  CurrencyInputPanel({
       }
     }
   }, [onMax, isProjectCreate, payInput, selectedCurrencyBalanceUSDT])
+
+  const airPercent = useAirTokenPercent()
+
+  const percentBalance = useMemo(() => {
+    let balance1 = 0
+    let balance2 = 0
+    if (airPercent) {
+      balance2 = Number((Number(value) * airPercent / 100).toFixed(2))
+      balance1 = Number((Number(value) - balance2).toFixed(2))
+    }
+
+    return {
+      balance1,
+      balance2
+    }
+    
+  }, [airPercent, value, selectedCurrencyBalance])
+
   return (
     <InputPanel id={id} payInput={payInput}>
       <Container hideInput={hideInput}>
@@ -242,6 +263,27 @@ export default function  CurrencyInputPanel({
           </CurrencySelect>
         </InputRow>
         <BalanceWrap>
+          <div>
+            {
+              isProjectCreate && airPercent && airPercent > 0 ? 
+              <div className='bg-[rgba(200,206,255,0.20)] rounded-sm h-[26px] px-[6px] flex items-center text-[rgba(0,0,0,0.60)] text-[14px]'>
+                <div className=' flex items-center'>
+                  <CurrencyLogo currency={selectedCurrencyBalanceUSDT?.currency} size={'14px'} />
+                  <span className='mx-1'>{percentBalance.balance1}</span>
+                  {selectedCurrencyBalanceUSDT?.currency?.symbol}
+                </div>
+                <LazyImage src='/images/airdrop/add2.svg' className='mx-1' />
+                <div className=' flex items-center'>
+                  <CurrencyLogo currency={selectedCurrencyBalance?.currency} size={'14px'} />
+                  <span className='mx-1'>{percentBalance.balance2}</span>
+                  {selectedCurrencyBalance?.currency?.symbol}
+                </div>
+                
+              </div> : null
+            }
+          </div>
+          
+            <div>
             {account && (
               <TYPE.body
                 onClick={handleOnMax}
@@ -267,6 +309,7 @@ export default function  CurrencyInputPanel({
             {account && currency && label !== 'You received' && (
                 <StyledBalanceMax onClick={handleOnMax}>MAX</StyledBalanceMax>
               )}
+              </div>
         </BalanceWrap>
       </Container>
       {!disableCurrencySelect && onCurrencySelect && (

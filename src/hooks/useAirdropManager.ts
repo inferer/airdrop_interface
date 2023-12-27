@@ -78,7 +78,6 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
       const airdrop = data[0]
       const offerTokenData = getUSDTTokenByAddress(airdrop[2][0])
       const labelTokenData = getLabelTokenByAddress(airdrop[2][2])
-      
       const tempData: any = {
         airdropId: airdrop[0].toString(),
         name: airdrop[1][0],
@@ -94,7 +93,7 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
           ...labelTokenData
         },
         sender: airdrop[2][3],
-        offerLocked: BigNumber.from(airdrop[3][0]).div(BigNumber.from((10 ** (offerTokenData?.decimals ?? 1)).toString())).toString(),
+        offerLocked: BigNumber.from(airdrop[3][0]).add(BigNumber.from(airdrop[3][1])).div(BigNumber.from((10 ** (offerTokenData?.decimals ?? 1)).toString())).toString(),
         labelLocked: BigNumber.from(airdrop[3][2]).div(BigNumber.from((10 ** (labelTokenData?.decimals ?? 1)).toString())).toString(),
         unit: BigNumber.from(airdrop[3][3]).toString(),
         duration: airdrop[4].toString(),

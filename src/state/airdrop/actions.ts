@@ -39,3 +39,4 @@ export const updateUserAirdropConfirmed = createAction<{ airdropList: IAirdrop[]
 export const updateUserAlgAirdropList = createAction<{ algAirdropList: IAlgAirdrop[] }>('airdrop/updateUserAlgAirdropList')
 export const updateUserLabelScore = createAction<{ key: string, score: number }>('airdrop/updateUserLabelScore')
 export const updateMaxUnits = createAction<{ units: number }>('airdrop/updateMaxUnits')
+export const updateAirTokenPercent = createAction<{ percent: number }>('airdrop/updateAirTokenPercent')

@@ -14,6 +14,8 @@ import { useCurrencyBalance } from '../state/wallet/hooks'
 import { AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury'
 import { useSwapCallArguments } from './useSwapCallback'
 import { useAddPopup } from '../state/application/hooks'
+import { useAirTokenPercent } from '../state/airdrop/hooks'
+import { Field } from '../state/swap/actions'
 
 
 export function useCreateCallback(
@@ -31,6 +33,7 @@ export function useCreateCallback(
     currencies,
     inputError: swapInputError
   } = useDerivedSwapInfo()
+  const airPercent = useAirTokenPercent()
 
   const swapCalls = useSwapCallArguments(v2Trade, allowedSlippage, deadline, recipientAddressOrName)
   let lockedToken
@@ -50,18 +53,46 @@ export function useCreateCallback(
     return '0'
   }, [args, lockedCurrency])
 
+  const lockedAmountAB = useMemo(() => {
+    let lockedAmountA = ''
+    let lockedAmountAShow = ''
+    let lockedAmountB = ''
+    let lockedAmountBShow = ''
+    if (args[0] && lockedCurrency) {
+      const _lockedAmountB = BigNumber.from(parseInt(args[0], 16)).mul(BigNumber.from(airPercent)).div(BigNumber.from(100))
+      const _lockedAmountA = BigNumber.from(parseInt(args[0], 16)).sub(_lockedAmountB)
+      lockedAmountB = _lockedAmountB.toHexString()
+      lockedAmountA = _lockedAmountA.toHexString()
+      lockedAmountAShow = (Number(_lockedAmountA.toString()) / (10 ** lockedCurrency?.decimals)).toString()
+      lockedAmountBShow = (Number(_lockedAmountB.toString()) / (10 ** lockedCurrency?.decimals)).toString()
+
+    }
+    
+    return {
+      lockedAmountA,
+      lockedAmountB,
+      lockedAmountAShow,
+      lockedAmountBShow
+    }
+  }, [args, lockedCurrency, airPercent])
+
   const [approvalState, approve] = useApproveCallback(lockedCurrencyAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
+  const [approvalStateAir, approveAir] = useApproveCallback(v2Trade?.inputAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
   const [approvalStateLabel, approveLabel] = useApproveCallback(v2Trade?.outputAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
   return {
     args,
     lockedAmount,
+    lockedAmountAB,
     lockedCurrency,
+    lockedCurrencyAir: currencies[Field.INPUT],
     lockedCurrencyAmount,
     outputAmount: v2Trade?.outputAmount,
     approvalState,
     approve,
     approvalStateLabel,
-    approveLabel
+    approveLabel,
+    approvalStateAir,
+    approveAir
   }
 }
 
@@ -76,7 +107,9 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
     channel: string,
     action: string,
     unint: string,
-    content: string
+    content: string,
+    lockedAmountA: string,
+    lockedAmountB: string
   ) => {
     if (airdropSender && account && lockedToken) {
       setCreateStatus(1)
@@ -84,10 +117,10 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       const baseInfo = [name, label, channel, action, content]
       const route = args[2]
       const offer_label_token = [lockedToken.address, route[0], route[route.length - 1], account]
-      const offer_label_locked = [args[0], '0', args[1], unint]
+      const offer_label_locked = [lockedAmountA, lockedAmountB, args[1], unint]
       const duration = 7 * 24 * 60 * 60
-
-      console.log(baseInfo, offer_label_token, offer_label_locked, duration)
+      
+      console.log(baseInfo, offer_label_token, offer_label_locked, duration, content, lockedAmountA, lockedAmountB)
       let gasLimit = '5000000'
 
       try {
@@ -96,14 +129,19 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       } catch (error) {
 
       }
-      const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit })
-      console.log(tx)
-      const receipt = await tx.wait()
-      console.log(receipt)
-      setCreateStatus(2)
-      if (receipt.status) {
-        router.push('/collect')
+      try {
+        const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit })
+        console.log(tx)
+        const receipt = await tx.wait()
+        console.log(receipt)
+        setCreateStatus(2)
+        if (receipt.status) {
+          router.push('/collect')
+        }
+      } catch(error) {
+        console.log(error)
       }
+      
       // const airdropManager = await airdropSender.airdropManager()
       // const airdropAssetTreasury = await airdropSender.airdropAssetTreasury()
 

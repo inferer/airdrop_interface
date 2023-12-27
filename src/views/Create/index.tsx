@@ -18,6 +18,7 @@ import { AutoRow } from '../../components/Row'
 import Loader from '../../components/Loader'
 import { Token } from '@uniswap/sdk'
 import { TWITTER_UNIT } from '../../constants'
+import CurrencyLogo from '../../components/CurrencyLogo'
 
 
 
@@ -31,13 +32,17 @@ export default function Create() {
   const {
     args,
     lockedAmount,
+    lockedAmountAB,
     lockedCurrency,
+    lockedCurrencyAir,
     lockedCurrencyAmount,
     outputAmount,
     approvalState,
     approve,
     approvalStateLabel,
-    approveLabel
+    approveLabel,
+    approvalStateAir,
+    approveAir
   } = useCreateCallback(undefined, undefined, undefined, null)
 
   const { createStatus, handleCreateAirdrop } = useCreateAirdrop(args, lockedCurrency as Token ?? undefined)
@@ -51,7 +56,6 @@ export default function Create() {
     console.log(data)
     setAction(data.value)
   }
-
 
   return (
     <CreateBody>
@@ -72,23 +76,44 @@ export default function Create() {
               setName(value)
             }} />
           </ItemBox>
-          <ItemBox style={{ marginTop: 20}}>
+          <ItemBox style={{ marginTop: 20, height: 'auto'}}>
             <ItemTitle>offer</ItemTitle>
             <div className='flex justify-between items-center'>
               {/* <Input value={''} placeholder='10' onUserInput={function (input: string): void {
                 throw new Error('Function not implemented.')
               } } /> */}
-              <div className=' text-[32px] font-fsemibold'>{lockedAmount}</div>
+              <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>{lockedAmount}</div>
               <TokenInfo className='flex items-center mt-5 shrink-0'>
-                <LazyImage2 src='/images/airdrop/eth.svg' />
+                {/* <LazyImage2 src='/images/airdrop/eth.svg' /> */}
+                <CurrencyLogo currency={lockedCurrency || undefined} size={'24px'} />
                 <div className='text-[20px] font-fsemibold ml-1'>{lockedCurrency?.symbol}</div>
               </TokenInfo>
             </div>
+            {
+              Number(lockedAmountAB.lockedAmountBShow) > 0 ? 
+              <div className='flex justify-end mt-2'>
+                <div className='bg-[rgba(200,206,255,0.20)] rounded-[100px] h-[26px] px-[6px] flex items-center text-[rgba(0,0,0,0.40)] text-[14px]'>
+                  <div className=' flex items-center'>
+                    <CurrencyLogo currency={lockedCurrency || undefined} size={'14px'} />
+                    <span className='mx-1'>{lockedAmountAB.lockedAmountAShow}</span>
+                    {lockedCurrency?.symbol}
+                  </div>
+                  <LazyImage src='/images/airdrop/add2.svg' className='mx-1' />
+                  <div className=' flex items-center'>
+                    <CurrencyLogo currency={lockedCurrencyAir} size={'14px'} />
+                    <span className='mx-1'>{lockedAmountAB.lockedAmountBShow}</span>
+                    {lockedCurrencyAir?.symbol}
+                  </div>
+                </div> 
+              </div> : null
+            }
+            
+
           </ItemBox>
           <div className='flex justify-between mt-5'>
             <ItemBox width={180}>
               <ItemTitle>pool</ItemTitle>
-              <div className=' text-[14px] font-fsemibold mt-2 p-4'>
+              <div className=' text-[14px] font-fsemibold mt-2 p-4 text-[rgba(0,0,0,0.40)]'>
                 {label}
               </div>
             </ItemBox>
@@ -183,7 +208,27 @@ export default function Create() {
               </ButtonSwap>
             </div>
           }
-        
+          {
+            Number(lockedAmountAB.lockedAmountBShow) > 0 && 
+            <div className='w-[260px]'>
+              <ButtonSwap
+                onClick={approveAir}
+              >
+                <TYPE.textGrad1 fontWeight={600} fontSize={20}>
+                  { approvalStateAir === ApprovalState.PENDING ? (
+                      <AutoRow gap="6px" justify="center">
+                        Approving <Loader />
+                      </AutoRow>
+                    ) : approvalStateAir === ApprovalState.APPROVED ? (
+                      'Approved ' + lockedCurrencyAir?.symbol
+                    ) : (
+                      `Approve ${lockedCurrencyAir?.symbol}`
+                    )
+                  }
+                </TYPE.textGrad1>
+              </ButtonSwap>
+            </div>
+          }
           {
             outputAmount &&
             <div className='w-[260px]'>
@@ -214,11 +259,11 @@ export default function Create() {
                 alert('Airdrop name is empty!')
                 return
               }
-              if (approvalState !== ApprovalState.APPROVED || approvalStateLabel !== ApprovalState.APPROVED) {
+              if (approvalState !== ApprovalState.APPROVED || approvalStateLabel !== ApprovalState.APPROVED || (Number(lockedAmountAB.lockedAmountBShow) > 0 && approvalStateAir !== ApprovalState.APPROVED)) {
                 alert('Please approve token!')
                 return
               }
-              handleCreateAirdrop(name, label, 'Twitter', action, TWITTER_UNIT[action], content)
+              handleCreateAirdrop(name, label, 'Twitter', action, TWITTER_UNIT[action], content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)
             }}
           >
             <TYPE.textGrad1 fontWeight={600} fontSize={20}>

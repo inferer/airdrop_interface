@@ -114,7 +114,7 @@ export const TokenInfo = styled.div`
   align-items: center;
   gap: 4px;
   border-radius: 15px;
-  background: rgba(85, 123, 241, 0.02);
+  background: rgba(85, 123, 241, 0.06);
 
 `
 

@@ -47,6 +47,7 @@ import { ClickableText } from '../Pool/styleds'
 import Loader from '../../components/Loader'
 
 import TextT, { TextGray } from '../../components/Text'
+import UseAirAssets from './UseAirAssets'
 
 export default function Swap() {
   const loadedUrlParams = useDefaultsFromURLSearch()
@@ -282,7 +283,6 @@ export default function Swap() {
   }, [inputTokens, onCurrencySelection])
 
   const handleAction = useCallback(() => {
-    console.log(isProjectCreate, isUserCollect)
     if (isProjectCreate) {
       router.push('/create')
     }
@@ -290,7 +290,6 @@ export default function Swap() {
       router.push('/collect')
     }
   }, [isProjectCreate, isUserCollect])
-
 
   return (
     <>
@@ -316,7 +315,6 @@ export default function Swap() {
             swapErrorMessage={swapErrorMessage}
             onDismiss={handleConfirmDismiss}
           />
-
           <AutoColumn gap={'md'}>
             <CurrencyInputPanel
               label={'You pay'}
@@ -330,7 +328,14 @@ export default function Swap() {
               id={isProjectSwap || isProjectCreate ? "swap-currency-input" : "userswap-currency-input"}
             />
             <AutoColumn justify="space-between">
-              <AutoRow justify={isExpertMode ? 'space-between' : 'center'} style={{ padding: '0 1rem' }}>
+              <AutoRow justify={isExpertMode ? 'space-between' : 'center'}>
+                {
+                  isProjectCreate && 
+                    <UseAirAssets 
+                  />
+                }
+                
+
                 {/* <ArrowWrapper clickable>
                   <ArrowDown
                     size="16"

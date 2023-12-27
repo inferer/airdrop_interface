@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, AppState } from '../index'
-import { IAirdrop, IAlgAirdrop, updateMaxUnits } from './actions'
+import { IAirdrop, IAlgAirdrop, updateAirTokenPercent, updateMaxUnits } from './actions'
 
 
 export function useAirdropList() {
@@ -51,5 +51,16 @@ export function useUpdateMaxUnits() {
   const dispatch = useDispatch<AppDispatch>()
   return useCallback((units: number) => {
     dispatch(updateMaxUnits({ units }))
+  }, [dispatch])
+}
+
+export function useAirTokenPercent() {
+  return useSelector<AppState, AppState['airdrop']['airTokenPercent']>(state => state.airdrop.airTokenPercent)
+}
+
+export function useUpdateAirTokenPercent() {
+  const dispatch = useDispatch<AppDispatch>()
+  return useCallback((percent: number) => {
+    dispatch(updateAirTokenPercent({ percent }))
   }, [dispatch])
 }
