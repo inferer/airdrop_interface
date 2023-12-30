@@ -4,6 +4,7 @@ import useCopyClipboard from '../../hooks/useCopyClipboard'
 
 import { LinkStyledButton } from '../../theme'
 import { CheckCircle, Copy } from 'react-feather'
+import LazyImage from '../LazyImage'
 
 const CopyIcon = styled(LinkStyledButton)`
   color: ${({ theme }) => theme.text3};
@@ -37,7 +38,8 @@ export default function CopyHelper(props: { toCopy: string; children?: React.Rea
         </TransactionStatusText>
       ) : (
         <TransactionStatusText>
-          <Copy size={'16'} />
+          {/* <Copy size={'16'} /> */}
+          <LazyImage src='/images/airdrop/copy.svg' />
         </TransactionStatusText>
       )}
       {isCopied ? '' : props.children}

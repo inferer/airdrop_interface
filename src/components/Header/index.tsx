@@ -189,7 +189,7 @@ export default function Header() {
         </HeaderElement>
         <HeaderControls>
           <HeaderElement>
-            <TestnetWrapper>
+            {/* <TestnetWrapper>
               
                 <AirdropCard onClick={e => {
                   e.stopPropagation()
@@ -198,7 +198,7 @@ export default function Header() {
                   <Link href={'/tokens'}>Airdrop</Link>
                   
                 </AirdropCard>
-            </TestnetWrapper>
+            </TestnetWrapper> */}
             {/* <TestnetWrapper>
               {!isMobile && chainId && NETWORK_LABELS[chainId] && <NetworkCard>{NETWORK_LABELS[chainId]}</NetworkCard>}
             </TestnetWrapper> */}
@@ -211,11 +211,11 @@ export default function Header() {
               <Web3Status />
             </AccountElement> */}
           </HeaderElement>
-          <HeaderElement>
+          {/* <HeaderElement>
             <AirdropCard style={{width: 150}}>
               <Link href={'/tasks'}>Ongoing airdrops</Link>
             </AirdropCard>
-          </HeaderElement>
+          </HeaderElement> */}
           {/* <HeaderElementWrap>
             <Settings />
             <Menu />
