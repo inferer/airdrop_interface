@@ -265,7 +265,7 @@ export default function  CurrencyInputPanel({
         <BalanceWrap>
           <div>
             {
-              isProjectCreate && airPercent && airPercent > 0 ? 
+              payInput && isProjectCreate && airPercent && airPercent > 0 ? 
               <div className='bg-[rgba(200,206,255,0.20)] rounded-sm h-[26px] px-[6px] flex items-center text-[rgba(0,0,0,0.60)] text-[14px]'>
                 <div className=' flex items-center'>
                   <CurrencyLogo currency={selectedCurrencyBalanceUSDT?.currency} size={'14px'} />

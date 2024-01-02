@@ -1,3 +1,4 @@
+import LazyImage from "../../components/LazyImage";
 import { useAirTokenPercent, useUpdateAirTokenPercent } from "../../state/airdrop/hooks";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -53,6 +54,7 @@ const UseAirAssets: React.FC<{
         onMouseLeave={e => {
           e.stopPropagation()
           setShowpointer(false)
+          setFocusPointer(false)
         }}
         onMouseMove={e => {
           e.stopPropagation()
@@ -66,8 +68,8 @@ const UseAirAssets: React.FC<{
         <div className="h-[12px] w-[2px] bg-[#DBF0DE] absolute top-[4px] left-[25%]"></div>
         <div className="h-[12px] w-[2px] bg-[#DBF0DE] absolute top-[4px] left-[50%]"></div>
         <div className="h-[12px] w-[2px] bg-[#DBF0DE] absolute top-[4px] left-[75%]"></div>
-        <div className="h-full bg-[#EAF8EC] absolute left-0 top-0" style={{width: selectWidth}}>
-
+        <div className="h-full bg-[#EAF8EC] absolute left-0 top-0 flex items-center justify-center" style={{width: selectWidth}}>
+          <LazyImage src="/images/airdrop/per_icon.svg" />
         </div>
         {
           showPointer && 
@@ -81,7 +83,8 @@ const UseAirAssets: React.FC<{
               e.stopPropagation()
               setFocusPointer(false)
             }}
-          ></div>
+          >
+          </div>
         }
         
       </div>
