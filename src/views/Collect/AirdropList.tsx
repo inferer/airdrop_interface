@@ -80,9 +80,15 @@ const AirdropList: React.FC<{
                         </TableCell>
                         <TableCell className="w-[200px]">
                           <div>
-                            <span>{airdrop.offerLocked} {airdrop.offerToken.symbol}</span>
-                            <span className="px-1">+</span>
-                            <span>{airdrop.offerLabelLocked} {airdrop.labelToken.symbol}</span>
+                            <span>{airdrop.offerLocked} {airdrop.offerToken?.symbol || 'ETH' }</span>
+                            {
+                              Number(airdrop.offerLabelLocked) > 0 && 
+                              <>
+                                <span className="px-1">+</span>
+                                <span>{airdrop.offerLabelLocked} {airdrop.labelToken.symbol}</span>
+                              </>
+                            }
+                            
                           </div>
                           
                         </TableCell>
