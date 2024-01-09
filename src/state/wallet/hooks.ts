@@ -126,10 +126,10 @@ export function useCurrencyBalance(account?: string, currency?: Currency): Curre
 export function useCurrencyBalanceUSDT(account?: string, currencyAirId?: string, payInputCreate?: boolean): CurrencyAmount | undefined {
   const currencyId = currencyAirId && getUSDTTokenFromAirToken(currencyAirId)
   const currency = useCurrency(currencyId)
-  if (payInputCreate && (!currencyId || currency?.symbol === 'air-ETH')) {
-    return useCurrencyBalances(account, [ETHER])[0]
-  }
-  return useCurrencyBalances(account, [currency ?? undefined])[0]
+  // if (payInputCreate && (!currencyId || currency?.symbol === 'air-ETH')) {
+  //   return useCurrencyBalances(account, [ETHER])[0]
+  // }
+  return useCurrencyBalances(account, [payInputCreate && (!currencyId || currency?.symbol === 'air-ETH') ? ETHER : (currency ?? undefined)])[0]
   
 }
 
