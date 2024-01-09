@@ -21,8 +21,8 @@ export const getAccountScoreProof = async (account: string, label: string) => {
   return []
 }
 
-export const confirmCompleteAirdrop = async (account: string, airdropIds: string[]) => {
-  const res = await poster(`/api/airdrop-manager/confirmCompleteTask`, { account, airdropIds })
+export const confirmCompleteAirdrop = async (account: string, taskIds: string[]) => {
+  const res = await poster(`/api/airdrop-manager/confirmCompleteTask`, { account, taskIds })
   return res
 }
 
@@ -63,13 +63,13 @@ export function useAirdropReceiver(algToken?: string) {
       let gasLimit = '5000000'
       try {
         console.log(airdropId, algToken?.address, airToken, String(accountScore * 100), proof)
-        const gasEstimate = await airdropReceiver.estimateGas['confirmTask'](airdropId, algToken?.address, airToken, String(accountScore * 100), proof)
+        const gasEstimate = await airdropReceiver.estimateGas['confirmTaskMulti'](airdropId, algToken?.address, airToken, String(accountScore * 100), proof)
         gasLimit = gasEstimate.toString()
       } catch (error) {
         console.log(error)
       }
       try {
-        const tx = await airdropReceiver.confirmTask(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await airdropReceiver.confirmTaskMulti(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, { gasPrice: '1000000000', gasLimit: gasLimit })
         const receipt = await tx.wait()
         if (receipt.status) {
           router.push('/tasks')
@@ -89,16 +89,16 @@ export function useAirdropReceiver(algToken?: string) {
   }, [airdropReceiver, account, getAccountScoreProof])
 
   const handleUserCompleteTask = useCallback(async (
-    airdropIds: string[],
+    taskIds: string[],
   ) => {
     if (account) {
-      if (airdropIds.length <= 0) {
+      if (taskIds.length <= 0) {
         alert('no checked')
         return
       }
       setCompleteStatus(1)
       try {
-        const res = await confirmCompleteAirdrop(account, airdropIds)
+        const res = await confirmCompleteAirdrop(account, taskIds)
         if (res.code === 0) {
           handleGetUserAirdropConfirmed()
           alert('airdrop确认完成, 合约状态已更新，同时airt token 已转发')
@@ -116,10 +116,10 @@ export function useAirdropReceiver(algToken?: string) {
   }, [ account, handleGetUserAirdropConfirmed])
   const handleConfirmCompleteTask = useCallback(async (
     userAddress: string,
-    airdropIds: string[],
+    taskIds: string[],
   ) => {
     if (airdropReceiver && account) {
-      if (airdropIds.length <= 0) {
+      if (taskIds.length <= 0) {
         alert('no checked')
         return
       }
@@ -127,15 +127,15 @@ export function useAirdropReceiver(algToken?: string) {
       let gasLimit = '5000000'
       // await airdropReceiver.setAirdropAssetTreasury('0x92B97ea7dE7BEc9C6F75F9a450979F33098fB32a')
       try {
-        console.log(airdropIds)
-        const gasEstimate = await airdropReceiver.estimateGas['completeTask'](userAddress, airdropIds)
+        console.log(taskIds)
+        const gasEstimate = await airdropReceiver.estimateGas['completeTaskMulti'](userAddress, taskIds)
         gasLimit = gasEstimate.toString()
       } catch (error) {
         console.log(error)
       }
       console.log('gasLimit: ', gasLimit)
       try {
-        const tx = await airdropReceiver.completeTask(userAddress, airdropIds, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await airdropReceiver.completeTaskMulti(userAddress, taskIds, { gasPrice: '1000000000', gasLimit: gasLimit })
         console.log(tx)
         const receipt = await tx.wait()
         if (receipt.status) {

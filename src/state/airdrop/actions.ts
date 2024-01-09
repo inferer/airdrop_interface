@@ -2,6 +2,7 @@ import { createAction } from '@reduxjs/toolkit'
 import { Token } from '@uniswap/sdk'
 
 export interface IAirdrop {
+  id: string,
   airdropId: string,
   name: string,
   label: string,
@@ -13,6 +14,7 @@ export interface IAirdrop {
   labelToken: Token,
   sender: string,
   offerLocked: string,
+  offerLabelLocked: string,
   labelLocked: string,
   unit: string,
   duration: string,

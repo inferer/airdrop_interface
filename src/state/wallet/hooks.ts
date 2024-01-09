@@ -106,11 +106,11 @@ export function useCurrencyBalances(
   const tokenBalances = useTokenBalances(account, tokens)
   const containsETH: boolean = useMemo(() => currencies?.some(currency => currency === ETHER) ?? false, [currencies])
   const ethBalance = useETHBalances(containsETH ? [account] : [])
-
   return useMemo(
     () =>
       currencies?.map(currency => {
         if (!account || !currency) return undefined
+        // if (currency.symbol === 'air-ETH') return ethBalance[account]
         if (currency instanceof Token) return tokenBalances[currency.address]
         if (currency === ETHER) return ethBalance[account]
         return undefined
@@ -123,9 +123,12 @@ export function useCurrencyBalance(account?: string, currency?: Currency): Curre
   return useCurrencyBalances(account, [currency])[0]
 }
 
-export function useCurrencyBalanceUSDT(account?: string, currencyAirId?: string): CurrencyAmount | undefined {
+export function useCurrencyBalanceUSDT(account?: string, currencyAirId?: string, payInputCreate?: boolean): CurrencyAmount | undefined {
   const currencyId = currencyAirId && getUSDTTokenFromAirToken(currencyAirId)
   const currency = useCurrency(currencyId)
+  if (payInputCreate && (!currencyId || currency?.symbol === 'air-ETH')) {
+    return useCurrencyBalances(account, [ETHER])[0]
+  }
   return useCurrencyBalances(account, [currency ?? undefined])[0]
   
 }

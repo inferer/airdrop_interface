@@ -79,7 +79,12 @@ const AirdropList: React.FC<{
                           <span className="text-[#79D0C4] font-fmedium">{airdrop.unit}x</span> 
                         </TableCell>
                         <TableCell className="w-[200px]">
-                          <span>{airdrop.offerLocked} {airdrop.offerToken.symbol}</span>
+                          <div>
+                            <span>{airdrop.offerLocked} {airdrop.offerToken.symbol}</span>
+                            <span className="px-1">+</span>
+                            <span>{airdrop.offerLabelLocked} {airdrop.labelToken.symbol}</span>
+                          </div>
+                          
                         </TableCell>
                         <TableCell className="w-[180px]">
                           <span>{airdrop.expireOn}</span>

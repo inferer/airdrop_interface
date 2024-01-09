@@ -52,6 +52,14 @@ export const AIR_TOKEN_LIST: TokenInfo[] = [
     "decimals": 6,
     "chainId": 11155111,
     "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "ETH",
+    "address": "0x05823a3ee699F9277134A111Ab801548524E6C6B",
+    "symbol": "air-ETH",
+    "decimals": 18,
+    "chainId": 11155111,
+    "logoURI": "/images/tokens/usdt.png"
   }
 ]
 
@@ -163,8 +171,13 @@ export const GET_AIRUSDT_2_USDT = () => {
   let pair: {[key: string]: string} = {}
   AIR_TOKEN_LIST.map(token1 => {
     const symbol = token1.symbol.slice(4)
+    if (symbol === 'ETH') {
+      const key = (token1?.address || '') as string
+      // @ts-ignore
+      pair[key] = 'ETH'
+    }
     const toUSDT = ST_TOKEN_LIST.find(token2 => token2.symbol === symbol)
-    if (token1.address) {
+    if (token1.address && toUSDT) {
       const key = (token1?.address || '') as string
       // @ts-ignore
       pair[key] = toUSDT?.address

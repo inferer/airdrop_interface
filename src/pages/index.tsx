@@ -5,7 +5,7 @@ import { useEffect } from "react"
 const IndexPage = () => {
 
   useEffect(() => {
-    Router.push('/swap')
+    // Router.push('/swap')
   }, [])
   
   return null

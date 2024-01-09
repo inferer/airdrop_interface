@@ -1,7 +1,7 @@
 import router from 'next/router'
-import { BigNumber } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
-import { Currency, Token, Trade } from '@uniswap/sdk'
+import { Currency, ETHER, Token, Trade } from '@uniswap/sdk'
 import { useCallback, useMemo, useState } from 'react'
 import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE, ROUTER_ADDRESS } from '../constants'
 import { useActiveWeb3React } from './index'
@@ -14,7 +14,7 @@ import { useCurrencyBalance } from '../state/wallet/hooks'
 import { AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury'
 import { useSwapCallArguments } from './useSwapCallback'
 import { useAddPopup } from '../state/application/hooks'
-import { useAirTokenPercent } from '../state/airdrop/hooks'
+import { useAirTokenPercent, useAirTokenPercentBalance } from '../state/airdrop/hooks'
 import { Field } from '../state/swap/actions'
 
 
@@ -38,33 +38,39 @@ export function useCreateCallback(
   const swapCalls = useSwapCallArguments(v2Trade, allowedSlippage, deadline, recipientAddressOrName)
   let lockedToken
   let lockedTokenAir
+  let lockedLabel
   let args: any = []
   if (swapCalls[0]) {
     args = swapCalls[0]?.parameters?.args
     lockedTokenAir = args[2][0]
+    lockedLabel = args[2][1]
     lockedToken = getUSDTTokenFromAirToken(lockedTokenAir)
   }
   const lockedCurrency = useCurrency(lockedToken)
   const lockedCurrencyAmount = useCurrencyBalance(account ?? undefined, lockedCurrency ?? undefined)
   const lockedAmount = useMemo(() => {
     if (args[0] && lockedCurrency) {
-      return BigNumber.from(parseInt(args[0], 16)).div(10 ** lockedCurrency?.decimals).toString()
+      const div1 = BigNumber.from(parseInt(args[0], 16).toString(10)).toString()
+      const div2 = BigNumber.from((10 ** lockedCurrency?.decimals).toString(10)).toString()
+      return (Number(div1) / Number(div2)).toFixed(4)
     }
     return '0'
   }, [args, lockedCurrency])
-
+  const lockedLabelCurrency = useCurrency(lockedLabel)
+  const lockedLabelCurrencyAmount = useCurrencyBalance(account ?? undefined, lockedLabelCurrency ?? undefined)
+  const percentBalance = useAirTokenPercentBalance(lockedLabelCurrencyAmount)
   const lockedAmountAB = useMemo(() => {
     let lockedAmountA = ''
     let lockedAmountAShow = ''
     let lockedAmountB = ''
     let lockedAmountBShow = ''
-    if (args[0] && lockedCurrency) {
-      const _lockedAmountB = BigNumber.from(parseInt(args[0], 16)).mul(BigNumber.from(airPercent)).div(BigNumber.from(100))
-      const _lockedAmountA = BigNumber.from(parseInt(args[0], 16)).sub(_lockedAmountB)
-      lockedAmountB = _lockedAmountB.toHexString()
+    if (args[0] && lockedCurrency && v2Trade) {
+      const _lockedAmountB = percentBalance.balance2
+      const _lockedAmountA = BigNumber.from(parseInt(args[0], 16).toString())
+      lockedAmountB = BigNumber.from((_lockedAmountB * (10 ** v2Trade.outputAmount.currency.decimals)).toString()).toHexString()
       lockedAmountA = _lockedAmountA.toHexString()
       lockedAmountAShow = (Number(_lockedAmountA.toString()) / (10 ** lockedCurrency?.decimals)).toString()
-      lockedAmountBShow = (Number(_lockedAmountB.toString()) / (10 ** lockedCurrency?.decimals)).toString()
+      lockedAmountBShow = percentBalance.balance2?.toString(10)
 
     }
     
@@ -74,7 +80,7 @@ export function useCreateCallback(
       lockedAmountAShow,
       lockedAmountBShow
     }
-  }, [args, lockedCurrency, airPercent])
+  }, [args, lockedCurrency, airPercent, v2Trade, percentBalance])
 
   const [approvalState, approve] = useApproveCallback(lockedCurrencyAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
   const [approvalStateAir, approveAir] = useApproveCallback(v2Trade?.inputAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
@@ -113,10 +119,10 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
   ) => {
     if (airdropSender && account && lockedToken) {
       setCreateStatus(1)
-      console.log(lockedToken, args)
+      const isETH = lockedToken === ETHER
       const baseInfo = [name, label, channel, action, content]
       const route = args[2]
-      const offer_label_token = [lockedToken.address, route[0], route[route.length - 1], account]
+      const offer_label_token = [isETH ? ethers.constants.AddressZero : lockedToken.address, route[0], route[route.length - 1], account]
       const offer_label_locked = [lockedAmountA, lockedAmountB, args[1], unint]
       const duration = 7 * 24 * 60 * 60
       
@@ -124,23 +130,25 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       let gasLimit = '5000000'
 
       try {
-        const gasEstimate = await airdropSender.estimateGas['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration)
+        const gasEstimate = await airdropSender.estimateGas['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, 
+          {value: isETH ? lockedAmountA : '0'})
         gasLimit = gasEstimate.toString()
       } catch (error) {
 
       }
       try {
-        const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit, value: isETH ? lockedAmountA : '0' })
         console.log(tx)
         const receipt = await tx.wait()
         console.log(receipt)
-        setCreateStatus(2)
         if (receipt.status) {
           router.push('/collect')
         }
       } catch(error) {
         console.log(error)
       }
+      setCreateStatus(2)
+
       
       // const airdropManager = await airdropSender.airdropManager()
       // const airdropAssetTreasury = await airdropSender.airdropAssetTreasury()

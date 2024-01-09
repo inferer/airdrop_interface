@@ -46,6 +46,8 @@ export const getLabelAirdropIds = async (multi: Contract, airToken: string) => {
 }
 
 export const getAirdropList = async (multi: Contract, airdropLength: number | number[]) => {
+
+  
   const calls = []
   if (typeof airdropLength === 'number') {
     for(let i = 1; i <= airdropLength; i++) {
@@ -78,6 +80,7 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
       const airdrop = data[0]
       const offerTokenData = getUSDTTokenByAddress(airdrop[2][0])
       const labelTokenData = getLabelTokenByAddress(airdrop[2][2])
+      console.log(offerTokenData)
       const tempData: any = {
         airdropId: airdrop[0].toString(),
         name: airdrop[1][0],
@@ -93,8 +96,9 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
           ...labelTokenData
         },
         sender: airdrop[2][3],
-        offerLocked: BigNumber.from(airdrop[3][0]).add(BigNumber.from(airdrop[3][1])).div(BigNumber.from((10 ** (offerTokenData?.decimals ?? 1)).toString())).toString(),
-        labelLocked: BigNumber.from(airdrop[3][2]).div(BigNumber.from((10 ** (labelTokenData?.decimals ?? 1)).toString())).toString(),
+        offerLocked: BigNumber.from(airdrop[3][0]).div(BigNumber.from((10 ** (offerTokenData?.decimals ?? 18)).toString())).toString(),
+        offerLabelLocked: BigNumber.from(airdrop[3][1]).div(BigNumber.from((10 ** (labelTokenData?.decimals ?? 1)).toString())).toString(),
+        labelLocked: BigNumber.from(airdrop[3][2]).div(BigNumber.from((10 ** (labelTokenData?.decimals ?? 18)).toString())).toString(),
         unit: BigNumber.from(airdrop[3][3]).toString(),
         duration: airdrop[4].toString(),
         startTimestamp: airdrop[5].toString(),
@@ -143,7 +147,8 @@ export const getUserAirdropConfirmed2 = async (airdropManager: Contract, account
       completed: tempItem.completed,
       airdropId: tempItem[2]?.toString(),
       userAddress: tempItem[3],
-      confirmedTimestamp: tempItem[8]?.toString()
+      confirmedTimestamp: tempItem[8]?.toString(),
+      id: tempItem[11]?.toString()
     }
   }) : []
 }

@@ -64,3 +64,26 @@ export function useUpdateAirTokenPercent() {
     dispatch(updateAirTokenPercent({ percent }))
   }, [dispatch])
 }
+
+export function useAirTokenPercentBalance(otherCurrencyBalance: CurrencyAmount | undefined) {
+
+  const airPercent = useAirTokenPercent()
+
+  const percentBalance = useMemo(() => {
+    let balance1 = 0
+    let balance2 = 0
+    if (airPercent && otherCurrencyBalance) {
+      const currencyBalance = otherCurrencyBalance.toSignificant(6)
+      balance2 = Number((Number(currencyBalance) * airPercent / 100).toFixed(4))
+      balance1 = Number((Number(currencyBalance) - balance2).toFixed(4))
+    }
+
+    return {
+      balance1,
+      balance2
+    }
+    
+  }, [airPercent, otherCurrencyBalance])
+
+  return percentBalance
+}

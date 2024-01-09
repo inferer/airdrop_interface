@@ -46,7 +46,6 @@ import AppBody from '../AppBody'
 import { ClickableText } from '../Pool/styleds'
 import Loader from '../../components/Loader'
 
-import TextT, { TextGray } from '../../components/Text'
 import UseAirAssets from './UseAirAssets'
 
 export default function Swap() {

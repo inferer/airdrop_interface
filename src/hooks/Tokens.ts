@@ -170,9 +170,15 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 
 export function useCurrency(currencyId: string | undefined): Currency | null | undefined {
   const isETH = currencyId?.toUpperCase() === 'ETH'
-  const token = useToken(isETH ? undefined : currencyId)
-  // return isETH ? ETHER : token
-  return useToken(currencyId)
+  const token = useToken(currencyId)
+  
+  return useMemo(() => {
+    if (isETH) return ETHER
+    return token
+  }, [isETH, token])
+
+  // if (isETH) return ETHER
+  // return useToken(currencyId)
 }
 
 export function useInputTokens() {

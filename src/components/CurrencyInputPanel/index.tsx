@@ -15,7 +15,7 @@ import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import { useIsUserAction } from '../../state/user/hooks'
 import LazyImage from '../LazyImage'
-import { useAirTokenPercent } from '../../state/airdrop/hooks'
+import { useAirTokenPercent, useAirTokenPercentBalance } from '../../state/airdrop/hooks'
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -157,14 +157,15 @@ export default function  CurrencyInputPanel({
   showCommonBases,
 }: CurrencyInputPanelProps) {
   const { t } = useTranslation()
+  const { isProjectCreate, isProjectSwap } = useIsUserAction()
 
   const [modalOpen, setModalOpen] = useState(false)
   const { account } = useActiveWeb3React()
   const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
-  // @ts-ignore
-  const selectedCurrencyBalanceUSDT = useCurrencyBalanceUSDT(account ?? undefined, currency && currency.address)
-  const theme = useContext(ThemeContext)
 
+  // @ts-ignore
+  const selectedCurrencyBalanceUSDT = useCurrencyBalanceUSDT(account ?? undefined, currency && currency.address, isProjectCreate)
+  const theme = useContext(ThemeContext)
 
   const handleDismissSearch = useCallback(() => {
     setModalOpen(false)
@@ -175,7 +176,6 @@ export default function  CurrencyInputPanel({
     return id === 'swap-currency-input' || id === 'add-liquidity-input-tokena' || id === 'collect-currency-input' || id === 'userswap-currency-input'
   }, [id])
 
-  const { isProjectCreate, isProjectSwap } = useIsUserAction()
 
   const handleOnMax = useCallback(async () => {
     if (onMax) {
@@ -188,21 +188,24 @@ export default function  CurrencyInputPanel({
   }, [onMax, isProjectCreate, payInput, selectedCurrencyBalanceUSDT])
 
   const airPercent = useAirTokenPercent()
+  const otherCurrencyBalance = useCurrencyBalance(account ?? undefined, otherCurrency ?? undefined)
+  // const percentBalance = useMemo(() => {
+  //   let balance1 = 0
+  //   let balance2 = 0
+  //   if (airPercent && otherCurrencyBalance) {
+  //     const currencyBalance = otherCurrencyBalance.toSignificant(6)
+  //     balance2 = Number((Number(currencyBalance) * airPercent / 100).toFixed(4))
+  //     balance1 = Number((Number(currencyBalance) - balance2).toFixed(4))
+  //   }
 
-  const percentBalance = useMemo(() => {
-    let balance1 = 0
-    let balance2 = 0
-    if (airPercent) {
-      balance2 = Number((Number(value) * airPercent / 100).toFixed(2))
-      balance1 = Number((Number(value) - balance2).toFixed(2))
-    }
-
-    return {
-      balance1,
-      balance2
-    }
+  //   return {
+  //     balance1,
+  //     balance2
+  //   }
     
-  }, [airPercent, value, selectedCurrencyBalance])
+  // }, [airPercent, value, selectedCurrencyBalance, otherCurrencyBalance])
+
+  const percentBalance = useAirTokenPercentBalance(otherCurrencyBalance)
 
   return (
     <InputPanel id={id} payInput={payInput}>
@@ -269,21 +272,27 @@ export default function  CurrencyInputPanel({
               <div className='bg-[rgba(200,206,255,0.20)] rounded-sm h-[26px] px-[6px] flex items-center text-[rgba(0,0,0,0.60)] text-[14px]'>
                 <div className=' flex items-center'>
                   <CurrencyLogo currency={selectedCurrencyBalanceUSDT?.currency} size={'14px'} />
-                  <span className='mx-1'>{percentBalance.balance1}</span>
+                  <span className='mx-1'>{value}</span>
                   {selectedCurrencyBalanceUSDT?.currency?.symbol}
                 </div>
-                <LazyImage src='/images/airdrop/add2.svg' className='mx-1' />
-                <div className=' flex items-center'>
-                  <CurrencyLogo currency={selectedCurrencyBalance?.currency} size={'14px'} />
-                  <span className='mx-1'>{percentBalance.balance2}</span>
-                  {selectedCurrencyBalance?.currency?.symbol}
-                </div>
+                {
+                  otherCurrency ? 
+                  <>
+                    <LazyImage src='/images/airdrop/add2.svg' className='mx-1' />
+                    <div className=' flex items-center'>
+                      <CurrencyLogo currency={otherCurrency} size={'14px'} />
+                      <span className='mx-1'>{percentBalance.balance2}</span>
+                      {otherCurrency?.symbol}
+                    </div>
+                  </> : null
+                }
+                
                 
               </div> : null
             }
           </div>
           
-            <div>
+            <div className='h-[26px]'>
             {account && (
               <TYPE.body
                 onClick={handleOnMax}

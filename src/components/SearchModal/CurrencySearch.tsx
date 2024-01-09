@@ -102,8 +102,8 @@ export function CurrencySearch({
 
   const showETH: boolean = useMemo(() => {
     const s = searchQuery.toLowerCase().trim()
-    return (s === '' || s === 'e' || s === 'et' || s === 'eth') && isProjectMode
-  }, [searchQuery, isProjectMode])
+    return (s === '' || s === 'e' || s === 'et' || s === 'eth') && isProjectCreate
+  }, [searchQuery, isProjectCreate])
 
   const tokenComparator = useTokenComparator(invertSearchOrder)
 

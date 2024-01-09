@@ -42,10 +42,10 @@ const AirdropConfirm: React.FC<{
 
   useEffect(() => {
     if (account && airdrop) {
-      handleGetUserTaskConfirmed(airdrop.airdropId)
-        .then(res => {
-          setUserTaskConfirmed(res)
-        })
+      // handleGetUserTaskConfirmed(airdrop.airdropId)
+      //   .then(res => {
+      //     setUserTaskConfirmed(res)
+      //   })
     }
   }, [account, airdrop])
 
@@ -171,10 +171,7 @@ const AirdropConfirm: React.FC<{
           <ButtonSwap 
             onClick={e => {
               e.stopPropagation()
-              if (Number(userTaskConfirmed.airdropId) > 0) {
-                alert('此任务已经领取')
-                return
-              }
+              
               if (approvalState !== ApprovalState.APPROVED) {
                 alert('Please approve token!')
                 return

@@ -16,7 +16,7 @@ import { useCreateAirdrop, useCreateCallback } from '../../hooks/useAirdropSende
 import { ApprovalState } from '../../hooks/useApproveCallback'
 import { AutoRow } from '../../components/Row'
 import Loader from '../../components/Loader'
-import { Token } from '@uniswap/sdk'
+import { ETHER, Token } from '@uniswap/sdk'
 import { TWITTER_UNIT } from '../../constants'
 import CurrencyLogo from '../../components/CurrencyLogo'
 
@@ -100,9 +100,9 @@ export default function Create() {
                   </div>
                   <LazyImage src='/images/airdrop/add2.svg' className='mx-1' />
                   <div className=' flex items-center'>
-                    <CurrencyLogo currency={lockedCurrencyAir} size={'14px'} />
+                    <CurrencyLogo currency={outputAmount?.currency} size={'14px'} />
                     <span className='mx-1'>{lockedAmountAB.lockedAmountBShow}</span>
-                    {lockedCurrencyAir?.symbol}
+                    {outputAmount?.currency?.symbol}
                   </div>
                 </div> 
               </div> : null
@@ -188,7 +188,7 @@ export default function Create() {
       <div className='flex justify-end mt-5'>
         
           {
-            lockedCurrency &&
+            lockedCurrency && lockedCurrency !== ETHER &&
             <div className='w-[260px]'>
               <ButtonSwap
                 onClick={approve}
@@ -209,25 +209,25 @@ export default function Create() {
             </div>
           }
           {
-            Number(lockedAmountAB.lockedAmountBShow) > 0 && 
-            <div className='w-[260px]'>
-              <ButtonSwap
-                onClick={approveAir}
-              >
-                <TYPE.textGrad1 fontWeight={600} fontSize={20}>
-                  { approvalStateAir === ApprovalState.PENDING ? (
-                      <AutoRow gap="6px" justify="center">
-                        Approving <Loader />
-                      </AutoRow>
-                    ) : approvalStateAir === ApprovalState.APPROVED ? (
-                      'Approved ' + lockedCurrencyAir?.symbol
-                    ) : (
-                      `Approve ${lockedCurrencyAir?.symbol}`
-                    )
-                  }
-                </TYPE.textGrad1>
-              </ButtonSwap>
-            </div>
+            // Number(lockedAmountAB.lockedAmountBShow) > 0 && 
+            // <div className='w-[260px]'>
+            //   <ButtonSwap
+            //     onClick={approveAir}
+            //   >
+            //     <TYPE.textGrad1 fontWeight={600} fontSize={20}>
+            //       { approvalStateAir === ApprovalState.PENDING ? (
+            //           <AutoRow gap="6px" justify="center">
+            //             Approving <Loader />
+            //           </AutoRow>
+            //         ) : approvalStateAir === ApprovalState.APPROVED ? (
+            //           'Approved ' + lockedCurrencyAir?.symbol
+            //         ) : (
+            //           `Approve ${lockedCurrencyAir?.symbol}`
+            //         )
+            //       }
+            //     </TYPE.textGrad1>
+            //   </ButtonSwap>
+            // </div>
           }
           {
             outputAmount &&
@@ -259,7 +259,7 @@ export default function Create() {
                 alert('Airdrop name is empty!')
                 return
               }
-              if (approvalState !== ApprovalState.APPROVED || approvalStateLabel !== ApprovalState.APPROVED || (Number(lockedAmountAB.lockedAmountBShow) > 0 && approvalStateAir !== ApprovalState.APPROVED)) {
+              if (approvalState !== ApprovalState.APPROVED || approvalStateLabel !== ApprovalState.APPROVED) {
                 alert('Please approve token!')
                 return
               }

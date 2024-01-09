@@ -102,8 +102,7 @@ function CurrencyRow({
   const customAdded = useIsUserAddedToken(currency)
   const balance = useCurrencyBalance(account ?? undefined, currency)
   // @ts-ignore
-  const balanceUSDT = useCurrencyBalanceUSDT(account ?? undefined, currency.address)
-
+  const balanceUSDT = useCurrencyBalanceUSDT(account ?? undefined, currency.address, payInputCreate)
   const removeToken = useRemoveUserAddedToken()
   const addToken = useAddUserToken()
 
@@ -185,7 +184,7 @@ export default function CurrencyList({
 }) {
   const { isProjectCreate } = useIsUserAction()
   
-  const itemData = useMemo(() => (showETH ? [...currencies] : currencies), [currencies, showETH])
+  const itemData = useMemo(() => (showETH ? [ ...currencies] : currencies), [currencies, showETH])
 
   const Row = useCallback(
     ({ data, index, style }) => {

@@ -16,7 +16,7 @@ import { useCurrencyBalances } from '../wallet/hooks'
 import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
 import { SwapState } from './reducer'
 import useToggledVersion from '../../hooks/useToggledVersion'
-import { useUserSlippageTolerance } from '../user/hooks'
+import { useIsUserAction, useUserSlippageTolerance } from '../user/hooks'
 import { computeSlippageAdjustedAmounts } from '../../utils/prices'
 import { getAirTokenFromAlgToken } from '../../utils/getTokenList'
 
@@ -119,7 +119,7 @@ export function useDerivedSwapInfo(): {
   const { account } = useActiveWeb3React()
 
   const toggledVersion = useToggledVersion()
-
+  const { isProjectCreate } = useIsUserAction()
   const {
     independentField,
     typedValue,
@@ -204,7 +204,7 @@ export function useDerivedSwapInfo(): {
       : null
   ]
 
-  if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
+  if (!isProjectCreate && balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
     inputError = 'Insufficient ' + amountIn.currency.symbol + ' balance'
   }
 
