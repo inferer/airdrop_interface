@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, AppState } from '../index'
-import { IAirdrop, IAlgAirdrop, updateAirTokenPercent, updateMaxUnits } from './actions'
+import { IAirdrop, IAlgAirdrop, TokenLocked, updateAirTokenPercent, updateMaxUnits } from './actions'
 
 
 export function useAirdropList() {
@@ -86,4 +86,17 @@ export function useAirTokenPercentBalance(otherCurrencyBalance: CurrencyAmount |
   }, [airPercent, otherCurrencyBalance])
 
   return percentBalance
+}
+
+
+export function useProjectTokenLockedList() {
+  return useSelector<AppState, AppState['airdrop']['projectTokenLockedList']>(state => state.airdrop.projectTokenLockedList)
+}
+
+export function useProjectLabelLocked(address: string) {
+  const projectTokenLockedList = useProjectTokenLockedList()
+  return useMemo(() => {
+    if (!address) return ({} as TokenLocked)
+    return projectTokenLockedList.find(token => token?.address?.toLowerCase() === address.toLowerCase()) || ({} as TokenLocked)
+  }, [projectTokenLockedList, address])
 }

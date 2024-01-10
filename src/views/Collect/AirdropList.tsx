@@ -68,7 +68,7 @@ const AirdropList: React.FC<{
                     >
                       <>
                         <TableCell className="flex-1 w-[300px]">
-                          <div className=' text-[16px] text-black'>{airdrop.airdropId} <span className="pl-6">{airdrop.name}</span></div>
+                          <div className=' text-[16px] font-fsemibold text-black'>{airdrop.airdropId} <span className="pl-6">{airdrop.name}</span></div>
                         </TableCell>
                         <TableCell className="w-[135px] ">
                           <div className="bg-[rgba(63,60,255,0.05)] rounded-lg h-[35px] px-[8px] flex items-center justify-center text-[rgba(63,60,255,0.80)] font-fmedium text-[16px]">

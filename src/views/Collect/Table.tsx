@@ -4,7 +4,7 @@ export const TableCell = ({
   className
 }: { children: React.ReactChild, className?: string }) => {
   return (
-    <div className={`flex items-center font-dbold text-[16px] leading-[21px] text-[#000] whitespace-nowrap ${className}`}>
+    <div className={`flex items-center font-fnormal text-[16px] leading-[21px] text-[#000] whitespace-nowrap ${className}`}>
       { children }
     </div>
   )
@@ -51,7 +51,7 @@ export const TableHead = ({
   children,
 }: { children: React.ReactElement, className?: string }) => {
   return (
-    <div className="flex justify-between h-[37px] items-center bg-[rgba(179,179,179,0.03)] px-5">
+    <div className="flex justify-between h-[37px] items-center bg-[rgba(85,123,241,0.03)] px-5">
       { children }
     </div>
   )

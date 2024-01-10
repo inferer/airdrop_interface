@@ -97,7 +97,7 @@ const StyledTokenName = styled.span<{ active?: boolean }>`
 `
 
 const StyledBalanceMax = styled.span`
-  color: #8AE899;
+  color: #49BCFF;
   font-family: Inter-SemiBold;
   font-size: 16px;
   font-style: normal;
@@ -246,7 +246,7 @@ export default function  CurrencyInputPanel({
               {pair ? (
                 <DoubleCurrencyLogo currency0={pair.token0} currency1={pair.token1} size={20} margin={true} />
               ) : currency ? (
-                <CurrencyLogo currency={currency} size={'20px'} />
+                <CurrencyLogo currency={currency} size={'20px'} type={ payInput && isProjectCreate ? 'payInputCreate' : '' } />
               ) : null}
               {pair ? (
                 <StyledTokenName className="pair-name-container">

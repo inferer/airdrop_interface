@@ -15,7 +15,7 @@ const AppWrapper = styled.div`
   align-items: flex-start;
   overflow-x: hidden;
   height: 100vh;
-  padding-top: 120px;
+  padding-top: 84px;
 `
 
 const HeaderWrapper = styled.div`

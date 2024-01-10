@@ -98,14 +98,23 @@ export function useAirdropReceiver(algToken?: string) {
       }
       setCompleteStatus(1)
       try {
+        // setTimeout(() => {
+        //   setCompleteStatus(2)
+        // }, 2000)
         const res = await confirmCompleteAirdrop(account, taskIds)
         if (res.code === 0) {
           handleGetUserAirdropConfirmed()
+          setCompleteStatus(2)
           alert('airdrop确认完成, 合约状态已更新，同时airt token 已转发')
         } else {
+          setCompleteStatus(-1)
           alert(res.message)
         }
-        setCompleteStatus(2)
+        
+
+        setTimeout(() => {
+          setCompleteStatus(0)
+        }, 4000)
         
       } catch(error) {
         console.log(error)

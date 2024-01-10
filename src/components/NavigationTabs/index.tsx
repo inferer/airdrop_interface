@@ -171,7 +171,7 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
     onClick && onClick(type)
   }, [active])
   return (
-    <Tabs style={{ marginLeft: 60 }}>
+    <Tabs style={{ marginLeft: 45 }}>
       <StyledNavLink2 id={`airdrop-btn-click`} className={active === 'airdrop' ? 'airdrop' : ''}
         onClick={() => handleTab('airdrop')}
       >

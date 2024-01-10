@@ -32,7 +32,7 @@ const AirdropList: React.FC<{
     if (checked && index < 0) {
       checkList.push(id)
     }
-    onChecked && onChecked(checkList)
+    onChecked && onChecked([...checkList])
     setCheckList(checkList)
   }, [checkList])
   

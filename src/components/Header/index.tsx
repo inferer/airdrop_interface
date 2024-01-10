@@ -31,8 +31,8 @@ const HeaderFrame = styled.div`
   top: 0;
   position: absolute;
   z-index: 2;
-  padding-left: 7.8125vw;
-  padding-right: 7.8125vw;
+  padding-left: 4.1666vw;
+  padding-right: 4.1666vw;
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
     padding: 12px 0 0 0;
     width: calc(100%);
@@ -175,7 +175,7 @@ export default function Header() {
 
   return (
     <HeaderFrame>
-      <RowBetween style={{ alignItems: 'flex-start' }} padding="1rem 1rem 0 1rem">
+      <RowBetween style={{ alignItems: 'flex-start' }} padding="26px 1rem 0 1rem">
         <HeaderElement>
           <Link href={'/swap'}>
             <UniIcon className=' cursor-pointer'>

@@ -89,14 +89,16 @@ export default function RightMenu() {
 
   const handleClick = (action: string) => {
     if (action === 'switch') {
-      router.push('/swap')
-      setTimeout(() => {
-        toggleSetUserRoleMode()
-      }, 300)
+      toggleSetUserRoleMode()
+      // router.push('/swap')
+      // setTimeout(() => {
+      //   toggleSetUserRoleMode()
+      // }, 300)
+      toggleShowRightMenu()
       return
     }
     if (action === 'tokens') {
-      router.push('/tokens')
+      router.push('/rewards')
       return
     }
     if (action === 'tasks') {

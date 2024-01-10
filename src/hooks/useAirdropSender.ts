@@ -52,7 +52,7 @@ export function useCreateCallback(
     if (args[0] && lockedCurrency) {
       const div1 = BigNumber.from(parseInt(args[0], 16).toString(10)).toString()
       const div2 = BigNumber.from((10 ** lockedCurrency?.decimals).toString(10)).toString()
-      return (Number(div1) / Number(div2)).toFixed(4)
+      return (Number(div1) / Number(div2)).toString()
     }
     return '0'
   }, [args, lockedCurrency])

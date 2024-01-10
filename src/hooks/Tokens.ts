@@ -1,7 +1,7 @@
 import { parseBytes32String } from '@ethersproject/strings'
 import { Currency, ETHER, Token, currencyEquals } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { useAirLabelTokenList, useAirTokenList, useAlgLabelTokenList, useSelectedTokenList } from '../state/lists/hooks'
+import { useAirLabelTokenList, useAirTokenList, useAlgLabelTokenList, useSelectedTokenList, useUSDTTokenList } from '../state/lists/hooks'
 import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
 import { useAddUserToken, useIsUserAction, useUserAddedTokens } from '../state/user/hooks'
 import { isAddress } from '../utils'
@@ -80,6 +80,26 @@ export function useAlgLabelAllTokens(): { [address: string]: Token } {
   const { chainId } = useActiveWeb3React()
   const userAddedTokens = useUserAddedTokens()
   const allTokens = useAlgLabelTokenList()
+
+  return useMemo(() => {
+    if (!chainId) return {}
+    return (
+      userAddedTokens
+        .reduce<{ [address: string]: Token }>(
+          (tokenMap, token) => {
+            tokenMap[token.address] = token
+            return tokenMap
+          },
+          { ...allTokens[chainId] }
+        )
+    )
+  }, [chainId, userAddedTokens, allTokens])
+}
+
+export function useUSDTAllTokens(): { [address: string]: Token } {
+  const { chainId } = useActiveWeb3React()
+  const userAddedTokens = useUserAddedTokens()
+  const allTokens = useUSDTTokenList()
 
   return useMemo(() => {
     if (!chainId) return {}

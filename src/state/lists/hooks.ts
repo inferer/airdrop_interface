@@ -3,7 +3,7 @@ import { Tags, TokenInfo, TokenList } from '@uniswap/token-lists'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { AppState } from '../index'
-import { AIRLABEL_TOKEN_LIST_URL, AIR_TOKEN_LIST_URL, ALGLABEL_TOKEN_LIST_URL } from '../../constants/lists'
+import { AIRLABEL_TOKEN_LIST_URL, AIR_TOKEN_LIST_URL, ALGLABEL_TOKEN_LIST_URL, DEFAULT_TOKEN_LIST_URL } from '../../constants/lists'
 
 type TagDetails = Tags[keyof Tags]
 export interface TagInfo extends TagDetails {
@@ -102,6 +102,10 @@ export function useAirLabelTokenList(): TokenAddressMap {
 
 export function useAlgLabelTokenList(): TokenAddressMap {
   return useTokenList(ALGLABEL_TOKEN_LIST_URL)
+}
+
+export function useUSDTTokenList(): TokenAddressMap {
+  return useTokenList(DEFAULT_TOKEN_LIST_URL)
 }
 
 export function useSelectedListInfo(): { current: TokenList | null; pending: TokenList | null; loading: boolean } {

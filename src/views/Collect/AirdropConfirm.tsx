@@ -50,10 +50,43 @@ const AirdropConfirm: React.FC<{
   }, [account, airdrop])
 
   return (
-    <div className="p-5">
-      <div className=" text-[36px] font-fsemibold leading-[42px]">{airdrop.name}</div>
-      <div className="flex items-start mt-11">
+    <div className="p-5 pt-0">
+      {/* <div className=" text-[36px] font-fsemibold leading-[42px]">{airdrop.name}</div> */}
+      <div className="flex items-start mt-14">
         <div className="w-[420px]">
+          <div className="flex items-center">
+            <div className="w-[160px] shrink-0">
+              <LabelText>Name</LabelText>
+            </div>
+            <div>
+              <div className="text-[rgba(63,60,255,0.8)] text-[16px] font-fmedium rounded-lg bg-[rgba(63,60,255,0.05)] px-2">
+                <FlexCenter>{airdrop.name}</FlexCenter>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center mt-5">
+            <div className="w-[160px] shrink-0">
+              <LabelText>Fund</LabelText>
+            </div>
+            <div className="flex items-baseline">
+              <div className=" font-fmedium text-[22px]">
+                {airdrop.offerLocked}
+              </div>
+              <div className="text-[16px] ml-2">{airdrop.offerToken?.symbol}</div>
+            </div>
+          </div>
+          <div className="flex items-center mt-5">
+            <div className="w-[160px] shrink-0">
+              <LabelText>Action</LabelText>
+            </div>
+            <div className="py-[2px] px-[10px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)]">
+              <span className=" text-[16px] font-fsemibold">{airdrop.action}</span>
+            </div>
+          </div>
+          
+        </div>
+
+        <div className=" flex-1 relative -top-[5px]">
           <div className="flex items-center">
             <div className="w-[160px] shrink-0">
               <LabelText>Label</LabelText>
@@ -80,29 +113,7 @@ const AirdropConfirm: React.FC<{
               {airdrop.expireOn}
             </div>
           </div>
-        </div>
-
-        <div className=" flex-1 relative -top-[5px]">
-          <div className="flex items-center">
-            <div className="w-[160px] shrink-0">
-              <LabelText>Fund</LabelText>
-            </div>
-            <div className="flex items-baseline">
-              <div className=" font-fmedium text-[22px]">
-                {airdrop.offerLocked}
-              </div>
-              <div className="text-[16px] ml-2">{airdrop.offerToken?.symbol}</div>
-            </div>
-          </div>
-          <div className="flex items-center mt-5">
-            <div className="w-[160px] shrink-0">
-              <LabelText>Action</LabelText>
-            </div>
-            <div className="py-[2px] px-[10px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)]">
-              <span className=" text-[16px] font-fsemibold">{airdrop.action}</span>
-            </div>
-          </div>
-          <div className="flex items-center mt-5">
+          {/* <div className="flex items-center mt-5">
             <div className="w-[160px] shrink-0">
               <LabelText>Paid</LabelText>
             </div>
@@ -122,7 +133,7 @@ const AirdropConfirm: React.FC<{
               </div>
             }
             
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="mt-8">
@@ -137,7 +148,8 @@ const AirdropConfirm: React.FC<{
       </div>
       <div className=" flex justify-center mt-[50px]">
         <div className='w-[260px] mr-[180px]'>
-          <ButtonSwap 
+          <ButtonSwap
+            bgColor="#FAFAFA"
             altDisabledStyle
             onClick={e => {
               e.stopPropagation()

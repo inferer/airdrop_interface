@@ -75,9 +75,9 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
     "logoURI": "/images/tokens/usdt.png"
   },
   {
-    "name": "air-Sport",
+    "name": "air-Sports",
     "address": "0x4b4E8A920e396FBb89Ff393ff9F5A767daAb9987",
-    "symbol": "air-Sport",
+    "symbol": "air-Sports",
     "decimals": 18,
     "chainId": 11155111,
     "logoURI": "/images/tokens/usdt.png"
@@ -107,9 +107,9 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
     "logoURI": "/images/tokens/usdt.png"
   },
   {
-    "name": "air-Shopping",
+    "name": "air-Commerce",
     "address": "0x718f9ca36D58E7a922B5959C6DdD7455b3A9E3a4",
-    "symbol": "air-Shopping",
+    "symbol": "air-Commerce",
     "decimals": 18,
     "chainId": 11155111,
     "logoURI": "/images/tokens/usdt.png"
@@ -126,9 +126,9 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
     "logoURI": "/images/tokens/usdt.png"
   },
   {
-    "name": "alg-Sport",
+    "name": "alg-Sports",
     "address": "0x201f8391F31143A7416AE8F4C7C31B85024c00Ba",
-    "symbol": "alg-Sport",
+    "symbol": "alg-Sports",
     "decimals": 18,
     "chainId": 11155111,
     "logoURI": "/images/tokens/usdt.png"
@@ -158,9 +158,9 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
     "logoURI": "/images/tokens/usdt.png"
   },
   {
-    "name": "alg-Shopping",
+    "name": "alg-Commerce",
     "address": "0xf88DDd9259B05bE8339Aea6aA94E90df7fE94881",
-    "symbol": "alg-Shopping",
+    "symbol": "alg-Commerce",
     "decimals": 18,
     "chainId": 11155111,
     "logoURI": "/images/tokens/usdt.png"

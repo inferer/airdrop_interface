@@ -377,7 +377,7 @@ export default function Swap() {
               </>
             ) : null}
 
-            {showWrap ? null : (
+            {/* {showWrap ? null : (
               <Card padding={'.25rem .75rem 0 .75rem'} borderRadius={'20px'}>
                 <AutoColumn gap="4px">
                   {Boolean(trade) && (
@@ -404,7 +404,7 @@ export default function Swap() {
                   )}
                 </AutoColumn>
               </Card>
-            )}
+            )} */}
           </AutoColumn>
           <BottomGrouping>
             {
@@ -510,13 +510,13 @@ export default function Swap() {
                 </Text>
               </ButtonError>
             )}
-            {showApproveFlow && <ProgressSteps steps={[approval === ApprovalState.APPROVED]} />}
+            {/* {showApproveFlow && <ProgressSteps steps={[approval === ApprovalState.APPROVED]} />}
             {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
-            {betterTradeLinkVersion && <BetterTradeLink version={betterTradeLinkVersion} />}
+            {betterTradeLinkVersion && <BetterTradeLink version={betterTradeLinkVersion} />} */}
           </BottomGrouping>
         </Wrapper>
       </SwapBody>
-      <AdvancedSwapDetailsDropdown trade={trade} />
+      {/* <AdvancedSwapDetailsDropdown trade={trade} /> */}
     </>
   )
 }

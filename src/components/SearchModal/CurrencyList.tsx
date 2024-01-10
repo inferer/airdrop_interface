@@ -116,7 +116,7 @@ function CurrencyRow({
       disabled={isSelected}
       selected={otherSelected}
     >
-      <CurrencyLogo currency={currency} size={'20px'} />
+      <CurrencyLogo currency={currency} size={'20px'} type={payInputCreate ? 'payInputCreate' : ''} />
       <Column>
         <Text title={currency.name} fontWeight={500}>
           {payInputCreate ? currency.symbol?.slice(4) : currency.symbol}

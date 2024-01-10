@@ -19,11 +19,12 @@ import Loader from '../../components/Loader'
 import { ETHER, Token } from '@uniswap/sdk'
 import { TWITTER_UNIT } from '../../constants'
 import CurrencyLogo from '../../components/CurrencyLogo'
+import { useRouter } from 'next/router'
 
 
 
 export default function Create() {
-  const theme = useContext(ThemeContext)
+  const router = useRouter()
   const { account } = useActiveWeb3React()
   const [name, setName] = useState('')
 
@@ -60,13 +61,13 @@ export default function Create() {
   return (
     <CreateBody>
       <TitleWrap>
-        <Link to="/swap">
+        {/* <Link to="/swap">
           <div>
           <LazyImage className='icon-left cursor-pointer' src="/images/airdrop/arrow-left.svg" />
           </div>
-        </Link>
+        </Link> */}
         
-        <TYPE.textGrad1 fontSize={32} fontWeight={600}>Create the airdrop</TYPE.textGrad1>
+        <div className=' text-[32px] font-fsemibold text-black'>Create the airdrop</div>
       </TitleWrap>
       <ItemWrap>
         <div>
@@ -83,9 +84,9 @@ export default function Create() {
                 throw new Error('Function not implemented.')
               } } /> */}
               <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>{lockedAmount}</div>
-              <TokenInfo className='flex items-center mt-5 shrink-0'>
+              <TokenInfo className='flex items-center shrink-0'>
                 {/* <LazyImage2 src='/images/airdrop/eth.svg' /> */}
-                <CurrencyLogo currency={lockedCurrency || undefined} size={'24px'} />
+                <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'24px'} />
                 <div className='text-[20px] font-fsemibold ml-1'>{lockedCurrency?.symbol}</div>
               </TokenInfo>
             </div>
@@ -94,7 +95,7 @@ export default function Create() {
               <div className='flex justify-end mt-2'>
                 <div className='bg-[rgba(200,206,255,0.20)] rounded-[100px] h-[26px] px-[6px] flex items-center text-[rgba(0,0,0,0.40)] text-[14px]'>
                   <div className=' flex items-center'>
-                    <CurrencyLogo currency={lockedCurrency || undefined} size={'14px'} />
+                    <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'14px'} />
                     <span className='mx-1'>{lockedAmountAB.lockedAmountAShow}</span>
                     {lockedCurrency?.symbol}
                   </div>
@@ -155,8 +156,9 @@ export default function Create() {
                   <div className='flex items-center justify-between font-fsemibold text-[16px] py-3 px-4 bg-[rgba(85,123,241,0.02)] rounded-[8px]'>
                     <div>{TWITTER_UNIT[action]} x</div>
                     <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
-                      <LazyImage src='/images/airdrop/airdrop_icon.svg' />
-                      <div className=' font-fmedium text-[#A1CEA8]'>
+                      {/* <LazyImage src='/images/airdrop/airdrop_icon.svg' /> */}
+                      <CurrencyLogo currency={outputAmount?.currency} size={'20px'} />
+                      <div className=' font-fmedium text-[#A1CEA8] ml-1'>
                         {outputAmount?.currency?.symbol}
                       </div>
                     </div>
@@ -187,7 +189,7 @@ export default function Create() {
       </ItemWrap>
       <div className='flex justify-end mt-5'>
         
-          {
+          {/* {
             lockedCurrency && lockedCurrency !== ETHER &&
             <div className='w-[260px]'>
               <ButtonSwap
@@ -207,29 +209,8 @@ export default function Create() {
                 </TYPE.textGrad1>
               </ButtonSwap>
             </div>
-          }
-          {
-            // Number(lockedAmountAB.lockedAmountBShow) > 0 && 
-            // <div className='w-[260px]'>
-            //   <ButtonSwap
-            //     onClick={approveAir}
-            //   >
-            //     <TYPE.textGrad1 fontWeight={600} fontSize={20}>
-            //       { approvalStateAir === ApprovalState.PENDING ? (
-            //           <AutoRow gap="6px" justify="center">
-            //             Approving <Loader />
-            //           </AutoRow>
-            //         ) : approvalStateAir === ApprovalState.APPROVED ? (
-            //           'Approved ' + lockedCurrencyAir?.symbol
-            //         ) : (
-            //           `Approve ${lockedCurrencyAir?.symbol}`
-            //         )
-            //       }
-            //     </TYPE.textGrad1>
-            //   </ButtonSwap>
-            // </div>
-          }
-          {
+          } */}
+          {/* {
             outputAmount &&
             <div className='w-[260px]'>
               <ButtonSwap
@@ -249,8 +230,18 @@ export default function Create() {
                 </TYPE.textGrad1>
               </ButtonSwap>
             </div>
-          }
-        
+          } */}
+        <div className='w-[260px]'>
+          <ButtonSwap 
+            bgColor='#FAFAFA'
+            onClick={e => {
+              e.stopPropagation()
+              router.push('/swap')
+            }}
+          >
+            <span className='text-[rgba(0,0,0,0.6)] font-fsemibold text-[20px]'>Cancel</span>
+          </ButtonSwap>
+        </div>
         <div className='w-[260px]'>
           <ButtonSwap 
             onClick={e => {

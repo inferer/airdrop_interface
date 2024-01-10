@@ -37,8 +37,8 @@ body {
   font-family: Inter-Bold;
 }
 
-.table__body .table__row:nth-child(2n + 1) {
-  background-color: rgba(85, 123, 241, 0.02);
+.table__body .table__row:nth-child(2n) {
+  background-color: rgba(85, 123, 241, 0.05);
 }
 .table__body .table__row:hover {
   background-color: rgba(85, 123, 241, 0.04);
@@ -63,6 +63,10 @@ body {
 }
 .basic-single {
   width: 100% !important;
+}
+
+.first-up::first-letter {
+  text-transform: capitalize;
 }
 
 

@@ -93,3 +93,7 @@ export function getAlgLabelTokenByAddress(address: string) {
 export function getAlgTokenByLabel(label: string) {
   return ALGLABEL_TOKEN_LIST.find(token => token.symbol.slice(4) === label)
 }
+
+export function getAirTokenBySymbol(symbol: string) {
+  return AIRLABEL_TOKEN_LIST.find(token => token.symbol === symbol)
+}

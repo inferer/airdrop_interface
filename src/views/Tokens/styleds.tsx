@@ -38,3 +38,13 @@ export const FlexCenter = ({ children }: { children: React.ReactElement | string
     <div className=' flex justify-center items-center'>{ children }</div>
   )
 }
+
+
+export const TokensBody = styled.div`
+  width: 628px;
+  border-radius: 24px;
+  background: #FFF;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
+  margin: 0 auto;
+  padding: 30px;
+`

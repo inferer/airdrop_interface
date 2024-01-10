@@ -34,6 +34,15 @@ export interface IAlgAirdrop {
   token: Token
 }
 
+export type TokenLocked = {
+  "decimals": number,
+  "symbol": string,
+  "name": string,
+  "chainId": number,
+  "address": string
+  "lockedAmount": string
+}
+
 
 export const updateAirdropList = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateAirdropList')
 export const updateAirdropListOne = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateAirdropListOne')
@@ -42,3 +51,4 @@ export const updateUserAlgAirdropList = createAction<{ algAirdropList: IAlgAirdr
 export const updateUserLabelScore = createAction<{ key: string, score: number }>('airdrop/updateUserLabelScore')
 export const updateMaxUnits = createAction<{ units: number }>('airdrop/updateMaxUnits')
 export const updateAirTokenPercent = createAction<{ percent: number }>('airdrop/updateAirTokenPercent')
+export const updateProjectLabelLocked = createAction<{ tokenLockedList: TokenLocked[] }>('airdrop/updateProjectLabelLocked')

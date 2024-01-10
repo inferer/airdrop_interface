@@ -6,17 +6,25 @@ import EthereumLogo from '../../assets/images/ethereum-logo.png'
 import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import Logo from '../Logo'
+import { getAirTokenBySymbol } from '../../utils/getTokenList'
 
 const getTokenLogoURL = (address: string) =>
   `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
 
-export const getTokenLogoURL2 = (currency: any) => {
+export const getTokenLogoURL2 = (currency: any, type?: string) => {
   if (currency?.symbol === 'WETH') return EthereumLogo.src
   let logoName = currency?.symbol?.toLowerCase()
-  if (currency?.symbol?.indexOf('air-') === 0 || currency?.symbol?.indexOf('alg-') === 0) {
-    logoName = currency?.symbol?.slice(4).toLowerCase()
+  
+  if (type === 'payInputCreate') {
+    if (currency?.symbol?.indexOf('air-') === 0 || currency?.symbol?.indexOf('alg-') === 0) {
+      logoName = currency?.symbol?.slice(4).toLowerCase()
+    }
+    return `/images/tokens/swap/${logoName}.svg`
   }
-  return `/images/tokens/${logoName}.png`
+  if (type === 'create') {
+    return `/images/tokens/create/${logoName}.svg`
+  }
+  return `/images/tokens/swap/${logoName}.svg`
 }
 
 const StyledEthereumLogo = styled.img<{ size: string }>`
@@ -32,10 +40,12 @@ const StyledLogo = styled(Logo)<{ size: string }>`
 `
 
 export default function CurrencyLogo({
+  type,
   currency,
   size = '24px',
   style
 }: {
+  type?: string
   currency?: Currency
   size?: string
   style?: React.CSSProperties
@@ -43,21 +53,8 @@ export default function CurrencyLogo({
   const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
 
   const srcs: string[] = useMemo(() => {
-    if (currency === ETHER) return []
-
-    if (currency instanceof Token) {
-      if (currency instanceof WrappedTokenInfo) {
-        return [...uriLocations, getTokenLogoURL2(currency)]
-      }
-
-      return [getTokenLogoURL2(currency)]
-    }
-    return []
-  }, [currency, uriLocations])
-
-  if (currency === ETHER) {
-    return <StyledEthereumLogo src='/images/tokens/eth.png' size={size} style={style} />
-  }
+    return [getTokenLogoURL2(currency, type)]
+  }, [currency, type, uriLocations])
 
   return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />
 }
