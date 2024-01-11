@@ -3,13 +3,14 @@ import { useDispatch } from "react-redux"
 import { useActiveWeb3React } from "."
 import { useAirdropAssetTreasuryContract, useMulticallContract } from "./useContract"
 import { useCallback } from "react"
-import { useAirLabelAllTokens } from "./Tokens"
+import { useAirLabelAllTokens, useAlgLabelAllTokens, useUSDTAllTokens } from "./Tokens"
 import { AirdropAssetTreasury_NETWORKS, AirdropAssetTreasury_ABI } from "../constants/airdropAssetTreasury"
 import { NETWORK_CHAIN_ID } from "../connectors"
 import { BigNumber, Contract } from "ethers"
 import multicall from "../utils/multicall"
-import { Token } from "@uniswap/sdk"
-import { updateProjectLabelLocked } from "../state/airdrop/actions"
+import { ChainId, ETHER, JSBI, Token, TokenAmount } from "@uniswap/sdk"
+import { updateProjectLabelLocked, updateProjectUSDTLocked, updateUserAlgTokenLocked } from "../state/airdrop/actions"
+import { AddressZero_ETH } from "../constants"
 
 
 export const getAirdropAssetTreasuryAddress = () => {
@@ -38,6 +39,50 @@ export const getProjectLabelLocked = async (multi: Contract, account: string, to
   })
 }
 
+export const getProjectUSDTLocked = async (multi: Contract, account: string, tokenList: Token[]) => {
+
+  const calls: any[] = []
+  tokenList.map(token => {
+    calls.push({
+      address: getAirdropAssetTreasuryAddress(),
+      name: 'projectUSDTLocked',
+      params: [account, token.address]
+    })
+  })
+    
+
+  const res = await multicall(multi, AirdropAssetTreasury_ABI, calls)
+  return (res || []).map((item: any, index: number) => {
+    const temp = new TokenAmount(tokenList[index], JSBI.BigInt(item.toString()))
+    return {
+      ...tokenList[index],
+      lockedAmount: temp.toSignificant(6)
+    }
+  })
+}
+
+export const getUserAlgTokenLocked = async (multi: Contract, account: string, tokenList: Token[]) => {
+
+  const calls: any[] = []
+  tokenList.map(token => {
+    calls.push({
+      address: getAirdropAssetTreasuryAddress(),
+      name: 'userAlgTokenLocked',
+      params: [account, token.address]
+    })
+  })
+    
+
+  const res = await multicall(multi, AirdropAssetTreasury_ABI, calls)
+  return (res || []).map((item: any, index: number) => {
+    const temp = new TokenAmount(tokenList[index], JSBI.BigInt(item.toString()))
+    return {
+      ...tokenList[index],
+      lockedAmount: temp.toSignificant(6)
+    }
+  })
+}
+
 
 export function useAirdropAssetTreasury() {
   const dispatch = useDispatch<AppDispatch>()
@@ -45,6 +90,8 @@ export function useAirdropAssetTreasury() {
 
   const multi = useMulticallContract()
   const airLabelAllTokens = useAirLabelAllTokens()
+  const algLabelAllTokens = useAlgLabelAllTokens()
+  const usdtAllTokens = useUSDTAllTokens()
 
   const airdropAssetTreasury = useAirdropAssetTreasuryContract()
 
@@ -58,8 +105,28 @@ export function useAirdropAssetTreasury() {
 
   }, [multi, airdropAssetTreasury, airLabelAllTokens])
 
+  const handleGetProjectUSDTLocked = useCallback(async (account: string) => {
+    const usdtTokenList = Object.values(usdtAllTokens)
+    if (account && multi && airdropAssetTreasury && usdtTokenList.length > 0) {
+      const list = await getProjectUSDTLocked(multi, account, [AddressZero_ETH[ChainId.MAINNET] ,...usdtTokenList])
+      dispatch(updateProjectUSDTLocked({ tokenLockedList: list }))
+    }
+
+  }, [multi, airdropAssetTreasury, usdtAllTokens])
+
+  const handleGetUserAlgTokenLocked = useCallback(async (account: string) => {
+    const algTokenList = Object.values(algLabelAllTokens)
+    if (account && multi && airdropAssetTreasury && algTokenList.length > 0) {
+      const list = await getUserAlgTokenLocked(multi, account, algTokenList)
+      dispatch(updateUserAlgTokenLocked({ tokenLockedList: list }))
+    }
+
+  }, [multi, airdropAssetTreasury, usdtAllTokens])
+
   return {
-    handleGetProjectLabelLocked
+    handleGetProjectLabelLocked,
+    handleGetProjectUSDTLocked,
+    handleGetUserAlgTokenLocked
   }
 
 }

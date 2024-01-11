@@ -183,7 +183,9 @@ export default function Header() {
             </UniIcon>
           </Link>
           <TitleText>
-            <AirdropTokensTabs />
+            <AirdropTokensTabs onClick={(action) => {
+              router.push(`/${action}`)
+            }} />
             <LazyImage src="/images/assets/more.svg" className='more' alt="more" />
           </TitleText>
         </HeaderElement>

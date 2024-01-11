@@ -173,12 +173,12 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
   return (
     <Tabs style={{ marginLeft: 45 }}>
       <StyledNavLink2 id={`airdrop-btn-click`} className={active === 'airdrop' ? 'airdrop' : ''}
-        onClick={() => handleTab('airdrop')}
+        onClick={() => handleTab('collect')}
       >
         {t('Airdrop')}
       </StyledNavLink2>
       <StyledNavLink2 id={`tokens-btn-click`} className={active === 'tokens' ?  'airdrop' : ''}
-        onClick={() => handleTab('tokens')}
+        onClick={() => handleTab('rewards')}
       >
         {t('Tokens')}
       </StyledNavLink2>

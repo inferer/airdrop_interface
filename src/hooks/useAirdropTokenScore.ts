@@ -94,7 +94,14 @@ export function useAirdropTokenScore() {
 
   const handleClaim = useCallback(async (label: string, tokenAddress: string) => {
     if (account && airdropTokenScore) {
-      const proof = await getAccountProof(account, label.slice(4))
+      let _label = label.slice(4)
+      if (_label === 'Sports') {
+        _label = 'Sport'
+      }
+      if (_label === 'Commerce') {
+        _label = 'Shopping'
+      }
+      const proof = await getAccountProof(account, _label)
       if (proof.length > 0) {
         const tx = await airdropTokenScore.claimToken(tokenAddress, proof)
         const receipt = await tx.wait()

@@ -2,6 +2,7 @@ import { ChainId, JSBI, Percent, Token, WETH } from '@uniswap/sdk'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 
 import { fortmatic, injected, portis, walletconnect, walletlink } from '../connectors'
+import { ethers } from 'ethers'
 
 export const ROUTER_ADDRESS = '0x2B5d8D53b951A48D59C3723c60F81e5A976ACCCc'
 
@@ -191,4 +192,8 @@ export const TWITTER_UNIT: {[key: string]: string} = {
   like: '1',
   follow: '2',
   comment: '3'
+}
+export const AddressZero_ETH = {
+  [ChainId.MAINNET]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
+  [ChainId.SEPOLIA]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH')
 }

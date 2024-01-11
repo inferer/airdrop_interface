@@ -7,20 +7,24 @@ import { useActiveWeb3React } from "../../hooks";
 import { useCurrencyBalance } from "../../state/wallet/hooks";
 import { useIsRoleProjectMode } from "../../state/user/hooks";
 import { useAccountLabelScore, useAirdropTokenScore } from "../../hooks/useAirdropTokenScore";
-import { useAlgAirdrop, useProjectLabelLocked } from "../../state/airdrop/hooks";
+import { useAlgAirdrop, useProjectLabelLocked, useProjectUSDTLocked, useUserAlgTokenLocked } from "../../state/airdrop/hooks";
 import { useAirdropAssetTreasury } from "../../hooks/useAirdropAssetTreasury";
 
 const TokenItem = ({
   token,
-  isProjectMode
+  isProjectMode,
+  isRewards
 }: {
   token: Currency,
   isProjectMode?: boolean
+  isRewards?: boolean
 }) => {
   const { account } = useActiveWeb3React()
   const balance = useCurrencyBalance(account ?? undefined, token)
   // @ts-ignore
   const tokenLocked = useProjectLabelLocked(token.address)
+  // @ts-ignore
+  const usdtLocked = useProjectUSDTLocked(token.address)
   return (
     <div className=" rounded-[6px] border border-[rgba(107,190,225,0.2)] p-5 flex flex-col justify-between min-h-[130px]">
       <div className="flex items-center">
@@ -36,7 +40,7 @@ const TokenItem = ({
           isProjectMode && 
           <div className="flex justify-between items-center mt-2">
             <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Locked</div>
-            <div className="text-[16px] font-medium">{ tokenLocked.lockedAmount }</div>
+            <div className="text-[16px] font-medium">{ isRewards ? tokenLocked.lockedAmount : usdtLocked.lockedAmount }</div>
           </div>
         }
         
@@ -58,6 +62,9 @@ const AlgTokenItem = ({
   // @ts-ignore
   const algAirdrop = useAlgAirdrop(token.address)
   const accountScore = useAccountLabelScore(account || '', token?.symbol?.slice(4) || '' )
+  // @ts-ignore
+  const tokenLocked = useUserAlgTokenLocked(token.address)
+  // console.log(tokenLocked)
   return (
     <div className=" rounded-[6px] border border-[rgba(107,190,225,0.2)] p-5 flex flex-col justify-between min-h-[130px]">
       <div className="flex items-center">
@@ -71,7 +78,7 @@ const AlgTokenItem = ({
         </div>
         <div className="flex justify-between items-center mt-2">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Locked</div>
-          <div className="text-[16px] font-medium">2.5</div>
+          <div className="text-[16px] font-medium">{tokenLocked.lockedAmount}</div>
         </div>
         <div className="flex justify-between items-center mt-2">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Supply</div>
@@ -101,7 +108,7 @@ const TokenList = () => {
   const algLabelAllTokens = useAlgLabelAllTokens()
   const { handleGetAlgTokenList, handleClaim } = useAirdropTokenScore()
 
-  const { handleGetProjectLabelLocked } = useAirdropAssetTreasury()
+  const { handleGetProjectLabelLocked, handleGetProjectUSDTLocked, handleGetUserAlgTokenLocked } = useAirdropAssetTreasury()
 
   const algTokenList = useMemo(() => {
     return Object.values(algLabelAllTokens)
@@ -133,7 +140,13 @@ const TokenList = () => {
     if (account && isProjectMode && isRewards) {
       handleGetProjectLabelLocked(account)
     }
-  }, [account, isProjectMode, isRewards])
+    if (account && isProjectMode && !isRewards) {
+      handleGetProjectUSDTLocked(account)
+    }
+    if (account && !isProjectMode && !isRewards) {
+      handleGetUserAlgTokenLocked(account)
+    }
+  }, [account, isProjectMode, isRewards, handleGetProjectLabelLocked, handleGetProjectUSDTLocked, handleGetUserAlgTokenLocked])
   
   return (
     <div className=" mt-[55px]">
@@ -141,7 +154,7 @@ const TokenList = () => {
       <div className=" grid grid-cols-2 gap-x-[30px] gap-y-[20px]">
         {
           filterList.map(token => {
-            return (isRewards || isProjectMode) ? <TokenItem key={token.symbol} token={token} isProjectMode={isProjectMode} />
+            return (isRewards || isProjectMode) ? <TokenItem key={token.symbol} token={token} isProjectMode={isProjectMode} isRewards={isRewards} />
                                   : <AlgTokenItem key={token.symbol} token={token} isProjectMode={isProjectMode} claim={handleClaim} />
           })
         }

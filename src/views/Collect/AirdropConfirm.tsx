@@ -11,7 +11,7 @@ import { useAirdropReceiver } from "../../hooks/useAirdropReceiver";
 import { getTokenLogoURL2 } from "../../components/CurrencyLogo";
 import { ApprovalState } from "../../hooks/useApproveCallback";
 import { AutoRow } from "../../components/Row";
-import Loader from '../../components/Loader'
+import Loader, { Loading, LoadingX } from '../../components/Loader'
 import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
 import { useActiveWeb3React } from "../../hooks";
 
@@ -48,6 +48,12 @@ const AirdropConfirm: React.FC<{
       //   })
     }
   }, [account, airdrop])
+  const [approveLoading, setApproveLoading] = useState(true)
+  useEffect(() => {
+    if (approvalState !== ApprovalState.UNKNOWN) {
+      setApproveLoading(false)
+    }
+  }, [approvalState])
 
   return (
     <div className="p-5 pt-0">
@@ -146,21 +152,22 @@ const AirdropConfirm: React.FC<{
         <div className=" text-[rgba(123,120,255,0.80)] text-[16px] font-fsemibold ">Airdrop token would be issued from contract.</div>
         <div className=" text-[rgba(123,120,255,0.80)] text-[14px] font-normal mt-2 leading-[18px] ">Once you confirmed the airdrop, the alg-* token would be locked in protocol until the airdrop content gets done. And the alg-* token would be transformed into air-* token and transferred into your account for later trade in airdrop pools..</div>
       </div>
-      <div className=" flex justify-center mt-[50px]">
-        <div className='w-[260px] mr-[180px]'>
+      <div className=" flex justify-end mt-[50px]">
+        <div className='w-[260px] mr-[50px]'>
           <ButtonSwap
             bgColor="#FAFAFA"
             altDisabledStyle
             onClick={e => {
               e.stopPropagation()
+              router.push('/collect')
             }}
           >
             <div className="text-[rgba(0,0,0,0.60)] text-[20px] font-fsemibold">Cancel</div>
           </ButtonSwap>
         </div>
-        {
+        <div className='w-[260px]'>
+        {/* {
           algTokenCurrency &&
-          <div className='w-[260px]'>
             <ButtonSwap
               onClick={approve}
             >
@@ -177,9 +184,45 @@ const AirdropConfirm: React.FC<{
                 }
               </TYPE.textGrad1>
             </ButtonSwap>
-          </div>
+        } */}
+        {
+          approveLoading ? 
+          <ButtonSwap 
+            bgColor='rgba(123,120,255,0.1)'
+            onClick={e => {
+              e.stopPropagation()
+            }}
+          >
+            <Loading />
+            
+          </ButtonSwap> : 
+          approvalState === ApprovalState.NOT_APPROVED ?
+          <ButtonSwap 
+              bgColor='rgba(123,120,255,0.1)'
+              onClick={e => {
+                e.stopPropagation()
+                approve()
+              }}
+            >
+              <div className='text-[rgba(123,120,255,0.9)] font-fsemibold text-[20px]'>
+                Approve {algTokenCurrency?.symbol} 
+              </div>
+              
+            </ButtonSwap> : null
         }
-        <div className='w-[260px]'>
+        {
+            (approvalState === ApprovalState.PENDING) ?
+            <ButtonSwap 
+              bgColor='rgba(123,120,255,0.1)'
+              onClick={e => {
+                e.stopPropagation()
+              }}
+            >
+              <LoadingX />
+            </ButtonSwap> : null
+          }
+        {
+          !approveLoading && approvalState === ApprovalState.APPROVED && 
           <ButtonSwap 
             onClick={e => {
               e.stopPropagation()
@@ -193,10 +236,12 @@ const AirdropConfirm: React.FC<{
           >
             <TYPE.textGrad1 fontWeight={600} fontSize={20}>
               {
-                confirmStatus === 1 ? <Loader /> : 'Confirm'
+                confirmStatus === 1 ? <LoadingX /> : 'Confirm'
               }
             </TYPE.textGrad1>
           </ButtonSwap>
+        }
+          
         </div>
       </div>
     </div>

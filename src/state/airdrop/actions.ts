@@ -52,3 +52,5 @@ export const updateUserLabelScore = createAction<{ key: string, score: number }>
 export const updateMaxUnits = createAction<{ units: number }>('airdrop/updateMaxUnits')
 export const updateAirTokenPercent = createAction<{ percent: number }>('airdrop/updateAirTokenPercent')
 export const updateProjectLabelLocked = createAction<{ tokenLockedList: TokenLocked[] }>('airdrop/updateProjectLabelLocked')
+export const updateProjectUSDTLocked = createAction<{ tokenLockedList: TokenLocked[] }>('airdrop/updateProjectUSDTLocked')
+export const updateUserAlgTokenLocked = createAction<{ tokenLockedList: TokenLocked[] }>('airdrop/updateUserAlgTokenLocked')

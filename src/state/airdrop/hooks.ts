@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, AppState } from '../index'
 import { IAirdrop, IAlgAirdrop, TokenLocked, updateAirTokenPercent, updateMaxUnits } from './actions'
+import { ethers } from 'ethers'
 
 
 export function useAirdropList() {
@@ -99,4 +100,27 @@ export function useProjectLabelLocked(address: string) {
     if (!address) return ({} as TokenLocked)
     return projectTokenLockedList.find(token => token?.address?.toLowerCase() === address.toLowerCase()) || ({} as TokenLocked)
   }, [projectTokenLockedList, address])
+}
+
+export function useProjectUSDTLockedList() {
+  return useSelector<AppState, AppState['airdrop']['projectUSDTLockedList']>(state => state.airdrop.projectUSDTLockedList)
+}
+
+export function useProjectUSDTLocked(address: string = ethers.constants.AddressZero) {
+  const projectUSDTLockedList = useProjectUSDTLockedList()
+  return useMemo(() => {
+    if (!address) return ({} as TokenLocked)
+    return projectUSDTLockedList.find(token => token?.address?.toLowerCase() === address.toLowerCase()) || ({} as TokenLocked)
+  }, [projectUSDTLockedList, address])
+}
+export function useUserAlgTokenLockedList() {
+  return useSelector<AppState, AppState['airdrop']['userAlgTokenLocked']>(state => state.airdrop.userAlgTokenLocked)
+}
+
+export function useUserAlgTokenLocked(address: string = ethers.constants.AddressZero) {
+  const userAlgTokenLockedList = useUserAlgTokenLockedList()
+  return useMemo(() => {
+    if (!address) return ({} as TokenLocked)
+    return userAlgTokenLockedList.find(token => token?.address?.toLowerCase() === address.toLowerCase()) || ({} as TokenLocked)
+  }, [userAlgTokenLockedList, address])
 }

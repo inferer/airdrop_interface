@@ -314,7 +314,7 @@ export const ButtonSwap = styled.div<{
   background-repeat: no-repeat;
   background: ${({ bgColor }) => ( bgColor ? bgColor : 'linear-gradient(108deg, rgba(63, 60, 255, 0.06) 24.12%, rgba(107, 190, 225, 0.06) 51.08%, rgba(138, 232, 153, 0.06) 75.88%)')} ;
   width: ${({ width }) => (width ? width : '100%')};
-  height: ${({ height }) => ( height ? height: '64px')};
+  height: ${({ height }) => ( height ? height: '60px')};
   border-radius: ${({ borderRadius }) => borderRadius ? borderRadius : '12px'};
   outline: none;
   border: 1px solid transparent;
@@ -325,6 +325,8 @@ export const ButtonSwap = styled.div<{
   cursor: pointer;
   position: relative;
   z-index: 1;
+  padding-left: 15px;
+  padding-right: 15px;
   &:disabled {
     cursor: auto;
   }

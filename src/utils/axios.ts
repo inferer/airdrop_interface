@@ -4,7 +4,7 @@ import { API_ROOT } from '../constants'
 
 const instance = axios.create({
   baseURL: API_ROOT,
-  timeout: 60000,
+  timeout: 600000,
 });
 
 const getHeaders = () => {

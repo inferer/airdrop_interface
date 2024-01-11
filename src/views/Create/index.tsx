@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { ThemeContext } from 'styled-components'
 
 import {  TYPE } from '../../theme'
@@ -15,13 +15,15 @@ import { Link } from '../../components/AppRouter'
 import { useCreateAirdrop, useCreateCallback } from '../../hooks/useAirdropSender'
 import { ApprovalState } from '../../hooks/useApproveCallback'
 import { AutoRow } from '../../components/Row'
-import Loader from '../../components/Loader'
+import Loader, { Loading, LoadingX } from '../../components/Loader'
 import { ETHER, Token } from '@uniswap/sdk'
 import { TWITTER_UNIT } from '../../constants'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { useRouter } from 'next/router'
 
+let globalApproveCount = 0
 
+let globalApproveList: string[] = ['usdt', 'label']
 
 export default function Create() {
   const router = useRouter()
@@ -57,6 +59,40 @@ export default function Create() {
     console.log(data)
     setAction(data.value)
   }
+
+  const [approveLoading, setApproveLoading] = useState(true)
+  const [unApproveList, setUnApproveList] = useState<string[]>(globalApproveList)
+
+  useEffect(() => {
+    if (approvalState !== ApprovalState.UNKNOWN && approvalStateLabel !== ApprovalState.UNKNOWN) {
+      setApproveLoading(false)
+    }
+    if (approvalState === ApprovalState.APPROVED) {
+      const _index = unApproveList.findIndex(label => label === 'usdt')
+      if (_index > -1) {
+        const newList = [...unApproveList]
+        newList.splice(_index, 1)
+        setUnApproveList(newList)
+      }
+    }
+    if (approvalStateLabel === ApprovalState.APPROVED) {
+      const _index = unApproveList.findIndex(label => label === 'label')
+      if (_index > -1) {
+        const newList = [...unApproveList]
+        newList.splice(_index, 1)
+        setUnApproveList(newList)
+      }
+    }
+  }, [approvalState, approvalStateLabel, unApproveList])
+
+
+  const approveA = useMemo(() => {
+    return approvalState === ApprovalState.NOT_APPROVED && (lockedCurrency && lockedCurrency !== ETHER )
+  }, [lockedCurrency, approvalState])
+
+  const approveB = useMemo(() => {
+    return approvalStateLabel === ApprovalState.NOT_APPROVED && !!outputAmount
+  }, [outputAmount, approvalStateLabel])
 
   return (
     <CreateBody>
@@ -188,49 +224,6 @@ export default function Create() {
         </div>
       </ItemWrap>
       <div className='flex justify-end mt-5'>
-        
-          {/* {
-            lockedCurrency && lockedCurrency !== ETHER &&
-            <div className='w-[260px]'>
-              <ButtonSwap
-                onClick={approve}
-              >
-                <TYPE.textGrad1 fontWeight={600} fontSize={20}>
-                  { approvalState === ApprovalState.PENDING ? (
-                      <AutoRow gap="6px" justify="center">
-                        Approving <Loader />
-                      </AutoRow>
-                    ) : approvalState === ApprovalState.APPROVED ? (
-                      'Approved ' + lockedCurrency?.symbol
-                    ) : (
-                      `Approve ${lockedCurrency?.symbol}`
-                    )
-                  }
-                </TYPE.textGrad1>
-              </ButtonSwap>
-            </div>
-          } */}
-          {/* {
-            outputAmount &&
-            <div className='w-[260px]'>
-              <ButtonSwap
-                onClick={approveLabel}
-              >
-                <TYPE.textGrad1 fontWeight={600} fontSize={20}>
-                  { approvalStateLabel === ApprovalState.PENDING ? (
-                      <AutoRow gap="6px" justify="center">
-                        Approving <Loader />
-                      </AutoRow>
-                    ) : approvalStateLabel === ApprovalState.APPROVED ? (
-                      'Approved ' + outputAmount?.currency?.symbol
-                    ) : (
-                      `Approve ${outputAmount?.currency?.symbol}`
-                    )
-                  }
-                </TYPE.textGrad1>
-              </ButtonSwap>
-            </div>
-          } */}
         <div className='w-[260px]'>
           <ButtonSwap 
             bgColor='#FAFAFA'
@@ -242,29 +235,88 @@ export default function Create() {
             <span className='text-[rgba(0,0,0,0.6)] font-fsemibold text-[20px]'>Cancel</span>
           </ButtonSwap>
         </div>
-        <div className='w-[260px]'>
+        <div className='min-w-[260px] ml-[50px]'>
+        {
+          approveLoading ? 
           <ButtonSwap 
+            bgColor='rgba(123,120,255,0.1)'
             onClick={e => {
               e.stopPropagation()
-              if (!name) {
-                alert('Airdrop name is empty!')
-                return
-              }
-              if (approvalState !== ApprovalState.APPROVED || approvalStateLabel !== ApprovalState.APPROVED) {
-                alert('Please approve token!')
-                return
-              }
-              handleCreateAirdrop(name, label, 'Twitter', action, TWITTER_UNIT[action], content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)
             }}
           >
-            <TYPE.textGrad1 fontWeight={600} fontSize={20}>
-              {
-                createStatus === 1 ? <Loader /> : 'Confirm'
-              }
-            </TYPE.textGrad1>
-          </ButtonSwap>
+            <Loading />
+            
+          </ButtonSwap> : 
+          <>
+          {
+            approveA ? 
+            <ButtonSwap 
+              bgColor='rgba(123,120,255,0.1)'
+              onClick={e => {
+                e.stopPropagation()
+                approve()
+              }}
+            >
+              <div className='text-[rgba(123,120,255,0.9)] font-fsemibold text-[20px]'>
+                Approve {lockedCurrency?.symbol} (1/{approveB ? 2 : 1})
+              </div>
+              
+            </ButtonSwap> : null
+            
+          }
+          {
+            approveB && unApproveList.length === 1 ? 
+            <ButtonSwap 
+              bgColor='rgba(123,120,255,0.1)'
+              onClick={e => {
+                e.stopPropagation()
+                approveLabel()
+              }}
+            >
+              <div className='text-[rgba(123,120,255,0.9)] font-fsemibold text-[20px]'>
+                Approve {outputAmount?.currency?.symbol} ({approveA ? 2 : 1}/{approveA ? 2 : 1})
+              </div>
+              
+            </ButtonSwap> : null
+          }
+          {
+            (approvalState === ApprovalState.PENDING || approvalStateLabel === ApprovalState.PENDING ) ?
+            <ButtonSwap 
+              bgColor='rgba(123,120,255,0.1)'
+              onClick={e => {
+                e.stopPropagation()
+              }}
+            >
+              <LoadingX />
+            </ButtonSwap> : null
+          }
+          </>
+        }
+        {
+          !approveLoading && approvalState === ApprovalState.APPROVED && approvalStateLabel === ApprovalState.APPROVED &&
+            <ButtonSwap 
+              onClick={e => {
+                e.stopPropagation()
+                if (createStatus === 1) return
+                if (!name) {
+                  alert('Airdrop name is empty!')
+                  return
+                }
+                if (approvalState !== ApprovalState.APPROVED || approvalStateLabel !== ApprovalState.APPROVED) {
+                  alert('Please approve token!')
+                  return
+                }
+                handleCreateAirdrop(name, label, 'Twitter', action, TWITTER_UNIT[action], content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)
+              }}
+            >
+              <TYPE.textGrad1 fontWeight={600} fontSize={20}>
+                {
+                  createStatus === 1 ? <LoadingX /> : 'Confirm'
+                }
+              </TYPE.textGrad1>
+            </ButtonSwap>
+        }
         </div>
-        
       </div>
       
     </CreateBody>
