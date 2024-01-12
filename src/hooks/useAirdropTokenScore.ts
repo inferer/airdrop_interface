@@ -92,6 +92,7 @@ export function useAirdropTokenScore() {
     allAlgToken
   ])
 
+  const [claimStatus, setClaimStatus] = useState(0)
   const handleClaim = useCallback(async (label: string, tokenAddress: string) => {
     if (account && airdropTokenScore) {
       let _label = label.slice(4)
@@ -101,26 +102,36 @@ export function useAirdropTokenScore() {
       if (_label === 'Commerce') {
         _label = 'Shopping'
       }
-      const proof = await getAccountProof(account, _label)
-      if (proof.length > 0) {
-        const tx = await airdropTokenScore.claimToken(tokenAddress, proof)
-        const receipt = await tx.wait()
-        if (receipt.status) {
-          handleGetAlgTokenList()
-          alert('Success')
+      setClaimStatus(1)
+      try {
+        const proof = await getAccountProof(account, _label)
+        if (proof.length > 0) {
+          const tx = await airdropTokenScore.claimToken(tokenAddress, proof)
+          const receipt = await tx.wait()
+          if (receipt.status) {
+            handleGetAlgTokenList()
+            alert('Success')
+          } else {
+            alert('Error')
+          }
         } else {
           alert('Error')
         }
-      } else {
-        alert('Error')
+        setClaimStatus(0)
+
+      } catch (err) {
+        console.log(err)
+        setClaimStatus(0)
       }
+      
     }
     
   }, [account, airdropTokenScore, handleGetAlgTokenList])
 
   return {
     handleGetAlgTokenList,
-    handleClaim
+    handleClaim,
+    claimStatus
   }
 
 }

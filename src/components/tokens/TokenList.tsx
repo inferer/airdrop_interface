@@ -1,7 +1,7 @@
 import { Currency, ETHER, Token } from "@uniswap/sdk";
 import { useAirLabelAllTokens, useAlgLabelAllTokens, useAllTokens, useCurrency, useUSDTAllTokens } from "../../hooks/Tokens";
 import { useRouter } from "next/router";
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import CurrencyLogo from "../CurrencyLogo";
 import { useActiveWeb3React } from "../../hooks";
 import { useCurrencyBalance } from "../../state/wallet/hooks";
@@ -9,6 +9,7 @@ import { useIsRoleProjectMode } from "../../state/user/hooks";
 import { useAccountLabelScore, useAirdropTokenScore } from "../../hooks/useAirdropTokenScore";
 import { useAlgAirdrop, useProjectLabelLocked, useProjectUSDTLocked, useUserAlgTokenLocked } from "../../state/airdrop/hooks";
 import { useAirdropAssetTreasury } from "../../hooks/useAirdropAssetTreasury";
+import { Loading } from "../Loader";
 
 const TokenItem = ({
   token,
@@ -50,11 +51,12 @@ const TokenItem = ({
 }
 const AlgTokenItem = ({
   token,
-  isProjectMode,
+  currentTokenAddress,
   claim
 }: {
   token: Currency,
   isProjectMode?: boolean
+  currentTokenAddress?: string
   claim?: (label: string, tokenAddress: string) => void
 }) => {
   const { account } = useActiveWeb3React()
@@ -86,12 +88,17 @@ const AlgTokenItem = ({
         </div>
         <div className="flex justify-between items-center mt-2">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Supply in plan</div>
-          <div className="text-[16px] font-medium bg-[rgba(161,206,168,0.06)] rounded px-[6px] text-[#A1CEA8] cursor-pointer"
+          <div className="text-[16px] w-[40px] h-[24px] flex items-center justify-center font-medium bg-[rgba(161,206,168,0.06)] rounded px-[6px] text-[#A1CEA8] cursor-pointer"
             onClick={e => {
               e.stopPropagation()
+              if (currentTokenAddress) return
               claim && claim(algAirdrop.token.symbol || '', algAirdrop.token.address)
             }}
-          >Get</div>
+          > 
+            {
+              currentTokenAddress === algAirdrop?.token?.address ? <Loading size="16px" stroke="#A1CEA8" /> : 'Get'
+            }
+          </div>
         </div>
       </div>
     </div>
@@ -106,7 +113,7 @@ const TokenList = () => {
   const usdtAllTokens = useUSDTAllTokens()
   const { account } = useActiveWeb3React()
   const algLabelAllTokens = useAlgLabelAllTokens()
-  const { handleGetAlgTokenList, handleClaim } = useAirdropTokenScore()
+  const { handleGetAlgTokenList, handleClaim, claimStatus } = useAirdropTokenScore()
 
   const { handleGetProjectLabelLocked, handleGetProjectUSDTLocked, handleGetUserAlgTokenLocked } = useAirdropAssetTreasury()
 
@@ -147,6 +154,17 @@ const TokenList = () => {
       handleGetUserAlgTokenLocked(account)
     }
   }, [account, isProjectMode, isRewards, handleGetProjectLabelLocked, handleGetProjectUSDTLocked, handleGetUserAlgTokenLocked])
+  const [currentTokenAddress, setCurrentTokenAddress] = useState('')
+  const _handleClaim = useCallback(async (label: string, tokenAddress: string) => {
+    setCurrentTokenAddress(tokenAddress)
+    handleClaim(label, tokenAddress)
+  }, [])
+
+  useEffect(() => {
+    if (claimStatus !== 1) {
+      setCurrentTokenAddress('')
+    }
+  }, [claimStatus])
   
   return (
     <div className=" mt-[55px]">
@@ -155,7 +173,7 @@ const TokenList = () => {
         {
           filterList.map(token => {
             return (isRewards || isProjectMode) ? <TokenItem key={token.symbol} token={token} isProjectMode={isProjectMode} isRewards={isRewards} />
-                                  : <AlgTokenItem key={token.symbol} token={token} isProjectMode={isProjectMode} claim={handleClaim} />
+                                  : <AlgTokenItem key={token.symbol} token={token} isProjectMode={isProjectMode} claim={_handleClaim} currentTokenAddress={currentTokenAddress} />
           })
         }
         {/* <TokenItem />

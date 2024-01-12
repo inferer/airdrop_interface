@@ -56,10 +56,10 @@ export default function Loader({ size = '16px', stroke, ...rest }: { size?: stri
   )
 }
 
-export function Loading({ size = '30px', stroke, ...rest }: { size?: string; stroke?: string }) {
+export function Loading({ size = '30px', stroke = '#6BBEE1', ...rest }: { size?: string; stroke?: string }) {
   return (
     <StyledSVG2 viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" size={size}>
-      <path d="M3.02299 18.3752C2.2624 15.7227 2.40087 12.8931 3.41679 10.3275C4.43271 7.762 6.26899 5.60472 8.63932 4.19205C11.0096 2.77937 13.7808 2.19071 16.5207 2.51785C19.2606 2.84499 21.8153 4.06954 23.7864 6.00056C25.7575 7.93159 27.0342 10.4606 27.4176 13.1932C27.8009 15.9258 27.2693 18.7084 25.9056 21.1073C24.5419 23.5061 22.4227 25.3863 19.8786 26.4547C18.6063 26.989 17.2636 27.3052 15.9053 27.3996" stroke="#6BBEE1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M3.02299 18.3752C2.2624 15.7227 2.40087 12.8931 3.41679 10.3275C4.43271 7.762 6.26899 5.60472 8.63932 4.19205C11.0096 2.77937 13.7808 2.19071 16.5207 2.51785C19.2606 2.84499 21.8153 4.06954 23.7864 6.00056C25.7575 7.93159 27.0342 10.4606 27.4176 13.1932C27.8009 15.9258 27.2693 18.7084 25.9056 21.1073C24.5419 23.5061 22.4227 25.3863 19.8786 26.4547C18.6063 26.989 17.2636 27.3052 15.9053 27.3996" stroke={stroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
 
     </StyledSVG2>
   )

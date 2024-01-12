@@ -47,7 +47,6 @@ export default function AddLiquidity() {
   // const currencyIdA = '0x300f6B06211F490c2A5Fb5c7f634A3f6D636E355'
   // const currencyIdB = AIRLABEL_TOKEN_LIST[0].address
   
-  console.log(router.query)
   const currencyIdA = router.query.address && router.query.address[0]
   const currencyIdB = router.query.address && router.query.address[1]
   const currencyA = useCurrency(currencyIdA)

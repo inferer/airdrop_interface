@@ -27,10 +27,14 @@ function Collect() {
   const [airdropId, setAirdropId] = useState('')
 
   useEffect(() => {
+    let timer: any = null
     if (completeStatus === 2) {
-      setTimeout(() => {
+      timer = setTimeout(() => {
         setIds([])
       }, 1500)
+    }
+    return () => {
+      timer && clearTimeout(timer)
     }
   }, [completeStatus])
 
