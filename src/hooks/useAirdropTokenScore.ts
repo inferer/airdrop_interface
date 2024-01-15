@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../state";
 import { updateUserAlgAirdropList, updateUserLabelScore } from "../state/airdrop/actions";
 import { getAlgLabelTokenByAddress, getAlgTokenByLabel } from "../utils/getTokenList";
-import { fetcher } from "../utils/axios";
+import { fetcher,userPoolSrvcFetcher } from "../utils/axios";
 import { useUserLabelScore } from "../state/airdrop/hooks";
 
 export const getAirdropTokenScoreAddress = () => {
@@ -21,7 +21,8 @@ export const getAirdropTokenScoreAddress = () => {
 }
 
 export const getAccountProof = async (account: string, label: string) => {
-  const res = await fetcher(`/api/airdrop/getTokenProof`, { account, label })
+
+  const res = await userPoolSrvcFetcher(`/api/admerkle/getTokenProof`, { account, label })
   if (res.code === 0 && res.data) {
     return res.data.hexProof || []
   }

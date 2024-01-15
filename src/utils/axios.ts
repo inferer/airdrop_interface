@@ -1,11 +1,16 @@
 // @ts-ignore
 import axios from 'axios'
-import { API_ROOT } from '../constants'
+import { API_ROOT,USER_POOL_SERVICE_ROOT } from '../constants'
 
 const instance = axios.create({
   baseURL: API_ROOT,
   timeout: 600000,
 });
+
+const userPoolService = axios.create({
+  baseURL: USER_POOL_SERVICE_ROOT,
+  timeout: 60000
+})
 
 const getHeaders = () => {
   
@@ -27,6 +32,13 @@ export function fetcher(url: string, data: any = {}) {
   let formatData = { ...data }
   getHeaders()
   return instance.get(url, { params: formatData }).then((res: { data: any; }) => processResult(res.data, url))
+}
+
+export function userPoolSrvcFetcher(url: string, data: any = {})
+{
+  let formatData = { ...data }
+  getHeaders()
+  return userPoolService.get(url, { params: formatData }).then((res: { data: any; }) => processResult(res.data, url))
 }
 
 export function fetcherServerSide(url: string, data: any) {
