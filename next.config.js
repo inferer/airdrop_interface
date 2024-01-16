@@ -28,6 +28,11 @@ const nextConfig = {
         source: '/plugin/:path*',
         destination: isDev ? `http://49.234.51.249:8792/plugin/:path*` : `https://api7.inferer.xyz/plugin/:path*`
       },
+      {
+        source: '/api/admerkle/:path*',
+        // destination: `https://api8.inferer.xyz/api/identity/:path*`
+        destination: isDev ? `http://125.88.184.105:8123/api/admerkle/:path*` : `http://125.88.184.105:8123/api/admerkle/:path*`
+      },
     ]
   },
 }
