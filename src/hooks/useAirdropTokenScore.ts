@@ -22,7 +22,7 @@ export const getAirdropTokenScoreAddress = () => {
 
 export const getAccountProof = async (account: string, label: string) => {
 
-  const res = await userPoolSrvcFetcher(`/api/admerkle/getTokenProof`, { account, label })
+  const res = await fetcher(`/api/airdrop/getTokenProof`, { account, label })
   if (res.code === 0 && res.data) {
     return res.data.hexProof || []
   }
