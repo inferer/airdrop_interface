@@ -3,8 +3,10 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 
 import { fortmatic, injected, portis, walletconnect, walletlink } from '../connectors'
 import { ethers } from 'ethers'
+import contractList from './contractsLocal'
 
-export const ROUTER_ADDRESS = '0x2B5d8D53b951A48D59C3723c60F81e5A976ACCCc'
+// export const ROUTER_ADDRESS = '0x2B5d8D53b951A48D59C3723c60F81e5A976ACCCc'
+export const ROUTER_ADDRESS = contractList.router02
 
 // a list of tokens by chain
 type ChainTokenList = {
@@ -25,6 +27,7 @@ export const USDT_SEPOLIA = new Token(ChainId.SEPOLIA, '0x521957098aC7a7AC7eAa36
 const WETH_ONLY: ChainTokenList = {
   [ChainId.MAINNET]: [WETH[ChainId.MAINNET]],
   [ChainId.SEPOLIA]: [WETH[ChainId.SEPOLIA]],
+  [ChainId.LOCAL]: [WETH[ChainId.LOCAL]],
 }
 
 // used to construct intermediary pairs for trading
@@ -195,5 +198,6 @@ export const TWITTER_UNIT: {[key: string]: string} = {
 }
 export const AddressZero_ETH = {
   [ChainId.MAINNET]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
-  [ChainId.SEPOLIA]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH')
+  [ChainId.SEPOLIA]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
+  [ChainId.LOCAL]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH')
 }

@@ -79,21 +79,21 @@ export function getALgTokenFromAirToken(address?: string) {
 }
 
 export function getUSDTTokenByAddress(address: string) {
-  return ST_TOKEN_LIST.find(token => token.address.toLowerCase() === address.toLowerCase())
+  return filterTokenByChainId(ST_TOKEN_LIST).find(token => token.address.toLowerCase() === address.toLowerCase())
 }
 
 export function getLabelTokenByAddress(address: string) {
-  return AIRLABEL_TOKEN_LIST.find(token => token.address.toLowerCase() === address.toLowerCase())
+  return filterTokenByChainId(AIRLABEL_TOKEN_LIST).find(token => token.address.toLowerCase() === address.toLowerCase())
 }
 
 export function getAlgLabelTokenByAddress(address: string) {
-  return ALGLABEL_TOKEN_LIST.find(token => token.address.toLowerCase() === address.toLowerCase())
+  return filterTokenByChainId(ALGLABEL_TOKEN_LIST).find(token => token.address.toLowerCase() === address.toLowerCase())
 }
 
 export function getAlgTokenByLabel(label: string) {
-  return ALGLABEL_TOKEN_LIST.find(token => token.symbol.slice(4) === label)
+  return filterTokenByChainId(ALGLABEL_TOKEN_LIST).find(token => token.symbol.slice(4) === label)
 }
 
 export function getAirTokenBySymbol(symbol: string) {
-  return AIRLABEL_TOKEN_LIST.find(token => token.symbol === symbol)
+  return filterTokenByChainId(AIRLABEL_TOKEN_LIST).find(token => token.symbol === symbol)
 }

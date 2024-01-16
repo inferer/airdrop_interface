@@ -1,4 +1,7 @@
+import { ChainId } from '@uniswap/sdk'
+import { NETWORK_CHAIN_ID } from '../../connectors'
 import { TokenInfo } from '@uniswap/token-lists'
+import contractList from '../contractsLocal'
 
 export const ST_TOKEN_LIST: TokenInfo[] = [
   {
@@ -23,6 +26,30 @@ export const ST_TOKEN_LIST: TokenInfo[] = [
     "symbol": "USDT",
     "decimals": 6,
     "chainId": 11155111,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "Dai Stablecoin",
+    "address": contractList.Daitoken,
+    "symbol": "DAI",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/dai.png"
+  },
+  {
+    "name": "USD//C",
+    "address": contractList.USDCtoken,
+    "symbol": "USDC",
+    "decimals": 6,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdc.png"
+  },
+  {
+    "name": "Tether USD",
+    "address": contractList.USDTtoken,
+    "symbol": "USDT",
+    "decimals": 6,
+    "chainId": ChainId.LOCAL,
     "logoURI": "/images/tokens/usdt.png"
   }
 ]
@@ -59,6 +86,38 @@ export const AIR_TOKEN_LIST: TokenInfo[] = [
     "symbol": "air-ETH",
     "decimals": 18,
     "chainId": 11155111,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "Dai Stablecoin",
+    "address": contractList.AirDaitoken,
+    "symbol": "air-DAI",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/dai.png"
+  },
+  {
+    "name": "USD//C",
+    "address": contractList.AirUSDCtoken,
+    "symbol": "air-USDC",
+    "decimals": 6,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdc.png"
+  },
+  {
+    "name": "Tether USD",
+    "address": contractList.AirUSDTtoken,
+    "symbol": "air-USDT",
+    "decimals": 6,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "ETH",
+    "address": contractList.AirETHtoken,
+    "symbol": "air-ETH",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
     "logoURI": "/images/tokens/usdt.png"
   }
 ]
@@ -113,6 +172,54 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
     "decimals": 18,
     "chainId": 11155111,
     "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "air-Social",
+    "address": contractList['air-Social'],
+    "symbol": "air-Social",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "air-Sports",
+    "address": contractList['air-Sports'],
+    "symbol": "air-Sports",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "air-Game",
+    "address": contractList['air-Game'],
+    "symbol": "air-Game",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "air-Art",
+    "address": contractList['air-Art'],
+    "symbol": "air-Art",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "air-Finance",
+    "address": contractList['air-Finance'],
+    "symbol": "air-Finance",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "air-Commerce",
+    "address": contractList['air-Commerce'],
+    "symbol": "air-Commerce",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
   }
 ]
 
@@ -164,19 +271,67 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
     "decimals": 18,
     "chainId": 11155111,
     "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "alg-Social",
+    "address": contractList['alg-Social'],
+    "symbol": "alg-Social",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "alg-Sports",
+    "address": contractList['alg-Sports'],
+    "symbol": "alg-Sports",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "alg-Game",
+    "address": contractList['alg-Game'],
+    "symbol": "alg-Game",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "alg-Art",
+    "address": contractList['alg-Art'],
+    "symbol": "alg-Art",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "alg-Finance",
+    "address": contractList['alg-Finance'],
+    "symbol": "alg-Finance",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "alg-Commerce",
+    "address": contractList['alg-Commerce'],
+    "symbol": "alg-Commerce",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
   }
 ]
 
 export const GET_AIRUSDT_2_USDT = () => {
   let pair: {[key: string]: string} = {}
-  AIR_TOKEN_LIST.map(token1 => {
+  AIR_TOKEN_LIST.filter(token => token.chainId === NETWORK_CHAIN_ID).map(token1 => {
     const symbol = token1.symbol.slice(4)
     if (symbol === 'ETH') {
       const key = (token1?.address || '') as string
       // @ts-ignore
       pair[key] = 'ETH'
     }
-    const toUSDT = ST_TOKEN_LIST.find(token2 => token2.symbol === symbol)
+    const toUSDT = ST_TOKEN_LIST.filter(token => token.chainId === NETWORK_CHAIN_ID).find(token2 => token2.symbol === symbol)
     if (token1.address && toUSDT) {
       const key = (token1?.address || '') as string
       // @ts-ignore
@@ -190,7 +345,7 @@ export const GET_AIRUSDT_2_USDT = () => {
 
 export const GET_ALGTOKEN_2_AIRTOKEN = () => {
   let pair: {[key: string]: string} = {}
-  ALGLABEL_TOKEN_LIST.map(token1 => {
+  ALGLABEL_TOKEN_LIST.filter(token => token.chainId === NETWORK_CHAIN_ID).map(token1 => {
     const symbol = token1.symbol.slice(4)
     const toUSDT = AIRLABEL_TOKEN_LIST.find(token2 => token2.symbol.slice(4) === symbol)
     if (token1.address) {
@@ -206,9 +361,9 @@ export const GET_ALGTOKEN_2_AIRTOKEN = () => {
 
 export const GET_AIRTOKEN_2_ALGTOKEN = () => {
   let pair: {[key: string]: string} = {}
-  AIRLABEL_TOKEN_LIST.map(token1 => {
+  AIRLABEL_TOKEN_LIST.filter(token => token.chainId === NETWORK_CHAIN_ID).map(token1 => {
     const symbol = token1.symbol.slice(4)
-    const toUSDT = ALGLABEL_TOKEN_LIST.find(token2 => token2.symbol.slice(4) === symbol)
+    const toUSDT = ALGLABEL_TOKEN_LIST.filter(token => token.chainId === NETWORK_CHAIN_ID).find(token2 => token2.symbol.slice(4) === symbol)
     if (token1.address) {
       const key = (token1?.address || '') as string
       // @ts-ignore

@@ -1,5 +1,6 @@
 import { ChainId } from '@uniswap/sdk'
 import AirdropManager_ABI from './abi.json'
+import contractList from '../contractsLocal'
 
 const AirdropManager_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '',
@@ -13,6 +14,7 @@ const AirdropManager_NETWORKS: { [chainId in ChainId]: string } = {
   // [ChainId.SEPOLIA]: '0x3E5f7f1cEBCF37a3CB391D6fd1a95Ab204d15145',
   // [ChainId.SEPOLIA]: '0x14584accAD478023fa4c47992c1914e1Fb335445',
   [ChainId.SEPOLIA]: '0xDeE1C5a0f971E3b10e896793Ff27251434c5062C',
+  [ChainId.LOCAL]: contractList.airdropManager,
 }
 
 export { AirdropManager_ABI, AirdropManager_NETWORKS }

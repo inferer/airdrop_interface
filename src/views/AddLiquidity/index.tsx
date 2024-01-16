@@ -172,13 +172,13 @@ export default function AddLiquidity() {
       ]
       value = null
     }
-    if (NETWORK_CHAIN_ID !== 1) {
-      estimate = () => {
-        return new Promise(resolve => {
-          resolve(3000000)
-        })
-      }
-    }
+    // if (NETWORK_CHAIN_ID !== 1) {
+    //   estimate = () => {
+    //     return new Promise(resolve => {
+    //       resolve(3000000)
+    //     })
+    //   }
+    // }
     console.log(args)
     setAttemptingTxn(true)
     await estimate(...args, value ? { value } : {})
