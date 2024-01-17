@@ -68,8 +68,8 @@ export default function ListUpdatePopup({
                 {tokensAdded.length > 0 ? (
                   <li>
                     {tokensAdded.map((token, i) => (
-                      <React.Fragment key={`${token.chainId}-${token.address}`}>
-                        <strong title={token.address}>{token.symbol}</strong>
+                      <React.Fragment key={`${token.chainId}-${token?.address}`}>
+                        <strong title={token?.address}>{token.symbol}</strong>
                         {i === tokensAdded.length - 1 ? null : ', '}
                       </React.Fragment>
                     ))}{' '}
@@ -79,8 +79,8 @@ export default function ListUpdatePopup({
                 {tokensRemoved.length > 0 ? (
                   <li>
                     {tokensRemoved.map((token, i) => (
-                      <React.Fragment key={`${token.chainId}-${token.address}`}>
-                        <strong title={token.address}>{token.symbol}</strong>
+                      <React.Fragment key={`${token.chainId}-${token?.address}`}>
+                        <strong title={token?.address}>{token.symbol}</strong>
                         {i === tokensRemoved.length - 1 ? null : ', '}
                       </React.Fragment>
                     ))}{' '}

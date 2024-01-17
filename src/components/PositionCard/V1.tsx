@@ -47,12 +47,12 @@ function V1PositionCard({ token, V1LiquidityBalance }: PositionCardProps) {
 
         <AutoColumn gap="8px">
           <RowBetween marginTop="10px">
-            <Link href={`/migrate/v1/${V1LiquidityBalance.token.address}`}>
+            <Link href={`/migrate/v1/${V1LiquidityBalance.token?.address}`}>
               <ButtonSecondary width="68%">
                 Migrate
               </ButtonSecondary>
             </Link>
-            <Link href={`/remove/v1/${V1LiquidityBalance.token.address}`}>
+            <Link href={`/remove/v1/${V1LiquidityBalance.token?.address}`}>
               <ButtonSecondary
                 style={{ backgroundColor: 'transparent' }}
                 width="28%"

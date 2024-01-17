@@ -117,7 +117,7 @@ export default function RemoveLiquidity({
       name: 'Inferer LP',
       version: '1',
       chainId: chainId,
-      verifyingContract: pair.liquidityToken.address
+      verifyingContract: pair.liquidityToken?.address
     }
     const Permit = [
       { name: 'owner', type: 'address' },
@@ -213,7 +213,7 @@ export default function RemoveLiquidity({
       if (oneCurrencyIsETH) {
         methodNames = ['removeLiquidityETH', 'removeLiquidityETHSupportingFeeOnTransferTokens']
         args = [
-          currencyBIsETH ? tokenA.address : tokenB.address,
+          currencyBIsETH ? tokenA?.address : tokenB?.address,
           liquidityAmount.raw.toString(),
           amountsMin[currencyBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(),
           amountsMin[currencyBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(),
@@ -225,8 +225,8 @@ export default function RemoveLiquidity({
       else {
         methodNames = ['removeLiquidity']
         args = [
-          tokenA.address,
-          tokenB.address,
+          tokenA?.address,
+          tokenB?.address,
           liquidityAmount.raw.toString(),
           amountsMin[Field.CURRENCY_A].toString(),
           amountsMin[Field.CURRENCY_B].toString(),
@@ -241,7 +241,7 @@ export default function RemoveLiquidity({
       if (oneCurrencyIsETH) {
         methodNames = ['removeLiquidityETHWithPermit', 'removeLiquidityETHWithPermitSupportingFeeOnTransferTokens']
         args = [
-          currencyBIsETH ? tokenA.address : tokenB.address,
+          currencyBIsETH ? tokenA?.address : tokenB?.address,
           liquidityAmount.raw.toString(),
           amountsMin[currencyBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(),
           amountsMin[currencyBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(),
@@ -257,8 +257,8 @@ export default function RemoveLiquidity({
       else {
         methodNames = ['removeLiquidityWithPermit']
         args = [
-          tokenA.address,
-          tokenB.address,
+          tokenA?.address,
+          tokenB?.address,
           liquidityAmount.raw.toString(),
           amountsMin[Field.CURRENCY_A].toString(),
           amountsMin[Field.CURRENCY_B].toString(),
@@ -556,8 +556,8 @@ export default function RemoveLiquidity({
                       <RowBetween style={{ justifyContent: 'flex-end' }}>
                         {oneCurrencyIsETH ? (
                           <StyledInternalLink
-                            href={`/remove/${currencyA === ETHER ? WETH[chainId].address : currencyIdA}/${
-                              currencyB === ETHER ? WETH[chainId].address : currencyIdB
+                            href={`/remove/${currencyA === ETHER ? WETH[chainId]?.address : currencyIdA}/${
+                              currencyB === ETHER ? WETH[chainId]?.address : currencyIdB
                             }`}
                           >
                             Receive WETH

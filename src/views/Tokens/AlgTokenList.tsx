@@ -20,11 +20,11 @@ const AlgTokenListItem: React.FC<{
   claim
 }) => {
   const { account } = useActiveWeb3React()
-  const algTokenCurrency = useCurrency(algAirdrop.token.address)
+  const algTokenCurrency = useCurrency(algAirdrop?.token?.address)
   const algTokenCurrencyAmount = useCurrencyBalance(account ?? undefined, algTokenCurrency ?? undefined)
 
   return (
-    <TableRow key={algAirdrop.token?.address} 
+    <TableRow key={algAirdrop?.token?.address} 
       onClick={() => {
         
       }}
@@ -50,7 +50,7 @@ const AlgTokenListItem: React.FC<{
               <button className=" border border-gray-300 p-1 rounded ml-2"
                 onClick={e => {
                   e.stopPropagation()
-                  claim && claim(algAirdrop.token.symbol || '', algAirdrop.token.address)
+                  claim && claim(algAirdrop.token?.symbol || '', algAirdrop?.token?.address)
                 }}
               >Claim</button>
             }

@@ -109,7 +109,7 @@ export default function Search() {
     if (isUserCollect) {
       const inputCurrency = currencies[Field.INPUT]
       // @ts-ignore
-      router.push(`/collect/${inputCurrency.address}`)
+      router.push(`/collect/${inputCurrency?.address}`)
     }
   }, [isUserCollect, currencies])
 
