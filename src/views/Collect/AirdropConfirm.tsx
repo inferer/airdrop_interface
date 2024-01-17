@@ -156,7 +156,6 @@ const AirdropConfirm: React.FC<{
         <div className='w-[260px] mr-[50px]'>
           <ButtonSwap
             bgColor="#FAFAFA"
-            altDisabledStyle
             onClick={e => {
               e.stopPropagation()
               router.push('/collect')
