@@ -20,7 +20,7 @@ import { useAirTokenPercent, useAirTokenPercentBalance } from '../../state/airdr
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
   align-items: center;
-  padding: ${({ selected }) => (selected ? '0.75rem 0.5rem 0.75rem 1rem' : '0.75rem 0.75rem 0.75rem 1rem')};
+  padding: ${({ selected }) => (selected ? '0.75rem 0.5rem 0.75rem 1rem' : '4px 0.75rem 4px 1rem')};
 `
 
 const CurrencySelect = styled.button<{ selected: boolean }>`
@@ -118,7 +118,7 @@ const BalanceWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 16px 26px;
+  padding: 0 16px 22px;
 
 `
 
@@ -265,6 +265,8 @@ export default function  CurrencyInputPanel({
             </Aligner>
           </CurrencySelect>
         </InputRow>
+        {
+          payInput ?
         <BalanceWrap>
           <div>
             {
@@ -319,7 +321,9 @@ export default function  CurrencyInputPanel({
                 <StyledBalanceMax onClick={handleOnMax}>MAX</StyledBalanceMax>
               )}
               </div>
-        </BalanceWrap>
+        </BalanceWrap> : <div className='h-[48px]'></div>
+        }
+
       </Container>
       {!disableCurrencySelect && onCurrencySelect && (
         <CurrencySearchModal

@@ -27,7 +27,7 @@ const TokenItem = ({
   // @ts-ignore
   const usdtLocked = useProjectUSDTLocked(token.address)
   return (
-    <div className=" rounded-[6px] border border-[rgba(107,190,225,0.2)] p-5 flex flex-col justify-between min-h-[130px]">
+    <div className=" rounded-[6px] border border-[rgba(107,190,225,0.2)] px-5 py-4 flex flex-col justify-between min-h-[130px]">
       <div className="flex items-center">
         <CurrencyLogo currency={token} size="24" />
         <div className=" text-[16px] font-fmedium ml-[6px] first-up">{token.symbol}</div>
@@ -35,13 +35,13 @@ const TokenItem = ({
       <div className="mt-10">
         <div className="flex justify-between items-center">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Balance</div>
-          <div className="text-[16px] font-medium">{balance?.toSignificant(6)}</div>
+          <div className="text-[18px] font-medium">{balance?.toSignificant(6)}</div>
         </div>
         {
           isProjectMode && 
           <div className="flex justify-between items-center mt-2">
             <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Locked</div>
-            <div className="text-[16px] font-medium">{ isRewards ? tokenLocked.lockedAmount : usdtLocked.lockedAmount }</div>
+            <div className="text-[18px] font-medium">{ isRewards ? tokenLocked.lockedAmount : usdtLocked.lockedAmount }</div>
           </div>
         }
         
@@ -68,7 +68,7 @@ const AlgTokenItem = ({
   const tokenLocked = useUserAlgTokenLocked(token.address)
   // console.log(tokenLocked)
   return (
-    <div className=" rounded-[6px] border border-[rgba(107,190,225,0.2)] p-5 flex flex-col justify-between min-h-[130px]">
+    <div className=" rounded-[6px] border border-[rgba(107,190,225,0.2)] px-5 py-4 flex flex-col justify-between min-h-[130px]">
       <div className="flex items-center">
         <CurrencyLogo currency={token} size="24" />
         <div className=" text-[16px] font-fmedium ml-[6px] first-up">{token.symbol}</div>
@@ -76,19 +76,19 @@ const AlgTokenItem = ({
       <div className="mt-10">
         <div className="flex justify-between items-center">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Balance</div>
-          <div className="text-[16px] font-medium">{balance?.toSignificant(6)}</div>
+          <div className="text-[18px] font-medium">{balance?.toSignificant(6)}</div>
         </div>
         <div className="flex justify-between items-center mt-2">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Locked</div>
-          <div className="text-[16px] font-medium">{tokenLocked.lockedAmount}</div>
+          <div className="text-[18px] font-medium">{tokenLocked.lockedAmount}</div>
         </div>
         <div className="flex justify-between items-center mt-2">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Supply</div>
-          <div className="text-[16px] font-medium">{algAirdrop.unclaimed}</div>
+          <div className="text-[18px] font-medium">{algAirdrop.unclaimed}</div>
         </div>
         <div className="flex justify-between items-center mt-2">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Supply in plan</div>
-          <div className="text-[16px] w-[40px] h-[24px] flex items-center justify-center font-medium bg-[rgba(161,206,168,0.06)] rounded px-[6px] text-[#A1CEA8] cursor-pointer"
+          <div className="text-[18px] w-[40px] h-[24px] flex items-center justify-center font-medium bg-[rgba(161,206,168,0.06)] rounded px-[6px] text-[#A1CEA8] cursor-pointer"
             onClick={e => {
               e.stopPropagation()
               if (currentTokenAddress) return
@@ -168,7 +168,7 @@ const TokenList = () => {
   
   return (
     <div className=" mt-[55px]">
-      <div className="text-[16px] font-fmedium text-black mb-5">Tokens</div>
+      <div className="text-[18px] font-fmedium text-black mb-5">Tokens</div>
       <div className=" grid grid-cols-2 gap-x-[30px] gap-y-[20px]">
         {
           filterList.map(token => {

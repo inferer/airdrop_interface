@@ -1,6 +1,7 @@
 import React from 'react'
 
 import styled, { keyframes } from 'styled-components'
+import LazyImage from '../LazyImage'
 
 const rotate = keyframes`
   from {
@@ -66,6 +67,7 @@ export function Loading({ size = '30px', stroke = '#6BBEE1', ...rest }: { size?:
 }
 
 export function LoadingX({ size = '30px', stroke, ...rest }: { size?: string; stroke?: string }) {
+  return <LazyImage src='/images/airdrop/loading.gif' className='w-[96px] h-[14px]' />
   return (
     <StyledSVG3 viewBox="0 0 96 14" fill="none" xmlns="http://www.w3.org/2000/svg" width="96" height="14">
       <path fillRule="evenodd" clipRule="evenodd" d="M0 2.12132L4.43934 6.56066L0 11L2.12132 13.1213L7.62132 7.62132L8.68198 6.56066L7.62132 5.5L2.12132 0L0 2.12132ZM17.5 2.12132L21.9393 6.56066L17.5 11L19.6213 13.1213L25.1213 7.62132L26.182 6.56066L25.1213 5.5L19.6213 0L17.5 2.12132ZM39.4393 6.56066L35 2.12132L37.1213 0L42.6213 5.5L43.682 6.56066L42.6213 7.62132L37.1213 13.1213L35 11L39.4393 6.56066ZM52.5 2.12132L56.9393 6.56066L52.5 11L54.6213 13.1213L60.1213 7.62132L61.182 6.56066L60.1213 5.5L54.6213 0L52.5 2.12132ZM74.4393 6.56066L70 2.12132L72.1213 0L77.6213 5.5L78.682 6.56066L77.6213 7.62132L72.1213 13.1213L70 11L74.4393 6.56066ZM87 2.12132L91.4393 6.56066L87 11L89.1213 13.1213L94.6213 7.62132L95.682 6.56066L94.6213 5.5L89.1213 0L87 2.12132Z" fill="url(#paint0_linear_3725_1578)"/>

@@ -264,17 +264,17 @@ export function useCollectSwapInfo(): {
   // get link to trade on v1, if a better rate exists
 
   let inputError: string | undefined
-  if (!account) {
-    inputError = 'Connect Wallet'
-  }
+  // if (!account) {
+  //   inputError = 'Connect Wallet'
+  // }
 
-  if (!parsedAmount) {
-    inputError = inputError ?? 'Enter an amount'
-  }
+  // if (!parsedAmount) {
+  //   inputError = inputError ?? 'Enter an amount'
+  // }
 
-  if (!currencies[Field.INPUT] || !currencies[Field.OUTPUT]) {
-    inputError = inputError ?? 'Select a token'
-  }
+  // if (!currencies[Field.INPUT] || !currencies[Field.OUTPUT]) {
+  //   inputError = inputError ?? 'Select a token'
+  // }
 
 
   // compare input balance to max input based on version

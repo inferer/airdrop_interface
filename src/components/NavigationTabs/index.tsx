@@ -205,7 +205,7 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
   }, [setUserAction, onClick])
 
   return (
-    <Tabs style={{ justifyContent: 'flex-start', marginBottom: 25 }}>
+    <Tabs style={{ justifyContent: 'flex-start', marginBottom: 22 }}>
       {
         isProjectMode ? (
           <>

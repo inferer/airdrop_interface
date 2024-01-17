@@ -239,12 +239,9 @@ export default function Swap() {
   // show approve flow when: no error on inputs, not approved or pending, or approved in current session
   // never show if price impact is above threshold in non expert mode
   const showApproveFlow =
-    !swapInputError &&
     (approval === ApprovalState.NOT_APPROVED ||
       approval === ApprovalState.PENDING ||
-      (approvalSubmitted && approval === ApprovalState.APPROVED)) &&
-    !(priceImpactSeverity > 3 && !isExpertMode)
-
+      (approvalSubmitted && approval === ApprovalState.APPROVED))
   const handleConfirmDismiss = useCallback(() => {
     setSwapState({ showConfirm: false, tradeToConfirm, attemptingTxn, swapErrorMessage, txHash })
     // if there was a tx hash, we want to clear the input
@@ -314,7 +311,7 @@ export default function Swap() {
             swapErrorMessage={swapErrorMessage}
             onDismiss={handleConfirmDismiss}
           />
-          <AutoColumn gap={'md'}>
+          <AutoColumn gap={'6px'}>
             <CurrencyInputPanel
               label={'You pay'}
               value={formattedAmounts[Field.INPUT]}
@@ -408,25 +405,14 @@ export default function Swap() {
           </AutoColumn>
           <BottomGrouping>
             {
-              isUserCollect ?
-                <ButtonSwap onClick={handleAction} >
-                  <TYPE.textGrad1 fontWeight={600} fontSize={20}>
-                    {
-                      (isProjectSwap || isUserSwap) ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'
-                    }
-                  </TYPE.textGrad1>
-                </ButtonSwap> :
+              
             !account ? (
-              <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
-            ) : showWrap ? (
-              <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>
-                {wrapInputError ??
-                  (wrapType === WrapType.WRAP ? 'Wrap' : wrapType === WrapType.UNWRAP ? 'Unwrap' : null)}
-              </ButtonPrimary>
-            ) : noRoute && userHasSpecifiedInputOutput ? (
-              <GreyCard style={{ textAlign: 'center' }}>
-                <TYPE.main mb="4px">Insufficient liquidity for this trade.</TYPE.main>
-              </GreyCard>
+              <ButtonSwap onClick={toggleWalletModal}>
+                <div className='btn-text'>
+                  Connect Wallet
+                </div>
+                
+              </ButtonSwap>
             ) : showApproveFlow ? (
               <RowBetween>
                 <ButtonConfirmed
@@ -446,40 +432,27 @@ export default function Swap() {
                     'Approve ' + currencies[Field.INPUT]?.symbol
                   )}
                 </ButtonConfirmed>
-                <ButtonError
+                <ButtonSwap
                   onClick={() => {
-                    if (isProjectCreate) {
+                    if (isProjectCreate || isUserCollect) {
                       handleAction()
                       return
                     }
-                    if (isExpertMode) {
-                      handleSwap()
-                    } else {
-                      setSwapState({
-                        tradeToConfirm: trade,
-                        attemptingTxn: false,
-                        swapErrorMessage: undefined,
-                        showConfirm: true,
-                        txHash: undefined
-                      })
-                    }
+                    handleSwap()
                   }}
                   width="48%"
                   id="swap-button"
                   disabled={
                     !isValid || approval !== ApprovalState.APPROVED || (priceImpactSeverity > 3 && !isExpertMode)
                   }
-                  error={isValid && priceImpactSeverity > 2}
                 >
-                  <Text fontSize={16} fontWeight={500}>
-                    {priceImpactSeverity > 3 && !isExpertMode
-                      ? `Price Impact High`
-                      : (isProjectSwap || isUserSwap) ? (`Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`) : isProjectCreate ? 'Create' : 'Collect' }
+                  <Text fontSize={16} fontWeight={500} className='btn-text'>
+                    {isProjectSwap ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'}
                   </Text>
-                </ButtonError>
+                </ButtonSwap>
               </RowBetween>
             ) : (
-              <ButtonError
+              <ButtonSwap
                 onClick={() => {
                   if (isProjectCreate) {
                     handleAction()
@@ -498,17 +471,13 @@ export default function Swap() {
                   }
                 }}
                 id="swap-button"
-                disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError}
-                error={isValid && priceImpactSeverity > 2 && !swapCallbackError}
+                disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError || (noRoute && userHasSpecifiedInputOutput)}
               >
-                <Text fontSize={20} fontWeight={500}>
-                  {swapInputError
-                    ? swapInputError
-                    : priceImpactSeverity > 3 && !isExpertMode
-                    ? `Price Impact Too High`
-                    : (isProjectSwap || isUserSwap) ? (`Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`) : isProjectCreate ? 'Create' : 'Collect'}
+                <Text fontSize={20} fontWeight={500} className='btn-text'>
+                  {isProjectSwap
+                    ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'}
                 </Text>
-              </ButtonError>
+              </ButtonSwap>
             )}
             {/* {showApproveFlow && <ProgressSteps steps={[approval === ApprovalState.APPROVED]} />}
             {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
@@ -516,7 +485,7 @@ export default function Swap() {
           </BottomGrouping>
         </Wrapper>
       </SwapBody>
-      {/* <AdvancedSwapDetailsDropdown trade={trade} /> */}
+      <AdvancedSwapDetailsDropdown trade={trade} />
     </>
   )
 }

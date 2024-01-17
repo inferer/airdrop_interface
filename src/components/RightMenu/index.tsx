@@ -89,7 +89,11 @@ export default function RightMenu() {
 
   const handleClick = (action: string) => {
     if (action === 'switch') {
-      toggleSetUserRoleMode()
+      router.push('/swap')
+      setTimeout(() => {
+        toggleSetUserRoleMode()
+      }, 300)
+      
       // router.push('/swap')
       // setTimeout(() => {
       //   toggleSetUserRoleMode()

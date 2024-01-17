@@ -30,7 +30,7 @@ export const SectionBreak = styled.div`
 `
 
 export const BottomGrouping = styled.div`
-  margin-top: 1rem;
+  margin-top: 12px;
 `
 
 export const ErrorText = styled(Text)<{ severity?: 0 | 1 | 2 | 3 | 4 }>`
@@ -155,4 +155,6 @@ export const SwapBody = styled.div`
   border-radius: 24px;
   background: #FFF;
   padding: 30px;
+  margin-top: 56px;
+
 `

@@ -21,6 +21,8 @@ import LazyImage, { LazyImage2, LazyImage3 } from '../LazyImage'
 import { AirdropTokensTabs } from '../NavigationTabs'
 
 import router from 'next/router'
+import WalletModal from '../WalletModal'
+import useENSName from '../../hooks/useENSName'
 
 const HeaderFrame = styled.div`
   display: flex;
@@ -163,6 +165,7 @@ const BalanceText = styled(Text)`
 const NETWORK_LABELS: { [chainId in ChainId]: string | null } = {
   [ChainId.MAINNET]: null,
   [ChainId.SEPOLIA]: 'Sepolia',
+  [ChainId.LOCAL]: 'Local'
 }
 
 export default function Header() {
@@ -173,9 +176,11 @@ export default function Header() {
   // const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
   // const [isDark] = useDarkModeManager()
 
+  const { ENSName } = useENSName(account ?? undefined)
+
   return (
     <HeaderFrame>
-      <RowBetween style={{ alignItems: 'flex-start' }} padding="26px 1rem 0 1rem">
+      <div className='h-[84px] flex items-center justify-between w-full'>
         <HeaderElement>
           <Link href={'/swap'}>
             <UniIcon className=' cursor-pointer'>
@@ -189,50 +194,23 @@ export default function Header() {
             <LazyImage src="/images/assets/more.svg" className='more' alt="more" />
           </TitleText>
         </HeaderElement>
-        <HeaderControls>
-          <HeaderElement>
-            {/* <TestnetWrapper>
-              
-                <AirdropCard onClick={e => {
-                  e.stopPropagation()
-                  
-                }} >
-                  <Link href={'/tokens'}>Airdrop</Link>
-                  
-                </AirdropCard>
-            </TestnetWrapper> */}
-            {/* <TestnetWrapper>
-              {!isMobile && chainId && NETWORK_LABELS[chainId] && <NetworkCard>{NETWORK_LABELS[chainId]}</NetworkCard>}
-            </TestnetWrapper> */}
-            {/* <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
-              {account && userEthBalance ? (
-                <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
-                  {userEthBalance?.toSignificant(4)} ETH
-                </BalanceText>
-              ) : null}
-              <Web3Status />
-            </AccountElement> */}
-          </HeaderElement>
-          {/* <HeaderElement>
-            <AirdropCard style={{width: 150}}>
-              <Link href={'/tasks'}>Ongoing airdrops</Link>
-            </AirdropCard>
-          </HeaderElement> */}
-          {/* <HeaderElementWrap>
-            <Settings />
-            <Menu />
-          </HeaderElementWrap> */}
-          <HeaderElementWrap>
-            <LazyImage2 src={ isProjectMode ? '/images/airdrop/project.svg' : '/images/airdrop/user.svg'} className='icon-role' />
-          </HeaderElementWrap>
-          <Web3Status />
-          <HeaderElementWrap
+        {
+          account && 
+          <div className='flex items-center h-[48px] px-3 connect-bg cursor-pointer'
+
             onClick={toggleShowRightMenu}
           >
-            <LazyImage src="/images/airdrop/qiehuan.svg" className='icon-qiehuan' />
-          </HeaderElementWrap>
-        </HeaderControls>
-      </RowBetween>
+            <HeaderElementWrap>
+              <LazyImage2 src={ isProjectMode ? '/images/airdrop/project.svg' : '/images/airdrop/user.svg'} className='icon-role' />
+            </HeaderElementWrap>
+            <Web3Status />
+            <HeaderElementWrap>
+              <LazyImage src="/images/airdrop/qiehuan.svg" className='icon-qiehuan' />
+            </HeaderElementWrap>
+          </div>
+        }
+        <WalletModal ENSName={ENSName ?? undefined} pendingTransactions={[]} confirmedTransactions={[]} />
+      </div>
     </HeaderFrame>
   )
 }

@@ -69,4 +69,9 @@ body {
   text-transform: capitalize;
 }
 
+.connect-bg:hover {
+  background: linear-gradient(108deg,rgba(63,60,255,0.03) 24.12%,rgba(107,190,225,0.03) 51.08%,rgba(138,232,153,0.03) 75.88%);
+  border-radius: 8px;
+}
+
 

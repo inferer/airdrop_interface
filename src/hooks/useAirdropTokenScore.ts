@@ -120,8 +120,9 @@ export function useAirdropTokenScore() {
         }
         setClaimStatus(0)
 
-      } catch (err) {
+      } catch (err: any) {
         console.log(err)
+        alert(err?.data?.message || err.message)
         setClaimStatus(0)
       }
       

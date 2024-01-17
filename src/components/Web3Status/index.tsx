@@ -185,8 +185,8 @@ function Web3StatusInner() {
 
   if (account) {
     return (
-      <Web3StatusConnected id="web3-status-connected" onClick={toggleWalletModal} pending={hasPendingTransactions}>
-        {hasPendingTransactions ? (
+      <Web3StatusConnected id="web3-status-connected" pending={hasPendingTransactions}>
+        {/* {hasPendingTransactions ? (
           <RowBetween>
             <Text color='#000' style={{color: '#000'}}>{pending?.length} Pending</Text> <Loader stroke="black" />
           </RowBetween>
@@ -195,8 +195,9 @@ function Web3StatusInner() {
             {hasSocks ? SOCK : null}
             <TYPE.textGrad1 fontWeight={600}>{ENSName || shortenAddress(account)}</TYPE.textGrad1>
           </>
-        )}
+        )} */}
         {/* {!hasPendingTransactions && connector && <StatusIcon connector={connector} />} */}
+        <TYPE.textGrad1 fontWeight={600}>{ENSName || shortenAddress(account)}</TYPE.textGrad1>
       </Web3StatusConnected>
     )
   } else if (error) {
@@ -238,7 +239,7 @@ export default function Web3Status() {
   return (
     <>
       <Web3StatusInner />
-      <WalletModal ENSName={ENSName ?? undefined} pendingTransactions={pending} confirmedTransactions={confirmed} />
+      {/* <WalletModal ENSName={ENSName ?? undefined} pendingTransactions={pending} confirmedTransactions={confirmed} /> */}
     </>
   )
 }

@@ -45,7 +45,7 @@ export default function Search() {
     parsedAmountOUTPUT,
     parsedAmountOUTPUTDerived,
     currencies,
-    inputError: swapInputError
+    inputError: collectInputError
   } = useCollectSwapInfo()
 
 
@@ -148,15 +148,22 @@ export default function Search() {
           <BottomGrouping>
             {
               isUserCollect ?
-                <ButtonSwap onClick={handleAction} >
-                  <TYPE.textGrad1 fontWeight={600} fontSize={20}>
+                <ButtonSwap 
+                  disabled={!!collectInputError}
+                  onClick={e => {
+                    e.stopPropagation()
+                    if (!!collectInputError) return
+                    handleAction()
+                  }} >
+                  <div className='btn-text'>
                     {
                       (isProjectSwap || isUserSwap) ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'
                     }
-                  </TYPE.textGrad1>
+                  </div>
+                    
                 </ButtonSwap> :
             !account ? (
-              <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
+              <ButtonSwap onClick={toggleWalletModal}>Connect Wallet</ButtonSwap>
             ) : null}
           </BottomGrouping>
         </Wrapper>
