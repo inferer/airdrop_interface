@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import IndexPage from "../../views/Swap";
+import IndexPage from "../../views/Search";
 import TokensPage from "../../views/Tokens";
 
 function UserPage() {
