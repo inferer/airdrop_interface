@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import useToggle from '../../hooks/useToggle'
@@ -83,32 +83,43 @@ export default function RightMenu() {
 
   const node = useRef<HTMLDivElement>()
   const { showRightMenu, toggleShowRightMenu } = useShowRightMenu()
-
   useOnClickOutside(node, showRightMenu ? toggleShowRightMenu : undefined)
   const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
 
-  const handleClick = (action: string) => {
+  const handleClick = useCallback((action: string) => {
+    toggleShowRightMenu(!showRightMenu)
+    // setTimeout(() => {
+    //   toggleShowRightMenu()
+    // }, 300)
     if (action === 'switch') {
       console.log(router.pathname)
-      if (router.pathname === '/search') {
-        router.push('/swap')
-        setTimeout(() => {
-          toggleSetUserRoleMode()
-        }, 300)
-      } else {
-        toggleSetUserRoleMode()
+      if (router.pathname === '/project/[action]') {
+        if (router.query.action === 'rewards') {
+          router.push('/user/rewards')
+        } else if (router.query.action === 'consumption') {
+          router.push('/user/consumption')
+        } else {
+          router.push('/user/swap')
+        }
+      } else if (router.pathname === '/user/[action]') {
+        // router.push('/project/swap')
+        if (router.query.action === 'rewards') {
+          router.push('/project/rewards')
+        } else if (router.query.action === 'consumption') {
+          router.push('/project/consumption')
+        } else {
+          router.push('/project/swap')
+        }
+      } else if (router.pathname === '/collect/[[...id]]') {
+        router.push('/project/swap')
       }
-      
-      
-      // router.push('/swap')
-      // setTimeout(() => {
-      //   toggleSetUserRoleMode()
-      // }, 300)
-      toggleShowRightMenu()
-      return
     }
     if (action === 'tokens') {
-      router.push('/rewards')
+      if (isProjectMode) {
+        router.push('/project/rewards')
+      } else {
+        router.push('/user/rewards')
+      }
       return
     }
     if (action === 'tasks') {
@@ -117,8 +128,7 @@ export default function RightMenu() {
     if (action === 'home') {
       router.push('/swap')
     }
-    toggleShowRightMenu()
-  }
+  }, [router, isProjectMode, showRightMenu])
 
   return (
     <RightWrap open={showRightMenu} ref={node as any}>

@@ -182,15 +182,13 @@ export default function Header() {
     <HeaderFrame>
       <div className='h-[84px] flex items-center justify-between w-full'>
         <HeaderElement>
-          <Link href={'/swap'}>
+          <Link href={ isProjectMode ? '/project/swap' :  '/user/swap'}>
             <UniIcon className=' cursor-pointer'>
               <LazyImage src="/images/logo.png" alt="logo" />
             </UniIcon>
           </Link>
           <TitleText>
-            <AirdropTokensTabs onClick={(action) => {
-              router.push(`/${action}`)
-            }} />
+            <AirdropTokensTabs />
             <LazyImage src="/images/assets/more.svg" className='more' alt="more" />
           </TitleText>
         </HeaderElement>
@@ -198,7 +196,10 @@ export default function Header() {
           account && 
           <div className='flex items-center h-[48px] px-3 connect-bg cursor-pointer'
 
-            onClick={toggleShowRightMenu}
+            onClick={e => {
+              e.stopPropagation()
+              toggleShowRightMenu(true)
+            } }
           >
             <HeaderElementWrap>
               <LazyImage2 src={ isProjectMode ? '/images/airdrop/project.svg' : '/images/airdrop/user.svg'} className='icon-role' />

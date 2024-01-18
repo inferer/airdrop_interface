@@ -107,7 +107,7 @@ const AlgTokenItem = ({
 
 const TokenList = () => {
   const router = useRouter()
-  const isRewards = router.pathname === "/rewards"
+  const isRewards = router.query.action === "rewards"
   const isProjectMode = useIsRoleProjectMode()
   const airLabelAllTokens = useAirLabelAllTokens()
   const usdtAllTokens = useUSDTAllTokens()

@@ -23,6 +23,7 @@ import {
 } from './actions'
 import { airdropV2, airdropV2Swap, getUserNonce } from './api'
 import { useUserModeInputCurrency } from '../swap/hooks'
+import { useRouter } from 'next/router'
 
 function serializeToken(token: Token): SerializedToken {
   return {
@@ -44,13 +45,17 @@ function deserializeToken(serializedToken: SerializedToken): Token {
   )
 }
 
+export function useIsShowRightMenu() {
+  return useSelector<AppState, AppState['user']['showRightMenu']>(state => state.user.showRightMenu)
+}
+
 export function useShowRightMenu() {
   const dispatch = useDispatch<AppDispatch>()
 
-  const showRightMenu = useSelector<AppState, AppState['user']['showRightMenu']>(state => state.user.showRightMenu)
+  const showRightMenu = useIsShowRightMenu()
 
-  const toggleShowRightMenu = useCallback(() => {
-    dispatch(updateRightMenu({ show: !showRightMenu }))
+  const toggleShowRightMenu = useCallback((flag?: boolean) => {
+    dispatch(updateRightMenu({ show: flag !== undefined ? flag : !showRightMenu}))
   }, [ dispatch, showRightMenu, updateRightMenu ])
 
   return { showRightMenu, toggleShowRightMenu }
@@ -68,8 +73,31 @@ export function useUserAction() {
   return { userAction, setUserAction } 
 }
 
+export function useGetUserAction() {
+  const router = useRouter()
+  return useMemo(() => {
+    if (router.pathname === '/project/[action]') {
+      if (router.query.action === 'swap') {
+        return UserAction.PROJECT_SWAP
+      }
+      if (router.query.action === 'create') {
+        return UserAction.CREATE
+      }
+    } else {
+      if (router.query.action === 'swap') {
+        return UserAction.USER_SWAP
+      }
+      if (router.query.action === 'collect') {
+        return UserAction.USER_COLLECT
+      }
+    }
+    return UserAction.PROJECT_SWAP
+  }, [router])
+}
+
 export function useIsUserAction() {
-  const userAction = useSelector<AppState, AppState['user']['userAction']>(state => state.user.userAction)
+  // const userAction = useSelector<AppState, AppState['user']['userAction']>(state => state.user.userAction)
+  const userAction = useGetUserAction()
 
   const isProjectSwap = useMemo(() => {
     return userAction === UserAction.PROJECT_SWAP
@@ -112,8 +140,19 @@ export function useIsDarkMode(): boolean {
 }
 
 export function useIsRoleProjectMode(): boolean {
-  const roleMode = useSelector<AppState, AppState['user']['userRoleMode']>(state => state.user.userRoleMode)
-  return useMemo(() => roleMode === UserRoleMode.PROJECT , [roleMode])
+  // const roleMode = useSelector<AppState, AppState['user']['userRoleMode']>(state => state.user.userRoleMode)
+  // return useMemo(() => roleMode === UserRoleMode.PROJECT , [roleMode])
+  const router = useRouter()
+  return useMemo(() => {
+    if (
+      router.pathname.indexOf('/project/') > -1 ||
+      router.pathname === '/create'
+    
+    ) {
+      return true
+    }
+    return false
+  }, [router])
 }
 
 export function useUserRoleMode(): [boolean, () => void] {

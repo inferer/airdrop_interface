@@ -6,7 +6,7 @@ import { UserAction } from "../../constants";
 
 const Banner = () => {
   const router = useRouter()
-  const isRewards = router.pathname === "/rewards"
+  const isRewards = router.query.action === "rewards"
   const isProjectMode = useIsRoleProjectMode()
   const { userAction, setUserAction }  = useUserAction()
 

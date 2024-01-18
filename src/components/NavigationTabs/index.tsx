@@ -164,12 +164,21 @@ const StyledNavLink2 = styled.div<{
 `
 
 export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => void}) {
+  const router = useRouter()
   const { t } = useTranslation()
+  const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
   const [active, setActive] = useState<'airdrop' | 'tokens'>('airdrop')
+
   const handleTab = useCallback((type) => {
     setActive(type)
-    onClick && onClick(type)
-  }, [active])
+    if (type === 'rewards') {
+      router.push(isProjectMode ? '/project/rewards' :  '/user/rewards')
+    } else {
+      router.push(`/${type}`)
+    }
+    // onClick && onClick(type)
+
+  }, [active, isProjectMode])
   return (
     <Tabs style={{ marginLeft: 45 }}>
       <StyledNavLink2 id={`airdrop-btn-click`} className={active === 'airdrop' ? 'airdrop' : ''}
@@ -194,15 +203,18 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
   const { userAction, setUserAction }  = useUserAction()
   const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect } = useIsUserAction()
 
-  const handleTab = useCallback((action: UserAction) => {
-    setUserAction(action)
-    if (action === UserAction.USER_COLLECT) {
-      router.push('/search')
-    } else {
-      onClick && onClick(action)
-    }
+  const handleTab = useCallback((action: string) => {
+    router.push(action)
+    // setUserAction(action)
+    // if (action === UserAction.USER_COLLECT) {
+    //   router.push('/search')
+    // } else {
+    //   onClick && onClick(action)
+    // }
     
-  }, [setUserAction, onClick])
+  }, [])
+
+
 
   return (
     <Tabs style={{ justifyContent: 'flex-start', marginBottom: 22 }}>
@@ -210,12 +222,12 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
         isProjectMode ? (
           <>
             <StyledNavLink2 id={`swap-btn-click`} className={isProjectSwap ? 'airdrop' : ''}
-              onClick={() => handleTab(UserAction.PROJECT_SWAP)}
+              onClick={() => handleTab('/project/swap')}
             >
               {t('Swap')}
             </StyledNavLink2>
             <StyledNavLink2 id={`create-btn-click`} className={isProjectCreate ?  'airdrop' : ''}
-              onClick={() => handleTab(UserAction.CREATE)}
+              onClick={() => handleTab('/project/create')}
             >
               {t('Create')}
             </StyledNavLink2>
@@ -223,12 +235,12 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
         ) : (
           <>
             <StyledNavLink2 id={`userswap-btn-click`} className={isUserSwap ? 'create' : ''}
-              onClick={() => handleTab(UserAction.USER_SWAP)}
+              onClick={() => handleTab('/user/swap')}
             >
               {t('Swap')}
             </StyledNavLink2>
             <StyledNavLink2 id={`collect-btn-click`} className={isUserCollect ?  'airdrop' : ''}
-              onClick={() => handleTab(UserAction.USER_COLLECT)}
+              onClick={() => handleTab('/user/collect')}
             >
               {t('Collect')}
             </StyledNavLink2>

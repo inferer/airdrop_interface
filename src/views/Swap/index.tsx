@@ -1,4 +1,4 @@
-import router from 'next/router'
+import router, { useRouter } from 'next/router'
 import { CurrencyAmount, JSBI, Token, Trade } from '@uniswap/sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { ArrowDown, Type } from 'react-feather'
@@ -49,6 +49,7 @@ import Loader from '../../components/Loader'
 import UseAirAssets from './UseAirAssets'
 
 export default function Swap() {
+  const router = useRouter()
   const loadedUrlParams = useDefaultsFromURLSearch()
 
   // token warning stuff
