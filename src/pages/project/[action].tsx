@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import IndexPage from "../../views/Swap";
 import TokensPage from "../../views/Tokens";
 
-export default function() {
+function ProjectPage () {
   const router = useRouter()
 
   console.log(router.pathname)
@@ -17,3 +17,5 @@ export default function() {
     <IndexPage />
   )
 }
+
+export default ProjectPage

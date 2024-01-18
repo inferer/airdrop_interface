@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import IndexPage from "../../views/Swap";
 import TokensPage from "../../views/Tokens";
 
-export default function() {
+function UserPage() {
   const router = useRouter()
 
   if (
@@ -16,3 +16,5 @@ export default function() {
     <IndexPage />
   )
 }
+
+export default UserPage
