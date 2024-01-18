@@ -76,16 +76,10 @@
 ]
 
 "typescript": "^3.8.3"
-<Web3ReactProviderDefault getLibrary={getLibrary}>
-          <Provider store={store}>
-            <Updaters />
-            <ThemeProvider>
-              <ThemedGlobalStyle />
-              <App>{children}</App>
-            </ThemeProvider>
-
-          </Provider>
-        </Web3ReactProviderDefault>
 
 
-        https://eth.public-rpc.com
+
+Host github.com
+Hostname ssh.github.com
+Port 443
+IdentityFile ~/.ssh/id_ed25519
