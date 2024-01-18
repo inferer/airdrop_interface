@@ -263,12 +263,12 @@ export function SwapCollectTabs({ onClick }: { onClick?: (type: UserAction) => v
       router.push('/search')
     } 
     if (action === UserAction.USER_SWAP) {
-      router.push('/swap')
+      router.push('/user/swap')
     } 
   }, [setUserAction, onClick])
 
   return (
-    <Tabs style={{ justifyContent: 'flex-start', marginBottom: 25 }}>
+    <Tabs style={{ justifyContent: 'flex-start', marginBottom: 22 }}>
       <>
         <StyledNavLink2 id={`userswap-btn-click`} className={''}
           onClick={() => handleTab(UserAction.USER_SWAP)}
