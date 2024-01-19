@@ -92,7 +92,6 @@ export default function RightMenu() {
     //   toggleShowRightMenu()
     // }, 300)
     if (action === 'switch') {
-      console.log(router.pathname)
       if (router.pathname === '/project/[action]') {
         if (router.query.action === 'rewards') {
           router.push('/user/rewards')
@@ -126,7 +125,12 @@ export default function RightMenu() {
       router.push('/tasks')
     }
     if (action === 'home') {
-      router.push('/swap')
+      if (isProjectMode) {
+        router.push('/project/swap')
+      } else {
+        router.push('/user/swap')
+      }
+      
     }
   }, [router, isProjectMode, showRightMenu])
 

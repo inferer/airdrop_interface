@@ -52,7 +52,7 @@ export function CurrencySearch({
   const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect } = useIsUserAction()
   const isProjectMode  = useIsRoleProjectMode()
   const location = useLocation()
-  const isSwap = location.pathname === '/swap' || location.pathname === '/search'
+  const isSwap = location.query && (location.query.action === 'swap' || location.query.action === 'collect')
 
   const fixedList = useRef<FixedSizeList>()
   const [searchQuery, setSearchQuery] = useState<string>('')
