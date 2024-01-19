@@ -73,5 +73,12 @@ body {
   background: linear-gradient(108deg,rgba(63,60,255,0.03) 24.12%,rgba(107,190,225,0.03) 51.08%,rgba(138,232,153,0.03) 75.88%);
   border-radius: 8px;
 }
+.avatar-bg {
+  border-radius: 100px;
+  background: linear-gradient(135deg, rgba(63, 60, 255, 0.10) 0%, rgba(107, 190, 225, 0.10) 100%);
+}
+.menu-item:hover {
+  background: linear-gradient(135deg, rgba(63, 60, 255, 0.15) 0%, rgba(107, 190, 225, 0.15) 100%), #FFF;
+}
 
 

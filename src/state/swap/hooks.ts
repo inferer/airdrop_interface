@@ -12,7 +12,7 @@ import { useTradeExactIn, useTradeExactOut } from '../../hooks/Trades'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 import { isAddress } from '../../utils'
 import { AppDispatch, AppState } from '../index'
-import { useCurrencyBalances } from '../wallet/hooks'
+import { useCurrencyBalanceUSDT, useCurrencyBalances } from '../wallet/hooks'
 import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
 import { SwapState } from './reducer'
 import useToggledVersion from '../../hooks/useToggledVersion'
@@ -207,7 +207,11 @@ export function useDerivedSwapInfo(): {
   if (!isProjectCreate && balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
     inputError = 'Insufficient ' + amountIn.currency.symbol + ' balance'
   }
-
+  // @ts-ignore
+  const selectedCurrencyBalanceUSDT = useCurrencyBalanceUSDT(account ?? undefined, inputCurrency && inputCurrency.address, isProjectCreate)
+  if (isProjectCreate && selectedCurrencyBalanceUSDT && amountIn && selectedCurrencyBalanceUSDT.lessThan(amountIn)) {
+    inputError = 'Insufficient ' + selectedCurrencyBalanceUSDT.currency.symbol + ' balance'
+  }
   return {
     currencies,
     currencyBalances,

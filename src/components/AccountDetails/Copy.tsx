@@ -28,7 +28,7 @@ const TransactionStatusText = styled.span`
 
 export default function CopyHelper(props: { toCopy: string; children?: React.ReactNode }) {
   const [isCopied, setCopied] = useCopyClipboard()
-
+  
   return (
     <CopyIcon onClick={() => setCopied(props.toCopy)}>
       {isCopied ? (

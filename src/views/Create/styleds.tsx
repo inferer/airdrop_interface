@@ -64,6 +64,7 @@ export const CreateBody = styled.div`
   border-radius: 24px;
   background: #FFF;
   padding: 45px 40px;
+  margin-top: 56px;
 `
 
 export const TitleWrap = styled.div`

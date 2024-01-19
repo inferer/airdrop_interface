@@ -10,6 +10,8 @@ import { shortenAddress } from '../../utils'
 import useCopyClipboard from '../../hooks/useCopyClipboard'
 import CopyHelper from '../AccountDetails/Copy'
 import { useRouter } from 'next/router'
+import { useWeb3React } from '@web3-react/core'
+import { Tooltip2 } from '../Tooltip'
 
 
 const RightWrap = styled.div<{ open: boolean }>`
@@ -52,7 +54,7 @@ const MenuItem: React.FC<{
     <div onClick={e => {
       e.stopPropagation()
       onClick && onClick()
-    }} className='flex justify-between items-center cursor-pointer'>
+    }} className='flex justify-between items-center cursor-pointer p-6 menu-item'>
       <div className=' rounded-lg bg-white flex justify-center items-center w-[36px] h-[36px]'>
         <LazyImage src={icon} />
       </div>
@@ -66,7 +68,7 @@ const MenuLine: React.FC<{
   
 }) => {
   return (
-    <div className='flex justify-between items-center py-6'>
+    <div className='flex justify-between items-center'>
       <div className=' rounded-lg bg-white flex justify-center items-center w-[36px]'>
       </div>
       <div className='pl-4 text-[16px] font-fbold flex-1'>
@@ -77,6 +79,7 @@ const MenuLine: React.FC<{
 }
 
 export default function RightMenu() {
+  const { deactivate } = useWeb3React()
   const router = useRouter()
   const { account } = useActiveWeb3React()
   const [ isCopied, staticCopy ] = useCopyClipboard()
@@ -91,6 +94,7 @@ export default function RightMenu() {
     // setTimeout(() => {
     //   toggleShowRightMenu()
     // }, 300)
+    console.log(router.pathname)
     if (action === 'switch') {
       if (router.pathname === '/project/[action]') {
         if (router.query.action === 'rewards') {
@@ -111,6 +115,8 @@ export default function RightMenu() {
         }
       } else if (router.pathname === '/collect/[[...id]]') {
         router.push('/project/swap')
+      } else if (router.pathname === '/create') {
+        router.push('/user/swap')
       }
     }
     if (action === 'tokens') {
@@ -137,7 +143,19 @@ export default function RightMenu() {
   return (
     <RightWrap open={showRightMenu} ref={node as any}>
       <RightContent>
-        <div className=' flex justify-between mt-2 mb-[18px]'>
+        <div className=' flex justify-between mt-2 mb-[18px] relative'>
+          {
+            showRightMenu && 
+            <div className=' absolute top-0 -left-[68px] cursor-pointer'
+              onClick={e => {
+                e.stopPropagation()
+                toggleShowRightMenu()
+              }}
+            >
+              <LazyImage src='/images/airdrop/arrow-right.svg' />
+            </div>
+          }
+          
           <div className=' cursor-pointer'
             onClick={e => {
               e.stopPropagation()
@@ -149,34 +167,42 @@ export default function RightMenu() {
           <div className=' cursor-pointer'
             onClick={e => {
               e.stopPropagation()
+              deactivate()
               toggleShowRightMenu()
+              router.push(isProjectMode ? '/project/swap' : '/user/swap')
             }}
           >
             <LazyImage src='/images/airdrop/right2.svg' />
           </div>
         </div>
         <div className=' flex items-center justify-center flex-col'>
-          <div className=' w-[100px] h-[100px] rounded-full bg-[rgba(63,60,255,0.10)] flex justify-center items-center'>
+          <div className=' w-[100px] h-[100px] rounded-full bg-[rgba(63,60,255,0.10)] flex justify-center items-center avatar-bg'>
             <LazyImage2 src={ isProjectMode ? '/images/airdrop/project.svg' : '/images/airdrop/user.svg'} className='icon-role w-[45px] h-[45px]' />
           </div>
           <div className='text-[15px] font-fnormal text-[#3F4664] mt-2 flex items-center'>
             {account && shortenAddress(account)}
-            {/* <div onClick={e => {
+            <div
+              className='ml-2'
+            onClick={e => {
               e.stopPropagation()
               staticCopy(account || '')
             }}>
-              <LazyImage src='/images/airdrop/copy.svg' className='ml-2 cursor-pointer' />
-            </div> */}
-            <div className='ml-1'>
+              <Tooltip2 text='Copy' >
+                <LazyImage src='/images/airdrop/copy.svg' className='cursor-pointer' />
+              </Tooltip2>
+            </div>
+            {/* <div className='ml-1'>
               <CopyHelper toCopy={account || ''} >
               
               </CopyHelper>
-            </div>
-            
+            </div> */}
+            <Tooltip2 text='View on Etherscan' className='ml-1' >
+              <LazyImage src='/images/airdrop/open.svg' />
+            </Tooltip2>
           </div>
         </div>
         <div className='px-3'>
-          <div className='mt-[65px] rounded-[6px] px-6 py-[18px]' style={{'background': 'linear-gradient(135deg, rgba(63, 60, 255, 0.06) 0%, rgba(107, 190, 225, 0.06) 100%)'}}>
+          <div className='mt-[65px] rounded-[6px]' style={{'background': 'linear-gradient(135deg, rgba(63, 60, 255, 0.09) 0%, rgba(107, 190, 225, 0.09) 100%)'}}>
             <MenuItem icon='/images/airdrop/switch2.svg' text='Switch airdrop role'
               onClick={() => handleClick('switch')}
             />

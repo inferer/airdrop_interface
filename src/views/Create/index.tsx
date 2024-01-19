@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from 're
 import { ThemeContext } from 'styled-components'
 
 import {  TYPE } from '../../theme'
-import { ButtonSwap } from '../../components/Button'
+import { ButtonCancel, ButtonSwap } from '../../components/Button'
 
 import { useActiveWeb3React } from '../../hooks'
 import { Dots } from '../../components/swap/styleds'
@@ -103,7 +103,7 @@ export default function Create() {
           </div>
         </Link> */}
         
-        <div className=' text-[32px] font-fsemibold text-black'>Create the airdrop</div>
+        <div className=' text-[32px] font-fsemibold text-black leading-normal'>Create the airdrop</div>
       </TitleWrap>
       <ItemWrap>
         <div>
@@ -225,15 +225,15 @@ export default function Create() {
       </ItemWrap>
       <div className='flex justify-end mt-5'>
         <div className='w-[260px]'>
-          <ButtonSwap 
+          <ButtonCancel 
             bgColor='#FAFAFA'
             onClick={e => {
               e.stopPropagation()
-              router.push('/swap')
+              router.push('/project/swap')
             }}
           >
-            <span className='text-[rgba(0,0,0,0.6)] font-fsemibold text-[20px]'>Cancel</span>
-          </ButtonSwap>
+            <span className=' btn-text'>Cancel</span>
+          </ButtonCancel>
         </div>
         <div className='min-w-[260px] ml-[50px]'>
         {
@@ -257,7 +257,7 @@ export default function Create() {
                 approve()
               }}
             >
-              <div className='text-[rgba(123,120,255,0.9)] font-fsemibold text-[20px]'>
+              <div className='btn-text'>
                 Approve {lockedCurrency?.symbol} (1/{approveB ? 2 : 1})
               </div>
               
@@ -311,7 +311,7 @@ export default function Create() {
             >
               <TYPE.textGrad1 fontWeight={600} fontSize={20}>
                 {
-                  createStatus === 1 ? <LoadingX /> : 'Confirm'
+                  createStatus === 1 ? <LoadingX /> : 'Create'
                 }
               </TYPE.textGrad1>
             </ButtonSwap>
