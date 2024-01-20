@@ -317,7 +317,6 @@ export const ButtonSwap = styled.div<{
   height: ${({ height }) => ( height ? height: '60px')};
   border-radius: ${({ borderRadius }) => borderRadius ? borderRadius : '12px'};
   outline: none;
-  border: 1px solid transparent;
   display: flex;
   justify-content: center;
   flex-wrap: nowrap;
@@ -360,7 +359,7 @@ export const ButtonCancel = styled.div<{
   disabled?: boolean
 }>`
   background-repeat: no-repeat;
-  background: ${({ bgColor }) => ( bgColor ? bgColor : '#FAFAFA')} ;
+  background: #FAFAFA;
   
   width: ${({ width }) => (width ? width : '100%')};
   height: ${({ height }) => ( height ? height: '60px')};

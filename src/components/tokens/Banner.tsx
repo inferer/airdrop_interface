@@ -41,7 +41,7 @@ const Banner = () => {
           {
             isProjectMode ?
             <>
-              <div className=" cursor-pointer"
+              <div className=" cursor-pointer user-create"
                 onClick={e => {
                   e.stopPropagation()
                   handleTab(UserAction.CREATE)
@@ -49,18 +49,18 @@ const Banner = () => {
               >Create</div>
             </> :
             <>
-              <div className=" cursor-pointer"
+              <div className=" cursor-pointer user-swap"
                 onClick={e => {
                   e.stopPropagation()
                   handleTab(UserAction.USER_SWAP)
                 }}
               >Swap</div>
-              <div className=" cursor-pointer ml-5"
+              {/* <div className=" cursor-pointer ml-5"
                 onClick={e => {
                   e.stopPropagation()
                   // handleTab(UserAction.USER_SWAP)
                 }}
-              >Withdraw</div>
+              >Withdraw</div> */}
             </>
           }
           

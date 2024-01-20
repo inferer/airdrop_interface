@@ -5,7 +5,8 @@ import { useEffect } from "react"
 const IndexPage = () => {
 
   useEffect(() => {
-    Router.push('/project/swap')
+    const isProjectMode = localStorage.getItem('airdrop_model')
+    Router.push(isProjectMode === 'true' ? '/project/swap' : '/user/swap')
   }, [])
   
   return null

@@ -5,6 +5,7 @@ import Head from 'next/head'
 import PageRoot from '../views/PageRoot'
 
 export default function App({ Component, pageProps }: AppProps) {
+
   return (
     <>
       <Head>

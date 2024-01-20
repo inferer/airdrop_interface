@@ -80,5 +80,20 @@ body {
 .menu-item:hover {
   background: linear-gradient(135deg, rgba(63, 60, 255, 0.15) 0%, rgba(107, 190, 225, 0.15) 100%), #FFF;
 }
+.menu-item-user:hover {
+  background: linear-gradient(135deg, rgba(107, 190, 225, 0.06) 0%, rgba(138, 232, 153, 0.06) 100%);
+}
+.user-swap {
+  background: linear-gradient(135deg, #6BBEE1 0%, #8AE899 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.user-create {
+  background: linear-gradient(135deg, #3F3CFF 0%, #6BBEE1 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
 

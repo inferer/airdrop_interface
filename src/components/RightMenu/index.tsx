@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import useToggle from '../../hooks/useToggle'
 
-import LazyImage, { LazyImage2 } from '../LazyImage'
+import LazyImage, { LazyImage2, LazyImage4 } from '../LazyImage'
 import { useShowRightMenu, useUserRoleMode } from '../../state/user/hooks'
 import { useActiveWeb3React } from '../../hooks'
 import { shortenAddress } from '../../utils'
@@ -43,18 +43,20 @@ const MenuItem: React.FC<{
   icon: string,
   text: string,
   active?: boolean
+  isProjectMode?: boolean
   onClick?: () => void
 }> = ({
   icon,
   text,
   active,
+  isProjectMode,
   onClick
 }) => {
   return (
     <div onClick={e => {
       e.stopPropagation()
       onClick && onClick()
-    }} className='flex justify-between items-center cursor-pointer p-6 menu-item'>
+    }} className={`flex justify-between items-center cursor-pointer p-6 ${isProjectMode ? 'menu-item' : 'menu-item-user'}`}>
       <div className=' rounded-lg bg-white flex justify-center items-center w-[36px] h-[36px]'>
         <LazyImage src={icon} />
       </div>
@@ -96,6 +98,7 @@ export default function RightMenu() {
     // }, 300)
     console.log(router.pathname)
     if (action === 'switch') {
+      localStorage.setItem('airdrop_model', !isProjectMode ? 'true' : 'false')
       if (router.pathname === '/project/[action]') {
         if (router.query.action === 'rewards') {
           router.push('/user/rewards')
@@ -162,7 +165,7 @@ export default function RightMenu() {
               handleClick('home')
             }}
           >
-            <LazyImage src='/images/airdrop/home.svg' />
+            <LazyImage4 src='/images/airdrop/home.svg' activeSrc='/images/airdrop/home2.svg' />
           </div>
           <div className=' cursor-pointer'
             onClick={e => {
@@ -172,7 +175,7 @@ export default function RightMenu() {
               router.push(isProjectMode ? '/project/swap' : '/user/swap')
             }}
           >
-            <LazyImage src='/images/airdrop/right2.svg' />
+            <LazyImage4 src='/images/airdrop/right2.svg' activeSrc='/images/airdrop/right3.svg' />
           </div>
         </div>
         <div className=' flex items-center justify-center flex-col'>
@@ -187,8 +190,8 @@ export default function RightMenu() {
               e.stopPropagation()
               staticCopy(account || '')
             }}>
-              <Tooltip2 text='Copy' >
-                <LazyImage src='/images/airdrop/copy.svg' className='cursor-pointer' />
+              <Tooltip2 text={isCopied ? 'Copied' : 'Copy' } >
+                <LazyImage4 src='/images/airdrop/copy.svg' activeSrc='/images/airdrop/copy2.svg' className='cursor-pointer' />
               </Tooltip2>
             </div>
             {/* <div className='ml-1'>
@@ -197,25 +200,25 @@ export default function RightMenu() {
               </CopyHelper>
             </div> */}
             <Tooltip2 text='View on Etherscan' className='ml-1' >
-              <LazyImage src='/images/airdrop/open.svg' />
+              <LazyImage4 src='/images/airdrop/open.svg' activeSrc='/images/airdrop/open2.svg' />
             </Tooltip2>
           </div>
         </div>
         <div className='px-3'>
-          <div className='mt-[65px] rounded-[6px]' style={{'background': 'linear-gradient(135deg, rgba(63, 60, 255, 0.09) 0%, rgba(107, 190, 225, 0.09) 100%)'}}>
-            <MenuItem icon='/images/airdrop/switch2.svg' text='Switch airdrop role'
+          <div className='mt-[65px] rounded-[6px]' style={{'background': isProjectMode ? 'linear-gradient(135deg, rgba(63, 60, 255, 0.09) 0%, rgba(107, 190, 225, 0.09) 100%)' : 'linear-gradient(135deg, rgba(107, 190, 225, 0.09) 0%, rgba(138, 232, 153, 0.09) 100%)'}}>
+            <MenuItem icon='/images/airdrop/switch2.svg' text='Switch airdrop role' isProjectMode={isProjectMode}
               onClick={() => handleClick('switch')}
             />
             <MenuLine />
-            <MenuItem icon='/images/airdrop/airdrop2.svg' text='Airdrops tokens' 
+            <MenuItem icon='/images/airdrop/airdrop2.svg' text='Airdrops tokens' isProjectMode={isProjectMode}
               onClick={() => handleClick('tokens')}
             />
             <MenuLine />
-            <MenuItem icon='/images/airdrop/ongoing.svg' text='Ongoing airdrops' 
+            <MenuItem icon='/images/airdrop/ongoing.svg' text='Ongoing airdrops' isProjectMode={isProjectMode} 
               onClick={() => handleClick('tasks')}
             />
             <MenuLine />
-            <MenuItem icon='/images/airdrop/completed.svg' text='Completed airdrops' />
+            <MenuItem icon='/images/airdrop/completed.svg' text='Completed airdrops' isProjectMode={isProjectMode} />
           </div>
         </div>
         

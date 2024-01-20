@@ -251,7 +251,6 @@ export default function Create() {
           {
             approveA ? 
             <ButtonSwap 
-              bgColor='rgba(123,120,255,0.1)'
               onClick={e => {
                 e.stopPropagation()
                 approve()
@@ -267,7 +266,6 @@ export default function Create() {
           {
             approveB && unApproveList.length === 1 ? 
             <ButtonSwap 
-              bgColor='rgba(123,120,255,0.1)'
               onClick={e => {
                 e.stopPropagation()
                 approveLabel()
