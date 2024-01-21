@@ -110,6 +110,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
   const handleCreateAirdrop = useCallback(async (
     name: string,
     label: string,
+    _duration: string,
     channel: string,
     action: string,
     unint: string,
@@ -124,7 +125,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       const route = args[2]
       const offer_label_token = [isETH ? ethers.constants.AddressZero : lockedToken.address, route[0], route[route.length - 1], account]
       const offer_label_locked = [lockedAmountA, lockedAmountB, args[1], unint]
-      const duration = 7 * 24 * 60 * 60
+      const duration = parseInt(_duration) * 24 * 60 * 60
       
       console.log(baseInfo, offer_label_token, offer_label_locked, duration, content, lockedAmountA, lockedAmountB)
       let gasLimit = '5000000'

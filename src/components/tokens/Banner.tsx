@@ -12,13 +12,13 @@ const Banner = () => {
 
   const handleTab = useCallback((action: UserAction) => {
     if (action === UserAction.CREATE) {
-      setUserAction(action)
-      router.push('/swap')
+      // setUserAction(action)
+      router.push('/project/create')
     }
     
     if (action === UserAction.USER_SWAP) {
-      setUserAction(action)
-      router.push('/swap')
+      // setUserAction(action)
+      router.push('/user/swap')
     }
   }, [setUserAction])
 

@@ -193,11 +193,30 @@ export enum UserAction {
   
 }
 
+export const CHANNEL_LIST = [
+  { value: 'twitter', label: 'Twitter' },
+]
+
+export const TWITTER_ACTION = [
+  { value: 'like', label: 'like' },
+  { value: 'follow', label: 'follow' },
+  { value: 'comment', label: 'comment' },
+]
+
+export const AIRDROP_DURATION = [
+  { value: '1', label: '1day' },
+  { value: '2', label: '2day' },
+  { value: '3', label: '3day' },
+  { value: '5', label: '5day' },
+  { value: '7', label: '7day' },
+]
+
 export const TWITTER_UNIT: {[key: string]: string} = {
   like: '1',
   follow: '2',
   comment: '3'
 }
+
 export const AddressZero_ETH = {
   [ChainId.MAINNET]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
   [ChainId.SEPOLIA]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),

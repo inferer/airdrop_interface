@@ -24,6 +24,7 @@ import { PaddedColumn, SearchInput, Separator } from './styleds'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { useIsRoleProjectMode, useIsUserAction } from '../../state/user/hooks'
 import { useLocation } from '../../hooks/useLocation'
+import { LazyImage4 } from '../LazyImage'
 
 interface CurrencySearchProps {
   isOpen: boolean
@@ -172,15 +173,12 @@ export function CurrencySearch({
   
   return (
     <Column style={{ width: '100%', flex: '1 1' }}>
-      <PaddedColumn gap="14px">
+      <PaddedColumn gap="14px" style={{padding: 30}}>
         <RowBetween>
-          <Text fontWeight={500} fontSize={16}>
-            Select a token
-            <QuestionHelper text="Find a token by searching for its name or symbol or by pasting its address below." />
-          </Text>
+          <div className=' font-fsemibold text-[18px]'>Select an air token</div>
           <CloseIcon onClick={onDismiss} />
         </RowBetween>
-        <SearchInput
+        {/* <SearchInput
           type="text"
           id="token-search-input"
           placeholder={t('tokenSearchPlaceholder')}
@@ -191,18 +189,25 @@ export function CurrencySearch({
         />
         {showCommonBases && (
           <CommonBases chainId={chainId} onSelect={handleCurrencySelect} selectedCurrency={selectedCurrency} />
-        )}
-        <RowBetween>
+        )} */}
+        {/* <RowBetween>
           <Text fontSize={14} fontWeight={500}>
             Token Name
           </Text>
           <SortButton ascending={invertSearchOrder} toggleSortOrder={() => setInvertSearchOrder(iso => !iso)} />
-        </RowBetween>
+        </RowBetween> */}
       </PaddedColumn>
 
-      <Separator />
+      {/* <Separator /> */}
+      <div className='px-[30px]'>
+        <div className=' flex justify-between items-center bg-[rgba(85,123,241,0.03)] px-[16px] py-[10px] text-[14px] font-fsemibold text-[rgba(0,0,0,0.4)]'>
+          <div>Name</div>
+          <div>Balance</div>
+        </div>
 
-      <div style={{ flex: '1' }}>
+        
+      </div>
+      <div style={{ flex: '1' }} className='px-[30px]' >
         <AutoSizer disableWidth>
           {({ height }) => (
             <CurrencyList
@@ -218,7 +223,10 @@ export function CurrencySearch({
           )}
         </AutoSizer>
       </div>
-
+      <div className=' text-[11px] text-[rgba(0,0,0,0.4)] font-fnormal cursor-pointer flex items-center justify-center pb-4'>
+        Apply for new air token
+        <LazyImage4 className='ml-1' src='/images/airdrop/open.svg' activeSrc='/images/airdrop/open2.svg' />
+      </div>
       {/* <Separator />
       <Card>
         <RowBetween>

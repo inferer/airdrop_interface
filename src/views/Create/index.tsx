@@ -1,23 +1,17 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { ThemeContext } from 'styled-components'
-
 import {  TYPE } from '../../theme'
 import { ButtonCancel, ButtonSwap } from '../../components/Button'
-
 import { useActiveWeb3React } from '../../hooks'
-import { Dots } from '../../components/swap/styleds'
 import { CreateBody, ItemBox, ItemCenter, ItemTitle, ItemWrap, TitleWrap, TokenInfo } from './styleds'
 import LazyImage, { LazyImage2 } from '../../components/LazyImage'
 import Input from '../../components/TextInput/Input'
 import Select from './Select'
 import SelectInput from './Select2'
-import { Link } from '../../components/AppRouter'
 import { useCreateAirdrop, useCreateCallback } from '../../hooks/useAirdropSender'
 import { ApprovalState } from '../../hooks/useApproveCallback'
-import { AutoRow } from '../../components/Row'
-import Loader, { Loading, LoadingX } from '../../components/Loader'
+import { Loading, LoadingX } from '../../components/Loader'
 import { ETHER, Token } from '@uniswap/sdk'
-import { TWITTER_UNIT } from '../../constants'
+import { AIRDROP_DURATION, CHANNEL_LIST, TWITTER_ACTION, TWITTER_UNIT } from '../../constants'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { useRouter } from 'next/router'
 
@@ -30,7 +24,7 @@ export default function Create() {
   const { account } = useActiveWeb3React()
   const [name, setName] = useState('')
 
-  const [content, setContent] = useState('https://twitter.com/intent/like?tweet_id=17203739135769 52121')
+  const [content, setContent] = useState('https://twitter.com/intent/like?tweet_id=1720373913576952121')
 
   const {
     args,
@@ -56,8 +50,11 @@ export default function Create() {
 
   const [action, setAction] = useState<string>('like')
   const handleChange = (data: any) => {
-    console.log(data)
     setAction(data.value)
+  }
+  const [duration, setDutation] = useState('1')
+  const handleDurationChange = (data: any) => {
+    setDutation(data.value)
   }
 
   const [approveLoading, setApproveLoading] = useState(true)
@@ -150,14 +147,17 @@ export default function Create() {
           <div className='flex justify-between mt-5'>
             <ItemBox width={180}>
               <ItemTitle>pool</ItemTitle>
-              <div className=' text-[14px] font-fsemibold mt-2 p-4 text-[rgba(0,0,0,0.40)]'>
-                {label}
+              <div className=' text-[14px] font-fsemibold mt-2 text-[rgba(0,0,0,0.40)]'>
+                <div className="flex items-center justify-between bg-[rgba(85,123,241,0.02)] rounded-[8px] cursor-pointer min-w-[120px] relative py-3 px-4 ">
+                  {label}
+                  
+                </div>
               </div>
             </ItemBox>
             <ItemBox width={180}>
               <ItemTitle>duration</ItemTitle>
-              <div className=' text-[14px] font-fsemibold mt-2 p-4'>
-                1 day
+              <div className='mt-2 font-fmedium'>
+                <Select defaultValue={AIRDROP_DURATION[0]} options={AIRDROP_DURATION} onChange={handleDurationChange} />
               </div>
             </ItemBox>
           </div>
@@ -170,13 +170,13 @@ export default function Create() {
               <div>
                 <ItemTitle>Channel</ItemTitle>
                 <div className='mt-2 font-fmedium'>
-                  <Select title='Twitter' />
+                  <Select defaultValue={CHANNEL_LIST[0]} options={CHANNEL_LIST} />
                 </div>
               </div>
               <div className='ml-[40px]'>
                 <ItemTitle>Action</ItemTitle>
-                <div className='mt-2 font-fmedium'>
-                  <SelectInput onChange={handleChange} />
+                <div className='mt-2 font-fmedium min-w-[146px]'>
+                  <Select defaultValue={TWITTER_ACTION[0]} options={TWITTER_ACTION} onChange={handleChange} />
                 </div>
               </div>
               <div className='ml-[34px]'>
@@ -304,7 +304,7 @@ export default function Create() {
                   alert('Please approve token!')
                   return
                 }
-                handleCreateAirdrop(name, label, 'Twitter', action, TWITTER_UNIT[action], content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)
+                handleCreateAirdrop(name, label, duration, 'Twitter', action, TWITTER_UNIT[action], content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)
               }}
             >
               <TYPE.textGrad1 fontWeight={600} fontSize={20}>

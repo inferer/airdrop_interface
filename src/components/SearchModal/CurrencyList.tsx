@@ -110,8 +110,9 @@ function CurrencyRow({
   // only show add or remove buttons if not on selected list
   return (
     <MenuItem
+
       style={style}
-      className={`token-item-${key}`}
+      className={`token-item token-item-${key}`}
       onClick={() => (isSelected ? null : onSelect())}
       disabled={isSelected}
       selected={otherSelected}
@@ -210,6 +211,7 @@ export default function CurrencyList({
 
   return (
     <FixedSizeList
+      className='token-list-wrap'
       height={height}
       ref={fixedListRef as any}
       width="100%"

@@ -1,16 +1,19 @@
+import { MaxUint256 } from '@ethersproject/constants'
 import { AppDispatch } from "../state"
 import { useDispatch } from "react-redux"
 import { useActiveWeb3React } from "."
 import { useAirdropAssetTreasuryContract, useMulticallContract } from "./useContract"
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 import { useAirLabelAllTokens, useAlgLabelAllTokens, useUSDTAllTokens } from "./Tokens"
 import { AirdropAssetTreasury_NETWORKS, AirdropAssetTreasury_ABI } from "../constants/airdropAssetTreasury"
 import { NETWORK_CHAIN_ID } from "../connectors"
-import { BigNumber, Contract } from "ethers"
+import { BigNumber, Contract, ethers } from "ethers"
 import multicall from "../utils/multicall"
-import { ChainId, ETHER, JSBI, Token, TokenAmount } from "@uniswap/sdk"
+import { ChainId, Currency, ETHER, JSBI, Token, TokenAmount } from "@uniswap/sdk"
 import { updateProjectLabelLocked, updateProjectUSDTLocked, updateUserAlgTokenLocked } from "../state/airdrop/actions"
 import { AddressZero_ETH } from "../constants"
+import { getUSDTTokenFromAirToken } from "../utils/getTokenList"
+import { getERC20Contract } from "../utils"
 
 
 export const getAirdropAssetTreasuryAddress = () => {
@@ -86,7 +89,7 @@ export const getUserAlgTokenLocked = async (multi: Contract, account: string, to
 
 export function useAirdropAssetTreasury() {
   const dispatch = useDispatch<AppDispatch>()
-  const { account } = useActiveWeb3React()
+  const { account, library, chainId } = useActiveWeb3React()
 
   const multi = useMulticallContract()
   const airLabelAllTokens = useAirLabelAllTokens()
@@ -123,10 +126,62 @@ export function useAirdropAssetTreasury() {
 
   }, [multi, airdropAssetTreasury, usdtAllTokens])
 
+  const [withdrawStatus, setWithdrawStatus] = useState(0)
+  const handleUserWithdraw = useCallback(async (value: string, airToken: Currency) => {
+    if (account && airdropAssetTreasury && library && chainId) {
+      setWithdrawStatus(1)
+      try {
+        // @ts-ignore
+        const airTokenAddress = airToken.address
+        const tokenContract = getERC20Contract(airTokenAddress, library, account)
+        const spender = AirdropAssetTreasury_NETWORKS[chainId]
+        const allowance = await tokenContract.allowance(account, spender)
+        
+        let usdtTokenAddress = getUSDTTokenFromAirToken(airTokenAddress)
+        usdtTokenAddress = usdtTokenAddress === 'ETH' ? ethers.constants.AddressZero : usdtTokenAddress
+        const amount = BigNumber.from((Number(value) * (10 ** airToken.decimals)).toString(10)).toString()
+        console.log(airToken, usdtTokenAddress, BigNumber.from((Number(value) * (10 ** airToken.decimals)).toString(10)).toString())
+        console.log(allowance.toString())
+        let approved = false
+        if (Number(allowance) < Number(amount)) {
+          const approveTx = await tokenContract.approve(spender, MaxUint256)
+          const receipt = await approveTx.wait()
+          if (receipt.status) {
+            approved = true
+          } else {
+            alert('Approve: error')
+          }
+        } else {
+          approved = true
+        }
+        if (approved) {
+          const tx = await airdropAssetTreasury.userWithdraw(airTokenAddress, usdtTokenAddress, amount)
+          const receipt = await tx.wait()
+          if (receipt.status) {
+            setWithdrawStatus(2)
+            alert('Success')
+          } else {
+            alert('Error')
+          }
+        }
+        // // setTimeout(() => {
+        // //   setWithdrawStatus(2)
+        // // }, 1500)
+        
+      } catch(err: any) {
+        console.log(err)
+        alert(err?.data?.message || err.message)
+        setWithdrawStatus(0)
+      }
+    }
+  }, [account, library, chainId, airdropAssetTreasury])
+
   return {
     handleGetProjectLabelLocked,
     handleGetProjectUSDTLocked,
-    handleGetUserAlgTokenLocked
+    handleGetUserAlgTokenLocked,
+    handleUserWithdraw,
+    withdrawStatus
   }
 
 }

@@ -449,7 +449,7 @@ export default function Swap() {
                   }
                 >
                   <Text fontSize={16} fontWeight={500} className='btn-text'>
-                    {isProjectSwap ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'}
+                    {isProjectSwap || isUserSwap ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'}
                   </Text>
                 </ButtonSwap>
               </RowBetween>

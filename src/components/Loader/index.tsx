@@ -66,6 +66,15 @@ export function Loading({ size = '30px', stroke = '#6BBEE1', ...rest }: { size?:
   )
 }
 
+export function Loading2({ size = '15px', stroke = '#6BBEE1', ...rest }: { size?: string; stroke?: string }) {
+  return (
+    
+    <StyledSVG2 viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" size={size}>
+      <path d="M1.51149 9.18758C1.1312 7.86134 1.20043 6.44654 1.70839 5.16377C2.21635 3.881 3.13449 2.80236 4.31966 2.09602C5.50482 1.38969 6.8904 1.09536 8.26035 1.25893C9.6303 1.42249 10.9076 2.03477 11.8932 3.00028C12.8787 3.9658 13.5171 5.23028 13.7088 6.59659C13.9004 7.96289 13.6346 9.35422 12.9528 10.5536C12.2709 11.7531 11.2114 12.6932 9.9393 13.2274C9.30317 13.4945 8.63178 13.6526 7.95267 13.6998" stroke="#90B696" strokeLinecap="round" strokeLinejoin="round"/>
+    </StyledSVG2>
+  )
+}
+
 export function LoadingX({ size = '30px', stroke, ...rest }: { size?: string; stroke?: string }) {
   return <LazyImage src='/images/airdrop/loading.gif' className='w-[96px] h-[14px]' />
   return (

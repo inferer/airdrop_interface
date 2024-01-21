@@ -6,7 +6,7 @@ const IndexPage = () => {
 
   useEffect(() => {
     const isProjectMode = localStorage.getItem('airdrop_model')
-    Router.push(isProjectMode === 'true' ? '/project/swap' : '/user/swap')
+    Router.push(isProjectMode !== 'false' ? '/project/swap' : '/user/swap')
   }, [])
   
   return null

@@ -10,6 +10,10 @@ import { useAccountLabelScore, useAirdropTokenScore } from "../../hooks/useAirdr
 import { useAlgAirdrop, useProjectLabelLocked, useProjectUSDTLocked, useUserAlgTokenLocked } from "../../state/airdrop/hooks";
 import { useAirdropAssetTreasury } from "../../hooks/useAirdropAssetTreasury";
 import { Loading } from "../Loader";
+import LazyImage from "../LazyImage";
+import Withdraw from "./Withdraw";
+import { useApproveCallback } from "../../hooks/useApproveCallback";
+import { AirdropAssetTreasury_NETWORKS } from "../../constants/airdropAssetTreasury";
 
 const TokenItem = ({
   token,
@@ -104,7 +108,48 @@ const AlgTokenItem = ({
     </div>
   )
 }
+const AirUSDTTokenItem = ({
+  token,
+  onClick,
+  currentTokenAddress
+}: {
+  token: Currency,
+  onClick?: (value: string, token: Currency) => void,
+  currentTokenAddress?: string
 
+}) => {
+  const { account, chainId } = useActiveWeb3React()
+  const balance = useCurrencyBalance(account ?? undefined, token)
+  // @ts-ignore
+  // const lockedCurrency = useCurrency(token.address)
+  // const lockedCurrencyAmount = useCurrencyBalance(account ?? undefined, lockedCurrency ?? undefined)
+  // const [approvalState, approve] = useApproveCallback(lockedCurrencyAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
+
+  // console.log(approvalState, token.symbol, 111111)
+
+  return (
+    <div className=" rounded-[6px] border border-[rgba(107,190,225,0.2)] px-5 py-4 flex flex-col justify-between min-h-[130px]">
+      <div className="flex items-center">
+        <CurrencyLogo currency={token} size="24" />
+        <div className=" text-[16px] font-fmedium ml-[6px] first-up">{token.symbol}</div>
+      </div>
+      <div className="mt-10">
+        <div className="flex justify-between items-center">
+          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Balance</div>
+          <div className="text-[18px] font-medium flex items-center">
+            {balance?.toSignificant(6)}
+            <LazyImage src="/images/airdrop/lock.svg" className="ml-[3px]" />
+          </div>
+        </div>
+        <div className="flex justify-between items-center mt-2">
+          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Withdraw</div>
+          <Withdraw token={token} onClick={onClick} currentTokenAddress={currentTokenAddress} balance={balance ? balance?.toSignificant(6) : '0'} />
+        </div>
+        
+      </div>
+    </div>
+  )
+}
 const TokenList = () => {
   const router = useRouter()
   const isRewards = router.query.action === "rewards"
@@ -113,9 +158,11 @@ const TokenList = () => {
   const usdtAllTokens = useUSDTAllTokens()
   const { account } = useActiveWeb3React()
   const algLabelAllTokens = useAlgLabelAllTokens()
+  const airUSDTAllTokens = useAllTokens()
+
   const { handleGetAlgTokenList, handleClaim, claimStatus } = useAirdropTokenScore()
 
-  const { handleGetProjectLabelLocked, handleGetProjectUSDTLocked, handleGetUserAlgTokenLocked } = useAirdropAssetTreasury()
+  const { handleGetProjectLabelLocked, handleGetProjectUSDTLocked, handleGetUserAlgTokenLocked, handleUserWithdraw, withdrawStatus } = useAirdropAssetTreasury()
 
   const algTokenList = useMemo(() => {
     return Object.values(algLabelAllTokens)
@@ -128,10 +175,13 @@ const TokenList = () => {
     return Object.values(usdtAllTokens)
   }, [usdtAllTokens])
 
+  const airUSDTTokenList = useMemo(() => {
+    return Object.values(airUSDTAllTokens)
+  }, [airUSDTAllTokens])
+
   const filterList = useMemo(() => {
     if (isProjectMode) {
       if (isRewards) return airTokenList
-
       return [ETHER, ...usdtTokenList]
     }
     if (isRewards) return airTokenList
@@ -154,6 +204,7 @@ const TokenList = () => {
       handleGetUserAlgTokenLocked(account)
     }
   }, [account, isProjectMode, isRewards, handleGetProjectLabelLocked, handleGetProjectUSDTLocked, handleGetUserAlgTokenLocked])
+
   const [currentTokenAddress, setCurrentTokenAddress] = useState('')
   const _handleClaim = useCallback(async (label: string, tokenAddress: string) => {
     setCurrentTokenAddress(tokenAddress)
@@ -161,10 +212,18 @@ const TokenList = () => {
   }, [])
 
   useEffect(() => {
-    if (claimStatus !== 1) {
+    if (claimStatus !== 1 && withdrawStatus !== 1) {
       setCurrentTokenAddress('')
     }
-  }, [claimStatus])
+  }, [claimStatus, withdrawStatus])
+
+  const _handleWithdraw = useCallback(async (value: string, token: Currency) => {
+    console.log(value, token)
+    // @ts-ignore
+    setCurrentTokenAddress(token.address)
+    // @ts-ignore
+    handleUserWithdraw(value, token)
+  }, [])
   
   return (
     <div className=" mt-[55px]">
@@ -176,10 +235,21 @@ const TokenList = () => {
                                   : <AlgTokenItem key={token.symbol} token={token} isProjectMode={isProjectMode} claim={_handleClaim} currentTokenAddress={currentTokenAddress} />
           })
         }
-        {/* <TokenItem />
-        <TokenItem />
-        <TokenItem /> */}
+        
       </div>
+      {
+        !isProjectMode && isRewards &&
+        <>
+          <div className="text-[18px] font-fmedium text-black mb-5 mt-[50px]">Funds</div>
+          <div className=" grid grid-cols-2 gap-x-[30px] gap-y-[20px]">
+            {
+              airUSDTTokenList.map(token => {
+                return <AirUSDTTokenItem key={token.symbol} token={token} onClick={_handleWithdraw} currentTokenAddress={currentTokenAddress} />
+              })
+            }
+          </div>
+        </>
+      }
     </div>
   )
 }

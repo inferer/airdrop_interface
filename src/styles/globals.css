@@ -41,8 +41,13 @@ body {
   background-color: rgba(85, 123, 241, 0.05);
 }
 .table__body .table__row:hover {
-  background-color: rgba(85, 123, 241, 0.04);
+  background: rgba(85, 123, 241, 0.05);
 }
+
+.token-list-wrap .token-item:nth-child(2n) {
+  background-color: rgba(85, 123, 241, 0.05);
+}
+
 .css-t3ipsp-control,
 .css-13cymwt-control {
   border-width: 0 !important;
