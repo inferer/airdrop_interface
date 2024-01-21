@@ -59,7 +59,7 @@ const Withdraw = ({
   }, [])
   const inputWrapWidth = useMemo(() => {
     const _width = inputValue.length * 14
-    return _width > 160 ? 160 : _width > 60 ? _width : 60
+    return _width > 160 ? 160 : _width > 48 ? _width : 48
   }, [inputValue])
 
   const handleWithdraw = useCallback(() => {
