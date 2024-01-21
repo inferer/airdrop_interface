@@ -57,7 +57,8 @@ const Select: React.FC<{
         className={`options absolute left-0 right-0 top-[110%] z-50 bg-white rounded-lg overflow-hidden transition-all `}>
         {
           options.map(item => {
-            return <div 
+            return <div
+              key={item.value} 
               onClick={e => {
                 e.stopPropagation()
                 handleClickItem(item)
