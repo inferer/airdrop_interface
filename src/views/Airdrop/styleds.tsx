@@ -15,7 +15,14 @@ export const ClickableText = styled(Text)`
   :hover {
     cursor: pointer;
   }
-  color: ${({ theme }) => theme.primary1};
+  color: rgba(0, 0, 0, 0.60);
+
+  text-align: right;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 `
 export const MaxButton = styled.button<{ width: string }>`
   padding: 0.5rem 1rem;

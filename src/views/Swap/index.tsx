@@ -7,7 +7,6 @@ import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
 import AddressInputPanel from '../../components/AddressInputPanel'
 import { ButtonError, ButtonLight, ButtonPrimary, ButtonConfirmed, ButtonSwap } from '../../components/Button'
-import Card, { GreyCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
@@ -42,11 +41,13 @@ import { useExpertModeManager, useIsUserAction, useUserDeadline, useUserSlippage
 import { LinkStyledButton, TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
-import AppBody from '../AppBody'
-import { ClickableText } from '../Pool/styleds'
+
 import Loader from '../../components/Loader'
 
 import UseAirAssets from './UseAirAssets'
+import Card from '../../components/Card'
+import { ClickableText } from '../Airdrop/styleds'
+import TradePriceDetails from '../../components/swap/TradePriceDetails'
 
 export default function Swap() {
   const router = useRouter()
@@ -376,34 +377,44 @@ export default function Swap() {
               </>
             ) : null}
 
-            {/* {showWrap ? null : (
-              <Card padding={'.25rem .75rem 0 .75rem'} borderRadius={'20px'}>
-                <AutoColumn gap="4px">
-                  {Boolean(trade) && (
-                    <RowBetween align="center">
-                      <Text fontWeight={500} fontSize={14} color={theme.text2}>
-                        Price
-                      </Text>
-                      <TradePrice
-                        price={trade?.executionPrice}
-                        showInverted={showInverted}
-                        setShowInverted={setShowInverted}
-                      />
-                    </RowBetween>
-                  )}
-                  {allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (
-                    <RowBetween align="center">
-                      <ClickableText fontWeight={500} fontSize={14} color={theme.text2} onClick={toggleSettings}>
-                        Slippage Tolerance
-                      </ClickableText>
-                      <ClickableText fontWeight={500} fontSize={14} color={theme.text2} onClick={toggleSettings}>
-                        {allowedSlippage / 100}%
-                      </ClickableText>
-                    </RowBetween>
-                  )}
-                </AutoColumn>
-              </Card>
-            )} */}
+            {trade && (
+              <TradePriceDetails trade={trade} />
+              // <div className=' mt-3 border border-[#F5F5F5] rounded-xl px-4 py-[13px]'>
+              //     {Boolean(trade) && (
+              //       <RowBetween >
+              //         <TradePrice
+              //           price={trade?.executionPrice}
+              //           showInverted={showInverted}
+              //           setShowInverted={setShowInverted}
+              //         />
+              //       </RowBetween>
+              //     )}
+              //     <div className='h-[1px] bg-[#F5F5F5] mt-4'></div>
+              //     {allowedSlippage && (
+              //       <div>
+              //         <RowBetween align="center" style={{marginTop: 12}}>
+              //           <div className='text-[rgba(0,0,0,0.5)] text-[12px]'>Max. slippage</div>
+              //           <ClickableText onClick={toggleSettings}>
+              //             {allowedSlippage / 100}%
+              //           </ClickableText>
+              //         </RowBetween>
+              //         <RowBetween align="center" style={{marginTop: 12}}>
+              //           <div className='text-[rgba(0,0,0,0.5)] text-[12px]'>Fee</div>
+              //           <ClickableText onClick={toggleSettings}>
+              //             {allowedSlippage / 100}%
+              //           </ClickableText>
+              //         </RowBetween>
+              //         <RowBetween align="center" style={{marginTop: 12}}>
+              //           <div className='text-[rgba(0,0,0,0.5)] text-[12px]'>Minimum received</div>
+              //           <ClickableText onClick={toggleSettings}>
+              //             {allowedSlippage / 100}%
+              //           </ClickableText>
+              //         </RowBetween>
+              //       </div>
+                    
+              //     )}
+              // </div>
+            )}
           </AutoColumn>
           <BottomGrouping>
             {
@@ -487,7 +498,7 @@ export default function Swap() {
           </BottomGrouping>
         </Wrapper>
       </SwapBody>
-      <AdvancedSwapDetailsDropdown trade={trade} />
+      {/* <AdvancedSwapDetailsDropdown trade={trade} /> */}
     </>
   )
 }
