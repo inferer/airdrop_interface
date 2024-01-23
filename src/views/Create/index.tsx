@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from 're
 import {  TYPE } from '../../theme'
 import { ButtonCancel, ButtonSwap } from '../../components/Button'
 import { useActiveWeb3React } from '../../hooks'
-import { CreateBody, ItemBox, ItemCenter, ItemTitle, ItemWrap, TitleWrap, TokenInfo } from './styleds'
+import { CreateBody, ItemBox, ItemBox2, ItemCenter, ItemTitle, ItemWrap, TitleWrap, TokenInfo } from './styleds'
 import LazyImage, { LazyImage2 } from '../../components/LazyImage'
 import Input from '../../components/TextInput/Input'
 import Select from './Select'
@@ -23,6 +23,7 @@ export default function Create() {
   const router = useRouter()
   const { account } = useActiveWeb3React()
   const [name, setName] = useState('')
+  const [nameError, setNameError] = useState(false)
 
   const [content, setContent] = useState('https://twitter.com/intent/like?tweet_id=1720373913576952121')
 
@@ -104,12 +105,17 @@ export default function Create() {
       </TitleWrap>
       <ItemWrap>
         <div>
-          <ItemBox>
-            <ItemTitle>airdrop name</ItemTitle>
-            <Input value={name} onUserInput={value => {
-              setName(value)
-            }} />
-          </ItemBox>
+          <ItemBox2
+            error={nameError && name.length <= 0}
+          >
+            <div className='content bg-white h-full'>
+              <ItemTitle>airdrop name</ItemTitle>
+              <Input value={name} onUserInput={value => {
+                setName(value)
+              }} />
+            </div>
+            
+          </ItemBox2>
           <ItemBox style={{ marginTop: 20, height: 'auto'}}>
             <ItemTitle>offer</ItemTitle>
             <div className='flex justify-between items-center'>
@@ -297,7 +303,8 @@ export default function Create() {
                 e.stopPropagation()
                 if (createStatus === 1) return
                 if (!name) {
-                  alert('Airdrop name is empty!')
+                  setNameError(true)
+                  // alert('Airdrop name is empty!')
                   return
                 }
                 if (approvalState !== ApprovalState.APPROVED || approvalStateLabel !== ApprovalState.APPROVED) {

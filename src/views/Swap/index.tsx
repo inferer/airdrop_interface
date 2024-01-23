@@ -290,6 +290,11 @@ export default function Swap() {
     }
   }, [isProjectCreate, isUserCollect])
 
+  useEffect(() => {
+    onUserInput(Field.INPUT, '')
+    onUserInput(Field.OUTPUT, '')
+  }, [router])
+
   return (
     <>
       <TokenWarningModal
@@ -487,7 +492,7 @@ export default function Swap() {
                 disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError || (noRoute && userHasSpecifiedInputOutput)}
               >
                 <Text fontSize={20} fontWeight={500} className='btn-text'>
-                  {isProjectSwap
+                  {isProjectSwap || isUserSwap
                     ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'}
                 </Text>
               </ButtonSwap>

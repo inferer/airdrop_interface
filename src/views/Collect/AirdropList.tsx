@@ -96,9 +96,9 @@ const AirdropList: React.FC<{
                           <span>{airdrop.expireOn}</span>
                         </TableCell>
                         <TableCell className="w-[140px]">
-                          <div className="min-w-[93px] h-[36px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)] px-2">
+                          <div className="min-w-[93px] h-[36px] flex items-center rounded border border-[rgba(0,0,0,0.06)] px-2">
                             <LazyImage src="/images/channel/twitter.svg" className=" w-5 h-5 rounded-full shrink-0" />
-                            <div className="w-[1px] h-[14px] bg-[rgba(0,0,0,0.06)] shrink-0"></div>
+                            <div className="w-[1px] h-[14px] mx-3 bg-[rgba(0,0,0,0.06)] shrink-0"></div>
                             <span className=" shrink-0 text-[16px] font-fsemibold">{airdrop.action}</span>
                           </div>
                         </TableCell>

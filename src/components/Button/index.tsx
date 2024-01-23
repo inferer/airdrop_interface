@@ -335,7 +335,7 @@ export const ButtonSwap = styled.div<{
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-family: Inter;
+    font-family: Inter-SemiBold;
     font-size: 20px;
     font-style: normal;
     font-weight: 600;

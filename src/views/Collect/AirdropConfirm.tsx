@@ -65,7 +65,7 @@ const AirdropConfirm: React.FC<{
               <LabelText>Name</LabelText>
             </div>
             <div>
-              <div className="text-[rgba(63,60,255,0.8)] text-[16px] font-fmedium rounded-lg bg-[rgba(63,60,255,0.05)] px-2">
+              <div className="text-black text-[16px] font-normal">
                 <FlexCenter>{airdrop.name}</FlexCenter>
               </div>
             </div>
@@ -144,21 +144,25 @@ const AirdropConfirm: React.FC<{
       </div>
       <div className="mt-8">
         <LabelText>Content</LabelText>
-        <div className="p-4 rounded-xl bg-[rgba(85,123,241,0.03)] font-fnormal h-[100px] mt-3">
-          {airdrop.content}
+        <div className="p-4 rounded-xl bg-[rgba(85,123,241,0.03)] font-fnormal h-[100px] mt-3 flex">
+          <LazyImage src="/images/airdrop/link.svg" className="w-5 h-5 mr-1" />
+          <div className="">
+            {airdrop.content}
+          </div>
         </div>
       </div>
       <div className="p-4 rounded-xl bg-[rgba(123,120,255,0.04)] font-fnormal mt-3">
         <div className=" text-[rgba(123,120,255,0.80)] text-[16px] font-fsemibold ">Airdrop token would be issued from contract.</div>
         <div className=" text-[rgba(123,120,255,0.80)] text-[14px] font-normal mt-2 leading-[18px] ">Once you confirmed the airdrop, the alg-* token would be locked in protocol until the airdrop content gets done. And the alg-* token would be transformed into air-* token and transferred into your account for later trade in airdrop pools..</div>
       </div>
-      <div className=" flex justify-end mt-[50px]">
-        <div className='w-[260px] mr-[50px]'>
+      <div className=" flex justify-center mt-[50px]">
+        <div className='w-[260px] mr-[180px]'>
           <ButtonSwap
             bgColor="#FAFAFA"
             onClick={e => {
               e.stopPropagation()
-              router.push('/collect')
+              // router.push('/collect')
+              router.back()
             }}
           >
             <div className="text-[rgba(0,0,0,0.60)] text-[20px] font-fsemibold">Cancel</div>
@@ -225,7 +229,7 @@ const AirdropConfirm: React.FC<{
           <ButtonSwap 
             onClick={e => {
               e.stopPropagation()
-              
+              if (confirmStatus === 1) return
               if (approvalState !== ApprovalState.APPROVED) {
                 alert('Please approve token!')
                 return
@@ -233,11 +237,11 @@ const AirdropConfirm: React.FC<{
               handleConfirmTask(airdrop.airdropId, airdrop.labelToken.address, airdrop.labelToken?.symbol?.slice(4) || '', accountScore)
             }}
           >
-            <TYPE.textGrad1 fontWeight={600} fontSize={20}>
+            <TYPE.textGrad2 fontWeight={600} fontSize={20}>
               {
                 confirmStatus === 1 ? <LoadingX /> : 'Confirm'
               }
-            </TYPE.textGrad1>
+            </TYPE.textGrad2>
           </ButtonSwap>
         }
           

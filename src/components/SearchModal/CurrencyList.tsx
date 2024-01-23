@@ -86,7 +86,8 @@ function CurrencyRow({
   isSelected,
   otherSelected,
   style,
-  payInputCreate
+  payInputCreate,
+  isAssetToken
 }: {
   currency: Currency
   onSelect: () => void
@@ -94,6 +95,7 @@ function CurrencyRow({
   otherSelected: boolean
   style: CSSProperties
   payInputCreate?: boolean
+  isAssetToken?: boolean
 }) {
   const { account, chainId } = useActiveWeb3React()
   const key = currencyKey(currency)
@@ -110,9 +112,8 @@ function CurrencyRow({
   // only show add or remove buttons if not on selected list
   return (
     <MenuItem
-
       style={style}
-      className={`token-item token-item-${key}`}
+      className={`token-item token-item-${key} ${isAssetToken ? 'token-item-asset' : 'token-item-air'}`}
       onClick={() => (isSelected ? null : onSelect())}
       disabled={isSelected}
       selected={otherSelected}
@@ -172,7 +173,8 @@ export default function CurrencyList({
   otherCurrency,
   fixedListRef,
   showETH,
-  payInput
+  payInput,
+  isAssetToken
 }: {
   height: number
   currencies: Currency[]
@@ -182,6 +184,7 @@ export default function CurrencyList({
   fixedListRef?: MutableRefObject<FixedSizeList | undefined>
   showETH: boolean
   payInput?: boolean
+  isAssetToken?: boolean
 }) {
   const { isProjectCreate } = useIsUserAction()
   
@@ -195,6 +198,7 @@ export default function CurrencyList({
       const handleSelect = () => onCurrencySelect(currency)
       return (
         <CurrencyRow
+          isAssetToken={isAssetToken}
           payInputCreate={ payInput && isProjectCreate }
           style={style}
           currency={currency}

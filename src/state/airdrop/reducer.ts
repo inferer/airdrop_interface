@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { IAirdrop, IAlgAirdrop, updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed, updateUserAlgAirdropList, updateUserLabelScore, updateMaxUnits, updateAirTokenPercent, updateProjectLabelLocked, TokenLocked, updateProjectUSDTLocked, updateUserAlgTokenLocked } from './actions'
+import { IAirdrop, IAlgAirdrop, updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed, updateUserAlgAirdropList, updateUserLabelScore, updateMaxUnits, updateAirTokenPercent, updateProjectLabelLocked, TokenLocked, updateProjectUSDTLocked, updateUserAlgTokenLocked, updateUserAirdropConfirmedByTaskId } from './actions'
 
 
 export interface AirdropState {
@@ -37,6 +37,23 @@ export default createReducer<AirdropState>(initialState, builder => {
   })
   builder.addCase(updateUserAirdropConfirmed, (state, { payload: { airdropList } }) => {
     state.userAirdropConfirmedList = airdropList
+  })
+  builder.addCase(updateUserAirdropConfirmedByTaskId, (state, { payload: { taskIds } }) => {
+    console.log(taskIds, state.userAirdropConfirmedList.length)
+    const _airdropList = state.userAirdropConfirmedList.map(airdrop => {
+      if (taskIds.includes(airdrop.id)) {
+        console.log(airdrop)
+        return {
+          ...airdrop,
+          completed: true
+        }
+      }
+      return {
+        ...airdrop
+      }
+    })
+
+    state.userAirdropConfirmedList = _airdropList
   })
   builder.addCase(updateUserAlgAirdropList, (state, { payload: { algAirdropList } }) => {
     state.userAlgAirdropList = algAirdropList

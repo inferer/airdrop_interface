@@ -41,11 +41,21 @@ body {
   background-color: rgba(85, 123, 241, 0.05);
 }
 .table__body .table__row:hover {
-  background: rgba(85, 123, 241, 0.05);
+  background: rgba(85, 123, 241, 0.10);
 }
 
 .token-list-wrap .token-item:nth-child(2n) {
-  background-color: rgba(85, 123, 241, 0.05);
+  background: linear-gradient(92deg, rgba(107, 190, 225, 0.05) 0%, rgba(138, 232, 153, 0.05) 100%);
+}
+.token-list-wrap .token-item:hover {
+  background: linear-gradient(92deg, rgba(107, 190, 225, 0.10) 0%, rgba(138, 232, 153, 0.10) 100%);
+}
+
+.token-list-wrap .token-item-asset:nth-child(2n) {
+  background: linear-gradient(115deg, rgba(63, 60, 255, 0.05) 6.8%, rgba(107, 190, 225, 0.05) 87.02%);
+}
+.token-list-wrap .token-item-asset:hover {
+  background: linear-gradient(115deg, rgba(63, 60, 255, 0.10) 6.8%, rgba(107, 190, 225, 0.10) 87.02%);
 }
 
 .css-t3ipsp-control,
@@ -99,6 +109,14 @@ body {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.score-item:hover {
+  background: #F2F2F2;
+}
+
+.score-item.active:hover {
+  background: rgba(73, 91, 255, 0.40);
 }
 
 

@@ -141,7 +141,10 @@ export default function RightMenu() {
       }
       
     }
-  }, [router, isProjectMode, showRightMenu])
+    if (action === 'completed') {
+      router.push('/user/completed')
+    }
+   }, [router, isProjectMode, showRightMenu])
 
   return (
     <RightWrap open={showRightMenu} ref={node as any}>
@@ -165,7 +168,7 @@ export default function RightMenu() {
               handleClick('home')
             }}
           >
-            <LazyImage4 src='/images/airdrop/home.svg' activeSrc='/images/airdrop/home2.svg' />
+            <LazyImage4 src='/images/airdrop/home.svg' activeSrc={ isProjectMode ? '/images/airdrop/home2.svg' : '/images/airdrop/home4.svg' } />
           </div>
           <div className=' cursor-pointer'
             onClick={e => {
@@ -175,7 +178,7 @@ export default function RightMenu() {
               router.push(isProjectMode ? '/project/swap' : '/user/swap')
             }}
           >
-            <LazyImage4 src='/images/airdrop/right2.svg' activeSrc='/images/airdrop/right3.svg' />
+            <LazyImage4 src='/images/airdrop/right2.svg' activeSrc={ isProjectMode ? '/images/airdrop/right3.svg' : '/images/airdrop/right4.svg'} />
           </div>
         </div>
         <div className=' flex items-center justify-center flex-col'>
@@ -218,7 +221,9 @@ export default function RightMenu() {
               onClick={() => handleClick('tasks')}
             />
             <MenuLine />
-            <MenuItem icon='/images/airdrop/completed.svg' text='Completed airdrops' isProjectMode={isProjectMode} />
+            <MenuItem icon='/images/airdrop/completed.svg' text='Completed airdrops' isProjectMode={isProjectMode} 
+              onClick={() => handleClick('completed')}
+            />
           </div>
         </div>
         

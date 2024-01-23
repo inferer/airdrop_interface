@@ -12,7 +12,7 @@ const ScoreItem = ({
         e.stopPropagation()
         onClick && onClick()
       }}
-      className={`${active ? 'bg-[rgba(73,91,255,0.30)]' : 'bg-[#FAFAFA]'}  w-[82px] h-3 rounded-sm mr-1 cursor-pointer`}>
+      className={`score-item ${active ? 'bg-[rgba(73,91,255,0.30)] active' : 'bg-[#FAFAFA]'}  w-[82px] h-3 rounded-sm mr-1 cursor-pointer`}>
 
     </div>
   )

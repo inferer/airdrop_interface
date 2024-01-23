@@ -47,6 +47,7 @@ export type TokenLocked = {
 export const updateAirdropList = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateAirdropList')
 export const updateAirdropListOne = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateAirdropListOne')
 export const updateUserAirdropConfirmed = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateUserAirdropConfirmed')
+export const updateUserAirdropConfirmedByTaskId = createAction<{ taskIds: string[] }>('airdrop/updateUserAirdropConfirmedByTaskId')
 export const updateUserAlgAirdropList = createAction<{ algAirdropList: IAlgAirdrop[] }>('airdrop/updateUserAlgAirdropList')
 export const updateUserLabelScore = createAction<{ key: string, score: number }>('airdrop/updateUserLabelScore')
 export const updateMaxUnits = createAction<{ units: number }>('airdrop/updateMaxUnits')

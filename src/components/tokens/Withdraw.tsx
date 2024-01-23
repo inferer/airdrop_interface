@@ -58,8 +58,8 @@ const Withdraw = ({
     setInputFocus(false)
   }, [])
   const inputWrapWidth = useMemo(() => {
-    const _width = inputValue.length * 14
-    return _width > 160 ? 160 : _width > 48 ? _width : 48
+    const _width = inputValue.length * 20
+    return _width > 160 ? 160 : _width > 52 ? _width : 52
   }, [inputValue])
 
   const handleWithdraw = useCallback(() => {

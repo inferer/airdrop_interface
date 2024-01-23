@@ -28,7 +28,7 @@ export const confirmCompleteAirdrop = async (account: string, taskIds: string[])
 
 
 export function useAirdropReceiver(algToken?: string) {
-  const { handleGetUserAirdropConfirmed } = useAirdropManager()
+  const { handleGetUserAirdropConfirmed, handleUpdateUserAirdropConfirmedByTaskId } = useAirdropManager()
   const { account, chainId, library } = useActiveWeb3React()
   const airdropReceiver: Contract | null = useAirdropReceiverContract()
 
@@ -98,23 +98,23 @@ export function useAirdropReceiver(algToken?: string) {
       }
       setCompleteStatus(1)
       try {
-        // setTimeout(() => {
-        //   setCompleteStatus(2)
-        // }, 2000)
+        
         const res = await confirmCompleteAirdrop(account, taskIds)
         if (res.code === 0) {
-          handleGetUserAirdropConfirmed()
+          setTimeout(() => {
+            handleUpdateUserAirdropConfirmedByTaskId(taskIds)
+          }, 2000)
+          
           setCompleteStatus(2)
-          alert('airdrop确认完成, 合约状态已更新，同时airt token 已转发')
         } else {
           setCompleteStatus(-1)
           alert(res.message)
         }
         
-
-        setTimeout(() => {
-          setCompleteStatus(0)
-        }, 4000)
+        // setTimeout(() => {
+        //   setCompleteStatus(0)
+        // }, 5000)
+        
         
       } catch(error) {
         console.log(error)
@@ -122,7 +122,7 @@ export function useAirdropReceiver(algToken?: string) {
       }
       
     }
-  }, [ account, handleGetUserAirdropConfirmed])
+  }, [ account, handleUpdateUserAirdropConfirmedByTaskId])
   const handleConfirmCompleteTask = useCallback(async (
     userAddress: string,
     taskIds: string[],
@@ -162,6 +162,7 @@ export function useAirdropReceiver(algToken?: string) {
   }, [airdropReceiver, account])
   return {
     confirmStatus,
+    setCompleteStatus,
     handleConfirmTask,
     completeStatus,
     handleUserCompleteTask,

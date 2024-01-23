@@ -23,7 +23,7 @@ const InputRow = styled.div<{ selected: boolean }>`
   padding: ${({ selected }) => (selected ? '0.75rem 0.5rem 0.75rem 1rem' : '4px 0.75rem 4px 1rem')};
 `
 
-const CurrencySelect = styled.button<{ selected: boolean }>`
+const CurrencySelect = styled.button<{ selected: boolean, disabled?: boolean, payInput?:boolean }>`
   align-items: center;
   padding: 0px 12px;
   height: 32px;
@@ -34,13 +34,13 @@ const CurrencySelect = styled.button<{ selected: boolean }>`
   color: ${({ selected, theme }) => (selected ? theme.text1 : theme.text3)};
   border-radius: 15px;
   outline: none;
-  cursor: pointer;
+  cursor: ${({ disabled }) => ( disabled ? 'auto' : 'pointer')} ;
   user-select: none;
   border: none;
 
   :focus,
   :hover {
-    background-color: ${({ selected, theme }) => ('rgba(255,255,255,0.8)')};
+    background: ${({ payInput }) => (payInput ? 'linear-gradient(92deg, rgba(107, 190, 225, 0.10) 0%, rgba(138, 232, 153, 0.10) 100%)' : 'linear-gradient(93deg, rgba(63, 60, 255, 0.10) 0%, rgba(107, 190, 225, 0.10) 100%)')};
   }
 `
 
@@ -96,8 +96,8 @@ const StyledTokenName = styled.span<{ active?: boolean }>`
 
 `
 
-const StyledBalanceMax = styled.span`
-  color: #49BCFF;
+const StyledBalanceMax = styled.span<{ color?: string }>`
+  color: ${({ color }) => ( color ?? '#49BCFF' )};
   font-family: Inter-SemiBold;
   font-size: 16px;
   font-style: normal;
@@ -157,8 +157,7 @@ export default function  CurrencyInputPanel({
   showCommonBases,
 }: CurrencyInputPanelProps) {
   const { t } = useTranslation()
-  const { isProjectCreate, isProjectSwap } = useIsUserAction()
-
+  const { isProjectCreate, isProjectSwap, isUserCollect } = useIsUserAction()
   const [modalOpen, setModalOpen] = useState(false)
   const { account } = useActiveWeb3React()
   const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
@@ -234,7 +233,9 @@ export default function  CurrencyInputPanel({
             </>
           )}
           <CurrencySelect
+            payInput={payInput}
             selected={!!currency}
+            disabled={disableCurrencySelect}
             className="open-currency-select-button"
             onClick={() => {
               if (!disableCurrencySelect) {
@@ -318,7 +319,7 @@ export default function  CurrencyInputPanel({
               </TYPE.body>
             )}
             {account && currency && label !== 'You received' && (
-                <StyledBalanceMax onClick={handleOnMax}>MAX</StyledBalanceMax>
+                <StyledBalanceMax onClick={handleOnMax} color={ isUserCollect ? '#8AE899' : undefined} >Max</StyledBalanceMax>
               )}
               </div>
         </BalanceWrap> : <div className='h-[48px]'></div>

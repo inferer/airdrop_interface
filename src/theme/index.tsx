@@ -146,10 +146,28 @@ const TextGrad1 = styled(Text)`
   align-items: center;
   justify-content: center;
 `
+const TextGrad2 = styled(Text)`
+
+  font-family: ${({ fontWeight }) => fontFamily[fontWeight as string]};
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal; /* 150% */
+  background: linear-gradient(135deg, #6BBEE1 0%, #8AE899 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
 
 export const TYPE = {
   textGrad1(props: TextProps) {
     return <TextGrad1 fontWeight={ props.fontWeight || '400' } { ...props } />
+  },
+  textGrad2(props: TextProps) {
+    return <TextGrad2 fontWeight={ props.fontWeight || '400' } { ...props } />
   },
   main(props: TextProps) {
     return <TextWrapper fontWeight={500} color={'text2'} {...props} />

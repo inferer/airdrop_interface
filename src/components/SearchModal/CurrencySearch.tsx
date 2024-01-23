@@ -25,6 +25,7 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 import { useIsRoleProjectMode, useIsUserAction } from '../../state/user/hooks'
 import { useLocation } from '../../hooks/useLocation'
 import { LazyImage4 } from '../LazyImage'
+import { TEL_URL } from '../../constants'
 
 interface CurrencySearchProps {
   isOpen: boolean
@@ -171,11 +172,19 @@ export function CurrencySearch({
     [filteredSortedTokens, handleCurrencySelect, searchQuery]
   )
   
+  const isAssetToken = useMemo(() => {
+    if (isProjectMode && payInput) return true
+    if (isUserSwap && !payInput) return true
+    return false
+  }, [isProjectMode, payInput, isUserSwap])
+
   return (
     <Column style={{ width: '100%', flex: '1 1' }}>
       <PaddedColumn gap="14px" style={{padding: 30}}>
         <RowBetween>
-          <div className=' font-fsemibold text-[18px]'>Select an air token</div>
+          <div className=' font-fsemibold text-[18px]'>
+            { isAssetToken ? 'Select an asset token' : 'Select an air token'}
+          </div>
           <CloseIcon onClick={onDismiss} />
         </RowBetween>
         {/* <SearchInput
@@ -211,6 +220,7 @@ export function CurrencySearch({
         <AutoSizer disableWidth>
           {({ height }) => (
             <CurrencyList
+              isAssetToken={isAssetToken}
               payInput={payInput}
               height={height}
               showETH={showETH}
@@ -223,7 +233,12 @@ export function CurrencySearch({
           )}
         </AutoSizer>
       </div>
-      <div className=' text-[11px] text-[rgba(0,0,0,0.4)] font-fnormal cursor-pointer flex items-center justify-center pb-4'>
+      <div className=' text-[11px] text-[rgba(0,0,0,0.4)] font-fnormal cursor-pointer flex items-center justify-center pb-4'
+        onClick={e => {
+          e.stopPropagation()
+          window.open(TEL_URL, '_blank')
+        }}
+      >
         Apply for new air token
         <LazyImage4 className='ml-1' src='/images/airdrop/open.svg' activeSrc='/images/airdrop/open2.svg' />
       </div>

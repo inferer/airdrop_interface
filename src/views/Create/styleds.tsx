@@ -91,6 +91,24 @@ export const ItemBox = styled.div<{ width?: number, height?: number }>`
   padding: 16px;
 
 `
+
+export const ItemBox2 = styled.div<{ width?: number, height?: number, error?: boolean }>`
+  border-radius: 12px;
+  /* border: 1px solid rgba(85, 123, 241, 0.10); */
+  background: #FFF;
+  width: ${({ width }) => (`${width || 380}px`)};
+  height: ${({ height }) => (`${height || 115}px`)};
+  background: ${({ error }) => ( error ? 'linear-gradient(180deg, #FF6060 0%, #FF2E2E 100%),linear-gradient(0deg, #FFFFFF, #FFFFFF)' : 'linear-gradient(115.46deg, #3F3CFF 6.8%, #6BBEE1 87.02%), linear-gradient(0deg, #FFFFFF, #FFFFFF)' )} ;
+  background-repeat: no-repeat;
+
+  padding: 1px;
+  .content {
+    border-radius: 11px;
+    padding: 16px;
+
+  }
+
+`
 export const ItemCenter = styled.div`
   background: #FAFAFA;
   width: 1px;

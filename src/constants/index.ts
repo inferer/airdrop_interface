@@ -222,3 +222,5 @@ export const AddressZero_ETH = {
   [ChainId.SEPOLIA]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
   [ChainId.LOCAL]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH')
 }
+
+export const TEL_URL = 'https://t.me/+zTwxF2bS6a85NzI1'
