@@ -14,7 +14,8 @@ export const CollectBody = styled.div`
   border-radius: 24px;
   background: #FFF;
   padding: 40px;
-  margin-top: 42px;
+  margin-top: 56px;
+  margin-bottom: 56px;
 `
 
 export const TitleWrap = styled.div`

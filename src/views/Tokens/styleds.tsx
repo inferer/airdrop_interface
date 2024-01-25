@@ -47,4 +47,5 @@ export const TokensBody = styled.div`
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
   margin: 0 auto;
   padding: 30px;
+  margin-top: 26px;
 `

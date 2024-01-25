@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import LazyImage from "../../components/LazyImage";
 import { FlexCenter, LabelText } from "./styleds";
-import { ButtonSwap } from "../../components/Button";
+import { ButtonCancel, ButtonSwap, ButtonSwapUser } from "../../components/Button";
 import { TYPE } from "../../theme";
 import { useAirdropList0 } from "../../state/airdrop/hooks";
 import router from 'next/router'
@@ -56,7 +56,7 @@ const AirdropConfirm: React.FC<{
   }, [approvalState])
 
   return (
-    <div className="p-5 pt-0">
+    <div className="py-5 pt-0">
       {/* <div className=" text-[36px] font-fsemibold leading-[42px]">{airdrop.name}</div> */}
       <div className="flex items-start mt-14">
         <div className="w-[420px]">
@@ -98,7 +98,7 @@ const AirdropConfirm: React.FC<{
               <LabelText>Label</LabelText>
             </div>
             <div>
-              <div className="text-[rgba(63,60,255,0.8)] text-[16px] font-fmedium rounded-lg bg-[rgba(63,60,255,0.05)] px-2">
+              <div className="text-[rgba(63,60,255,0.8)] text-[16px] font-fmedium rounded-lg bg-[rgba(63,60,255,0.05)] px-2 h-[35px] flex items-center">
                 <FlexCenter>{airdrop.label}</FlexCenter>
               </div>
             </div>
@@ -157,8 +157,7 @@ const AirdropConfirm: React.FC<{
       </div>
       <div className=" flex justify-center mt-[50px]">
         <div className='w-[260px] mr-[180px]'>
-          <ButtonSwap
-            bgColor="#FAFAFA"
+          <ButtonCancel
             onClick={e => {
               e.stopPropagation()
               // router.push('/collect')
@@ -166,7 +165,7 @@ const AirdropConfirm: React.FC<{
             }}
           >
             <div className="text-[rgba(0,0,0,0.60)] text-[20px] font-fsemibold">Cancel</div>
-          </ButtonSwap>
+          </ButtonCancel>
         </div>
         <div className='w-[260px]'>
         {/* {
@@ -226,7 +225,7 @@ const AirdropConfirm: React.FC<{
           }
         {
           !approveLoading && approvalState === ApprovalState.APPROVED && 
-          <ButtonSwap 
+          <ButtonSwapUser 
             onClick={e => {
               e.stopPropagation()
               if (confirmStatus === 1) return
@@ -242,7 +241,7 @@ const AirdropConfirm: React.FC<{
                 confirmStatus === 1 ? <LoadingX /> : 'Confirm'
               }
             </TYPE.textGrad2>
-          </ButtonSwap>
+          </ButtonSwapUser>
         }
           
         </div>

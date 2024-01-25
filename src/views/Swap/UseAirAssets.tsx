@@ -43,7 +43,7 @@ const UseAirAssets: React.FC<{
 
   return (
     <div className="w-full h-[58px] rounded-xl border border-[#F5F5F5] flex items-center px-4">
-      <div className=" text-[16px] font-fsemibold text-[rgba(0,0,0,0.40)]">
+      <div className=" text-[16px] font-fsemibold text-[rgba(0,0,0,0.40)] shrink-0">
         Use air assets
       </div>
       <div ref={wrapRef} className=" relative bg-[#F4F6FE] w-[284px] h-[20px] mx-[10px] shrink-0 rounded-[5px] flex items-center justify-between overflow-hidden"

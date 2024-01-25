@@ -24,6 +24,7 @@ export default function Create() {
   const { account } = useActiveWeb3React()
   const [name, setName] = useState('')
   const [nameError, setNameError] = useState(false)
+  const [errorCode, setErrorCode] = useState(1)
 
   const [content, setContent] = useState('https://twitter.com/intent/like?tweet_id=1720373913576952121')
 
@@ -107,18 +108,30 @@ export default function Create() {
         <div>
           <ItemBox2
             error={nameError && name.length <= 0}
+            errorCode={errorCode}
           >
             <div className='content bg-white h-full'>
               <ItemTitle>airdrop name</ItemTitle>
-              <Input value={name} onUserInput={value => {
+              <Input focus value={name} 
+                onFocus={e => {
+                  setErrorCode(1)
+                }}
+                onBlur={e => {
+                  if (name.length <= 0) {
+                    setErrorCode(-1)
+                  } else {
+                    setErrorCode(2)
+                  }
+                }}
+                onUserInput={value => {
                 setName(value)
               }} />
             </div>
             
           </ItemBox2>
-          <ItemBox style={{ marginTop: 20, height: 'auto'}}>
+          <ItemBox style={{ marginTop: 20, height: '144px'}}>
             <ItemTitle>offer</ItemTitle>
-            <div className='flex justify-between items-center'>
+            <div className='flex justify-between items-center mt-2'>
               {/* <Input value={''} placeholder='10' onUserInput={function (input: string): void {
                 throw new Error('Function not implemented.')
               } } /> */}
@@ -151,7 +164,7 @@ export default function Create() {
 
           </ItemBox>
           <div className='flex justify-between mt-5'>
-            <ItemBox width={180}>
+            <ItemBox width={180} height={100}>
               <ItemTitle>pool</ItemTitle>
               <div className=' text-[14px] font-fsemibold mt-2 text-[rgba(0,0,0,0.40)]'>
                 <div className="flex items-center justify-between bg-[rgba(85,123,241,0.02)] rounded-[8px] cursor-pointer min-w-[120px] relative py-3 px-4 ">
@@ -160,7 +173,7 @@ export default function Create() {
                 </div>
               </div>
             </ItemBox>
-            <ItemBox width={180}>
+            <ItemBox width={180} height={100}>
               <ItemTitle>duration</ItemTitle>
               <div className='mt-2 font-fmedium'>
                 <Select defaultValue={AIRDROP_DURATION[0]} options={AIRDROP_DURATION} onChange={handleDurationChange} />
@@ -211,10 +224,10 @@ export default function Create() {
             <div className='mt-4'>
               <ItemTitle>Content</ItemTitle>
               <div className='mt-2 py-3 px-4 h-[90px] bg-[rgba(85,123,241,0.02)] rounded-lg overflow-auto'>
-                <textarea className=' w-full h-full bg-[rgba(85,123,241,0)] outline-none leading-6'
+                <textarea className=' w-full h-full bg-[rgba(85,123,241,0)] outline-none leading-6 resize-none'
                   value={content}
                   onChange={() => {
-
+                    
                   }}
                 >
                 
@@ -224,8 +237,8 @@ export default function Create() {
           </ItemBox>
           
           <div className='h-[121px] bg-[rgba(123,120,255,0.06)] rounded-xl px-4 py-[18px] mt-5'>
-            <div className=' font-fsemibold text-[#7B78FF] text-base'>Airdrop assets would be locked in contract.</div>
-            <div className=' text-[#7B78FF] text-[14px] mt-3'>When you try to create an airdrop, the associated token assets would be locked in contract, and you would receive same amount of correspondant “air-” tokens, which are permitted to trade in airdrop pools.</div>
+            <div className=' font-fsemibold text-[#7B78FF] text-base leading-normal'>Airdrop assets would be locked in contract.</div>
+            <div className=' text-[#7B78FF] text-[14px] mt-3 leading-[18px]'>When you try to create an airdrop, the associated token assets would be locked in contract, and you would receive same amount of correspondant “air-” tokens, which are permitted to trade in airdrop pools.</div>
           </div>
         </div>
       </ItemWrap>

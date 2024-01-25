@@ -26,7 +26,7 @@ const InputRow = styled.div<{ selected: boolean }>`
 const CurrencySelect = styled.button<{ selected: boolean, disabled?: boolean, payInput?:boolean }>`
   align-items: center;
   padding: 0px 12px;
-  height: 32px;
+  height: 36px;
   font-size: 20px;
   font-weight: 600;
   font-family: Inter-SemiBold;
@@ -93,6 +93,10 @@ const Container = styled.div<{ hideInput: boolean }>`
 const StyledTokenName = styled.span<{ active?: boolean }>`
   ${({ active }) => (active ? '  margin: 0 0.25rem 0 0.75rem;' : '  margin: 0 0.25rem 0 0.25rem;')}
   font-size:  ${({ active }) => (active ? '20px' : '16px')};
+
+  &::first-letter {
+    text-transform: capitalize;
+  }
 
 `
 
@@ -188,22 +192,6 @@ export default function  CurrencyInputPanel({
 
   const airPercent = useAirTokenPercent()
   const otherCurrencyBalance = useCurrencyBalance(account ?? undefined, otherCurrency ?? undefined)
-  // const percentBalance = useMemo(() => {
-  //   let balance1 = 0
-  //   let balance2 = 0
-  //   if (airPercent && otherCurrencyBalance) {
-  //     const currencyBalance = otherCurrencyBalance.toSignificant(6)
-  //     balance2 = Number((Number(currencyBalance) * airPercent / 100).toFixed(4))
-  //     balance1 = Number((Number(currencyBalance) - balance2).toFixed(4))
-  //   }
-
-  //   return {
-  //     balance1,
-  //     balance2
-  //   }
-    
-  // }, [airPercent, value, selectedCurrencyBalance, otherCurrencyBalance])
-
   const percentBalance = useAirTokenPercentBalance(otherCurrencyBalance)
 
   return (

@@ -21,7 +21,10 @@ function Collect() {
     <div className='w-[1217px] mx-auto'>
       <CollectBody>
         <div className='flex items-center mb-10'>
-          <LazyImage src='/images/airdrop/label_icon.svg' className=' w-[24px] h-[24px] mr-2' />
+          {
+            !isAirdropConfirm && <LazyImage src='/images/airdrop/label_icon.svg' className=' w-[24px] h-[24px] mr-3' />
+          }
+          
           <div className=' font-fsemibold text-[32px]'>
             {isAirdropConfirm ? 'Confirm the Airdrop' : 'Airdrops'} 
           </div>

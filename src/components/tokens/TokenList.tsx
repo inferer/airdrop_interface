@@ -38,14 +38,14 @@ const TokenItem = ({
       </div>
       <div className="mt-10">
         <div className="flex justify-between items-center">
-          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Balance</div>
-          <div className="text-[18px] font-medium">{balance?.toSignificant(6)}</div>
+          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Balance</div>
+          <div className="text-[18px] font-fmedium">{balance?.toSignificant(6)}</div>
         </div>
         {
           isProjectMode && 
           <div className="flex justify-between items-center mt-2">
-            <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Locked</div>
-            <div className="text-[18px] font-medium">{ isRewards ? tokenLocked.lockedAmount : usdtLocked.lockedAmount }</div>
+            <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Locked</div>
+            <div className="text-[18px] font-fmedium">{ isRewards ? tokenLocked.lockedAmount : usdtLocked.lockedAmount }</div>
           </div>
         }
         
@@ -79,20 +79,20 @@ const AlgTokenItem = ({
       </div>
       <div className="mt-10">
         <div className="flex justify-between items-center">
-          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Balance</div>
-          <div className="text-[18px] font-medium">{balance?.toSignificant(6)}</div>
+          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Balance</div>
+          <div className="text-[18px] font-fmedium">{balance?.toSignificant(6)}</div>
         </div>
         <div className="flex justify-between items-center mt-2">
-          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Locked</div>
-          <div className="text-[18px] font-medium">{tokenLocked.lockedAmount}</div>
+          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Locked</div>
+          <div className="text-[18px] font-fmedium">{tokenLocked.lockedAmount}</div>
         </div>
         <div className="flex justify-between items-center mt-2">
-          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Supply</div>
-          <div className="text-[18px] font-medium">{algAirdrop.unclaimed}</div>
+          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Supply</div>
+          <div className="text-[18px] font-fmedium">{algAirdrop.unclaimed}</div>
         </div>
         <div className="flex justify-between items-center mt-2">
-          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Supply in plan</div>
-          <div className="text-[18px] w-[40px] h-[24px] flex items-center justify-center font-medium bg-[rgba(161,206,168,0.06)] rounded px-[6px] text-[#A1CEA8] cursor-pointer"
+          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Supply in plan</div>
+          <div className="text-[18px] w-[40px] h-[24px] flex items-center justify-center font-fmedium bg-[rgba(161,206,168,0.06)] rounded px-[6px] text-[#A1CEA8] cursor-pointer"
             onClick={e => {
               e.stopPropagation()
               if (currentTokenAddress) return
@@ -135,14 +135,14 @@ const AirUSDTTokenItem = ({
       </div>
       <div className="mt-10">
         <div className="flex justify-between items-center">
-          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Balance</div>
-          <div className="text-[18px] font-medium flex items-center">
+          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Balance</div>
+          <div className="text-[18px] font-fmedium flex items-center">
             {balance?.toSignificant(6)}
             <LazyImage src="/images/airdrop/lock.svg" className="ml-[3px]" />
           </div>
         </div>
         <div className="flex justify-between items-center mt-2">
-          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-medium">Withdraw</div>
+          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Withdraw</div>
           <Withdraw token={token} onClick={onClick} currentTokenAddress={currentTokenAddress} balance={balance ? balance?.toSignificant(6) : '0'} />
         </div>
         

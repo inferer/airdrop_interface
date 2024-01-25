@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { darken } from 'polished'
 import { useTranslation } from 'react-i18next'
@@ -148,7 +148,7 @@ const StyledNavLink2 = styled.div<{
   cursor: pointer;
   text-decoration: none;
   color: ${({ theme }) => theme.text3};
-  font-size: 18px;
+  font-size: 16px;
   margin-right: 24px;
   font-family: Inter-SemiBold;
 
@@ -167,7 +167,7 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
   const router = useRouter()
   const { t } = useTranslation()
   const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
-  const [active, setActive] = useState<'airdrop' | 'tokens'>('airdrop')
+  const [active, setActive] = useState<'collect' | 'tokens'>('collect')
 
   const handleTab = useCallback((type) => {
     setActive(type)
@@ -179,9 +179,18 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
     // onClick && onClick(type)
 
   }, [active, isProjectMode])
+
+  useEffect(() => {
+    if (router.pathname.indexOf('/rewards') || router.pathname.indexOf('/consumption')) {
+      setActive('tokens')
+    } else {
+      setActive('collect')
+    }
+  }, [])
+
   return (
     <Tabs style={{ marginLeft: 45 }}>
-      <StyledNavLink2 id={`airdrop-btn-click`} className={active === 'airdrop' ? 'airdrop' : ''}
+      <StyledNavLink2 id={`airdrop-btn-click`} className={active === 'collect' ? 'airdrop' : ''}
         onClick={() => handleTab('collect')}
       >
         {t('Airdrop')}

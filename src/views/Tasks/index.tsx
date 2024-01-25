@@ -47,7 +47,7 @@ function Collect() {
       <div className='w-[1217px] mx-auto'>
         <CollectBody>
         <div className='text-[32px] font-fsemibold mb-10 flex items-center'>
-          <LazyImage src='/images/airdrop/ongoing.svg' className=' w-[32px] h-[32px] mr-2' />
+          <LazyImage src='/images/airdrop/ongoing.svg' className=' w-[32px] h-[32px] mr-3' />
           Ongoing airdrops
         </div>
         {
@@ -114,7 +114,7 @@ function Collect() {
                   <div className=' text-[18px] font-fnormal'>
                     Checking the airdrop status in contract...
                   </div>
-                  <div className='px-10'>
+                  <div className='pl-10'>
                     <Loading />
                   </div>
                 </>

@@ -350,6 +350,54 @@ export const ButtonSwap = styled.div<{
     user-select: none;
   }
 `
+export const ButtonSwapUser = styled.div<{
+  bgColor?: string
+  padding?: string
+  width?: string
+  height?: string
+  borderRadius?: string
+  disabled?: boolean
+}>`
+  background-repeat: no-repeat;
+  background: ${({ bgColor, disabled }) => ( disabled ? 'linear-gradient(108deg, rgba(63, 60, 255, 0.03) 24.12%, rgba(107, 190, 225, 0.03) 51.08%, rgba(138, 232, 153, 0.03) 75.88%)' : bgColor ? bgColor : 'linear-gradient(135deg, rgba(107, 190, 225, 0.06) 0%, rgba(138, 232, 153, 0.06) 100%)')} ;
+  
+  width: ${({ width }) => (width ? width : '100%')};
+  height: ${({ height }) => ( height ? height: '60px')};
+  border-radius: ${({ borderRadius }) => borderRadius ? borderRadius : '12px'};
+  outline: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  padding-left: 15px;
+  padding-right: 15px;
+  &:disabled {
+    cursor: auto;
+  }
+
+  .btn-text {
+    background: ${({ disabled }) => ( disabled ? 'linear-gradient(135deg, rgba(63, 60, 255, 0.30) 6.8%, rgba(107, 190, 225, 0.30) 55.97%, rgba(138, 232, 153, 0.30) 101.2%)' : 'linear-gradient(96deg, #3F3CFF 0%, #6BBEE1 101.71%)')} ;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: Inter-SemiBold;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+  
+  &:hover {
+    background: ${({ disabled }) => ( disabled ? 'linear-gradient(108deg, rgba(63, 60, 255, 0.03) 24.12%, rgba(107, 190, 225, 0.03) 51.08%, rgba(138, 232, 153, 0.03) 75.88%)' : 'linear-gradient(96deg, rgba(63, 60, 255, 0.12) 0%, rgba(107, 190, 225, 0.12) 101.71%)')} ;
+  }
+
+  > * {
+    user-select: none;
+  }
+`
 export const ButtonCancel = styled.div<{
   bgColor?: string
   padding?: string
@@ -389,7 +437,7 @@ export const ButtonCancel = styled.div<{
   }
   
   &:hover {
-    background: #F9F9F9;
+    background: #F5F5F5;
     .btn-text {
       color: rgba(0, 0, 0, 0.80);
     }

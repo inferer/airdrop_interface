@@ -51,6 +51,7 @@ export const Input = React.memo(function InnerInput({
   error?: boolean
   fontSize?: string
   align?: 'right' | 'left'
+  focus?: boolean
 } & Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'onChange' | 'as'>) {
   const enforcer = (nextUserInput: string) => {
     onUserInput(nextUserInput)
@@ -70,6 +71,7 @@ export const Input = React.memo(function InnerInput({
       title=""
       autoComplete="off"
       autoCorrect="off"
+      autoFocus={Boolean(focus)}
       // text-specific options
       type="text"
       placeholder={placeholder || 'X'}

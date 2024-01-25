@@ -28,8 +28,8 @@ export const MenuItem = styled(RowBetween)`
   display: grid;
   grid-template-columns: auto minmax(auto, 1fr) auto minmax(0, 72px);
   grid-gap: 16px;
-  cursor: ${({ disabled }) => !disabled && 'pointer'};
-  pointer-events: ${({ disabled }) => disabled && 'none'};
+  /* cursor: ${({ disabled }) => !disabled && 'pointer'}; */
+  /* pointer-events: ${({ disabled }) => disabled && 'none'}; */
   opacity: ${({ disabled, selected }) => (disabled || selected ? 0.5 : 1)};
 `
 

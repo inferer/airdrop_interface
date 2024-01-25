@@ -59,7 +59,7 @@ const Withdraw = ({
   }, [])
   const inputWrapWidth = useMemo(() => {
     const _width = inputValue.length * 20
-    return _width > 160 ? 160 : _width > 52 ? _width : 52
+    return _width > 140 ? 140 : _width > 52 ? _width : 52
   }, [inputValue])
 
   const handleWithdraw = useCallback(() => {
@@ -87,7 +87,7 @@ const Withdraw = ({
             }}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            className={`text-[#90B696] text-[18px] h-[22px] font-fmedium w-full outline-none ${ inputFocus ? 'bg-[rgba(161,206,168,0.3)]' : 'bg-[rgba(0,0,0,0)]'}`}
+            className={`text-[#90B696] text-right text-[18px] h-[22px] font-fmedium w-full outline-none ${ inputFocus ? 'bg-[rgba(161,206,168,0.3)]' : 'bg-[rgba(0,0,0,0)]'}`}
           />
         </div>
         <div className="pl-1 cursor-pointer shrink-0">
