@@ -167,7 +167,7 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
   const router = useRouter()
   const { t } = useTranslation()
   const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
-  const [active, setActive] = useState<'collect' | 'tokens'>('collect')
+  const [active, setActive] = useState<'collect' | 'rewards'>('collect')
 
   const handleTab = useCallback((type) => {
     setActive(type)
@@ -181,8 +181,9 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
   }, [active, isProjectMode])
 
   useEffect(() => {
-    if (router.pathname.indexOf('/rewards') || router.pathname.indexOf('/consumption')) {
-      setActive('tokens')
+    if (router.pathname.indexOf('/rewards') > -1 || router.pathname.indexOf('/consumption') > -1) {
+
+      setActive('rewards')
     } else {
       setActive('collect')
     }
@@ -195,7 +196,7 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
       >
         {t('Airdrop')}
       </StyledNavLink2>
-      <StyledNavLink2 id={`tokens-btn-click`} className={active === 'tokens' ?  'airdrop' : ''}
+      <StyledNavLink2 id={`tokens-btn-click`} className={active === 'rewards' ?  'airdrop' : ''}
         onClick={() => handleTab('rewards')}
       >
         {t('Tokens')}
