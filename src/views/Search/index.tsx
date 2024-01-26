@@ -148,7 +148,7 @@ export default function Search() {
             {
               isUserCollect ?
                 <ButtonSwap 
-                  disabled={!!collectInputError}
+                  disabled={!!collectInputError || accountScore <= 0 || Number(formattedAmounts[Field.INPUT]) <= 0}
                   onClick={e => {
                     e.stopPropagation()
                     if (!!collectInputError) return

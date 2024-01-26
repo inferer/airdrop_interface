@@ -6,7 +6,7 @@ import { useActiveWeb3React } from '../../hooks'
 import { CollectBody, TitleWrap } from './styleds'
 import TaskList from './TaskList'
 import { useAirdropReceiver } from '../../hooks/useAirdropReceiver'
-import { ButtonSwap } from '../../components/Button'
+import { ButtonSwap, ButtonSwapUser } from '../../components/Button'
 import Loader, { Confirmed, Loading } from '../../components/Loader'
 import TextInput from '../../components/TextInput'
 import { useRouter } from 'next/router'
@@ -86,7 +86,7 @@ function Collect() {
                     Do you confirm that you have completed the selected airdrops?
                   </div>
                   <div className='w-[200px]'>
-                    <ButtonSwap 
+                    <ButtonSwapUser 
                       height='47px'
                       onClick={e => {
                         e.stopPropagation()
@@ -99,12 +99,12 @@ function Collect() {
                       }}
                     >
                       
-                      <TYPE.textGrad2 fontWeight={600} fontSize={16}>
+                      <div className='btn-text'>
                         {
                           'Confirm'
                         }
-                      </TYPE.textGrad2>
-                    </ButtonSwap>
+                      </div>
+                    </ButtonSwapUser>
                   </div>
                 </>
               }

@@ -114,7 +114,7 @@ export default function Create() {
               <ItemTitle>airdrop name</ItemTitle>
               <Input focus value={name} 
                 onFocus={e => {
-                  setErrorCode(1)
+                  setErrorCode(name.length <= 0 ? -1 : 1)
                 }}
                 onBlur={e => {
                   if (name.length <= 0) {
@@ -124,8 +124,10 @@ export default function Create() {
                   }
                 }}
                 onUserInput={value => {
-                setName(value)
-              }} />
+                  setName(value)
+                  setErrorCode(value.length <= 0 ? -1 : 1)
+                }} 
+              />
             </div>
             
           </ItemBox2>

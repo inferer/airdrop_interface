@@ -164,7 +164,7 @@ const AirdropConfirm: React.FC<{
               router.back()
             }}
           >
-            <div className="text-[rgba(0,0,0,0.60)] text-[20px] font-fsemibold">Cancel</div>
+            <div className="btn-text">Cancel</div>
           </ButtonCancel>
         </div>
         <div className='w-[260px]'>
@@ -236,11 +236,11 @@ const AirdropConfirm: React.FC<{
               handleConfirmTask(airdrop.airdropId, airdrop.labelToken.address, airdrop.labelToken?.symbol?.slice(4) || '', accountScore)
             }}
           >
-            <TYPE.textGrad2 fontWeight={600} fontSize={20}>
+            <div className="btn-text">
               {
                 confirmStatus === 1 ? <LoadingX /> : 'Confirm'
               }
-            </TYPE.textGrad2>
+            </div>
           </ButtonSwapUser>
         }
           

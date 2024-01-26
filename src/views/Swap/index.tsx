@@ -42,7 +42,7 @@ import { LinkStyledButton, TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 
-import Loader from '../../components/Loader'
+import Loader, { LoadingProject, LoadingUser } from '../../components/Loader'
 
 import UseAirAssets from './UseAirAssets'
 import Card from '../../components/Card'
@@ -194,7 +194,7 @@ export default function Swap() {
   )
 
   const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
-
+  const [swaping, setSwaping] = useState(false)
   const handleSwap = useCallback(() => {
     if (priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee)) {
       return
@@ -202,27 +202,15 @@ export default function Swap() {
     if (!swapCallback) {
       return
     }
+    setSwaping(true)
     setSwapState({ attemptingTxn: true, tradeToConfirm, showConfirm, swapErrorMessage: undefined, txHash: undefined })
     swapCallback()
       .then(hash => {
         setSwapState({ attemptingTxn: false, tradeToConfirm, showConfirm, swapErrorMessage: undefined, txHash: hash })
-
-        ReactGA.event({
-          category: 'Swap',
-          action:
-            recipient === null
-              ? 'Swap w/o Send'
-              : (recipientAddress ?? recipient) === account
-              ? 'Swap w/o Send + recipient'
-              : 'Swap w/ Send',
-          label: [
-            trade?.inputAmount?.currency?.symbol,
-            trade?.outputAmount?.currency?.symbol,
-            getTradeVersion(trade)
-          ].join('/')
-        })
+        setSwaping(false)
       })
       .catch(error => {
+        setSwaping(false)
         setSwapState({
           attemptingTxn: false,
           tradeToConfirm,
@@ -472,6 +460,7 @@ export default function Swap() {
             ) : (
               <ButtonSwap
                 onClick={() => {
+                  if (swaping) return
                   if (isProjectCreate) {
                     handleAction()
                     return
@@ -489,12 +478,17 @@ export default function Swap() {
                   }
                 }}
                 id="swap-button"
-                disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError || (noRoute && userHasSpecifiedInputOutput)}
+                disabled={swaping || !isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError || (noRoute && userHasSpecifiedInputOutput)}
               >
-                <Text fontSize={20} fontWeight={500} className='btn-text'>
-                  {isProjectSwap || isUserSwap
-                    ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'}
-                </Text>
+                {
+                  swaping ? 
+                    isProjectSwap ? <LoadingProject /> : <LoadingUser /> :
+                    <Text fontSize={20} fontWeight={500} className='btn-text'>
+                      {isProjectSwap || isUserSwap
+                        ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'}
+                    </Text>
+                }
+                
               </ButtonSwap>
             )}
             {/* {showApproveFlow && <ProgressSteps steps={[approval === ApprovalState.APPROVED]} />}

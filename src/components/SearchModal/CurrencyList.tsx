@@ -16,6 +16,7 @@ import { MouseoverTooltip } from '../Tooltip'
 import { FadedSpan, MenuItem } from './styleds'
 import Loader from '../Loader'
 import { isTokenOnList } from '../../utils'
+import { LazyImage2 } from '../LazyImage'
 
 function currencyKey(currency: Currency): string {
   return currency instanceof Token ? currency.address : currency === ETHER ? 'ETHER' : ''
@@ -118,6 +119,9 @@ function CurrencyRow({
       disabled={isSelected}
       selected={otherSelected}
     >
+      {
+        isSelected && <LazyImage2 src={isAssetToken ? '/images/airdrop/project_token_select.svg' : '/images/airdrop/user_token_select.svg'} className=' absolute left-2 top-[50%] -mt-[3px]' />
+      }
       <CurrencyLogo currency={currency} size={'20px'} type={payInputCreate ? 'payInputCreate' : ''} />
       <Column>
         <Text title={currency.name} fontWeight={500}>

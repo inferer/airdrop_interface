@@ -68,27 +68,29 @@ export function Loading({ size = '30px', stroke = '#6BBEE1', ...rest }: { size?:
 
 export function Loading2({ size = '15px', stroke = '#6BBEE1', ...rest }: { size?: string; stroke?: string }) {
   return (
-    
     <StyledSVG2 viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" size={size}>
       <path d="M1.51149 9.18758C1.1312 7.86134 1.20043 6.44654 1.70839 5.16377C2.21635 3.881 3.13449 2.80236 4.31966 2.09602C5.50482 1.38969 6.8904 1.09536 8.26035 1.25893C9.6303 1.42249 10.9076 2.03477 11.8932 3.00028C12.8787 3.9658 13.5171 5.23028 13.7088 6.59659C13.9004 7.96289 13.6346 9.35422 12.9528 10.5536C12.2709 11.7531 11.2114 12.6932 9.9393 13.2274C9.30317 13.4945 8.63178 13.6526 7.95267 13.6998" stroke="#90B696" strokeLinecap="round" strokeLinejoin="round"/>
     </StyledSVG2>
   )
 }
 
+export function LoadingProject({ size = '30px', stroke = '#6BBEE1', ...rest }: { size?: string; stroke?: string }) {
+  return (
+    <StyledSVG2 viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" size={size}>
+      <path d="M3.02299 18.3752C2.2624 15.7227 2.40087 12.8931 3.41679 10.3275C4.43271 7.762 6.26899 5.60472 8.63932 4.19205C11.0096 2.77937 13.7808 2.19071 16.5207 2.51785C19.2606 2.84499 21.8153 4.06954 23.7864 6.00056C25.7575 7.93159 27.0342 10.4606 27.4176 13.1932C27.8009 15.9258 27.2693 18.7084 25.9056 21.1073C24.5419 23.5061 22.4227 25.3863 19.8786 26.4547C18.6063 26.989 17.2636 27.3052 15.9053 27.3996" stroke="#3F3CFF" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </StyledSVG2>
+  )
+}
+
+export function LoadingUser({ size = '30px', stroke = '#6BBEE1', ...rest }: { size?: string; stroke?: string }) {
+  return (
+    <StyledSVG2 viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" size={size}>
+      <path d="M3.02299 18.3752C2.2624 15.7227 2.40087 12.8931 3.41679 10.3275C4.43271 7.762 6.26899 5.60472 8.63932 4.19205C11.0096 2.77937 13.7808 2.19071 16.5207 2.51785C19.2606 2.84499 21.8153 4.06954 23.7864 6.00056C25.7575 7.93159 27.0342 10.4606 27.4176 13.1932C27.8009 15.9258 27.2693 18.7084 25.9056 21.1073C24.5419 23.5061 22.4227 25.3863 19.8786 26.4547C18.6063 26.989 17.2636 27.3052 15.9053 27.3996" stroke="#6BC479" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </StyledSVG2>
+  )
+}
 export function LoadingX({ size = '30px', stroke, ...rest }: { size?: string; stroke?: string }) {
   return <LazyImage src='/images/airdrop/loading.gif' className='w-[96px] h-[14px]' />
-  return (
-    <StyledSVG3 viewBox="0 0 96 14" fill="none" xmlns="http://www.w3.org/2000/svg" width="96" height="14">
-      <path fillRule="evenodd" clipRule="evenodd" d="M0 2.12132L4.43934 6.56066L0 11L2.12132 13.1213L7.62132 7.62132L8.68198 6.56066L7.62132 5.5L2.12132 0L0 2.12132ZM17.5 2.12132L21.9393 6.56066L17.5 11L19.6213 13.1213L25.1213 7.62132L26.182 6.56066L25.1213 5.5L19.6213 0L17.5 2.12132ZM39.4393 6.56066L35 2.12132L37.1213 0L42.6213 5.5L43.682 6.56066L42.6213 7.62132L37.1213 13.1213L35 11L39.4393 6.56066ZM52.5 2.12132L56.9393 6.56066L52.5 11L54.6213 13.1213L60.1213 7.62132L61.182 6.56066L60.1213 5.5L54.6213 0L52.5 2.12132ZM74.4393 6.56066L70 2.12132L72.1213 0L77.6213 5.5L78.682 6.56066L77.6213 7.62132L72.1213 13.1213L70 11L74.4393 6.56066ZM87 2.12132L91.4393 6.56066L87 11L89.1213 13.1213L94.6213 7.62132L95.682 6.56066L94.6213 5.5L89.1213 0L87 2.12132Z" fill="url(#paint0_linear_3725_1578)"/>
-      <defs>
-        <linearGradient id="paint0_linear_3725_1578" x1="8.5" y1="7" x2="89" y2="7" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#7B78FF" stopOpacity="0.4"/>
-          <stop offset="0.58" stopColor="#7B78FF"/>
-          <stop offset="1" stopColor="#7B78FF" stopOpacity="0.4"/>
-        </linearGradient>
-      </defs>
-    </StyledSVG3>
-  )
 }
 
 export function Confirmed() {

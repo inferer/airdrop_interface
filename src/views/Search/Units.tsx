@@ -19,6 +19,7 @@ const ScoreItem = ({
 }
 
 const Units = () => {
+  const [showTip, setShowTip] = useState(false)
   const [unit, setUnit] = useState(1)
 
   const updateMaxUnits = useUpdateMaxUnits()
@@ -35,10 +36,22 @@ const Units = () => {
     
   }, [unit])
   return (
-    <div className=" border border-[#F5F5F5] rounded-xl px-4 h-[58px]">
+    <div className=" border border-[#F5F5F5] rounded-xl px-4 h-[58px] relative">
+      <div className={`bg-[#33383E] rounded px-3 py-[5px] text-[11px] font-dmedium leading-5 text-[rgba(232,234,236,1)] absolute left-0 bottom-[90%] ${showTip ? '' : 'hidden'}`}>
+      Max units refer to the airdrop task workload.
+      </div>
       <div className="flex items-center h-full">
         <LazyImage src="/images/airdrop/unit.svg" />
-        <div className="text-[rgba(0,0,0,0.40)] text-[16px] font-fsemibold ml-1">Max units</div>
+        <div className="text-[rgba(0,0,0,0.40)] text-[16px] font-fsemibold ml-1 cursor-pointer"
+          onMouseOver={e => {
+            e.stopPropagation()
+            setShowTip(true)
+          }}
+          onMouseLeave={e => {
+            e.stopPropagation()
+            setShowTip(false)
+          }}
+        >Max units</div>
         <div className="flex items-center ml-[21px]">
           <ScoreItem 
             active={maxUnits >= 1} 

@@ -344,6 +344,12 @@ export const ButtonSwap = styled.div<{
   
   &:hover {
     background: ${({ disabled }) => ( disabled ? 'linear-gradient(108deg, rgba(63, 60, 255, 0.03) 24.12%, rgba(107, 190, 225, 0.03) 51.08%, rgba(138, 232, 153, 0.03) 75.88%)' : 'linear-gradient(96deg, rgba(63, 60, 255, 0.12) 0%, rgba(107, 190, 225, 0.12) 101.71%)')} ;
+    .bnt-text {
+      background: linear-gradient(96deg, #2825FF 0%, #31BAF3 101.71%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
   }
 
   > * {
@@ -379,7 +385,7 @@ export const ButtonSwapUser = styled.div<{
   }
 
   .btn-text {
-    background: ${({ disabled }) => ( disabled ? 'linear-gradient(135deg, rgba(63, 60, 255, 0.30) 6.8%, rgba(107, 190, 225, 0.30) 55.97%, rgba(138, 232, 153, 0.30) 101.2%)' : 'linear-gradient(96deg, #3F3CFF 0%, #6BBEE1 101.71%)')} ;
+    background: linear-gradient(135deg, #5DBDE5 0%, #6FE081 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -391,7 +397,7 @@ export const ButtonSwapUser = styled.div<{
   }
   
   &:hover {
-    background: ${({ disabled }) => ( disabled ? 'linear-gradient(108deg, rgba(63, 60, 255, 0.03) 24.12%, rgba(107, 190, 225, 0.03) 51.08%, rgba(138, 232, 153, 0.03) 75.88%)' : 'linear-gradient(96deg, rgba(63, 60, 255, 0.12) 0%, rgba(107, 190, 225, 0.12) 101.71%)')} ;
+    background: ${({ disabled }) => ( disabled ? 'linear-gradient(108deg, rgba(63, 60, 255, 0.03) 24.12%, rgba(107, 190, 225, 0.03) 51.08%, rgba(138, 232, 153, 0.03) 75.88%)' : 'linear-gradient(135deg, rgba(107, 190, 225, 0.12) 0%, rgba(138, 232, 153, 0.12) 100%)')} ;
   }
 
   > * {

@@ -19,7 +19,7 @@ export interface TradePriceDetailsProps {
 }
 
 export default function TradePriceDetails({ trade }: TradePriceDetailsProps) {
-  const theme = useContext(ThemeContext)
+  const [show, setShow ] = useState(false)
   const [showInverted, setShowInverted] = useState<boolean>(false)
 
   const [allowedSlippage] = useUserSlippageTolerance()  // for expert mode
@@ -36,11 +36,21 @@ export default function TradePriceDetails({ trade }: TradePriceDetailsProps) {
             showInverted={showInverted}
             setShowInverted={setShowInverted}
           />
+          <div className={`cursor-pointer transition-all ${!show ? 'rotate-180' : 'rotate-0'}`}
+            onClick={e => {
+              e.stopPropagation()
+              setShow(!show)
+            }}
+          >
+            <LazyImage src='/images/airdrop/up.svg' />
+          </div>
+          
         </RowBetween>
       )}
-      <div className='h-[1px] bg-[#F5F5F5] mt-4'></div>
+      <div className={`h-[1px] bg-[#F5F5F5] transition-all mt-4 ${show ? 'h-[1px]' : 'h-0 mt-0'}`}></div>
+      
       {allowedSlippage && (
-        <div>
+        <div className={` transition-all overflow-hidden ${show ? 'h-[90px]' : 'h-0'}`}>
           <RowBetween align="center" style={{marginTop: 12}}>
             <div className='text-[rgba(0,0,0,0.5)] text-[12px]'>Max. slippage</div>
             <ClickableText onClick={toggleSettings}>
