@@ -1,34 +1,37 @@
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
-import React, { useEffect, useMemo, useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "./Table";
+import { useActiveWeb3React } from '../../hooks'
+import router from 'next/router'
+import { useIsRoleProjectMode } from '../../state/user/hooks'
+import { CollectBody } from '../Collect/styleds'
+import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "../Collect/Table";
 import LazyImage from "../../components/LazyImage";
-import { useAirdropList, useMaxUnits } from "../../state/airdrop/hooks";
+import { useProjectAirdropList } from "../../state/airdrop/hooks";
 import { useRouter } from "next/router";
 import { useAirdropManager } from "../../hooks/useAirdropManager";
 import { getALgTokenFromAirToken } from "../../utils/getTokenList";
 
-const AirdropList: React.FC<{
-
-}> = () => {
+export const OngoingList: React.FC<{
+  completed?: boolean
+}> = ({
+  completed
+}) => {
   const router = useRouter()
-
+  const { account } = useActiveWeb3React()
   const [algToken, setAlgToken] = useState('')
 
-  const { handleGetAirdropList } = useAirdropManager()
-  const airdropList = useAirdropList()
-  const maxUnits = useMaxUnits()
+  const { handleGetUserAirdropList } = useAirdropManager()
+  const airdropList = useProjectAirdropList()
+
   const filterAirdropList = useMemo(() => {
-    return airdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits)
-  }, [maxUnits, airdropList])
+    return airdropList.filter(airdrop => !completed ? !airdrop.completed : airdrop.completed)
+  }, [airdropList, completed])
+
   useEffect(() => {
-    let _algToken = ''
-    if (router.query.id) {
-      _algToken = router.query.id[0]
-      setAlgToken(_algToken)
-      handleGetAirdropList(_algToken)
+    if (account) {
+      handleGetUserAirdropList(account)
     }
-    
-  }, [router])
+  }, [account])
 
   return (
     <div>
@@ -63,8 +66,8 @@ const AirdropList: React.FC<{
                   return (
                     <TableRow key={airdrop.airdropId} 
                       onClick={() => {
-                        const _algToken = getALgTokenFromAirToken(airdrop.labelToken.address)
-                        router.push(`/collect/${algToken || _algToken}/${airdrop.airdropId}`)
+                        // const _algToken = getALgTokenFromAirToken(airdrop.labelToken.address)
+                        // router.push(`/collect/${algToken || _algToken}/${airdrop.airdropId}`)
                       }}
                     >
                       <>
@@ -117,4 +120,22 @@ const AirdropList: React.FC<{
   )
 }
 
-export default AirdropList
+
+
+function Ongoing() {
+
+  return (
+    <div className='w-[1217px] mx-auto'>
+      <CollectBody>
+        <div className='text-[32px] font-fsemibold mb-10 flex items-center'>
+          <LazyImage src='/images/airdrop/ongoing.svg' className=' w-[32px] h-[32px] mr-3' />
+          Ongoing airdrops
+        </div>
+        <OngoingList />
+      </CollectBody>
+    </div>
+    
+  )
+}
+
+export default React.memo(Ongoing)

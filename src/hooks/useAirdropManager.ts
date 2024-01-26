@@ -10,7 +10,7 @@ import { transformTime } from "../utils";
 import router from 'next/router'
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../state";
-import { updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed, updateUserAirdropConfirmedByTaskId } from "../state/airdrop/actions";
+import { updateAirdropList, updateAirdropListOne, updateProjectAirdropList, updateUserAirdropConfirmed, updateUserAirdropConfirmedByTaskId } from "../state/airdrop/actions";
 import { useActiveWeb3React } from ".";
 import { useMaxUnits, useUserAirdropConfirmedList } from "../state/airdrop/hooks";
 
@@ -40,6 +40,20 @@ export const getLabelAirdropIds = async (multi: Contract, airToken: string) => {
       name: 'getLabelAirdropIds',
       params: [airToken]
     })
+    
+
+  const [ ids ] = await multicall(multi, AirdropManager_ABI, calls)
+  return (ids && ids[0] || []).map((id: any) => id && id.toString()).filter((id: any) => !!id)
+}
+
+export const getUserAirdropIds = async (multi: Contract, account: string) => {
+  const calls = []
+    calls.push({
+      address: getAirdropManagerAddress(),
+      name: 'getUserAirdropIds',
+      params: [account]
+    })
+
 
   const [ ids ] = await multicall(multi, AirdropManager_ABI, calls)
   return (ids && ids[0] || []).map((id: any) => id && id.toString()).filter((id: any) => !!id)
@@ -82,7 +96,7 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
       const labelTokenData = getLabelTokenByAddress(airdrop[2][2])
       
       const _offerLocked = offerTokenData?.decimals ? BigNumber.from(airdrop[3][0]).div(BigNumber.from((10 ** (offerTokenData?.decimals ?? 18)).toString())).toString() : (Number(airdrop[3][0].toString()) / (10 ** (offerTokenData?.decimals ?? 18))).toFixed(4)
-
+      const expireOnTimestamp = Number(airdrop[5].toString()) * 1000 + Number(airdrop[4].toString()) * 1000
       const tempData: any = {
         airdropId: airdrop[0].toString(),
         name: airdrop[1][0],
@@ -105,8 +119,9 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
         unit: BigNumber.from(airdrop[3][3]).toString(),
         duration: airdrop[4].toString(),
         startTimestamp: airdrop[5].toString(),
-        expireOn: transformTime(Number(airdrop[5].toString()) * 1000 + Number(airdrop[4].toString()) * 1000),
-        claimed: airdrop[6].toString()
+        expireOn: transformTime(expireOnTimestamp),
+        claimed: airdrop[6].toString(),
+        completed: expireOnTimestamp < Date.now()
 
       }
       airdropList.push(tempData)
@@ -192,6 +207,19 @@ export function useAirdropManager() {
     }
   }, [multi])
 
+  const handleGetUserAirdropList = useCallback(async (account?: string) => {
+    if (multi) {
+      if (account) {
+        let airdropIds = await getUserAirdropIds(multi, account)
+        console.log(airdropIds)
+        const list = await getAirdropList(multi, airdropIds)
+        console.log(list)
+        dispatch(updateProjectAirdropList({ airdropList: list as any }))
+      }
+      
+    }
+  }, [multi])
+
   const handleGetAirdropOne = useCallback(async (airdropId: number) => {
     if (multi) {
       const list = await getAirdropList(multi, [airdropId])
@@ -244,7 +272,8 @@ export function useAirdropManager() {
     handleGetAirdropOne,
     handleGetUserAirdropConfirmed,
     handleGetUserTaskConfirmed,
-    handleUpdateUserAirdropConfirmedByTaskId
+    handleUpdateUserAirdropConfirmedByTaskId,
+    handleGetUserAirdropList
   }
 
 }

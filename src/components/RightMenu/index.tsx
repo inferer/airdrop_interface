@@ -130,8 +130,12 @@ export default function RightMenu() {
       }
       return
     }
-    if (action === 'tasks') {
-      router.push('/tasks')
+    if (action === 'ongoing') {
+      if (isProjectMode) {
+        router.push('/project/ongoing')
+      } else {
+        router.push('/user/ongoing')
+      }
     }
     if (action === 'home') {
       if (isProjectMode) {
@@ -142,7 +146,12 @@ export default function RightMenu() {
       
     }
     if (action === 'completed') {
-      router.push('/user/completed')
+      if (isProjectMode) {
+        router.push('/project/completed')
+      } else {
+        router.push('/user/completed')
+      }
+      
     }
    }, [router, isProjectMode, showRightMenu])
 
@@ -218,7 +227,7 @@ export default function RightMenu() {
             />
             <MenuLine />
             <MenuItem icon='/images/airdrop/ongoing.svg' text='Ongoing airdrops' isProjectMode={isProjectMode} 
-              onClick={() => handleClick('tasks')}
+              onClick={() => handleClick('ongoing')}
             />
             <MenuLine />
             <MenuItem icon='/images/airdrop/completed.svg' text='Completed airdrops' isProjectMode={isProjectMode} 

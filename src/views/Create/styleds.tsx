@@ -63,7 +63,7 @@ export const CreateBody = styled.div`
   margin: 0 auto;
   border-radius: 24px;
   background: #FFF;
-  padding: 45px 40px;
+  padding: 48px 40px 45px;
   margin-top: 56px;
 `
 

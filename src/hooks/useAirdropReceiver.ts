@@ -72,7 +72,7 @@ export function useAirdropReceiver(algToken?: string) {
         const tx = await airdropReceiver.confirmTaskMulti(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, { gasPrice: '1000000000', gasLimit: gasLimit })
         const receipt = await tx.wait()
         if (receipt.status) {
-          router.push('/tasks')
+          router.push('/user/ongoing')
           alert('Success')
         }
       } catch (error) {

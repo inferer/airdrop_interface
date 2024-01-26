@@ -14,7 +14,7 @@ import { RowFixed } from '../Row'
 import CurrencyLogo from '../CurrencyLogo'
 import { MouseoverTooltip } from '../Tooltip'
 import { FadedSpan, MenuItem } from './styleds'
-import Loader from '../Loader'
+import Loader, { Loading, LoadingProjectBalance, LoadingUserBalance } from '../Loader'
 import { isTokenOnList } from '../../utils'
 import { LazyImage2 } from '../LazyImage'
 
@@ -160,8 +160,8 @@ function CurrencyRow({
       <RowFixed style={{ justifySelf: 'flex-end' }}>
         {
           payInputCreate 
-            ? (balanceUSDT ? <Balance balance={balanceUSDT} /> : account ? <Loader /> : null)
-            : (balance ? <Balance balance={balance} /> : account ? <Loader /> : null)
+            ? (balanceUSDT ? <Balance balance={balanceUSDT} /> : account ? (isAssetToken ? <LoadingProjectBalance /> : <LoadingUserBalance /> ) : null)
+            : (balance ? <Balance balance={balance} /> : account ? (isAssetToken ? <LoadingProjectBalance /> : <LoadingUserBalance /> ) : null)
         }
         {/* {balance ? <Balance balance={balance} /> : account ? <Loader /> : null} */}
       </RowFixed>

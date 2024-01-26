@@ -8,7 +8,6 @@ import LazyImage, { LazyImage2 } from '../../components/LazyImage'
 import AirdropList from './AirdropList'
 import router from 'next/router'
 import AirdropConfirm from './AirdropConfirm'
-import { useAirdropManager } from '../../hooks/useAirdropManager'
 import { useIsRoleProjectMode } from '../../state/user/hooks'
 
 function Collect() {

@@ -208,6 +208,8 @@ export default function Swap() {
       .then(hash => {
         setSwapState({ attemptingTxn: false, tradeToConfirm, showConfirm, swapErrorMessage: undefined, txHash: hash })
         setSwaping(false)
+        onUserInput(Field.INPUT, '')
+        onUserInput(Field.OUTPUT, '')
       })
       .catch(error => {
         setSwaping(false)

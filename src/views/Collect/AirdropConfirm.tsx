@@ -61,7 +61,7 @@ const AirdropConfirm: React.FC<{
       <div className="flex items-start mt-14">
         <div className="w-[420px]">
           <div className="flex items-center">
-            <div className="w-[160px] shrink-0">
+            <div className="w-[91px] shrink-0">
               <LabelText>Name</LabelText>
             </div>
             <div>
@@ -71,18 +71,21 @@ const AirdropConfirm: React.FC<{
             </div>
           </div>
           <div className="flex items-center mt-5">
-            <div className="w-[160px] shrink-0">
+            <div className="w-[91px] shrink-0">
               <LabelText>Fund</LabelText>
             </div>
-            <div className="flex items-baseline">
-              <div className=" font-fmedium text-[22px]">
+            <div className="flex items-baseline font-fnormal">
+              <div className=" text-[16px]">
                 {airdrop.offerLocked}
               </div>
-              <div className="text-[16px] ml-2">{airdrop.offerToken?.symbol}</div>
+              {
+                airdrop.offerToken?.symbol && <div className="text-[16px] ml-2">{airdrop.offerToken?.symbol}</div>
+              }
+              
             </div>
           </div>
           <div className="flex items-center mt-5">
-            <div className="w-[160px] shrink-0">
+            <div className="w-[91px] shrink-0">
               <LabelText>Action</LabelText>
             </div>
             <div className="py-[2px] px-[10px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)]">
@@ -94,7 +97,7 @@ const AirdropConfirm: React.FC<{
 
         <div className=" flex-1 relative -top-[5px]">
           <div className="flex items-center">
-            <div className="w-[160px] shrink-0">
+            <div className="w-[91px] shrink-0">
               <LabelText>Label</LabelText>
             </div>
             <div>
@@ -104,7 +107,7 @@ const AirdropConfirm: React.FC<{
             </div>
           </div>
           <div className="flex items-center mt-7">
-            <div className="w-[160px] shrink-0">
+            <div className="w-[91px] shrink-0">
               <LabelText>Channel</LabelText>
             </div>
             <div>
@@ -112,7 +115,7 @@ const AirdropConfirm: React.FC<{
             </div>
           </div>
           <div className="flex items-center mt-7">
-            <div className="w-[160px] shrink-0">
+            <div className="w-[91px] shrink-0">
               <LabelText>Expire On</LabelText>
             </div>
             <div>
@@ -120,7 +123,7 @@ const AirdropConfirm: React.FC<{
             </div>
           </div>
           {/* <div className="flex items-center mt-5">
-            <div className="w-[160px] shrink-0">
+            <div className="w-[91px] shrink-0">
               <LabelText>Paid</LabelText>
             </div>
             {
@@ -144,7 +147,7 @@ const AirdropConfirm: React.FC<{
       </div>
       <div className="mt-8">
         <LabelText>Content</LabelText>
-        <div className="p-4 rounded-xl bg-[rgba(85,123,241,0.03)] font-fnormal h-[100px] mt-3 flex">
+        <div className="p-4 rounded-xl bg-[rgba(85,123,241,0.03)] font-fnormal h-[104px] mt-3 flex">
           <LazyImage src="/images/airdrop/link.svg" className="w-5 h-5 mr-1" />
           <div className="">
             {airdrop.content}
@@ -153,14 +156,13 @@ const AirdropConfirm: React.FC<{
       </div>
       <div className="p-4 rounded-xl bg-[rgba(123,120,255,0.04)] font-fnormal mt-3">
         <div className=" text-[rgba(123,120,255,0.80)] text-[16px] font-fsemibold ">Airdrop token would be issued from contract.</div>
-        <div className=" text-[rgba(123,120,255,0.80)] text-[14px] font-normal mt-2 leading-[18px] ">Once you confirmed the airdrop, the alg-* token would be locked in protocol until the airdrop content gets done. And the alg-* token would be transformed into air-* token and transferred into your account for later trade in airdrop pools..</div>
+        <div className=" text-[rgba(123,120,255,0.80)] text-[14px] font-normal mt-2 leading-[18px] ">Once you confirmed the airdrop, the alg-* token would be locked in protocol until the airdrop content gets done. And the Alg-* token would be transformed into Air-* token and transferred into your account for later trade in airdrop pools..</div>
       </div>
       <div className=" flex justify-center mt-[50px]">
         <div className='w-[260px] mr-[180px]'>
           <ButtonCancel
             onClick={e => {
               e.stopPropagation()
-              // router.push('/collect')
               router.back()
             }}
           >

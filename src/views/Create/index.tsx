@@ -112,7 +112,7 @@ export default function Create() {
           >
             <div className='content bg-white h-full'>
               <ItemTitle>airdrop name</ItemTitle>
-              <Input focus value={name} 
+              <Input style={{ lineHeight: '40px'}} focus value={name} 
                 onFocus={e => {
                   setErrorCode(name.length <= 0 ? -1 : 1)
                 }}
@@ -240,7 +240,7 @@ export default function Create() {
           
           <div className='h-[121px] bg-[rgba(123,120,255,0.06)] rounded-xl px-4 py-[18px] mt-5'>
             <div className=' font-fsemibold text-[#7B78FF] text-base leading-normal'>Airdrop assets would be locked in contract.</div>
-            <div className=' text-[#7B78FF] text-[14px] mt-3 leading-[18px]'>When you try to create an airdrop, the associated token assets would be locked in contract, and you would receive same amount of correspondant “air-” tokens, which are permitted to trade in airdrop pools.</div>
+            <div className=' text-[#7B78FF] text-[14px] mt-3 leading-[18px]'>When you try to create an airdrop, the associated token assets would be locked in contract, and you would receive same amount of correspondant “Air-” tokens, which are permitted to trade in airdrop pools.</div>
           </div>
         </div>
       </ItemWrap>

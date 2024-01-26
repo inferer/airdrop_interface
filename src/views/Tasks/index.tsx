@@ -123,7 +123,7 @@ function Collect() {
                 completeStatus === 2 && 
                 <>
                   <div className=' text-[18px] font-fnormal'>
-                    Received 15.11 air-Social tokens.
+                    Received 15.11 Air-Social tokens.
                   </div>
                   <div className='px-10'>
                     <Confirmed />

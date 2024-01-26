@@ -38,7 +38,6 @@ const CurrencySelect = styled.button<{ selected: boolean, disabled?: boolean, pa
   user-select: none;
   border: none;
 
-  :focus,
   :hover {
     background: ${({ payInput }) => (payInput ? 'linear-gradient(92deg, rgba(107, 190, 225, 0.10) 0%, rgba(138, 232, 153, 0.10) 100%)' : 'linear-gradient(93deg, rgba(63, 60, 255, 0.10) 0%, rgba(107, 190, 225, 0.10) 100%)')};
   }

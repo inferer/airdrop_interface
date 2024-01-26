@@ -143,7 +143,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
         const receipt = await tx.wait()
         console.log(receipt)
         if (receipt.status) {
-          router.push('/collect')
+          router.push('/project/ongoing')
         }
       } catch(error) {
         console.log(error)

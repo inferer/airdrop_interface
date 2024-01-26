@@ -16,7 +16,7 @@ export const getTokenLogoURL2 = (currency: any, type?: string) => {
   let logoName = currency?.symbol?.toLowerCase()
   
   if (type === 'payInputCreate') {
-    if (currency?.symbol?.indexOf('air-') === 0 || currency?.symbol?.indexOf('alg-') === 0) {
+    if (currency?.symbol?.indexOf('Air-') === 0 || currency?.symbol?.indexOf('Alg-') === 0) {
       logoName = currency?.symbol?.slice(4).toLowerCase()
     }
     return `/images/tokens/swap/${logoName}.svg`

@@ -7,6 +7,10 @@ import { IAirdrop, IAlgAirdrop, TokenLocked, updateAirTokenPercent, updateMaxUni
 import { ethers } from 'ethers'
 
 
+export function useProjectAirdropList() {
+  return useSelector<AppState, AppState['airdrop']['projectAirdropList']>(state => state.airdrop.projectAirdropList)
+}
+
 export function useAirdropList() {
   return useSelector<AppState, AppState['airdrop']['airdropList']>(state => state.airdrop.airdropList)
 }

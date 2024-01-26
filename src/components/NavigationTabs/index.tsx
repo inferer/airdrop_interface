@@ -174,7 +174,7 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
     if (type === 'rewards') {
       router.push(isProjectMode ? '/project/rewards' :  '/user/rewards')
     } else {
-      router.push(`/${type}`)
+      router.push(isProjectMode ? '/project/swap' :  '/user/swap')
     }
     // onClick && onClick(type)
 

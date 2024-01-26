@@ -110,7 +110,7 @@ export function useCurrencyBalances(
     () =>
       currencies?.map(currency => {
         if (!account || !currency) return undefined
-        // if (currency.symbol === 'air-ETH') return ethBalance[account]
+        // if (currency.symbol === 'Air-ETH') return ethBalance[account]
         if (currency instanceof Token) return tokenBalances[currency.address]
         if (currency === ETHER) return ethBalance[account]
         return undefined
@@ -126,10 +126,10 @@ export function useCurrencyBalance(account?: string, currency?: Currency): Curre
 export function useCurrencyBalanceUSDT(account?: string, currencyAirId?: string, payInputCreate?: boolean): CurrencyAmount | undefined {
   const currencyId = currencyAirId && getUSDTTokenFromAirToken(currencyAirId)
   const currency = useCurrency(currencyId)
-  // if (payInputCreate && (!currencyId || currency?.symbol === 'air-ETH')) {
+  // if (payInputCreate && (!currencyId || currency?.symbol === 'Air-ETH')) {
   //   return useCurrencyBalances(account, [ETHER])[0]
   // }
-  return useCurrencyBalances(account, [payInputCreate && (!currencyId || currency?.symbol === 'air-ETH') ? ETHER : (currency ?? undefined)])[0]
+  return useCurrencyBalances(account, [payInputCreate && (!currencyId || currency?.symbol === 'Air-ETH') ? ETHER : (currency ?? undefined)])[0]
   
 }
 
