@@ -25,6 +25,7 @@ export default function Create() {
   const [name, setName] = useState('')
   const [nameError, setNameError] = useState(false)
   const [errorCode, setErrorCode] = useState(1)
+  const [approvedTokenA, setApprovedTokenA] = useState(false)
 
   const [content, setContent] = useState('https://twitter.com/intent/like?tweet_id=1720373913576952121')
 
@@ -272,9 +273,10 @@ export default function Create() {
           {
             approveA ? 
             <ButtonSwap 
-              onClick={e => {
+              onClick={async e => {
                 e.stopPropagation()
-                approve()
+                await approve()
+                setApprovedTokenA(true)
               }}
             >
               <div className='btn-text'>
@@ -293,7 +295,7 @@ export default function Create() {
               }}
             >
               <div className='text-[rgba(123,120,255,0.9)] font-fsemibold text-[20px]'>
-                Approve {outputAmount?.currency?.symbol} ({approveA ? 2 : 1}/{approveA ? 2 : 1})
+                Approve {outputAmount?.currency?.symbol} ({approvedTokenA ? 2 : 1}/{approveA || approvedTokenA ? 2 : 1})
               </div>
               
             </ButtonSwap> : null

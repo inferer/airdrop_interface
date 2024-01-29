@@ -421,26 +421,21 @@ export default function Swap() {
                 </div>
                 
               </ButtonSwap>
-            ) : showApproveFlow ? (
+            ) : showApproveFlow && !isProjectCreate ? (
               <RowBetween>
-                <ButtonConfirmed
+                <ButtonSwap
                   onClick={approveCallback}
                   disabled={approval !== ApprovalState.NOT_APPROVED || approvalSubmitted}
-                  width="48%"
-                  altDisabledStyle={approval === ApprovalState.PENDING} // show solid button while waiting
-                  confirmed={approval === ApprovalState.APPROVED}
                 >
                   {approval === ApprovalState.PENDING ? (
-                    <AutoRow gap="6px" justify="center">
-                      Approving <Loader stroke="white" />
-                    </AutoRow>
+                    isProjectSwap ? <LoadingProject /> : <LoadingUser />
                   ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
-                    'Approved'
+                    <span className='btn-text'>Approved</span>
                   ) : (
-                    'Approve ' + currencies[Field.INPUT]?.symbol
+                    <span className='btn-text'>{'Approve ' + currencies[Field.INPUT]?.symbol}</span>
                   )}
-                </ButtonConfirmed>
-                <ButtonSwap
+                </ButtonSwap>
+                {/* <ButtonSwap
                   onClick={() => {
                     if (isProjectCreate || isUserCollect) {
                       handleAction()
@@ -457,7 +452,7 @@ export default function Swap() {
                   <Text fontSize={16} fontWeight={500} className='btn-text'>
                     {isProjectSwap || isUserSwap ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'}
                   </Text>
-                </ButtonSwap>
+                </ButtonSwap> */}
               </RowBetween>
             ) : (
               <ButtonSwap

@@ -54,6 +54,7 @@ export default function Pool() {
 
   const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
 
+  console.log(trackedTokenPairs, 1111)
   const hasV1Liquidity = useUserHasLiquidityInAllTokens()
 
   return (
