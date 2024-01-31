@@ -6,9 +6,11 @@ import { useUserAirdropConfirmedList } from "../../state/airdrop/hooks";
 import { useAirdropManager } from "../../hooks/useAirdropManager";
 import CheckBox from "../../components/CheckBox";
 import { useActiveWeb3React } from "../../hooks";
+import { IAirdrop } from "../../state/airdrop/actions";
+import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
 
 const AirdropList: React.FC<{
-  onChecked?: (keys: string[]) => void
+  onChecked?: (keys: IAirdrop[]) => void
 }> = ({
   onChecked
 }) => {
@@ -24,18 +26,18 @@ const AirdropList: React.FC<{
     handleGetUserAirdropConfirmed(true)
   }, [account])
   
-  const [checkList, setCheckList ] = useState<string[]>([])
-  const handleChecked = useCallback((id, checked) => {
-    const index = checkList.findIndex(checkId => checkId === id)
+  const [checkList, setCheckList ] = useState<IAirdrop[]>([])
+  const handleChecked = useCallback((checkedAirdrop, checked) => {
+    const index = checkList.findIndex(checkId => checkId.id === checkedAirdrop.id)
     if (!checked && index > -1) {
       checkList.splice(index, 1)
     }
     if (checked && index < 0) {
-      checkList.push(id)
+      checkList.push(checkedAirdrop)
     }
     onChecked && onChecked([...checkList])
     setCheckList(checkList)
-  }, [checkList])
+  }, [checkList, userConfirmedList])
   
   return (
     <div>
@@ -105,7 +107,7 @@ const AirdropList: React.FC<{
                           <div className="flex justify-center w-full">
                             
                             {
-                              airdrop.completed ? <div className=" text-gray-400 text-sm">Completed</div> : <CheckBox onChange={checked => handleChecked(airdrop.id, checked)} /> 
+                              airdrop.completed ? <div className=" text-gray-400 text-sm">Completed</div> : <CheckedWrap airdrop={airdrop} handleChecked={handleChecked} />
                             }
                             
                           </div>
@@ -115,34 +117,6 @@ const AirdropList: React.FC<{
                   )
                 })
               }
-              {/* <TableRow >
-                <>
-                  <TableCell className="flex-1 w-[300px]">
-                    <div className=' text-[16px] text-black'>01 <span className="pl-6">Azuki new users plan</span></div>
-                  </TableCell>
-                  <TableCell className="w-[135px] ">
-                    <div className="bg-[rgba(63,60,255,0.05)] rounded-lg h-[35px] px-[8px] flex items-center justify-center text-[rgba(63,60,255,0.80)] font-fmedium text-[16px]">
-                      Social
-                    </div>
-                  </TableCell>
-                  <TableCell className="w-[120px] ">
-                    <span className="text-[#79D0C4] font-fmedium">2x</span> 
-                  </TableCell>
-                  <TableCell className="w-[200px]">
-                    <span>1,000 USDC</span>
-                  </TableCell>
-                  <TableCell className="w-[180px]">
-                    <span>30/11/2023</span>
-                  </TableCell>
-                  <TableCell className="w-[140px]">
-                    <div className="w-[93px] h-[36px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)] px-2">
-                      <LazyImage src="/images/channel/twitter.svg" className=" w-5 h-5 rounded-full" />
-                      <div className="w-[1px] h-[14px] bg-[rgba(0,0,0,0.06)]"></div>
-                      <span className=" text-[16px] font-fsemibold">Like</span>
-                    </div>
-                  </TableCell>
-                </>
-              </TableRow> */}
 
             </>
           </TableBody>
@@ -150,6 +124,18 @@ const AirdropList: React.FC<{
       </Table>
     </div>
   )
+}
+
+const CheckedWrap = ({
+  airdrop,
+  handleChecked
+}: {
+  airdrop: IAirdrop,
+  handleChecked: (airdrop: IAirdrop, checked: boolean) => void
+}) => {
+  const { account } = useActiveWeb3React()
+  const accountScore = useAccountLabelScore(account || '', airdrop.labelToken?.symbol?.slice(4) || '' )
+  return <CheckBox onChange={checked => handleChecked({...airdrop, accountScore}, checked)} /> 
 }
 
 export default AirdropList

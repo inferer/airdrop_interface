@@ -38,6 +38,7 @@ export function useAirdropReceiver(algToken?: string) {
 
   const [confirmStatus, setConfirmStatus] = useState(0)
   const [completeStatus, setCompleteStatus] = useState(0)
+  const [completeErrorMessage, setCompleteErrorMessage] = useState('')
 
   const handleConfirmTask = useCallback(async (
     airdropId: string,
@@ -108,7 +109,8 @@ export function useAirdropReceiver(algToken?: string) {
           setCompleteStatus(2)
         } else {
           setCompleteStatus(-1)
-          alert(res.message)
+          // alert(res.message)
+          setCompleteErrorMessage(res.message)
         }
         
         // setTimeout(() => {
@@ -116,8 +118,9 @@ export function useAirdropReceiver(algToken?: string) {
         // }, 5000)
         
         
-      } catch(error) {
+      } catch(error: any) {
         console.log(error)
+        setCompleteErrorMessage(error.toString())
         setCompleteStatus(-1)
       }
       
@@ -163,6 +166,7 @@ export function useAirdropReceiver(algToken?: string) {
   return {
     confirmStatus,
     setCompleteStatus,
+    completeErrorMessage,
     handleConfirmTask,
     completeStatus,
     handleUserCompleteTask,

@@ -21,7 +21,8 @@ export interface IAirdrop {
   startTimestamp: string,
   expireOn: string,
   claimed: string,
-  completed?: boolean
+  completed?: boolean,
+  accountScore?: number
 }
 export interface IAlgAirdrop {
   claimed: string,

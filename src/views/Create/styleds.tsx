@@ -63,7 +63,7 @@ export const CreateBody = styled.div`
   margin: 0 auto;
   border-radius: 24px;
   background: #FFF;
-  padding: 48px 40px 45px;
+  padding: 48px 40px 30px;
   margin-top: 56px;
 `
 
@@ -100,7 +100,7 @@ export const ItemBox2 = styled.div<{ width?: number, height?: number, error?: bo
   height: ${({ height }) => (`${height || 100}px`)};
   background: ${({ error, errorCode }) => ( errorCode === -1 ? 'linear-gradient(180deg, #FF6060 0%, #FF2E2E 100%),linear-gradient(0deg, #FFFFFF, #FFFFFF)' : errorCode === 2 ? 'rgba(85,123,241,0.10)' : 'linear-gradient(115.46deg, #3F3CFF 6.8%, #6BBEE1 87.02%), linear-gradient(0deg, #FFFFFF, #FFFFFF)' )} ;
   background-repeat: no-repeat;
-
+  transition: all ease-in 0.35s;
   padding: 1px;
   .content {
     border-radius: 11px;

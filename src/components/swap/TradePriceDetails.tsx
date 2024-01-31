@@ -30,24 +30,27 @@ export default function TradePriceDetails({ trade }: TradePriceDetailsProps) {
   return (
     <div className=' mt-3 border border-[#F5F5F5] rounded-xl px-4 py-[13px]'>
       {Boolean(trade) && (
-        <RowBetween >
+        <RowBetween 
+          onClick={e => {
+            e.stopPropagation()
+            setShow(!show)
+          }}
+          style={{ cursor: 'pointer'}}
+        >
           <TradePrice
             price={trade?.executionPrice}
             showInverted={showInverted}
             setShowInverted={setShowInverted}
           />
           <div className={`cursor-pointer transition-all ${!show ? 'rotate-180' : 'rotate-0'}`}
-            onClick={e => {
-              e.stopPropagation()
-              setShow(!show)
-            }}
+            
           >
             <LazyImage src='/images/airdrop/up.svg' />
           </div>
           
         </RowBetween>
       )}
-      <div className={`h-[1px] bg-[#F5F5F5] transition-all mt-4 ${show ? 'h-[1px]' : 'h-0 mt-0'}`}></div>
+      <div className={`bg-[#F5F5F5] transition-all ${show ? 'h-[1px] mt-4' : 'h-0 mt-0'}`}></div>
       
       {allowedSlippage && (
         <div className={` transition-all overflow-hidden ${show ? 'h-[90px]' : 'h-0'}`}>

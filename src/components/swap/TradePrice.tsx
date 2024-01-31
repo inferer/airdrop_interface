@@ -35,7 +35,10 @@ export default function TradePrice({ price, showInverted, setShowInverted }: Tra
     >
       {show ? (
         <>
-          <div onClick={() => setShowInverted(!showInverted)} className='mr-2'>
+          <div onClick={(e) => {
+            e.stopPropagation()
+            setShowInverted(!showInverted)
+          }} className='mr-2'>
             <LazyImage src='/images/airdrop/inverted.svg' />
           </div>
           {!formattedPrice ? '-' : label} 

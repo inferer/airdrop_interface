@@ -115,14 +115,10 @@ export default function Create() {
               <ItemTitle>airdrop name</ItemTitle>
               <Input style={{ lineHeight: '40px'}} focus value={name} 
                 onFocus={e => {
-                  setErrorCode(name.length <= 0 ? -1 : 1)
+                  setErrorCode(1)
                 }}
                 onBlur={e => {
-                  if (name.length <= 0) {
-                    setErrorCode(-1)
-                  } else {
-                    setErrorCode(2)
-                  }
+                  setErrorCode(2)
                 }}
                 onUserInput={value => {
                   setName(value)
@@ -275,6 +271,10 @@ export default function Create() {
             <ButtonSwap 
               onClick={async e => {
                 e.stopPropagation()
+                if (name.length <= 0) {
+                  setErrorCode(-1)
+                  return
+                }
                 await approve()
                 setApprovedTokenA(true)
               }}
@@ -289,9 +289,13 @@ export default function Create() {
           {
             approveB && unApproveList.length === 1 ? 
             <ButtonSwap 
-              onClick={e => {
+              onClick={async e => {
                 e.stopPropagation()
-                approveLabel()
+                if (name.length <= 0) {
+                  setErrorCode(-1)
+                  return
+                }
+                await approveLabel()
               }}
             >
               <div className='text-[rgba(123,120,255,0.9)] font-fsemibold text-[20px]'>
@@ -319,9 +323,8 @@ export default function Create() {
               onClick={e => {
                 e.stopPropagation()
                 if (createStatus === 1) return
-                if (!name) {
-                  setNameError(true)
-                  // alert('Airdrop name is empty!')
+                if (name.length <= 0) {
+                  setErrorCode(-1)
                   return
                 }
                 if (approvalState !== ApprovalState.APPROVED || approvalStateLabel !== ApprovalState.APPROVED) {

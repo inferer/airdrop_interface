@@ -147,7 +147,7 @@ const AirdropConfirm: React.FC<{
       </div>
       <div className="mt-8">
         <LabelText>Content</LabelText>
-        <div className="p-4 rounded-xl bg-[rgba(85,123,241,0.03)] font-fnormal h-[104px] mt-3 flex">
+        <div className="p-4 rounded-xl bg-[rgba(85,123,241,0.03)] font-fnormal h-[136px] mt-3 flex">
           <LazyImage src="/images/airdrop/link.svg" className="w-5 h-5 mr-1" />
           <div className="">
             {airdrop.content}
@@ -155,8 +155,8 @@ const AirdropConfirm: React.FC<{
         </div>
       </div>
       <div className="p-4 rounded-xl bg-[rgba(123,120,255,0.04)] font-fnormal mt-3">
-        <div className=" text-[rgba(123,120,255,0.80)] text-[16px] font-fsemibold ">Airdrop token would be issued from contract.</div>
-        <div className=" text-[rgba(123,120,255,0.80)] text-[14px] font-normal mt-2 leading-[18px] ">Once you confirmed the airdrop, the alg-* token would be locked in protocol until the airdrop content gets done. And the Alg-* token would be transformed into Air-* token and transferred into your account for later trade in airdrop pools..</div>
+        <div className=" text-[rgba(147,205,155,0.8)] text-[16px] font-fsemibold ">Airdrop token would be issued from contract.</div>
+        <div className=" text-[rgba(147,205,155,0.8)] text-[14px] font-normal mt-2 leading-[18px] ">Once you confirmed the airdrop, the alg-* token would be locked in protocol until the airdrop content gets done. And the Alg-* token would be transformed into Air-* token and transferred into your account for later trade in airdrop pools..</div>
       </div>
       <div className=" flex justify-center mt-[50px]">
         <div className='w-[260px] mr-[180px]'>
@@ -202,13 +202,12 @@ const AirdropConfirm: React.FC<{
           </ButtonSwap> : 
           approvalState === ApprovalState.NOT_APPROVED ?
           <ButtonSwap 
-              bgColor='rgba(123,120,255,0.1)'
               onClick={e => {
                 e.stopPropagation()
                 approve()
               }}
             >
-              <div className='text-[rgba(123,120,255,0.9)] font-fsemibold text-[20px]'>
+              <div className='btn-text'>
                 Approve {algTokenCurrency?.symbol} 
               </div>
               

@@ -385,7 +385,7 @@ export const ButtonSwapUser = styled.div<{
   }
 
   .btn-text {
-    background: linear-gradient(135deg, #5DBDE5 0%, #6FE081 100%);
+    background: linear-gradient(135deg, #6BBEE1 0%, #7CD5B9 55.05%, #8AE899 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

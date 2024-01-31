@@ -137,8 +137,6 @@ export function useDerivedSwapInfo(): {
   const otherCurrencyBalance = useCurrencyBalance(account ?? undefined, outputCurrency ?? undefined)
   const percentBalance = useAirTokenPercentBalance(otherCurrencyBalance)
 
-  console.log(percentBalance)
-
   const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
     inputCurrency ?? undefined,
     outputCurrency ?? undefined

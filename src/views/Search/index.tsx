@@ -113,7 +113,11 @@ export default function Search() {
   }, [isUserCollect, currencies])
 
   const accountScore = useAccountLabelScore(account || '', currencies[Field.INPUT]?.symbol?.slice(4) || '' )
-
+  useEffect(() => {
+    onUserInput(Field.INPUT, '')
+    onUserInput(Field.OUTPUT, '')
+  }, [router])
+  
   return (
     <>
       <SwapBody>
