@@ -33,6 +33,7 @@ export const MenuItem = styled(RowBetween)`
   /* opacity: ${({ disabled, selected }) => (disabled || selected ? 0.5 : 1)}; */
   position: relative;
   padding-left: 28px;
+  cursor: pointer;
 `
 
 export const SearchInput = styled.input`

@@ -3,8 +3,10 @@ import { useAirTokenPercent, useUpdateAirTokenPercent } from "../../state/airdro
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const UseAirAssets: React.FC<{
+  value: string
   onChange?: (percent: number) => void
 }> = ({
+  value,
   onChange
 }) => {
   const updateAirTokenPercent = useUpdateAirTokenPercent()
@@ -40,6 +42,7 @@ const UseAirAssets: React.FC<{
     if (selectWidth > wrapInfo.width - 3) return wrapInfo.width - 3
     return selectWidth
   }, [wrapInfo, selectWidth])
+
 
   return (
     <div className="w-full h-[58px] rounded-xl border border-[#F5F5F5] flex items-center px-4">

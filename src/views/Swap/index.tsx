@@ -325,8 +325,7 @@ export default function Swap() {
               <AutoRow justify={isExpertMode ? 'space-between' : 'center'}>
                 {
                   isProjectCreate && 
-                    <UseAirAssets 
-                  />
+                    <UseAirAssets value={formattedAmounts[Field.INPUT]} />
                 }
                 
 

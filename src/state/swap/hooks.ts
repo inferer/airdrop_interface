@@ -12,13 +12,14 @@ import { useTradeExactIn, useTradeExactOut } from '../../hooks/Trades'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 import { isAddress } from '../../utils'
 import { AppDispatch, AppState } from '../index'
-import { useCurrencyBalanceUSDT, useCurrencyBalances } from '../wallet/hooks'
+import { useCurrencyBalance, useCurrencyBalanceUSDT, useCurrencyBalances } from '../wallet/hooks'
 import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
 import { SwapState } from './reducer'
 import useToggledVersion from '../../hooks/useToggledVersion'
 import { useIsUserAction, useUserSlippageTolerance } from '../user/hooks'
 import { computeSlippageAdjustedAmounts } from '../../utils/prices'
 import { getAirTokenFromAlgToken } from '../../utils/getTokenList'
+import { useAirTokenPercent, useAirTokenPercentBalance } from '../airdrop/hooks'
 
 export function useSwapState(): AppState['swap'] {
   return useSelector<AppState, AppState['swap']>(state => state.swap)
@@ -132,6 +133,11 @@ export function useDerivedSwapInfo(): {
   const outputCurrency = useCurrency(outputCurrencyId)
   const recipientLookup = useENS(recipient ?? undefined)
   const to: string | null = (recipient === null ? account : recipientLookup.address) ?? null
+
+  const otherCurrencyBalance = useCurrencyBalance(account ?? undefined, outputCurrency ?? undefined)
+  const percentBalance = useAirTokenPercentBalance(otherCurrencyBalance)
+
+  console.log(percentBalance)
 
   const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
     inputCurrency ?? undefined,
