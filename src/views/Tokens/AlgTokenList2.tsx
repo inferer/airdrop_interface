@@ -12,7 +12,7 @@ import { useAlgAirdrop } from "../../state/airdrop/hooks";
 
 const AlgTokenListItem: React.FC<{
   algToken: Currency,
-  claim?: (label: string, tokenAddress: string) => void
+  claim?: (label: string, tokenAddress: string, lockedAmount: string) => void
 }> = ({
   algToken,
   claim
@@ -53,7 +53,7 @@ const AlgTokenListItem: React.FC<{
                 <button className=" border border-gray-300 p-1 rounded ml-2"
                   onClick={e => {
                     e.stopPropagation()
-                    claim && claim(algAirdrop.token?.symbol || '', algAirdrop.token?.address)
+                    claim && claim(algAirdrop.token?.symbol || '', algAirdrop.token?.address, '0')
                   }}
                 >Claim</button>
               }
