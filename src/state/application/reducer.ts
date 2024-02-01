@@ -5,7 +5,9 @@ import {
   removePopup,
   toggleWalletModal,
   toggleSettingsMenu,
-  updateBlockNumber
+  updateBlockNumber,
+  showToast,
+  IToast
 } from './actions'
 
 type PopupList = Array<{ key: string; show: boolean; content: PopupContent; removeAfterMs: number | null }>
@@ -14,18 +16,27 @@ export interface ApplicationState {
   blockNumber: { [chainId: number]: number }
   popupList: PopupList
   walletModalOpen: boolean
-  settingsMenuOpen: boolean
+  settingsMenuOpen: boolean,
+  toastData: IToast
 }
 
 const initialState: ApplicationState = {
   blockNumber: {},
   popupList: [],
   walletModalOpen: false,
-  settingsMenuOpen: false
+  settingsMenuOpen: false,
+  toastData: {
+    title: '',
+    content: '',
+    type: ''
+  }
 }
 
 export default createReducer(initialState, builder =>
   builder
+    .addCase(showToast, (state, action) => {
+      state.toastData = action.payload.data
+    })
     .addCase(updateBlockNumber, (state, action) => {
       const { chainId, blockNumber } = action.payload
       if (typeof state.blockNumber[chainId] !== 'number') {
@@ -34,6 +45,7 @@ export default createReducer(initialState, builder =>
         state.blockNumber[chainId] = Math.max(blockNumber, state.blockNumber[chainId])
       }
     })
+    
     .addCase(toggleWalletModal, state => {
       state.walletModalOpen = !state.walletModalOpen
     })

@@ -327,10 +327,7 @@ export default function Create() {
                   setErrorCode(-1)
                   return
                 }
-                if (approvalState !== ApprovalState.APPROVED || approvalStateLabel !== ApprovalState.APPROVED) {
-                  alert('Please approve token!')
-                  return
-                }
+                
                 handleCreateAirdrop(name, label, duration, 'Twitter', action, TWITTER_UNIT[action], content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)
               }}
             >

@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { useActivePopups } from '../../state/application/hooks'
+import { useActivePopups, useShowToast, useToastData } from '../../state/application/hooks'
 import { AutoColumn } from '../Column'
 import PopupItem from './PopupItem'
+import LazyImage, { LazyImage2 } from '../LazyImage'
 
 const MobilePopupWrapper = styled.div<{ height: string | number }>`
   position: relative;
@@ -65,5 +66,164 @@ export default function Popups() {
         </MobilePopupInner>
       </MobilePopupWrapper>
     </>
+  )
+}
+
+const FixedPopupWrap = styled.div<{error?: boolean}>`
+  width: 221px;
+  min-height: 60px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(107,190,225,0.2);
+  background: #FFF;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
+  position: fixed;
+  top: 136px;
+  right: 80px;
+  flex-direction: row;
+  display: flex;
+
+  &.hide {
+    right: -300px;
+  }
+
+  .line {
+    background: linear-gradient(46deg, rgba(107, 190, 225, 0.20) 8.92%, rgba(138, 232, 153, 0.20) 71.53%);
+    width: 1px;
+    height: 100%;
+    flex-shrink: 0;
+    position: absolute;
+    right: 41px;
+    top: 0;
+  }
+  .title {
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: "DM Sans";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px; /* 150% */
+    background: var(--13, linear-gradient(46deg, #6BBEE1 8.92%, #8AE899 71.53%));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .content {
+    margin-top: 4px;
+    color: rgba(0, 0, 0, 0.40);
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: "DM Sans";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px; /* 157.143% */
+  }
+  .close {
+    .close1 {
+      display: block;
+    }
+    .close2 {
+      display: none;
+    }
+    &:hover {
+      border-radius: 0px 8px 8px 0px;
+      background: linear-gradient(46deg, rgba(107, 190, 225, 0.04) 8.92%, rgba(138, 232, 153, 0.04) 71.53%);
+      .close1 {
+        display: none;
+      }
+      .close2 {
+        display: block;
+      }
+    }
+  }
+
+  &.error {
+    border: 1px solid rgba(248, 138, 138, 0.2);
+    .line {
+      background: rgba(248, 138, 138, 0.20);
+    }
+    .title {
+      color: #F88A8A;
+      background: none;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: inherit;
+    }
+    .close {
+      &:hover {
+        border-radius: 0px 8px 8px 0px;
+        background: rgba(248, 138, 138, 0.20);
+      }
+    }
+  }
+`
+
+export function PopupsNew() {
+
+  // const [error, setError] = useState(false)
+
+  const toastData = useToastData()
+  const { handleHide } = useShowToast()
+
+  const error = useMemo(() => {
+    return toastData.type && toastData.type === 'error'
+  }, [toastData])
+
+  const tipImg = useMemo(() => {
+    if (error) return '/images/airdrop/error2.svg'
+    return '/images/airdrop/success.svg'
+  }, [error])
+
+  const tipImg1 = useMemo(() => {
+    if (error) return '/images/airdrop/error_close1.svg'
+    return '/images/airdrop/success_close.svg'
+  }, [error])
+
+  const tipImg2 = useMemo(() => {
+    if (error) return '/images/airdrop/error_close2.svg'
+    return '/images/airdrop/success_close2.svg'
+  }, [error])
+
+  const timerRef = useRef<any>(null)
+  useEffect(() => {
+    if (toastData.content && toastData.type) {
+      if (!timerRef.current) {
+        timerRef.current = setTimeout(() => {
+          clearTimeout(timerRef.current)
+          timerRef.current = null
+          handleHide()
+        }, 6000)
+      }
+    }
+    return () => {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
+  }, [toastData, handleHide])
+
+  return (
+    <FixedPopupWrap className={` ${toastData.type === '' ? 'hide' : 'show'} ${error ? 'error' : ''}`} >
+      <div className='w-full px-3 py-[9px]'>
+        <div className='flex items-center'>
+          <LazyImage2 src={tipImg} />
+          <div className='title ml-[6px]'>{toastData.title}</div>
+        </div>
+        <div className='content'>
+        {toastData.content}
+        </div>
+      </div>
+      <div className='line'></div>
+      <div className='w-[41px] shrink-0 flex items-center justify-center cursor-pointer close '
+        onClick={e => {
+          e.stopPropagation()
+          clearTimeout(timerRef.current)
+          timerRef.current = null
+          handleHide()
+        }}
+      >
+        <LazyImage2 src={tipImg1} className='close1' />
+        <LazyImage2 src={tipImg2} className='close2' />
+      </div>
+    </FixedPopupWrap>
   )
 }

@@ -2,7 +2,7 @@ import React, { Suspense, useEffect } from 'react'
 
 import styled from 'styled-components'
 import Header from '../components/Header'
-import Popups from '../components/Popups'
+import Popups, { PopupsNew } from '../components/Popups'
 import Web3ReactManager from '../components/Web3ReactManager'
 import { useRouter } from 'next/router'
 import { useUserRoleMode } from '../state/user/hooks'
@@ -72,6 +72,7 @@ export default function App({ children }: any) {
       </HeaderWrapper>
       <BodyWrapper>
         <Popups />
+        <PopupsNew />
         <Web3ReactManager>
           { children}
         </Web3ReactManager>

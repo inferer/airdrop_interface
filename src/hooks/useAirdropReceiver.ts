@@ -11,6 +11,7 @@ import { AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury
 import { fetcher, poster } from '../utils/axios'
 import { getAlgTokenByLabel } from '../utils/getTokenList'
 import { useAirdropManager } from './useAirdropManager'
+import { useShowToast } from '../state/application/hooks'
 
 
 export const getAccountScoreProof = async (account: string, label: string) => {
@@ -39,7 +40,8 @@ export function useAirdropReceiver(algToken?: string) {
   const [confirmStatus, setConfirmStatus] = useState(0)
   const [completeStatus, setCompleteStatus] = useState(0)
   const [completeErrorMessage, setCompleteErrorMessage] = useState('')
-
+  const { handleShow } = useShowToast()
+  
   const handleConfirmTask = useCallback(async (
     airdropId: string,
     airToken: string,
@@ -63,7 +65,7 @@ export function useAirdropReceiver(algToken?: string) {
         console.log(error)
         const message = error.data?.data?.message || error.data?.message || error.message
         console.log(message)
-        alert(message)
+        handleShow({ type: 'error', content: `Fail to confirm.`, title: 'Error' })
         setConfirmStatus(2)
         return
       }
@@ -72,10 +74,10 @@ export function useAirdropReceiver(algToken?: string) {
         const receipt = await tx.wait()
         if (receipt.status) {
           router.push('/user/ongoing')
-          alert('Success')
         }
       } catch (error) {
         console.log(error)
+        handleShow({ type: 'error', content: `Fail to confirm.`, title: 'Error' })
       }
       
       setConfirmStatus(2)
@@ -92,7 +94,7 @@ export function useAirdropReceiver(algToken?: string) {
   ) => {
     if (account) {
       if (taskIds.length <= 0) {
-        alert('no checked')
+        handleShow({ type: 'error', content: `Please select a task.`, title: 'Error' })
         return
       }
       setCompleteStatus(1)
@@ -107,7 +109,6 @@ export function useAirdropReceiver(algToken?: string) {
           setCompleteStatus(2)
         } else {
           setCompleteStatus(-1)
-          // alert(res.message)
           setCompleteErrorMessage(res.message)
         }
         
@@ -130,7 +131,7 @@ export function useAirdropReceiver(algToken?: string) {
   ) => {
     if (airdropReceiver && account) {
       if (taskIds.length <= 0) {
-        alert('no checked')
+        handleShow({ type: 'error', content: `Please select a task.`, title: 'Error' })
         return
       }
       setCompleteStatus(1)

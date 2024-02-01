@@ -61,7 +61,7 @@ const AlgTokenItem = ({
   token: Currency,
   isProjectMode?: boolean
   currentTokenAddress?: string
-  claim?: (label: string, tokenAddress: string) => void
+  claim?: (label: string, tokenAddress: string, lockedAmount: string) => void
 }) => {
   const { account } = useActiveWeb3React()
   const balance = useCurrencyBalance(account ?? undefined, token)
@@ -96,7 +96,7 @@ const AlgTokenItem = ({
             onClick={e => {
               e.stopPropagation()
               if (currentTokenAddress) return
-              claim && claim(algAirdrop.token.symbol || '', algAirdrop.token.address)
+              claim && claim(algAirdrop.token.symbol || '', algAirdrop.token.address, algAirdrop.unclaimed)
             }}
           > 
             {
@@ -206,9 +206,9 @@ const TokenList = () => {
   }, [account, isProjectMode, isRewards, handleGetProjectLabelLocked, handleGetProjectUSDTLocked, handleGetUserAlgTokenLocked])
 
   const [currentTokenAddress, setCurrentTokenAddress] = useState('')
-  const _handleClaim = useCallback(async (label: string, tokenAddress: string) => {
+  const _handleClaim = useCallback(async (label: string, tokenAddress: string, lockedAmount: string) => {
     setCurrentTokenAddress(tokenAddress)
-    handleClaim(label, tokenAddress)
+    handleClaim(label, tokenAddress, lockedAmount)
   }, [])
 
   useEffect(() => {

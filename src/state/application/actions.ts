@@ -17,6 +17,11 @@ export type PopupContent =
         auto: boolean
       }
     }
+export type IToast = {
+  title?: string,
+  content: string,
+  type?: string
+}
 
 export const updateBlockNumber = createAction<{ chainId: number; blockNumber: number }>('app/updateBlockNumber')
 export const toggleWalletModal = createAction<void>('app/toggleWalletModal')
@@ -25,3 +30,5 @@ export const addPopup = createAction<{ key?: string; removeAfterMs?: number | nu
   'app/addPopup'
 )
 export const removePopup = createAction<{ key: string }>('app/removePopup')
+
+export const showToast = createAction<{ data: IToast }>('app/showToast')

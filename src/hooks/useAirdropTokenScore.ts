@@ -15,6 +15,7 @@ import { updateUserAlgAirdropList, updateUserLabelScore } from "../state/airdrop
 import { getAlgLabelTokenByAddress, getAlgTokenByLabel } from "../utils/getTokenList";
 import { fetcher,userPoolSrvcFetcher } from "../utils/axios";
 import { useUserLabelScore } from "../state/airdrop/hooks";
+import { useShowToast } from "../state/application/hooks";
 
 export const getAirdropTokenScoreAddress = () => {
   return AirdropTokenScore_NETWORKS[NETWORK_CHAIN_ID as ChainId]
@@ -94,7 +95,8 @@ export function useAirdropTokenScore() {
   ])
 
   const [claimStatus, setClaimStatus] = useState(0)
-  const handleClaim = useCallback(async (label: string, tokenAddress: string) => {
+  const { handleShow } = useShowToast()
+  const handleClaim = useCallback(async (label: string, tokenAddress: string, lockedAmount: string) => {
     if (account && airdropTokenScore) {
       let _label = label.slice(4)
       // if (_label === 'Sports') {
@@ -106,29 +108,31 @@ export function useAirdropTokenScore() {
       setClaimStatus(1)
       try {
         const proof = await getAccountProof(account, _label)
+        
         if (proof.length > 0) {
           const tx = await airdropTokenScore.claimToken(tokenAddress, proof)
           const receipt = await tx.wait()
           if (receipt.status) {
             handleGetAlgTokenList()
-            alert('Success')
+            handleShow({ type: 'success', content: `Received ${lockedAmount} ${label} tokens successfully.` })
           } else {
-            alert('Error')
+            handleShow({ type: 'error', content: `Fail to received ${label} tokens.`, title: 'Error' })
           }
         } else {
-          alert('Error')
+          console.log(proof)
+          handleShow({ type: 'error', content: `Fail to received ${label} tokens.`, title: 'Error' })
         }
         setClaimStatus(0)
 
       } catch (err: any) {
         console.log(err)
-        alert(err?.data?.message || err.message)
+        handleShow({ type: 'error', content: `Fail to received ${label} tokens.`, title: 'Error' })
         setClaimStatus(0)
       }
       
     }
     
-  }, [account, airdropTokenScore, handleGetAlgTokenList])
+  }, [account, airdropTokenScore, handleGetAlgTokenList, handleShow])
 
   return {
     handleGetAlgTokenList,

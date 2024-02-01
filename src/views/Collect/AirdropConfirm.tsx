@@ -228,10 +228,6 @@ const AirdropConfirm: React.FC<{
             onClick={e => {
               e.stopPropagation()
               if (confirmStatus === 1) return
-              if (approvalState !== ApprovalState.APPROVED) {
-                alert('Please approve token!')
-                return
-              }
               handleConfirmTask(airdrop.airdropId, airdrop.labelToken.address, airdrop.labelToken?.symbol?.slice(4) || '', accountScore)
             }}
           >

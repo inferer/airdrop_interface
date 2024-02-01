@@ -14,6 +14,7 @@ import { updateProjectLabelLocked, updateProjectUSDTLocked, updateUserAlgTokenLo
 import { AddressZero_ETH } from "../constants"
 import { getUSDTTokenFromAirToken } from "../utils/getTokenList"
 import { getERC20Contract } from "../utils"
+import { useShowToast } from '../state/application/hooks'
 
 
 export const getAirdropAssetTreasuryAddress = () => {
@@ -127,6 +128,7 @@ export function useAirdropAssetTreasury() {
   }, [multi, airdropAssetTreasury, usdtAllTokens])
 
   const [withdrawStatus, setWithdrawStatus] = useState(0)
+  const { handleShow } = useShowToast()
   const handleUserWithdraw = useCallback(async (value: string, airToken: Currency) => {
     if (account && airdropAssetTreasury && library && chainId) {
       setWithdrawStatus(1)
@@ -149,7 +151,7 @@ export function useAirdropAssetTreasury() {
           if (receipt.status) {
             approved = true
           } else {
-            alert('Approve: error')
+            handleShow({ type: 'error', content: `Approve: error.`, title: 'Error' })
           }
         } else {
           approved = true
@@ -159,9 +161,9 @@ export function useAirdropAssetTreasury() {
           const receipt = await tx.wait()
           if (receipt.status) {
             setWithdrawStatus(2)
-            alert('Success')
+            handleShow({ type: 'success', content: `Withdraw ${value} ${airToken.symbol} tokens successfully.`, title: 'Success' })
           } else {
-            alert('Error')
+            handleShow({ type: 'error', content: `Fail to withdraw ${airToken.symbol} token.`, title: 'Error' })
           }
         }
         // // setTimeout(() => {
@@ -170,7 +172,7 @@ export function useAirdropAssetTreasury() {
         
       } catch(err: any) {
         console.log(err)
-        alert(err?.data?.message || err.message)
+        handleShow({ type: 'error', content: `Fail to withdraw ${airToken.symbol} token.`, title: 'Error' })
         setWithdrawStatus(0)
       }
     }

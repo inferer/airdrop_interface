@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { useActiveWeb3React } from '../../hooks'
-import { addPopup, PopupContent, removePopup, toggleWalletModal, toggleSettingsMenu } from './actions'
+import { addPopup, PopupContent, removePopup, toggleWalletModal, toggleSettingsMenu, showToast, IToast } from './actions'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppState } from '../index'
 
@@ -55,4 +55,25 @@ export function useRemovePopup(): (key: string) => void {
 export function useActivePopups(): AppState['application']['popupList'] {
   const list = useSelector((state: AppState) => state.application.popupList)
   return useMemo(() => list.filter(item => item.show), [list])
+}
+
+export function useShowToast() {
+  const dispatch = useDispatch()
+
+  const handleShow = useCallback(async (data: IToast) => {
+    dispatch(showToast({ data: { ...data, title: data.title ?? 'Success', type: data.type ?? 'success' } }))
+  }, [dispatch])
+
+  const handleHide = useCallback(async () => {
+    dispatch(showToast({ data: { title: '', content: '', type: ''} }))
+  }, [dispatch])
+
+  return {
+    handleShow,
+    handleHide
+  }
+}
+
+export function useToastData() {
+  return useSelector((state: AppState) => state.application.toastData)
 }
