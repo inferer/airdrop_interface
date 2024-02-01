@@ -398,6 +398,12 @@ export const ButtonSwapUser = styled.div<{
   
   &:hover {
     background: ${({ disabled }) => ( disabled ? 'linear-gradient(108deg, rgba(63, 60, 255, 0.03) 24.12%, rgba(107, 190, 225, 0.03) 51.08%, rgba(138, 232, 153, 0.03) 75.88%)' : 'linear-gradient(135deg, rgba(107, 190, 225, 0.12) 0%, rgba(138, 232, 153, 0.12) 100%)')} ;
+    .btn-text {
+      background: linear-gradient(135deg, #5DBDE5 0%, #6FE081 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
   }
 
   > * {

@@ -91,7 +91,7 @@ export default function Swap() {
     currencies,
     inputError: swapInputError
   } = useDerivedSwapInfo()
-  
+  console.log(swapInputError)
   const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
     currencies[Field.INPUT],
     currencies[Field.OUTPUT],
@@ -285,6 +285,10 @@ export default function Swap() {
     onUserInput(Field.OUTPUT, '')
   }, [router])
 
+  const disabled = useMemo(() => {
+    return swaping || !!swapInputError || !isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError || (noRoute && userHasSpecifiedInputOutput)
+  }, [swaping, swapInputError, isValid, priceImpactSeverity, isExpertMode, swapCallbackError, noRoute, userHasSpecifiedInputOutput])
+
   return (
     <>
       <TokenWarningModal
@@ -420,7 +424,7 @@ export default function Swap() {
                 </div>
                 
               </ButtonSwap>
-            ) : showApproveFlow && !isProjectCreate ? (
+            ) : showApproveFlow && !isProjectCreate && approval !== ApprovalState.APPROVED ? (
               <RowBetween>
                 <ButtonSwap
                   onClick={approveCallback}
@@ -428,8 +432,6 @@ export default function Swap() {
                 >
                   {approval === ApprovalState.PENDING ? (
                     isProjectSwap ? <LoadingProject /> : <LoadingUser />
-                  ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
-                    <span className='btn-text'>Approved</span>
                   ) : (
                     <span className='btn-text'>{'Approve ' + currencies[Field.INPUT]?.symbol}</span>
                   )}
@@ -456,7 +458,7 @@ export default function Swap() {
             ) : (
               <ButtonSwap
                 onClick={() => {
-                  if (swaping) return
+                  if (disabled) return
                   if (isProjectCreate) {
                     handleAction()
                     return
@@ -474,7 +476,7 @@ export default function Swap() {
                   }
                 }}
                 id="swap-button"
-                disabled={swaping || !isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError || (noRoute && userHasSpecifiedInputOutput)}
+                disabled={disabled}
               >
                 {
                   swaping ? 

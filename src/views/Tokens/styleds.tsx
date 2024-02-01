@@ -48,4 +48,5 @@ export const TokensBody = styled.div`
   margin: 0 auto;
   padding: 30px;
   margin-top: 56px;
+  margin-bottom: 50px;
 `

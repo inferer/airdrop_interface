@@ -14,7 +14,7 @@ const AirdropList: React.FC<{
 
   const [algToken, setAlgToken] = useState('')
 
-  const { handleGetAirdropList } = useAirdropManager()
+  const { handleGetAirdropList, handleUpdateAirdropList } = useAirdropManager()
   const airdropList = useAirdropList()
   const maxUnits = useMaxUnits()
   const filterAirdropList = useMemo(() => {
@@ -27,7 +27,9 @@ const AirdropList: React.FC<{
       setAlgToken(_algToken)
       handleGetAirdropList(_algToken)
     }
-    
+    return () => {
+      handleUpdateAirdropList()
+    }
   }, [router])
 
   return (

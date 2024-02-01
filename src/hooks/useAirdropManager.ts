@@ -94,8 +94,8 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
       const airdrop = data[0]
       const offerTokenData = getUSDTTokenByAddress(airdrop[2][0])
       const labelTokenData = getLabelTokenByAddress(airdrop[2][2])
-      
-      const _offerLocked = offerTokenData?.decimals ? BigNumber.from(airdrop[3][0]).div(BigNumber.from((10 ** (offerTokenData?.decimals ?? 18)).toString())).toString() : (Number(airdrop[3][0].toString()) / (10 ** (offerTokenData?.decimals ?? 18))).toFixed(4)
+      const subDecimals = String((10 ** (offerTokenData?.decimals ?? 18))).length - (airdrop[3][0].toString()).length
+      const _offerLocked = (Number(airdrop[3][0].toString()) / (10 ** (offerTokenData?.decimals ?? 18))).toFixed(subDecimals < 0 ?  0 : subDecimals)
       const expireOnTimestamp = Number(airdrop[5].toString()) * 1000 + Number(airdrop[4].toString()) * 1000
       const tempData: any = {
         airdropId: airdrop[0].toString(),
@@ -190,6 +190,10 @@ export function useAirdropManager() {
   const multi = useMulticallContract()
   const airdropManager = useAirdropManagerContract()
 
+  const handleUpdateAirdropList = useCallback(async () => {
+    dispatch(updateAirdropList({ airdropList: [] }))
+  }, [dispatch])
+
   const handleGetAirdropList = useCallback(async (algToken?: string) => {
     if (multi) {
       if (algToken) {
@@ -205,7 +209,7 @@ export function useAirdropManager() {
       }
       
     }
-  }, [multi])
+  }, [multi, dispatch])
 
   const handleGetUserAirdropList = useCallback(async (account?: string) => {
     if (multi) {
@@ -218,14 +222,21 @@ export function useAirdropManager() {
       }
       
     }
-  }, [multi])
+  }, [multi, dispatch])
 
   const handleGetAirdropOne = useCallback(async (airdropId: number) => {
     if (multi) {
       const list = await getAirdropList(multi, [airdropId])
       dispatch(updateAirdropListOne({ airdropList: list as any }))
     }
-  }, [multi])
+  }, [multi, dispatch])
+
+  const handleGetAirdropOne2 = useCallback(async (airdropId: number) => {
+    if (multi) {
+      const list = await getAirdropList(multi, [airdropId])
+      return list[0]
+    }
+  }, [multi, dispatch])
 
   const handleGetUserAirdropConfirmed = useCallback(async (refresh?: boolean) => {
     if (multi && airdropManager && account && (refresh || airdropList.length <= 0) ) {
@@ -236,7 +247,7 @@ export function useAirdropManager() {
       const newList = list.map((item, index) => ({ ...item, ...tempConfirmed[index]}))
       dispatch(updateUserAirdropConfirmed({ airdropList: newList as any }))
     }
-  }, [multi, airdropManager, account, airdropList])
+  }, [multi, airdropManager, account, airdropList, dispatch])
 
   const handleGetUserTaskConfirmed = useCallback(async (airdropId: string) => {
     if (airdropManager && account) {
@@ -273,7 +284,9 @@ export function useAirdropManager() {
     handleGetUserAirdropConfirmed,
     handleGetUserTaskConfirmed,
     handleUpdateUserAirdropConfirmedByTaskId,
-    handleGetUserAirdropList
+    handleGetUserAirdropList,
+    handleGetAirdropOne2,
+    handleUpdateAirdropList
   }
 
 }

@@ -123,6 +123,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       const isETH = lockedToken === ETHER
       const baseInfo = [name, label, channel, action, content]
       const route = args[2]
+      console.log(lockedAmountA, lockedAmountB, args[1], unint)
       const offer_label_token = [isETH ? ethers.constants.AddressZero : lockedToken.address, route[0], route[route.length - 1], account]
       const offer_label_locked = [lockedAmountA, lockedAmountB, args[1], unint]
       const duration = parseInt(_duration) * 24 * 60 * 60

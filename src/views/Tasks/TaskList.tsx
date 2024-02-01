@@ -8,6 +8,7 @@ import CheckBox from "../../components/CheckBox";
 import { useActiveWeb3React } from "../../hooks";
 import { IAirdrop } from "../../state/airdrop/actions";
 import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
+import CurrencyLogo from "../../components/CurrencyLogo";
 
 const AirdropList: React.FC<{
   onChecked?: (keys: IAirdrop[]) => void
@@ -38,7 +39,7 @@ const AirdropList: React.FC<{
     onChecked && onChecked([...checkList])
     setCheckList(checkList)
   }, [checkList, userConfirmedList])
-  
+  console.log(userConfirmedList)
   return (
     <div>
       <Table>
@@ -55,7 +56,7 @@ const AirdropList: React.FC<{
                 <span>Units</span> 
               </TableHeadCell> */}
               <TableHeadCell className="w-[200px]">
-                <span>Fund</span>
+                <span>Rewards</span>
               </TableHeadCell>
               <TableHeadCell className="w-[180px]">
                 <span>Expire On</span>
@@ -91,7 +92,10 @@ const AirdropList: React.FC<{
                           <span className="text-[#79D0C4] font-fmedium">2x</span> 
                         </TableCell> */}
                         <TableCell className="w-[200px]">
-                          <span>{airdrop.offerLocked} {airdrop.offerToken.symbol}</span>
+                          <div className="flex items-center">
+                            <span className="mr-2">{airdrop.labelLocked} {airdrop.labelToken?.symbol}</span>
+                            <CurrencyLogo currency={airdrop.labelToken} size="24" />
+                          </div>
                         </TableCell>
                         <TableCell className="w-[180px]">
                           <span>{airdrop.expireOn}</span>

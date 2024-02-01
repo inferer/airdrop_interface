@@ -103,7 +103,7 @@ export default function Create() {
           </div>
         </Link> */}
         
-        <div className=' text-[32px] font-fsemibold text-black leading-normal'>Create the airdrop</div>
+        <div className=' text-[32px] font-fsemibold text-black leading-normal' style={{lineHeight: 'normal'}}>Create the airdrop</div>
       </TitleWrap>
       <ItemWrap>
         <div>

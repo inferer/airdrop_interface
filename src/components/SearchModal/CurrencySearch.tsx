@@ -217,12 +217,12 @@ export function CurrencySearch({
         
       </div>
       <div style={{ flex: '1' }} className='px-[30px]' >
-        <AutoSizer disableWidth>
-          {({ height }) => (
+        {/* <AutoSizer disableWidth defaultHeight={346}>
+          {({ height }) => ( */}
             <CurrencyList
               isAssetToken={isAssetToken}
               payInput={payInput}
-              height={height}
+              height={346}
               showETH={showETH}
               currencies={filteredSortedTokens}
               onCurrencySelect={handleCurrencySelect}
@@ -230,8 +230,8 @@ export function CurrencySearch({
               selectedCurrency={selectedCurrency}
               fixedListRef={fixedList}
             />
-          )}
-        </AutoSizer>
+          {/* )}
+        </AutoSizer> */}
       </div>
       <div className=' text-[11px] text-[rgba(0,0,0,0.4)] font-fnormal cursor-pointer flex items-center justify-center pb-4'
         onClick={e => {

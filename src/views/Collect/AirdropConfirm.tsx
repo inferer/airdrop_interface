@@ -8,9 +8,7 @@ import { useAirdropList0 } from "../../state/airdrop/hooks";
 import router from 'next/router'
 import { useAirdropManager } from "../../hooks/useAirdropManager";
 import { useAirdropReceiver } from "../../hooks/useAirdropReceiver";
-import { getTokenLogoURL2 } from "../../components/CurrencyLogo";
 import { ApprovalState } from "../../hooks/useApproveCallback";
-import { AutoRow } from "../../components/Row";
 import Loader, { Loading, LoadingX } from '../../components/Loader'
 import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
 import { useActiveWeb3React } from "../../hooks";
@@ -154,7 +152,7 @@ const AirdropConfirm: React.FC<{
           </div>
         </div>
       </div>
-      <div className="p-4 rounded-xl bg-[rgba(123,120,255,0.04)] font-fnormal mt-3">
+      <div className="p-4 rounded-xl bg-[rgba(147,205,155,0.04)] font-fnormal mt-3">
         <div className=" text-[rgba(147,205,155,0.8)] text-[16px] font-fsemibold ">Airdrop token would be issued from contract.</div>
         <div className=" text-[rgba(147,205,155,0.8)] text-[14px] font-normal mt-2 leading-[18px] ">Once you confirmed the airdrop, the alg-* token would be locked in protocol until the airdrop content gets done. And the Alg-* token would be transformed into Air-* token and transferred into your account for later trade in airdrop pools..</div>
       </div>

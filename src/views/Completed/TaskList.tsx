@@ -4,8 +4,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 
 import LazyImage from "../../components/LazyImage";
 import { useUserAirdropConfirmedList } from "../../state/airdrop/hooks";
 import { useAirdropManager } from "../../hooks/useAirdropManager";
-import CheckBox from "../../components/CheckBox";
 import { useActiveWeb3React } from "../../hooks";
+import CurrencyLogo from "../../components/CurrencyLogo";
 
 const AirdropList: React.FC<{
 }> = ({
@@ -39,7 +39,7 @@ const AirdropList: React.FC<{
                 <span>Units</span> 
               </TableHeadCell> */}
               <TableHeadCell className="w-[250px]">
-                <span>Fund</span>
+                <span>Rewards</span>
               </TableHeadCell>
               <TableHeadCell className="w-[200px]">
                 <span>Expire On</span>
@@ -72,7 +72,10 @@ const AirdropList: React.FC<{
                           <span className="text-[#79D0C4] font-fmedium">2x</span> 
                         </TableCell> */}
                         <TableCell className="w-[250px]">
-                          <span>{airdrop.offerLocked} {airdrop.offerToken.symbol}</span>
+                          <div className="flex items-center">
+                            <span className="mr-2">{airdrop.labelLocked} {airdrop.labelToken?.symbol}</span>
+                            <CurrencyLogo currency={airdrop.labelToken} size="24" />
+                          </div>
                         </TableCell>
                         <TableCell className="w-[200px]">
                           <span>{airdrop.expireOn}</span>

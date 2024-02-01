@@ -56,7 +56,7 @@ function Collect() {
   const handleCheck = useCallback(() => {
     setIds([])
     setCompleteStatus(0)
-    router.push('/user/rewards')
+    router.push('/user/completed')
   }, [])
 
   // useEffect(() => {
