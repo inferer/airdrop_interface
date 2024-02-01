@@ -8,10 +8,6 @@ import Banner from '../../components/tokens/Banner'
 import TokenList from '../../components/tokens/TokenList'
 
 function Tokens() {
-  const theme = useContext(ThemeContext)
-  const { account } = useActiveWeb3React()
-
-
   return (
     <TokensBody>
       <TitleTab />
