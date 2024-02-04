@@ -73,7 +73,7 @@ const AirdropList: React.FC<{
                         </TableCell> */}
                         <TableCell className="w-[250px]">
                           <div className="flex items-center">
-                            <span className="mr-2">{airdrop.labelLocked} {airdrop.labelToken?.symbol}</span>
+                            <span className="mr-2">{airdrop.airAmount} {airdrop.labelToken?.symbol}</span>
                             <CurrencyLogo currency={airdrop.labelToken} size="24" />
                           </div>
                         </TableCell>

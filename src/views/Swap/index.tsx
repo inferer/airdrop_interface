@@ -29,7 +29,7 @@ import useENSAddress from '../../hooks/useENSAddress'
 import { useSwapCallback } from '../../hooks/useSwapCallback'
 import useToggledVersion, { Version } from '../../hooks/useToggledVersion'
 import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback'
-import { useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks'
+import { useShowToast, useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks'
 import { Field } from '../../state/swap/actions'
 import {
   useDefaultsFromURLSearch,
@@ -192,7 +192,7 @@ export default function Swap() {
     deadline,
     recipient
   )
-
+  const { handleShow } = useShowToast()
   const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
   const [swaping, setSwaping] = useState(false)
   const handleSwap = useCallback(() => {
@@ -202,16 +202,26 @@ export default function Swap() {
     if (!swapCallback) {
       return
     }
+
+
     setSwaping(true)
     setSwapState({ attemptingTxn: true, tradeToConfirm, showConfirm, swapErrorMessage: undefined, txHash: undefined })
-    swapCallback()
+    swapCallback() 
       .then(hash => {
         setSwapState({ attemptingTxn: false, tradeToConfirm, showConfirm, swapErrorMessage: undefined, txHash: hash })
+        const inputValue = formattedAmounts[Field.INPUT]
+        const outputValue = formattedAmounts[Field.OUTPUT]
+        const inputCurrency = currencies[Field.INPUT]
+        const outputCurrency = currencies[Field.OUTPUT]
+        const content = `Swap ${inputValue} ${inputCurrency?.symbol} for ${outputValue} ${outputCurrency?.symbol}`
+        handleShow({ type: 'success', content: content, title: 'Success', action: 'swap', hash: hash })
         setSwaping(false)
         onUserInput(Field.INPUT, '')
         onUserInput(Field.OUTPUT, '')
+        
       })
       .catch(error => {
+        handleShow({ type: 'error', content: error.message, title: 'Error' })
         setSwaping(false)
         setSwapState({
           attemptingTxn: false,
@@ -481,10 +491,10 @@ export default function Swap() {
                 {
                   swaping ? 
                     isProjectSwap ? <LoadingProject /> : <LoadingUser /> :
-                    <Text fontSize={20} fontWeight={500} className='btn-text'>
+                    <div className='btn-text'>
                       {isProjectSwap || isUserSwap
                         ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'}
-                    </Text>
+                    </div>
                 }
                 
               </ButtonSwap>

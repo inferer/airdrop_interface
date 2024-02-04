@@ -118,5 +118,25 @@ body {
 .score-item.active:hover {
   background: rgba(73, 91, 255, 0.40);
 }
+.view-etherscan .link3 {
+  display: inline-block;
+}
+.view-etherscan .link4{
+  display: none;
+}
+.view-etherscan:hover {
+  cursor: pointer;
+  background: linear-gradient(46deg, rgba(107, 190, 225, 0.70) 8.92%, rgba(138, 232, 153, 0.70) 71.53%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.view-etherscan:hover .link3 {
+  display: none;
+}
+.view-etherscan:hover .link4{
+  display: inline-block;
+}
 
 

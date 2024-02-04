@@ -9,7 +9,7 @@ import router from 'next/router'
 import { useAirdropManager } from "../../hooks/useAirdropManager";
 import { useAirdropReceiver } from "../../hooks/useAirdropReceiver";
 import { ApprovalState } from "../../hooks/useApproveCallback";
-import Loader, { Loading, LoadingX } from '../../components/Loader'
+import Loader, { Loading, LoadingX, LoadingXUser } from '../../components/Loader'
 import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
 import { useActiveWeb3React } from "../../hooks";
 
@@ -219,7 +219,7 @@ const AirdropConfirm: React.FC<{
                 e.stopPropagation()
               }}
             >
-              <LoadingX />
+              <LoadingXUser />
             </ButtonSwap> : null
           }
         {
@@ -233,7 +233,7 @@ const AirdropConfirm: React.FC<{
           >
             <div className="btn-text">
               {
-                confirmStatus === 1 ? <LoadingX /> : 'Confirm'
+                confirmStatus === 1 ? <LoadingXUser /> : 'Confirm'
               }
             </div>
           </ButtonSwapUser>

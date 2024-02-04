@@ -4,7 +4,7 @@ const ScoreItem = ({
   active
 }: { active?: boolean}) => {
   return (
-    <div className={`${active ? 'bg-[rgba(73,188,255,0.30)]' : 'bg-[#FAFAFA]'}  w-[60px] h-3 rounded-sm mr-1`}>
+    <div className={`${active ? 'bg-[rgba(73,188,255,0.30)] cursor-pointer' : 'bg-[#FAFAFA]'}  w-[60px] h-3 rounded-sm mr-1`}>
 
     </div>
   )
@@ -23,8 +23,8 @@ const Score = ({
       and utilized as identity analysis standard.
       More info on https://docs.inferer.xyz.
       </div>
-      <div className="flex items-center h-full cursor-pointer">
-        <div className="text-[rgba(0,0,0,0.40)] text-[16px] font-fsemibold"
+      <div className="flex items-center h-full">
+        <div className="text-[rgba(0,0,0,0.40)] text-[16px] font-fsemibold cursor-pointer"
           onMouseOver={e => {
             e.stopPropagation()
             setShowTip(true)

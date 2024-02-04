@@ -231,9 +231,9 @@ export function useSwapCallback(
             const withVersion =
               tradeVersion === Version.v2 ? withRecipient : `${withRecipient} on ${(tradeVersion as any).toUpperCase()}`
 
-            addTransaction(response, {
-              summary: withVersion
-            })
+            // addTransaction(response, {
+            //   summary: withVersion
+            // })
 
             return response.hash
           })

@@ -23,6 +23,7 @@ export interface IAirdrop {
   claimed: string,
   completed?: boolean,
   accountScore?: number
+  airAmount?: number
 }
 export interface IAlgAirdrop {
   claimed: string,

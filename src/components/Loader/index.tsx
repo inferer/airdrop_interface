@@ -120,6 +120,10 @@ export function LoadingX({ size = '30px', stroke, ...rest }: { size?: string; st
   return <LazyImage src='/images/airdrop/loading.gif' className='w-[96px] h-[14px]' />
 }
 
+export function LoadingXUser({ size = '30px', stroke, ...rest }: { size?: string; stroke?: string }) {
+  return <LazyImage src='/images/airdrop/loading-user.gif' className='w-[96px] h-[14px]' />
+}
+
 export function Confirmed() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">

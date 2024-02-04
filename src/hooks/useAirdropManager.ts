@@ -161,7 +161,9 @@ export const getUserAirdropConfirmed2 = async (airdropManager: Contract, account
 
   return userAirdropConfirmed && userAirdropConfirmed[0] ? userAirdropConfirmed.map((item: any) => {
     const tempItem = item
+    const labelTokenData = getLabelTokenByAddress(tempItem[7])
     return {
+      airAmount: Number(tempItem[5].toString()) / (10 ** (labelTokenData?.decimals ?? 18)),
       completed: tempItem.completed,
       airdropId: tempItem[2]?.toString(),
       userAddress: tempItem[3],

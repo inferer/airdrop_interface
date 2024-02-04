@@ -20,7 +20,9 @@ export type PopupContent =
 export type IToast = {
   title?: string,
   content: string,
-  type?: string
+  type?: string,
+  action?: string
+  hash?: string
 }
 
 export const updateBlockNumber = createAction<{ chainId: number; blockNumber: number }>('app/updateBlockNumber')

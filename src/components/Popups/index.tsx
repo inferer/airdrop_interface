@@ -4,6 +4,8 @@ import { useActivePopups, useShowToast, useToastData } from '../../state/applica
 import { AutoColumn } from '../Column'
 import PopupItem from './PopupItem'
 import LazyImage, { LazyImage2 } from '../LazyImage'
+import { getEtherscanLink, openBrowser } from '../../utils'
+import { useActiveWeb3React } from '../../hooks'
 
 const MobilePopupWrapper = styled.div<{ height: string | number }>`
   position: relative;
@@ -70,7 +72,7 @@ export default function Popups() {
 }
 
 const FixedPopupWrap = styled.div<{error?: boolean}>`
-  width: 221px;
+  width: 228px;
   min-height: 60px;
   flex-shrink: 0;
   border-radius: 8px;
@@ -160,7 +162,7 @@ const FixedPopupWrap = styled.div<{error?: boolean}>`
 
 export function PopupsNew() {
 
-  // const [error, setError] = useState(false)
+  const { chainId } = useActiveWeb3React()
 
   const toastData = useToastData()
   const { handleHide } = useShowToast()
@@ -192,7 +194,7 @@ export function PopupsNew() {
           clearTimeout(timerRef.current)
           timerRef.current = null
           handleHide()
-        }, 6000)
+        }, 116000)
       }
     }
     return () => {
@@ -203,13 +205,26 @@ export function PopupsNew() {
 
   return (
     <FixedPopupWrap className={` ${toastData.type === '' ? 'hide' : 'show'} ${error ? 'error' : ''}`} >
-      <div className='w-full px-3 py-[9px]'>
+      <div className='w-full px-[12px] py-[9px]'>
         <div className='flex items-center'>
           <LazyImage2 src={tipImg} />
           <div className='title ml-[6px]'>{toastData.title}</div>
         </div>
         <div className='content'>
-        {toastData.content}
+          {toastData.content}
+          {
+            toastData.action === 'swap' && 
+            <span className=' inline-flex items-center view-etherscan'
+              onClick={e => {
+                e.stopPropagation()
+                openBrowser(chainId && toastData.hash ? getEtherscanLink(chainId, toastData.hash, 'transaction') : '')
+              }}
+            >
+              View on Etherscan
+              <LazyImage src='/images/airdrop/link3.svg' className='ml-[6px] link3' />
+              <LazyImage src='/images/airdrop/link4.svg' className='ml-[6px] link4' />
+            </span>
+          }
         </div>
       </div>
       <div className='line'></div>
