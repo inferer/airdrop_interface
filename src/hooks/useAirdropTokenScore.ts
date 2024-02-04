@@ -142,7 +142,7 @@ export function useAirdropTokenScore() {
 
 }
 
-export function useAccountLabelScore(account: string, label: string) {
+export function useAccountLabelScore(account: string, label?: string) {
   const dispatch = useDispatch<AppDispatch>()
   const [score, setScore] = useState(0)
 
@@ -161,7 +161,6 @@ export function useAccountLabelScore(account: string, label: string) {
           
         })
       }
-      
     }
   }, [account, label, getAlgTokenByLabel, userScore])
 

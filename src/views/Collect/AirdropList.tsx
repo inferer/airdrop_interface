@@ -5,11 +5,14 @@ import LazyImage from "../../components/LazyImage";
 import { useAirdropList, useMaxUnits } from "../../state/airdrop/hooks";
 import { useRouter } from "next/router";
 import { useAirdropManager } from "../../hooks/useAirdropManager";
-import { getALgTokenFromAirToken } from "../../utils/getTokenList";
+import { getALgTokenFromAirToken, getAlgLabelTokenByAddress } from "../../utils/getTokenList";
+import { useActiveWeb3React } from "../../hooks";
+import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
 
 const AirdropList: React.FC<{
 
 }> = () => {
+  const { account } = useActiveWeb3React()
   const router = useRouter()
 
   const [algToken, setAlgToken] = useState('')
@@ -17,9 +20,10 @@ const AirdropList: React.FC<{
   const { handleGetAirdropList, handleUpdateAirdropList } = useAirdropManager()
   const airdropList = useAirdropList()
   const maxUnits = useMaxUnits()
+  const accountScore = useAccountLabelScore(account || '', router.query.id && router.query.id[0] && getAlgLabelTokenByAddress(router.query.id[0])?.symbol?.slice(4) )
   const filterAirdropList = useMemo(() => {
-    return airdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits)
-  }, [maxUnits, airdropList])
+    return airdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits && !airdrop.completed && (Number(airdrop.labelLocked) - Number(airdrop.claimed) >= accountScore))
+  }, [maxUnits, airdropList, accountScore])
   useEffect(() => {
     let _algToken = ''
     if (router.query.id) {

@@ -97,6 +97,9 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
       const subDecimals = String((10 ** (offerTokenData?.decimals ?? 18))).length - (airdrop[3][0].toString()).length
       const _offerLocked = (Number(airdrop[3][0].toString()) / (10 ** (offerTokenData?.decimals ?? 18))).toFixed(subDecimals < 0 ?  0 : subDecimals)
       const expireOnTimestamp = Number(airdrop[5].toString()) * 1000 + Number(airdrop[4].toString()) * 1000
+      const _labelLocked = (Number(airdrop[3][2]) / (10 ** (labelTokenData?.decimals ?? 18))).toFixed(4)
+      const _claimed = (Number(airdrop[6].toString()) / (10 ** (labelTokenData?.decimals ?? 18))).toFixed(4)
+      
       const tempData: any = {
         airdropId: airdrop[0].toString(),
         name: airdrop[1][0],
@@ -115,13 +118,13 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
         // offerLocked: BigNumber.from(airdrop[3][0]).div(BigNumber.from((10 ** (offerTokenData?.decimals ?? 18)).toString())).toString(),
         offerLocked: _offerLocked,
         offerLabelLocked: BigNumber.from(airdrop[3][1]).div(BigNumber.from((10 ** (labelTokenData?.decimals ?? 1)).toString())).toString(),
-        labelLocked: BigNumber.from(airdrop[3][2]).div(BigNumber.from((10 ** (labelTokenData?.decimals ?? 18)).toString())).toString(),
+        labelLocked: _labelLocked,
         unit: BigNumber.from(airdrop[3][3]).toString(),
         duration: airdrop[4].toString(),
         startTimestamp: airdrop[5].toString(),
         expireOn: transformTime(expireOnTimestamp),
-        claimed: airdrop[6].toString(),
-        completed: expireOnTimestamp < Date.now()
+        claimed: _claimed,
+        completed: expireOnTimestamp < Date.now() || (Number(_labelLocked) - Number(_claimed) < 1)
 
       }
       airdropList.push(tempData)

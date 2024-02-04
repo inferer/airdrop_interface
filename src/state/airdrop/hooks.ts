@@ -37,7 +37,7 @@ export function useAlgAirdrop(address: string) {
   }, [userAlgAirdropList, address])
 }
 
-export function useUserLabelScore(account: string, label: string) {
+export function useUserLabelScore(account: string, label?: string) {
   const userLabelScore = useSelector<AppState, AppState['airdrop']['userLabelScore']>(state => state.airdrop.userLabelScore)
 
   return useMemo(() => {
