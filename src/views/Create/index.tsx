@@ -298,7 +298,7 @@ export default function Create() {
                 await approveLabel()
               }}
             >
-              <div className='text-[rgba(123,120,255,0.9)] font-fsemibold text-[20px]'>
+              <div className='btn-text'>
                 Approve {outputAmount?.currency?.symbol} ({approvedTokenA ? 2 : 1}/{approveA || approvedTokenA ? 2 : 1})
               </div>
               
@@ -331,11 +331,11 @@ export default function Create() {
                 handleCreateAirdrop(name, label, duration, 'Twitter', action, TWITTER_UNIT[action], content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)
               }}
             >
-              <TYPE.textGrad1 fontWeight={600} fontSize={20}>
+              <div className='btn-text'>
                 {
                   createStatus === 1 ? <LoadingX /> : 'Create'
                 }
-              </TYPE.textGrad1>
+              </div>
             </ButtonSwap>
         }
         </div>

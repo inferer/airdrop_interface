@@ -203,7 +203,6 @@ export default function Swap() {
       return
     }
 
-
     setSwaping(true)
     setSwapState({ attemptingTxn: true, tradeToConfirm, showConfirm, swapErrorMessage: undefined, txHash: undefined })
     swapCallback() 

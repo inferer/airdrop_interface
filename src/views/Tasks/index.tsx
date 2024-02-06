@@ -77,30 +77,11 @@ function Collect() {
     <>
       <div className='w-[1217px] mx-auto' style={{paddingBottom: ids.length > 0 ?  117 : 0}}>
         <CollectBody>
-        <div className='text-[32px] font-fsemibold mb-10 flex items-center'>
-          <LazyImage src='/images/airdrop/ongoing.svg' className=' w-[32px] h-[32px] mr-3' />
-          Ongoing airdrops
-        </div>
-        {
-          account !== '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea' ?
-          <TaskList onChecked={handleOnChecked} /> :
-          <div>
-            <div>
-              userAddress: 
-              <TextInput value={userAddress} onUserInput={ val => {
-                setUserAddress(val)
-              } } />
-            </div>
-            <div>
-              airdropId: 
-              <TextInput value={airdropId} onUserInput={ val => {
-                setAirdropId(val)
-              } } />
-            </div>
-            
+          <div className='text-[32px] font-fsemibold mb-10 flex items-center'>
+            <LazyImage src='/images/airdrop/ongoing.svg' className=' w-[32px] h-[32px] mr-3' />
+            Ongoing airdrops
           </div>
-        }
-          
+          <TaskList onChecked={handleOnChecked} /> 
         </CollectBody>
       </div>
       {

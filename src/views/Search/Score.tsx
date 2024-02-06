@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
 const ScoreItem = ({
-  active
-}: { active?: boolean}) => {
+  active,
+  score
+}: { active?: boolean, score?: number}) => {
   return (
-    <div className={`${active ? 'bg-[rgba(73,188,255,0.30)] cursor-pointer' : 'bg-[#FAFAFA]'}  w-[60px] h-3 rounded-sm mr-1`}>
+    <div className={`${active ? 'bg-[rgba(73,188,255,0.30)] cursor-pointer' : 'bg-[#FAFAFA]'} ${score && score > 0 ? 'cursor-pointer' : ''} w-[60px] h-3 rounded-sm mr-1`}>
 
     </div>
   )
@@ -35,10 +36,10 @@ const Score = ({
           }}
         >Score</div>
         <div className="flex items-center ml-[70px]">
-          <ScoreItem active={score >= 1} />
-          <ScoreItem active={score > 1.25} />
-          <ScoreItem active={score > 1.5} />
-          <ScoreItem active={score > 1.75} />
+          <ScoreItem active={score >= 1} score={score} />
+          <ScoreItem active={score > 1.25} score={score} />
+          <ScoreItem active={score > 1.5} score={score} />
+          <ScoreItem active={score > 1.75} score={score} />
         </div>
         <div className={`text-base font-fbold ml-3 ${score > 0 ? 'text-[#49BCFF]' : 'text-[rgba(0,0,0,0.30)]'}`}>{score}x</div>
       </div>

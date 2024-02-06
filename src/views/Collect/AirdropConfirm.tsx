@@ -199,7 +199,7 @@ const AirdropConfirm: React.FC<{
             
           </ButtonSwap> : 
           approvalState === ApprovalState.NOT_APPROVED ?
-          <ButtonSwap 
+          <ButtonSwapUser 
               onClick={e => {
                 e.stopPropagation()
                 approve()
@@ -209,7 +209,7 @@ const AirdropConfirm: React.FC<{
                 Approve {algTokenCurrency?.symbol} 
               </div>
               
-            </ButtonSwap> : null
+            </ButtonSwapUser> : null
         }
         {
             (approvalState === ApprovalState.PENDING) ?

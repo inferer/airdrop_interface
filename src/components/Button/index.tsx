@@ -344,7 +344,7 @@ export const ButtonSwap = styled.div<{
   
   &:hover {
     background: ${({ disabled }) => ( disabled ? 'linear-gradient(108deg, rgba(63, 60, 255, 0.03) 24.12%, rgba(107, 190, 225, 0.03) 51.08%, rgba(138, 232, 153, 0.03) 75.88%)' : 'linear-gradient(96deg, rgba(63, 60, 255, 0.12) 0%, rgba(107, 190, 225, 0.12) 101.71%)')} ;
-    .bnt-text {
+    .btn-text {
       background: linear-gradient(96deg, #2825FF 0%, #31BAF3 101.71%);
       background-clip: text;
       -webkit-background-clip: text;

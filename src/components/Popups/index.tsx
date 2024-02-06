@@ -194,7 +194,7 @@ export function PopupsNew() {
           clearTimeout(timerRef.current)
           timerRef.current = null
           handleHide()
-        }, 116000)
+        }, 6000)
       }
     }
     return () => {
@@ -211,7 +211,10 @@ export function PopupsNew() {
           <div className='title ml-[6px]'>{toastData.title}</div>
         </div>
         <div className='content'>
-          {toastData.content}
+          <div className='line-clamp-2'>
+            {toastData.content}
+          </div>
+          
           {
             toastData.action === 'swap' && 
             <span className=' inline-flex items-center view-etherscan'
