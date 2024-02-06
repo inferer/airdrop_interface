@@ -5,7 +5,7 @@ const ScoreItem = ({
   score
 }: { active?: boolean, score?: number}) => {
   return (
-    <div className={`${active ? 'bg-[rgba(73,188,255,0.30)] cursor-pointer' : 'bg-[#FAFAFA]'} ${score && score > 0 ? 'cursor-pointer' : ''} w-[60px] h-3 rounded-sm mr-1`}>
+    <div className={`${active ? 'bg-[rgba(73,188,255,0.30)] ' : 'bg-[#FAFAFA]'} w-[60px] h-3 rounded-sm mr-1`}>
 
     </div>
   )

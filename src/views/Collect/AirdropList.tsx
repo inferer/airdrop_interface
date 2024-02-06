@@ -8,6 +8,7 @@ import { useAirdropManager } from "../../hooks/useAirdropManager";
 import { getALgTokenFromAirToken, getAlgLabelTokenByAddress } from "../../utils/getTokenList";
 import { useActiveWeb3React } from "../../hooks";
 import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
+import { useCollectSwapInfo } from "../../state/swap/hooks";
 
 const AirdropList: React.FC<{
 
@@ -21,9 +22,34 @@ const AirdropList: React.FC<{
   const airdropList = useAirdropList()
   const maxUnits = useMaxUnits()
   const accountScore = useAccountLabelScore(account || '', router.query.id && router.query.id[0] && getAlgLabelTokenByAddress(router.query.id[0])?.symbol?.slice(4) )
+  const {
+    currencyBalances,
+    parsedAmount,
+    parsedAmountOUTPUT,
+    parsedAmountOUTPUTDerived,
+    currencies,
+    inputError: collectInputError
+  } = useCollectSwapInfo()
+
   const filterAirdropList = useMemo(() => {
-    return airdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits && !airdrop.completed && (Number(airdrop.labelLocked) - Number(airdrop.claimed) >= accountScore))
-  }, [maxUnits, airdropList, accountScore])
+    const tempAirdropList = airdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits && !airdrop.completed && (Number(airdrop.labelLocked) - Number(airdrop.claimed) >= 1))
+    const algAmount = Number(parsedAmountOUTPUT?.toSignificant())
+    let tempList = []
+    let tempTotal = 0
+    if (maxUnits > 0 && accountScore > 0 && algAmount > 0 && tempAirdropList.length > 0) {
+      for (let k = 0; k < tempAirdropList.length; k++) {
+        if (tempTotal + accountScore * Number(tempAirdropList[k].unit) <= algAmount) {
+          tempList.push({...tempAirdropList[k]})
+          tempTotal += accountScore * Number(tempAirdropList[k].unit)
+        } else {
+          break
+        }
+      }
+    }
+    // return airdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits && !airdrop.completed && (Number(airdrop.labelLocked) - Number(airdrop.claimed) >= accountScore))
+    return tempList
+  }, [maxUnits, airdropList, accountScore, parsedAmountOUTPUT])
+
   useEffect(() => {
     let _algToken = ''
     if (router.query.id) {

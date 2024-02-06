@@ -47,7 +47,6 @@ export default function Search() {
     currencies,
     inputError: collectInputError
   } = useCollectSwapInfo()
-
   const parsedAmounts = {
         [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : parsedAmountOUTPUTDerived,
         [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : parsedAmountOUTPUT

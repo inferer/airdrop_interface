@@ -189,7 +189,7 @@ const AirdropConfirm: React.FC<{
         } */}
         {
           approveLoading ? 
-          <ButtonSwap 
+          <ButtonSwapUser 
             bgColor='rgba(123,120,255,0.1)'
             onClick={e => {
               e.stopPropagation()
@@ -197,7 +197,7 @@ const AirdropConfirm: React.FC<{
           >
             <Loading />
             
-          </ButtonSwap> : 
+          </ButtonSwapUser> : 
           approvalState === ApprovalState.NOT_APPROVED ?
           <ButtonSwapUser 
               onClick={e => {
@@ -213,14 +213,14 @@ const AirdropConfirm: React.FC<{
         }
         {
             (approvalState === ApprovalState.PENDING) ?
-            <ButtonSwap 
+            <ButtonSwapUser 
               bgColor='rgba(123,120,255,0.1)'
               onClick={e => {
                 e.stopPropagation()
               }}
             >
               <LoadingXUser />
-            </ButtonSwap> : null
+            </ButtonSwapUser> : null
           }
         {
           !approveLoading && approvalState === ApprovalState.APPROVED && 
