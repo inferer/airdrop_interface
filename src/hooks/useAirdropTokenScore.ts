@@ -47,28 +47,50 @@ export const getUserTokenClaim = async (multi: Contract, tokenList: Token[], acc
       params: [account, token.address]
     }
   })
-
   const dataList = await multicall(multi, AirdropTokenScore_ABI, calls)
   const tempList: any[] = [];
   (dataList || []).map((item: any, index: number) => {
     if (item) {
       const userToken = item[0] || []
       const _claimTokenTimestamp = userToken[2].toString()
-      const _tokenTimestamp = userToken[3].toString()
-      const _tokenAmount = BigNumber.from(userToken[4].toString()).div(BigNumber.from(String(10 ** 18))).toString()
+      const _tokenAmount = BigNumber.from(userToken[3].toString()).div(BigNumber.from(String(10 ** 18))).toString()
+
       tempList.push({
         claimed: userToken[0].toString(),
         latestTimestamp: userToken[1].toString(),
         claimTokenTimestamp: _claimTokenTimestamp,
-        tokenTimestamp: _tokenTimestamp,
         tokenAmount: _tokenAmount,
-        tokenTotalAmount: userToken[5].toString(),
-        unclaimed: _claimTokenTimestamp === _tokenTimestamp ? '0' : _tokenAmount,
+        tokenTotalAmount: _tokenAmount,
+        unclaimed: 0,
         token: getAlgLabelTokenByAddress(tokenList[index].address) 
       }) 
     }
   })
   return tempList
+}
+
+export const getLockedAlgAssets = async (multi: Contract, tokenAddress: string, score: number) => {
+  const calls = [{
+      address: getAirdropTokenScoreAddress(),
+      name: 'getLockedAlgAssets',
+      params: [tokenAddress, score]
+    }]
+  // const tempData = await multicall(multi, AirdropTokenScore_ABI, [{
+  //   address: getAirdropTokenScoreAddress(),
+  //   name: 'getBlockTimestamp',
+  //   params: []
+  // }])
+  // console.log(tempData[0][0].toString())
+  // const dataList = await multicall(multi, AirdropTokenScore_ABI, calls)
+  // const data = dataList[0][0]
+  // if (!data) return '0'
+  // const amount = BigNumber.from(data.toString()).div(BigNumber.from(String(10 ** 18))).toString()
+  // console.log(tokenAddress, amount)
+  // return amount
+
+  const supplyAmount = await multi.getLockedAlgAssets(tokenAddress, score)
+  const amount = BigNumber.from(supplyAmount.toString()).div(BigNumber.from(String(10 ** 18))).toString()
+  return amount
 }
 
 export function useAirdropTokenScore() {
@@ -83,7 +105,6 @@ export function useAirdropTokenScore() {
       const algTokens = Object.values(allAlgToken)
       if (algTokens.length > 0) {
         const algTokenList = await getUserTokenClaim(multi, algTokens, account)
-        console.log(algTokenList)
         dispatch(updateUserAlgAirdropList({ algAirdropList: algTokenList }))
 
       }
@@ -96,7 +117,7 @@ export function useAirdropTokenScore() {
 
   const [claimStatus, setClaimStatus] = useState(0)
   const { handleShow } = useShowToast()
-  const handleClaim = useCallback(async (label: string, tokenAddress: string, lockedAmount: string) => {
+  const handleClaim = useCallback(async (label: string, tokenAddress: string, lockedAmount: string, score: number) => {
     if (account && airdropTokenScore) {
       let _label = label.slice(4)
       // if (_label === 'Sports') {
@@ -110,7 +131,7 @@ export function useAirdropTokenScore() {
         const proof = await getAccountProof(account, _label)
         
         if (proof.length > 0) {
-          const tx = await airdropTokenScore.claimToken(tokenAddress, proof)
+          const tx = await airdropTokenScore.claimToken(tokenAddress, score * 100, proof)
           const receipt = await tx.wait()
           if (receipt.status) {
             handleGetAlgTokenList()
@@ -165,5 +186,23 @@ export function useAccountLabelScore(account: string, label?: string) {
   }, [account, label, getAlgTokenByLabel, userScore])
 
   return score
+}
+
+export function useAccountTokenSupply(tokenAddress: string, score: number) {
+  const [supplyAmount, setSupplyAmount] = useState('0')
+
+  const { account } = useActiveWeb3React()
+  const multi = useMulticallContract()
+  const airdropTokenScore = useAirdropTokenScoreContract()
+
+  useEffect(() => {
+    if (account && airdropTokenScore && tokenAddress && score) {
+      getLockedAlgAssets(airdropTokenScore, tokenAddress, score * 100).then((amount) => {
+        setSupplyAmount(amount)
+      })
+    }
+  }, [account, airdropTokenScore, tokenAddress, score])
+
+  return supplyAmount
 }
 

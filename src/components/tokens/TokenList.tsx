@@ -6,7 +6,7 @@ import CurrencyLogo from "../CurrencyLogo";
 import { useActiveWeb3React } from "../../hooks";
 import { useCurrencyBalance } from "../../state/wallet/hooks";
 import { useIsRoleProjectMode } from "../../state/user/hooks";
-import { useAccountLabelScore, useAirdropTokenScore } from "../../hooks/useAirdropTokenScore";
+import { useAccountLabelScore, useAccountTokenSupply, useAirdropTokenScore } from "../../hooks/useAirdropTokenScore";
 import { useAlgAirdrop, useProjectLabelLocked, useProjectUSDTLocked, useUserAlgTokenLocked } from "../../state/airdrop/hooks";
 import { useAirdropAssetTreasury } from "../../hooks/useAirdropAssetTreasury";
 import { Loading } from "../Loader";
@@ -61,7 +61,7 @@ const AlgTokenItem = ({
   token: Currency,
   isProjectMode?: boolean
   currentTokenAddress?: string
-  claim?: (label: string, tokenAddress: string, lockedAmount: string) => void
+  claim?: (label: string, tokenAddress: string, lockedAmount: string, score: number) => void
 }) => {
   const { account } = useActiveWeb3React()
   const balance = useCurrencyBalance(account ?? undefined, token)
@@ -70,7 +70,8 @@ const AlgTokenItem = ({
   const accountScore = useAccountLabelScore(account || '', token?.symbol?.slice(4) || '' )
   // @ts-ignore
   const tokenLocked = useUserAlgTokenLocked(token.address)
-  // console.log(tokenLocked)
+  // @ts-ignore
+  const supplyAmount = useAccountTokenSupply(token.address, accountScore)
   return (
     <div className=" rounded-[6px] border border-[rgba(107,190,225,0.2)] px-5 py-4 flex flex-col justify-between min-h-[130px]">
       <div className="flex items-center">
@@ -88,7 +89,7 @@ const AlgTokenItem = ({
         </div>
         <div className="flex justify-between items-center mt-2">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Supply</div>
-          <div className="text-[18px] font-fmedium">{algAirdrop.unclaimed}</div>
+          <div className="text-[18px] font-fmedium">{supplyAmount}</div>
         </div>
         <div className="flex justify-between items-center mt-2">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Supply in plan</div>
@@ -96,7 +97,7 @@ const AlgTokenItem = ({
             onClick={e => {
               e.stopPropagation()
               if (currentTokenAddress) return
-              claim && claim(algAirdrop.token.symbol || '', algAirdrop.token.address, algAirdrop.unclaimed)
+              claim && claim(algAirdrop.token.symbol || '', algAirdrop.token.address, supplyAmount, accountScore)
             }}
           > 
             {
@@ -206,9 +207,9 @@ const TokenList = () => {
   }, [account, isProjectMode, isRewards, handleGetProjectLabelLocked, handleGetProjectUSDTLocked, handleGetUserAlgTokenLocked])
 
   const [currentTokenAddress, setCurrentTokenAddress] = useState('')
-  const _handleClaim = useCallback(async (label: string, tokenAddress: string, lockedAmount: string) => {
+  const _handleClaim = useCallback(async (label: string, tokenAddress: string, lockedAmount: string, score: number) => {
     setCurrentTokenAddress(tokenAddress)
-    handleClaim(label, tokenAddress, lockedAmount)
+    handleClaim(label, tokenAddress, lockedAmount, score)
   }, [])
 
   useEffect(() => {
