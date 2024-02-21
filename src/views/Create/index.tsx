@@ -6,18 +6,22 @@ import { CreateBody, ItemBox, ItemBox2, ItemCenter, ItemTitle, ItemWrap, TitleWr
 import LazyImage, { LazyImage2 } from '../../components/LazyImage'
 import Input from '../../components/TextInput/Input'
 import Select from './Select'
-import SelectInput from './Select2'
 import { useCreateAirdrop, useCreateCallback } from '../../hooks/useAirdropSender'
 import { ApprovalState } from '../../hooks/useApproveCallback'
 import { Loading, LoadingX } from '../../components/Loader'
 import { ETHER, Token } from '@uniswap/sdk'
-import { AIRDROP_DURATION, CHANNEL_LIST, TWITTER_ACTION, TWITTER_UNIT } from '../../constants'
+import { AIRDROP_DURATION, CHANNEL_LIST, TWITTER_ACTION, TWITTER_UNIT, CONTRACT_ACTION } from '../../constants'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { useRouter } from 'next/router'
+import { othersContracts } from '../../constants/contractsLocal'
 
 let globalApproveCount = 0
 
 let globalApproveList: string[] = ['usdt', 'label']
+
+const twitterContent = 'https://twitter.com/intent/like?tweet_id=1720373913576952121'
+const contractContent = othersContracts.projectContract.toLowerCase() + '.0xf4f3c8a4'
+// const contractContent = othersContracts.projectContract.toLowerCase() + '.comment'
 
 export default function Create() {
   const router = useRouter()
@@ -27,7 +31,7 @@ export default function Create() {
   const [errorCode, setErrorCode] = useState(1)
   const [approvedTokenA, setApprovedTokenA] = useState(false)
 
-  const [content, setContent] = useState('https://twitter.com/intent/like?tweet_id=1720373913576952121')
+  const [content, setContent] = useState(twitterContent)
 
   const {
     args,
@@ -51,10 +55,24 @@ export default function Create() {
     return outputAmount?.currency?.symbol?.slice(4) || ''
   }, [outputAmount])
 
+  const [channel, setChannel] = useState<string>('twitter')
+  const handleChangeChannel = (data: any) => {
+    setChannel(data.value)
+    if (data.value === 'twitter') {
+      setAction('like')
+      setContent(twitterContent)
+    }
+    if (data.value === 'contract') {
+      setAction('function')
+      setContent(contractContent)
+    }
+  }
+
   const [action, setAction] = useState<string>('like')
   const handleChange = (data: any) => {
     setAction(data.value)
   }
+  
   const [duration, setDutation] = useState('1')
   const handleDurationChange = (data: any) => {
     setDutation(data.value)
@@ -93,6 +111,13 @@ export default function Create() {
   const approveB = useMemo(() => {
     return approvalStateLabel === ApprovalState.NOT_APPROVED && !!outputAmount
   }, [outputAmount, approvalStateLabel])
+
+  const actionList = useMemo(() => {
+    if (channel === 'twitter') {
+      return TWITTER_ACTION
+    }
+    return CONTRACT_ACTION
+  }, [channel])
 
   return (
     <CreateBody>
@@ -188,13 +213,13 @@ export default function Create() {
               <div>
                 <ItemTitle>Channel</ItemTitle>
                 <div className='mt-2 font-fmedium'>
-                  <Select defaultValue={CHANNEL_LIST[0]} options={CHANNEL_LIST} />
+                  <Select defaultValue={CHANNEL_LIST[0]} options={CHANNEL_LIST} onChange={handleChangeChannel} />
                 </div>
               </div>
               <div className='ml-[40px]'>
                 <ItemTitle>Action</ItemTitle>
                 <div className='mt-2 font-fmedium min-w-[146px]'>
-                  <Select defaultValue={TWITTER_ACTION[0]} options={TWITTER_ACTION} onChange={handleChange} />
+                  <Select defaultValue={actionList[0]} options={actionList} onChange={handleChange} />
                 </div>
               </div>
               <div className='ml-[34px]'>
@@ -328,7 +353,7 @@ export default function Create() {
                   return
                 }
                 
-                handleCreateAirdrop(name, label, duration, 'Twitter', action, TWITTER_UNIT[action], content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)
+                handleCreateAirdrop(name, label, duration, channel, action, TWITTER_UNIT[action], content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)
               }}
             >
               <div className='btn-text'>

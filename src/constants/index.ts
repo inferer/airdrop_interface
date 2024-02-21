@@ -195,12 +195,17 @@ export enum UserAction {
 
 export const CHANNEL_LIST = [
   { value: 'twitter', label: 'Twitter' },
+  { value: 'contract', label: 'Contract' },
 ]
 
 export const TWITTER_ACTION = [
   { value: 'like', label: 'like' },
   { value: 'follow', label: 'follow' },
   { value: 'comment', label: 'comment' },
+]
+
+export const CONTRACT_ACTION = [
+  { value: 'function', label: 'function' },
 ]
 
 export const AIRDROP_DURATION = [
@@ -214,7 +219,8 @@ export const AIRDROP_DURATION = [
 export const TWITTER_UNIT: {[key: string]: string} = {
   like: '1',
   follow: '2',
-  comment: '3'
+  comment: '3',
+  function: '3'
 }
 
 export const AddressZero_ETH = {

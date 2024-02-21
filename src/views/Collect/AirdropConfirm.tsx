@@ -20,6 +20,7 @@ const AirdropConfirm: React.FC<{
   const { 
     confirmStatus,
     handleConfirmTask,
+    handleRegisterTask,
     algTokenCurrency,
     approvalState, 
     approve 
@@ -53,6 +54,7 @@ const AirdropConfirm: React.FC<{
     }
   }, [approvalState])
 
+  console.log(airdrop)
   return (
     <div className="py-5 pt-0">
       {/* <div className=" text-[36px] font-fsemibold leading-[42px]">{airdrop.name}</div> */}
@@ -109,7 +111,14 @@ const AirdropConfirm: React.FC<{
               <LabelText>Channel</LabelText>
             </div>
             <div>
-              <LazyImage src="/images/channel/twitter.svg" className=" rounded-full" />
+              {
+                airdrop.channel === 'twitter' && <LazyImage src="/images/channel/twitter.svg" className=" rounded-full" />
+              }
+              {
+                airdrop.channel === 'contract' && <div className="py-[2px] px-[10px] flex justify-between items-center rounded border border-[rgba(0,0,0,0.06)]">
+                <span className=" text-[16px] font-fsemibold">Contract</span>
+              </div>
+              }
             </div>
           </div>
           <div className="flex items-center mt-7">
@@ -212,18 +221,18 @@ const AirdropConfirm: React.FC<{
             </ButtonSwapUser> : null
         }
         {
-            (approvalState === ApprovalState.PENDING) ?
-            <ButtonSwapUser 
-              bgColor='rgba(123,120,255,0.1)'
-              onClick={e => {
-                e.stopPropagation()
-              }}
-            >
-              <LoadingXUser />
-            </ButtonSwapUser> : null
-          }
+          (approvalState === ApprovalState.PENDING) ?
+          <ButtonSwapUser 
+            bgColor='rgba(123,120,255,0.1)'
+            onClick={e => {
+              e.stopPropagation()
+            }}
+          >
+            <LoadingXUser />
+          </ButtonSwapUser> : null
+        }
         {
-          !approveLoading && approvalState === ApprovalState.APPROVED && 
+          !approveLoading && approvalState === ApprovalState.APPROVED && airdrop.channel !== 'contract' && 
           <ButtonSwapUser 
             onClick={e => {
               e.stopPropagation()
@@ -234,6 +243,22 @@ const AirdropConfirm: React.FC<{
             <div className="btn-text">
               {
                 confirmStatus === 1 ? <LoadingXUser /> : 'Confirm'
+              }
+            </div>
+          </ButtonSwapUser>
+        }
+        {
+          !approveLoading && approvalState === ApprovalState.APPROVED && airdrop.channel === 'contract' && 
+          <ButtonSwapUser 
+            onClick={e => {
+              e.stopPropagation()
+              if (confirmStatus === 1) return
+              handleRegisterTask(airdrop.airdropId, airdrop.labelToken.address, airdrop.labelToken?.symbol?.slice(4) || '', accountScore)
+            }}
+          >
+            <div className="btn-text">
+              {
+                confirmStatus === 1 ? <LoadingXUser /> : 'Register'
               }
             </div>
           </ButtonSwapUser>

@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useCallback, useMemo, useState } from 'react'
 import { useActiveWeb3React } from './index'
-import { useAirdropReceiverContract } from './useContract'
+import { useAirdropReceiverContract, useContractDemoContract } from './useContract'
 import { useCurrency } from './Tokens'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import { useApproveCallback } from './useApproveCallback'
@@ -74,6 +74,53 @@ export function useAirdropReceiver(algToken?: string) {
         const receipt = await tx.wait()
         if (receipt.status) {
           router.push('/user/ongoing')
+        }
+      } catch (error) {
+        console.log(error)
+        handleShow({ type: 'error', content: `Fail to confirm.`, title: 'Error' })
+      }
+      
+      setConfirmStatus(2)
+      // const airdropAssetTreasury = await airdropReceiver.airdropAssetTreasury()
+      // const airdropManager = await airdropReceiver.airdropManager()
+      // await airdropReceiver.setAirdropManager('0xeA7e608Dc26040751191Bd7F55FD33DA92BaAB82')
+      // await airdropReceiver.setAirdropAssetTreasury('0x59E56cDc025083c8D2cd6E01FAD0c56174c735E9')
+      // console.log(airdropAssetTreasury, airdropManager)
+    }
+  }, [airdropReceiver, account, getAccountScoreProof, handleGetAirdropOne2])
+  
+  const handleRegisterTask = useCallback(async (
+    airdropId: string,
+    airToken: string,
+    label: string,
+    accountScore: number
+  ) => {
+    if (airdropReceiver && account) {
+      setConfirmStatus(1)
+      const algToken = getAlgTokenByLabel(label)
+      // const airdropInfo = await handleGetAirdropOne2(Number(airdropId))
+      // console.log(airdropInfo)
+
+      const proof = await getAccountScoreProof(account, label)
+
+      let gasLimit = '5000000'
+      try {
+        console.log(airdropId, algToken?.address, airToken, String(accountScore * 100), proof)
+        const gasEstimate = await airdropReceiver.estimateGas['registerTask'](airdropId, algToken?.address, airToken, String(accountScore * 100), proof)
+        gasLimit = gasEstimate.toString()
+      } catch (error: any) {
+        console.log(error)
+        const message = error.data?.data?.message || error.data?.message || error.message
+        console.log(message)
+        handleShow({ type: 'error', content: `Fail to Register.`, title: 'Error' })
+        setConfirmStatus(2)
+        return
+      }
+      try {
+        const tx = await airdropReceiver.registerTask(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const receipt = await tx.wait()
+        if (receipt.status) {
+          router.push('/contract-demo')
         }
       } catch (error) {
         console.log(error)
@@ -167,11 +214,53 @@ export function useAirdropReceiver(algToken?: string) {
     setCompleteStatus,
     completeErrorMessage,
     handleConfirmTask,
+    handleRegisterTask,
     completeStatus,
     handleUserCompleteTask,
     handleConfirmCompleteTask,
     algTokenCurrency,
     approvalState,
     approve
+  }
+}
+
+export function useProjectContractDemo() {
+  const [confirmStatus, setConfirmStatus] = useState(0)
+  const { account } = useActiveWeb3React()
+  const contractDemo: Contract | null = useContractDemoContract()
+  const { handleShow } = useShowToast()
+
+  const handleCommentAction = useCallback(async () => {
+    if (account && contractDemo) {
+      setConfirmStatus(1)
+      let gasLimit = '5000000'
+      try {
+        const gasEstimate = await contractDemo.estimateGas['comment']()
+        gasLimit = gasEstimate.toString()
+      } catch (error: any) {
+        console.log(error)
+        const message = error.data?.data?.message || error.data?.message || error.message
+        console.log(message)
+        handleShow({ type: 'error', content: `Fail to Complete.`, title: 'Error' })
+        setConfirmStatus(2)
+        return
+      }
+      try {
+        const tx = await contractDemo.comment({ gasPrice: '1000000000', gasLimit: gasLimit })
+        const receipt = await tx.wait()
+        if (receipt.status) {
+          handleShow({ type: 'success', content: `Success.`, title: 'Success' })
+        }
+      } catch (error) {
+        console.log(error)
+        handleShow({ type: 'error', content: `Fail to confirm.`, title: 'Error' })
+      }
+      setConfirmStatus(2)
+    }
+  }, [account, contractDemo])
+
+  return {
+    handleCommentAction,
+    confirmStatus
   }
 }

@@ -36,4 +36,10 @@ const contractList =
   "multicall": "0x1291Be112d480055DaFd8a610b7d1e203891C274"
 }
 
+export const othersContracts = {
+  "projectContract": "0xd710a67624Ad831683C86a48291c597adE30F787",
+  "infererTrackManagerLogic": "0xCa1D199b6F53Af7387ac543Af8e8a34455BBe5E0",
+  "infererTrackManager": "0xf5c4a909455C00B99A90d93b48736F3196DB5621",
+}
+
 export default contractList
