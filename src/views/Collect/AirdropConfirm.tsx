@@ -199,7 +199,6 @@ const AirdropConfirm: React.FC<{
         {
           approveLoading ? 
           <ButtonSwapUser 
-            bgColor='rgba(123,120,255,0.1)'
             onClick={e => {
               e.stopPropagation()
             }}

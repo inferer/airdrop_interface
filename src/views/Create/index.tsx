@@ -20,8 +20,8 @@ let globalApproveCount = 0
 let globalApproveList: string[] = ['usdt', 'label']
 
 const twitterContent = 'https://twitter.com/intent/like?tweet_id=1720373913576952121'
-const contractContent = othersContracts.projectContract.toLowerCase() + '.0xf4f3c8a4'
-// const contractContent = othersContracts.projectContract.toLowerCase() + '.comment'
+// const contractContent = othersContracts.projectContract.toLowerCase() + '.0xf4f3c8a4'
+const contractContent = othersContracts.projectContract.toLowerCase() + '.comment'
 
 export default function Create() {
   const router = useRouter()

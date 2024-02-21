@@ -38,12 +38,18 @@ const AirdropList: React.FC<{
     let tempTotal = 0
     if (maxUnits > 0 && accountScore > 0 && algAmount > 0 && tempAirdropList.length > 0) {
       for (let k = 0; k < tempAirdropList.length; k++) {
-        if (tempTotal + accountScore * Number(tempAirdropList[k].unit) <= algAmount) {
+        if (tempList.length === 0) {
           tempList.push({...tempAirdropList[k]})
           tempTotal += accountScore * Number(tempAirdropList[k].unit)
         } else {
-          break
+          if (tempTotal + accountScore * Number(tempAirdropList[k].unit) <= algAmount) {
+            tempList.push({...tempAirdropList[k]})
+            tempTotal += accountScore * Number(tempAirdropList[k].unit)
+          } else {
+            break
+          }
         }
+        
       }
     }
     // return airdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits && !airdrop.completed && (Number(airdrop.labelLocked) - Number(airdrop.claimed) >= accountScore))
