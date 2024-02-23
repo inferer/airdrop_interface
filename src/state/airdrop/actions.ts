@@ -57,4 +57,5 @@ export const updateAirTokenPercent = createAction<{ percent: number }>('airdrop/
 export const updateProjectLabelLocked = createAction<{ tokenLockedList: TokenLocked[] }>('airdrop/updateProjectLabelLocked')
 export const updateProjectUSDTLocked = createAction<{ tokenLockedList: TokenLocked[] }>('airdrop/updateProjectUSDTLocked')
 export const updateUserAlgTokenLocked = createAction<{ tokenLockedList: TokenLocked[] }>('airdrop/updateUserAlgTokenLocked')
+export const updateUserDepositBalance = createAction<{ tokenLockedList: TokenLocked[] }>('airdrop/updateUserDepositBalance')
 export const updateProjectAirdropList = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateProjectAirdropList')

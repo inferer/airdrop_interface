@@ -188,7 +188,7 @@ export function useAccountLabelScore(account: string, label?: string) {
   return score
 }
 
-export function useAccountTokenSupply(tokenAddress: string, score: number) {
+export function useAccountTokenSupply(tokenAddress: string, score: number, balance?: string) {
   const [supplyAmount, setSupplyAmount] = useState('0')
 
   const { account } = useActiveWeb3React()
@@ -201,7 +201,7 @@ export function useAccountTokenSupply(tokenAddress: string, score: number) {
         setSupplyAmount(amount)
       })
     }
-  }, [account, airdropTokenScore, tokenAddress, score])
+  }, [account, airdropTokenScore, tokenAddress, score, balance])
 
   return supplyAmount
 }

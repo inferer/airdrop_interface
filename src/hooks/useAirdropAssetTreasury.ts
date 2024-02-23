@@ -10,7 +10,7 @@ import { NETWORK_CHAIN_ID } from "../connectors"
 import { BigNumber, Contract, ethers } from "ethers"
 import multicall from "../utils/multicall"
 import { ChainId, Currency, ETHER, JSBI, Token, TokenAmount } from "@uniswap/sdk"
-import { updateProjectLabelLocked, updateProjectUSDTLocked, updateUserAlgTokenLocked } from "../state/airdrop/actions"
+import { updateProjectLabelLocked, updateProjectUSDTLocked, updateUserAlgTokenLocked, updateUserDepositBalance } from "../state/airdrop/actions"
 import { AddressZero_ETH } from "../constants"
 import { getUSDTTokenFromAirToken } from "../utils/getTokenList"
 import { getERC20Contract } from "../utils"
@@ -88,6 +88,29 @@ export const getUserAlgTokenLocked = async (multi: Contract, account: string, to
   })
 }
 
+export const getDepositBalance = async (multi: Contract, account: string, tokenList: Token[]) => {
+
+  const calls: any[] = []
+  tokenList.map(token => {
+    calls.push({
+      address: getAirdropAssetTreasuryAddress(),
+      // name: 'getDepositBalance',
+      // params: [token.address]
+      name: 'userDepositBalance',
+      params: [account, token.address]
+    })
+  })
+    
+  const res = await multicall(multi, AirdropAssetTreasury_ABI, calls)
+  return (res || []).map((item: any, index: number) => {
+    const temp = new TokenAmount(tokenList[index], JSBI.BigInt(item.toString()))
+    return {
+      ...tokenList[index],
+      lockedAmount: temp.toSignificant(6)
+    }
+  })
+}
+
 
 export function useAirdropAssetTreasury() {
   const dispatch = useDispatch<AppDispatch>()
@@ -126,7 +149,18 @@ export function useAirdropAssetTreasury() {
       dispatch(updateUserAlgTokenLocked({ tokenLockedList: list }))
     }
 
-  }, [multi, airdropAssetTreasury, usdtAllTokens])
+  }, [multi, airdropAssetTreasury, algLabelAllTokens])
+
+  const handleGetDepositBalance = useCallback(async (account: string) => {
+    const usdtTokenList = Object.values(usdtAllTokens)
+    if (account && multi && airdropAssetTreasury && usdtTokenList.length > 0 && chainId) {
+      const ETHToken = AddressZero_ETH[chainId]
+      const list = await getDepositBalance(multi, account, [ETHToken, ...usdtTokenList])
+      console.log(list)
+      dispatch(updateUserDepositBalance({ tokenLockedList: list }))
+    }
+
+  }, [multi, airdropAssetTreasury, usdtAllTokens, chainId])
 
   const [withdrawStatus, setWithdrawStatus] = useState(0)
   const { handleShow } = useShowToast()
@@ -158,7 +192,7 @@ export function useAirdropAssetTreasury() {
           approved = true
         }
         if (approved) {
-          const tx = await airdropAssetTreasury.userWithdraw(airTokenAddress, usdtTokenAddress, amount)
+          const tx = await airdropAssetTreasury.userWithdraw(airTokenAddress, amount)
           const receipt = await tx.wait()
           if (receipt.status) {
             setWithdrawStatus(2)
@@ -178,12 +212,69 @@ export function useAirdropAssetTreasury() {
       }
     }
   }, [account, library, chainId, airdropAssetTreasury])
+  const handleUserDeposit = useCallback(async (value: string, airToken: Currency) => {
+    if (account && airdropAssetTreasury && library && chainId) {
+      setWithdrawStatus(1)
+      if (Number(value) <= 0) {
+        setWithdrawStatus(2)
+        handleShow({ type: 'error', content: `Invalid deposit value!`, title: 'Error' })
+        setTimeout(() => {
+          setWithdrawStatus(0)
+        }, 300)
+        return
+      }
+      try {
+        // @ts-ignore
+        const airTokenAddress = airToken.symbol === 'ETH' ? ethers.constants.AddressZero : airToken.address
+        let allowance = MaxUint256
+        let tokenContract
+        const spender = AirdropAssetTreasury_NETWORKS[chainId]
+        if (airTokenAddress !== ethers.constants.AddressZero) {
+          tokenContract = getERC20Contract(airTokenAddress, library, account)
+          allowance = await tokenContract.allowance(account, spender)
+        }
+        
+        const amount = BigNumber.from((Number(value) * (10 ** airToken.decimals)).toString(10)).toString()
+        console.log(airToken, BigNumber.from((Number(value) * (10 ** airToken.decimals)).toString(10)).toString())
+        console.log(allowance.toString())
+        let approved = false
+        if (Number(allowance) < Number(amount) && tokenContract) {
+          const approveTx = await tokenContract.approve(spender, MaxUint256)
+          const receipt = await approveTx.wait()
+          if (receipt.status) {
+            approved = true
+          } else {
+            handleShow({ type: 'error', content: `Approve: error.`, title: 'Error' })
+          }
+        } else {
+          approved = true
+        }
+        if (approved) {
+          const tx = await airdropAssetTreasury.userDeposit(airTokenAddress, amount, { value: airToken.symbol === 'ETH' ? amount : '0' })
+          const receipt = await tx.wait()
+          if (receipt.status) {
+            setWithdrawStatus(2)
+            handleShow({ type: 'success', content: `Deposit ${value} ${airToken.symbol} tokens successfully.`, title: 'Success' })
+          } else {
+            handleShow({ type: 'error', content: `Fail to Deposit ${airToken.symbol} token.`, title: 'Error' })
+          }
+        }
+        
+      } catch(err: any) {
+        console.log(err)
+        handleShow({ type: 'error', content: `Fail to Deposit ${airToken.symbol} token.`, title: 'Error' })
+        setWithdrawStatus(0)
+      }
+    }
+  }, [account, library, chainId, airdropAssetTreasury])
 
   return {
     handleGetProjectLabelLocked,
     handleGetProjectUSDTLocked,
     handleGetUserAlgTokenLocked,
+    handleGetDepositBalance,
     handleUserWithdraw,
+    handleUserDeposit,
     withdrawStatus
   }
 

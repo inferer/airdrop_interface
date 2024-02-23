@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { IAirdrop, IAlgAirdrop, updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed, updateUserAlgAirdropList, updateUserLabelScore, updateMaxUnits, updateAirTokenPercent, updateProjectLabelLocked, TokenLocked, updateProjectUSDTLocked, updateUserAlgTokenLocked, updateUserAirdropConfirmedByTaskId, updateProjectAirdropList } from './actions'
+import { IAirdrop, IAlgAirdrop, updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed, updateUserAlgAirdropList, updateUserLabelScore, updateMaxUnits, updateAirTokenPercent, updateProjectLabelLocked, TokenLocked, updateProjectUSDTLocked, updateUserAlgTokenLocked, updateUserAirdropConfirmedByTaskId, updateProjectAirdropList, updateUserDepositBalance } from './actions'
 
 
 export interface AirdropState {
@@ -12,6 +12,7 @@ export interface AirdropState {
   airTokenPercent: number,
   projectTokenLockedList: TokenLocked[],
   projectUSDTLockedList: TokenLocked[],
+  userDepositBalanceList: TokenLocked[],
   userAlgTokenLocked: TokenLocked[],
   projectAirdropList: IAirdrop[],
 }
@@ -27,7 +28,8 @@ const initialState: AirdropState = {
   projectTokenLockedList: [],
   projectUSDTLockedList: [],
   userAlgTokenLocked: [],
-  projectAirdropList: []
+  projectAirdropList: [],
+  userDepositBalanceList: []
 }
 
 export default createReducer<AirdropState>(initialState, builder => {
@@ -80,5 +82,8 @@ export default createReducer<AirdropState>(initialState, builder => {
   })
   builder.addCase(updateUserAlgTokenLocked, (state, { payload: { tokenLockedList} }) => {
     state.userAlgTokenLocked = tokenLockedList
+  })
+  builder.addCase(updateUserDepositBalance, (state, { payload: { tokenLockedList } }) => {
+    state.userDepositBalanceList = tokenLockedList
   })
 })

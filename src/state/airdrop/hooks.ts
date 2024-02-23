@@ -128,3 +128,14 @@ export function useUserAlgTokenLocked(address: string = ethers.constants.Address
     return userAlgTokenLockedList.find(token => token?.address?.toLowerCase() === address.toLowerCase()) || ({} as TokenLocked)
   }, [userAlgTokenLockedList, address])
 }
+
+export function useUserDepositBalanceList() {
+  return useSelector<AppState, AppState['airdrop']['userDepositBalanceList']>(state => state.airdrop.userDepositBalanceList)
+}
+export function useUserDepositBalance(address: string = ethers.constants.AddressZero) {
+  const userDepositBalanceList = useUserDepositBalanceList()
+  return useMemo(() => {
+    if (!address) return ({} as TokenLocked)
+    return userDepositBalanceList.find(token => token?.address?.toLowerCase() === address.toLowerCase()) || ({} as TokenLocked)
+  }, [userDepositBalanceList, address])
+}
