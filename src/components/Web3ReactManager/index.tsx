@@ -29,7 +29,7 @@ export default function Web3ReactManager({ children }: { children: JSX.Element }
   const { active: networkActive, error: networkError, activate: activateNetwork } = useWeb3React(NetworkContextName)
 
   useEffect(() => {
-    if (account) {
+    if (account && router.pathname !== '/join') {
       handleGetUserInfo(account)
         .then((userInfo: any) => {
           if (userInfo && userInfo.id) {

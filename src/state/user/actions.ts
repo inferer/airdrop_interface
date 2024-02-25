@@ -14,6 +14,14 @@ export interface SerializedPair {
   token1: SerializedToken
 }
 
+export interface LoginUserInfo {
+  id: number,
+  address: string,
+  pAddress: string,
+  inviteCode: string,
+  createdAt: string,
+}
+
 export const updateMatchesDarkMode = createAction<{ matchesDarkMode: boolean }>('user/updateMatchesDarkMode')
 export const updateUserDarkMode = createAction<{ userDarkMode: boolean }>('user/updateUserDarkMode')
 export const updateUserExpertMode = createAction<{ userExpertMode: boolean }>('user/updateUserExpertMode')
@@ -32,3 +40,4 @@ export const removeSerializedPair = createAction<{ chainId: number; tokenAAddres
 export const updateUserRoleMode = createAction<{ userRoleMode: UserRoleMode }>('user/updateUserRoleMode')
 export const updateUserAction = createAction<{ userAction: UserAction }>('user/updateUserAction')
 export const updateRightMenu = createAction<{ show: boolean }>('user/updateRightMenu')
+export const updateLoginUserInfo = createAction<{ userInfo: LoginUserInfo }>('user/updateLoginUserInfo')

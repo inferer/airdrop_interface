@@ -42,7 +42,7 @@ export const verify2join = async (
   account: string, 
   code: string, 
 ) => {
-  const res = await poster(`/api/user/verifyInviteCode`, { account, code })
+  const res = await poster(`/api/user/verifyInviteCode`, { address: account, code })
 
   return res && res.data || {}
 }

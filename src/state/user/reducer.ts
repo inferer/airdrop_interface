@@ -15,7 +15,9 @@ import {
   updateUserDeadline,
   updateUserRoleMode,
   updateUserAction,
-  updateRightMenu
+  updateRightMenu,
+  LoginUserInfo,
+  updateLoginUserInfo
 } from './actions'
 
 const currentTimestamp = () => new Date().getTime()
@@ -54,6 +56,8 @@ export interface UserState {
   userRoleMode: UserRoleMode
 
   userAction: UserAction,
+
+  loginUserInfo: LoginUserInfo
 }
 
 function pairKey(token0Address: string, token1Address: string) {
@@ -71,11 +75,15 @@ export const initialState: UserState = {
   pairs: {},
   timestamp: currentTimestamp(),
   userRoleMode: UserRoleMode.PROJECT,
-  userAction: UserAction.PROJECT_SWAP
+  userAction: UserAction.PROJECT_SWAP,
+  loginUserInfo: {id: 0, address: '', pAddress: '', inviteCode: '', createdAt: ''}
 }
 
 export default createReducer(initialState, builder =>
   builder
+    .addCase(updateLoginUserInfo, (state, action) => {
+      state.loginUserInfo = action.payload.userInfo
+    })
     .addCase(updateRightMenu, (state, action) => {
       state.showRightMenu = action.payload.show
     })

@@ -35,35 +35,48 @@ const CodeWrap = styled.div<{
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    &.disabled {
+      background: linear-gradient(131deg, rgba(0,0,0,0.40) 6.08%, rgba(0,0,0,0.40) 97.02%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
   }
 `
 
 const CodeItem = ({
   code,
-  project
+  project,
+  used
 }: {
   code?: string
   project?: boolean
+  used?: boolean
 }) => {
   const [ isCopied, staticCopy ] = useCopyClipboard()
   return (
     <div className="text-[14px] font-fmedium flex items-center " style={{ letterSpacing: '0.28px'}}>
-      <div className="item-text uppercase">{code}</div>
+      <div className={`item-text uppercase ${used ? 'disabled' : ''}`}>{code}</div>
       <div
         onClick={e => {
           e.stopPropagation()
           staticCopy(code?.replace(/-/g, '') || '')
         }}
       >
-        <Tooltip2 text={isCopied ? 'Copied' : 'Copy' } >
-          <LazyImage className="ml-1 cursor-pointer" src={project ? "/images/airdrop/copy3.svg" : "/images/airdrop/copy4.svg"} />
-        </Tooltip2>
+        {
+          !used && 
+          <Tooltip2 text={isCopied ? 'Copied' : 'Copy' } >
+            <LazyImage className="ml-1 cursor-pointer" src={project ? "/images/airdrop/copy3.svg" : "/images/airdrop/copy4.svg"} />
+          </Tooltip2>
+        }
+        
       </div>
     </div>
   )
 }
-// 6f4f0eb84982a93a
-// ecd08e2644c8b19f
+// 3ca6900045ecb4fd
+// 3ca6900045ecb4fc
+// fb800cd447069ccb
 
 function InviteCode() {
   const router = useRouter()
@@ -88,7 +101,7 @@ function InviteCode() {
       <CodeWrap project={isProject}>
         <div className="p-[20px] grid grid-cols-2 gap-x-[100px] gap-y-[16px]">
           {
-            inviteCodeList.map(item => <CodeItem key={item.inviteCode} project={isProject} code={item.inviteCode} />)
+            inviteCodeList.map(item => <CodeItem key={item.inviteCode} project={isProject} code={item.inviteCode} used={item.used} />)
           }
         </div>
       </CodeWrap>

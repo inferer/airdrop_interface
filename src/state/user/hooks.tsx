@@ -1,6 +1,6 @@
 import { ChainId, Pair, Token } from '@uniswap/sdk'
 import flatMap from 'lodash.flatmap'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS, UserAction, UserRoleMode } from '../../constants'
 
@@ -19,11 +19,13 @@ import {
   updateUserSlippageTolerance,
   updateUserRoleMode,
   updateUserAction,
-  updateRightMenu
+  updateRightMenu,
+  updateLoginUserInfo
 } from './actions'
 import { airdropV2, airdropV2Swap, getUserInfo, getUserInviteCode, getUserNonce, verify2join } from './api'
 import { useUserModeInputCurrency } from '../swap/hooks'
 import { useRouter } from 'next/router'
+import { useShowToast } from '../application/hooks'
 
 function serializeToken(token: Token): SerializedToken {
   return {
@@ -355,6 +357,7 @@ export function useTrackedTokenPairs(): [Token, Token][] {
 
 export function useAirdrop() {
   const { account } = useActiveWeb3React() 
+  
   const handleAirdrop = useCallback(async (algToken, totalAmount) => {
         // return
     if (account) {
@@ -409,13 +412,24 @@ export function useAirdrop() {
     handleAirdrop,
     handleAirdropSwap
   }
-  
+}
+
+export function useLoginUserInfo() {
+  return useSelector<AppState, AppState['user']['loginUserInfo']>(state => state.user.loginUserInfo) 
 }
 
 export function useUserInfo() {
+  const router = useRouter()
+  const { handleShow } = useShowToast()
+  const dispatch = useDispatch<AppDispatch>()
+  const { account, activate, deactivate } = useActiveWeb3React()
+
+  const [joinStatus, setJoinStatus] = useState(0)
 
   const handleGetUserInfo = useCallback(async (account: string) => {
+    dispatch(updateLoginUserInfo({ userInfo: {id: 0, address: '', pAddress: '', inviteCode: '', createdAt: ''} }))
     const res = await getUserInfo(account)
+    dispatch(updateLoginUserInfo({ userInfo: res }))
     return res
   }, [])
 
@@ -425,13 +439,23 @@ export function useUserInfo() {
   }, [])
 
   const handleUserJoin = useCallback(async (account: string, code: string) => {
+    setJoinStatus(1)
     const res = await verify2join(account, code)
-  }, [])
+    if (res && res.address) {
+      dispatch(updateLoginUserInfo({ userInfo: res }))
+      router.push('/project/swap')
+    } else {
+      handleShow({ type: 'error', content: `Invalid invite code !`, title: 'Error' })
+      deactivate()
+    }
+    setJoinStatus(0)
+  }, [account, deactivate, dispatch])
 
   return {
     handleGetUserInfo,
     handleGetUserInviteCode,
-    handleUserJoin
+    handleUserJoin,
+    joinStatus
   }
 
 }

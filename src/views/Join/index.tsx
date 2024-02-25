@@ -1,9 +1,11 @@
 import { useUserInfo } from "../../state/user/hooks"
 import { ButtonJoin } from "../../components/Button"
 import LazyImage from "../../components/LazyImage"
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import styled from "styled-components"
 import { useActiveWeb3React } from "../../hooks"
+import { useWalletModalToggle } from "../../state/application/hooks"
+import { LoadingX } from "../../components/Loader"
 
 export const JoinBody = styled.div`
   width: 540px;
@@ -50,7 +52,9 @@ function CodeItem ({
 }
 
 function Join() {
-  const { account } = useActiveWeb3React()
+  const { account, activate, deactivate } = useActiveWeb3React()
+  const toggleWalletModal = useWalletModalToggle()
+  
   const inputRef = useRef<HTMLInputElement>(null)
   const [codeValue, setCodeValue] = useState('')
   const onChange = useCallback((value: string) => {
@@ -67,13 +71,14 @@ function Join() {
     }
   }, [codeValue])
 
-  const { handleUserJoin } = useUserInfo()
+  const { joinStatus, handleUserJoin } = useUserInfo()
   
-  const _handleJoin = useCallback(async () => {
-    if (account) {
-      
+  useEffect(() => {
+    if (account && codeList.code1.length >= 4) {
+      const code = codeList.code1 + '-' + codeList.code2 + '-' + codeList.code3 + '-' + codeList.code4
+      handleUserJoin(account, code.toLowerCase())
     }
-  }, [account, codeList, handleUserJoin])
+  }, [account, codeList, handleUserJoin, deactivate])
 
   return (
     <JoinBody >
@@ -113,17 +118,22 @@ function Join() {
         </div>
         <div className="mt-[48px]">
           <ButtonJoin 
-            disabled={codeValue.length < 16}  
+            disabled={codeValue.length < 16 || joinStatus === 1}  
             onClick={e => {
               e.stopPropagation()
-              if (codeValue.length < 16) return
-
+              if (codeValue.length < 16 || joinStatus === 1) return
+              toggleWalletModal()
 
             }}
           >
-            <div className="btn-text">
-              Join protocol now
-            </div>
+            {
+              joinStatus === 1 ? 
+              <LoadingX /> : 
+              <div className="btn-text">
+                Join protocol now
+              </div>
+            }
+            
           </ButtonJoin>
         </div>
       </div>

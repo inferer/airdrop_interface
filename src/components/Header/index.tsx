@@ -6,7 +6,7 @@ import { Text } from 'rebass'
 import styled from 'styled-components'
 
 import { useActiveWeb3React } from '../../hooks'
-import { useDarkModeManager, useShowRightMenu, useUserRoleMode } from '../../state/user/hooks'
+import { useDarkModeManager, useLoginUserInfo, useShowRightMenu, useUserRoleMode } from '../../state/user/hooks'
 import { useETHBalances } from '../../state/wallet/hooks'
 
 import { LightCard, YellowCard, BlueCard } from '../Card'
@@ -172,6 +172,7 @@ export default function Header() {
   const { account, chainId } = useActiveWeb3React()
   const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
   const { showRightMenu, toggleShowRightMenu } = useShowRightMenu()
+  const loginUserInfo = useLoginUserInfo()
 
   // const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
   // const [isDark] = useDarkModeManager()
@@ -193,7 +194,7 @@ export default function Header() {
           </TitleText>
         </HeaderElement>
         {
-          account && 
+          account && loginUserInfo.address && 
           <div className='flex items-center h-[48px] px-3 connect-bg cursor-pointer'
 
             onClick={e => {

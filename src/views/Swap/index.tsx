@@ -45,8 +45,7 @@ import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import Loader, { LoadingProject, LoadingUser } from '../../components/Loader'
 
 import UseAirAssets from './UseAirAssets'
-import Card from '../../components/Card'
-import { ClickableText } from '../Airdrop/styleds'
+
 import TradePriceDetails from '../../components/swap/TradePriceDetails'
 
 export default function Swap() {
