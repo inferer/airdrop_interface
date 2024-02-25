@@ -345,7 +345,7 @@ export const ButtonSwap = styled.div<{
   &:hover {
     background: ${({ disabled }) => ( disabled ? 'linear-gradient(108deg, rgba(63, 60, 255, 0.03) 24.12%, rgba(107, 190, 225, 0.03) 51.08%, rgba(138, 232, 153, 0.03) 75.88%)' : 'linear-gradient(96deg, rgba(63, 60, 255, 0.12) 0%, rgba(107, 190, 225, 0.12) 101.71%)')} ;
     .btn-text {
-      background: linear-gradient(96deg, #2825FF 0%, #31BAF3 101.71%);
+      background: ${({ disabled }) => (disabled ? 'linear-gradient(135deg, rgba(63, 60, 255, 0.30) 6.8%, rgba(107, 190, 225, 0.30) 55.97%, rgba(138, 232, 153, 0.30) 101.2%)' : 'linear-gradient(96deg, #2825FF 0%, #31BAF3 101.71%)')} ;
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -452,6 +452,53 @@ export const ButtonCancel = styled.div<{
     background: #F5F5F5;
     .btn-text {
       color: rgba(0, 0, 0, 0.80);
+    }
+  }
+
+  > * {
+    user-select: none;
+  }
+`
+export const ButtonJoin = styled.div<{
+  padding?: string
+  width?: string
+  height?: string
+  borderRadius?: string
+  disabled?: boolean
+}>`
+  background-repeat: no-repeat;
+  background: rgba(172, 171, 255, 0.06);
+  width: ${({ width }) => (width ? width : '100%')};
+  height: ${({ height }) => ( height ? height: '60px')};
+  border-radius: ${({ borderRadius }) => borderRadius ? borderRadius : '12px'};
+  outline: none;
+  border: 1px solid transparent;
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  padding-left: 15px;
+  padding-right: 15px;
+  &:disabled {
+    cursor: auto;
+  }
+
+  .btn-text {
+    color: ${({ disabled }) => disabled ? 'rgba(54,54,54,0.30)' : '#363636' };
+    font-family: Inter-SemiBold;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+  
+  &:hover {
+    background: ${({ disabled }) => disabled ? 'rgba(172, 171, 255, 0.06)' : '#F5F5F5' } ;
+    .btn-text {
+      color: ${({ disabled }) => disabled ? 'rgba(54,54,54,0.30)' : '#363636' };
     }
   }
 

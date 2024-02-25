@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import ReactGA from 'react-ga'
 import styled from 'styled-components'
 import { isMobile } from 'react-device-detect'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
@@ -14,10 +13,11 @@ import { SUPPORTED_WALLETS } from '../../constants'
 import { ExternalLink } from '../../theme'
 import MetamaskIcon from '../../assets/images/metamask.png'
 import Close from '../../assets/images/x.svg'
-import { injected, fortmatic, portis } from '../../connectors'
+import { injected, fortmatic, portis, APP_INFERER_CONNECTOR } from '../../connectors'
 import { OVERLAY_READY } from '../../connectors/Fortmatic'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { AbstractConnector } from '@web3-react/abstract-connector'
+import { InjectedConnector } from '@web3-react/injected-connector'
 
 const CloseIcon = styled.div`
   position: absolute;
@@ -142,6 +142,7 @@ export default function WalletModal({
   useEffect(() => {
     if (account && !previousAccount && walletModalOpen) {
       toggleWalletModal()
+
     }
   }, [account, previousAccount, toggleWalletModal, walletModalOpen])
 
@@ -170,12 +171,6 @@ export default function WalletModal({
       }
       return true
     })
-    // log selected wallet
-    ReactGA.event({
-      category: 'Wallet',
-      action: 'Change Wallet',
-      label: name
-    })
     setPendingWallet(connector) // set wallet for pending view
     setWalletView(WALLET_VIEWS.PENDING)
 
@@ -183,13 +178,16 @@ export default function WalletModal({
     if (connector instanceof WalletConnectConnector && connector.walletConnectProvider?.wc?.uri) {
       connector.walletConnectProvider = undefined
     }
-
+    if (connector instanceof InjectedConnector) {
+      localStorage.setItem(APP_INFERER_CONNECTOR, 'true')
+    }
     connector &&
       activate(connector, undefined, true).catch(error => {
         if (error instanceof UnsupportedChainIdError) {
           activate(connector) // a little janky...can't use setError because the connector isn't set
         } else {
           setPendingError(true)
+          localStorage.removeItem(APP_INFERER_CONNECTOR)
         }
       })
   }

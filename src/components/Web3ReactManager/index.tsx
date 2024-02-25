@@ -7,6 +7,8 @@ import { network } from '../../connectors'
 import { useEagerConnect, useInactiveListener } from '../../hooks'
 import { NetworkContextName } from '../../constants'
 import Loader from '../Loader'
+import { useUserInfo } from '../../state/user/hooks'
+import { useRouter } from 'next/router'
 
 const MessageWrapper = styled.div`
   display: flex;
@@ -21,8 +23,24 @@ const Message = styled.h2`
 
 export default function Web3ReactManager({ children }: { children: JSX.Element }) {
   const { t } = useTranslation()
-  const { active } = useWeb3React()
+  const router = useRouter()
+  const { handleGetUserInfo } = useUserInfo()
+  const { active, account, deactivate } = useWeb3React()
   const { active: networkActive, error: networkError, activate: activateNetwork } = useWeb3React(NetworkContextName)
+
+  useEffect(() => {
+    if (account) {
+      handleGetUserInfo(account)
+        .then((userInfo: any) => {
+          if (userInfo && userInfo.id) {
+
+          } else {
+            deactivate()
+            router.push('/join')
+          }
+        })
+    }
+  }, [account])
 
   // try to eagerly connect to an injected provider, if it exists and has granted access already
   const triedEager = useEagerConnect()
@@ -64,13 +82,13 @@ export default function Web3ReactManager({ children }: { children: JSX.Element }
   }
 
   // if neither context is active, spin
-  if (!active && !networkActive) {
-    return showLoader ? (
-      <MessageWrapper>
-        <Loader />
-      </MessageWrapper>
-    ) : null
-  }
+  // if (!active && !networkActive) {
+  //   return showLoader ? (
+  //     <MessageWrapper>
+  //       <Loader />
+  //     </MessageWrapper>
+  //   ) : null
+  // }
 
   return children
 }

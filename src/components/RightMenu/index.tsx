@@ -1,17 +1,16 @@
 import React, { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-import useToggle from '../../hooks/useToggle'
 
 import LazyImage, { LazyImage2, LazyImage4 } from '../LazyImage'
 import { useShowRightMenu, useUserRoleMode } from '../../state/user/hooks'
 import { useActiveWeb3React } from '../../hooks'
 import { shortenAddress } from '../../utils'
 import useCopyClipboard from '../../hooks/useCopyClipboard'
-import CopyHelper from '../AccountDetails/Copy'
 import { useRouter } from 'next/router'
 import { useWeb3React } from '@web3-react/core'
 import { Tooltip2 } from '../Tooltip'
+import { APP_INFERER_CONNECTOR } from '../../connectors'
 
 
 const RightWrap = styled.div<{ open: boolean }>`
@@ -104,6 +103,8 @@ export default function RightMenu() {
           router.push('/user/rewards')
         } else if (router.query.action === 'consumption') {
           router.push('/user/consumption')
+        } else if (router.query.action === 'invite') {
+          router.push('/user/invite')
         } else {
           router.push('/user/swap')
         }
@@ -113,6 +114,8 @@ export default function RightMenu() {
           router.push('/project/rewards')
         } else if (router.query.action === 'consumption') {
           router.push('/project/consumption')
+        } else if (router.query.action === 'invite') {
+          router.push('/project/invite')
         } else {
           router.push('/project/swap')
         }
@@ -143,7 +146,6 @@ export default function RightMenu() {
       } else {
         router.push('/user/swap')
       }
-      
     }
     if (action === 'completed') {
       if (isProjectMode) {
@@ -151,7 +153,13 @@ export default function RightMenu() {
       } else {
         router.push('/user/completed')
       }
-      
+    }
+    if (action === 'invite') {
+      if (isProjectMode) {
+        router.push('/project/invite')
+      } else {
+        router.push('/user/invite')
+      }
     }
    }, [router, isProjectMode, showRightMenu])
 
@@ -182,6 +190,7 @@ export default function RightMenu() {
           <div className=' cursor-pointer'
             onClick={e => {
               e.stopPropagation()
+              localStorage.removeItem(APP_INFERER_CONNECTOR)
               deactivate()
               toggleShowRightMenu()
               router.push(isProjectMode ? '/project/swap' : '/user/swap')
@@ -198,10 +207,10 @@ export default function RightMenu() {
             {account && shortenAddress(account)}
             <div
               className='ml-2'
-            onClick={e => {
-              e.stopPropagation()
-              staticCopy(account || '')
-            }}>
+              onClick={e => {
+                e.stopPropagation()
+                staticCopy(account || '')
+              }}>
               <Tooltip2 text={isCopied ? 'Copied' : 'Copy' } >
                 <LazyImage4 src='/images/airdrop/copy.svg' activeSrc='/images/airdrop/copy2.svg' className='cursor-pointer' />
               </Tooltip2>
@@ -232,6 +241,10 @@ export default function RightMenu() {
             <MenuLine />
             <MenuItem icon='/images/airdrop/completed.svg' text='Completed airdrops' isProjectMode={isProjectMode} 
               onClick={() => handleClick('completed')}
+            />
+            <MenuLine />
+            <MenuItem icon='/images/airdrop/completed.svg' text='Invite code' isProjectMode={isProjectMode} 
+              onClick={() => handleClick('invite')}
             />
           </div>
         </div>

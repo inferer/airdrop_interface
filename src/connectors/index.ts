@@ -17,6 +17,8 @@ if (typeof NETWORK_URL === 'undefined') {
   throw new Error(`NEXT_PUBLIC_NETWORK_URL must be a defined environment variable`)
 }
 
+export const APP_INFERER_CONNECTOR = 'APP_INFERER_CONNECTOR'
+
 export const network = new NetworkConnector({
   urls: { [NETWORK_CHAIN_ID]: NETWORK_URL }
 })

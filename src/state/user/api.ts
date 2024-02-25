@@ -26,3 +26,23 @@ export const airdropV2Swap = async (
 
   return res
 }
+
+export const getUserInfo = async (account: string) => {
+  const res = await fetcher(`/api/user/info/${account}`)
+  return res && res.data || {}
+}
+
+export const getUserInviteCode = async (account: string) => {
+  const res = await fetcher(`/api/user/inviteCode/${account}`)
+  return res && res.data || []
+}
+
+
+export const verify2join = async (
+  account: string, 
+  code: string, 
+) => {
+  const res = await poster(`/api/user/verifyInviteCode`, { account, code })
+
+  return res && res.data || {}
+}

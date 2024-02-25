@@ -116,6 +116,10 @@ export default function Search() {
     onUserInput(Field.INPUT, '')
     onUserInput(Field.OUTPUT, '')
   }, [router])
+
+  const disabled = useMemo(() => {
+    return !account || !!collectInputError || accountScore <= 0 || Number(formattedAmounts[Field.INPUT]) <= 0
+  }, [account, collectInputError, accountScore, formattedAmounts])
   
   return (
     <>
@@ -151,9 +155,10 @@ export default function Search() {
             {
               isUserCollect ?
                 <ButtonSwap 
-                  disabled={!!collectInputError || accountScore <= 0 || Number(formattedAmounts[Field.INPUT]) <= 0}
+                  disabled={disabled}
                   onClick={e => {
                     e.stopPropagation()
+                    if (disabled) return
                     if (!!collectInputError) return
                     handleAction()
                   }} >

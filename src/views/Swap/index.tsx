@@ -37,7 +37,7 @@ import {
   useSwapActionHandlers,
   useSwapState
 } from '../../state/swap/hooks'
-import { useExpertModeManager, useIsUserAction, useUserDeadline, useUserSlippageTolerance } from '../../state/user/hooks'
+import { useExpertModeManager, useIsUserAction, useUserDeadline, useUserInfo, useUserSlippageTolerance } from '../../state/user/hooks'
 import { LinkStyledButton, TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
@@ -67,7 +67,8 @@ export default function Swap() {
     setDismissTokenWarning(true)
   }, [])
 
-  const { account } = useActiveWeb3React()
+  const { handleGetUserInfo } = useUserInfo()
+  const { account, deactivate } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
 
   // toggle wallet when disconnected
@@ -295,8 +296,8 @@ export default function Swap() {
   }, [router])
 
   const disabled = useMemo(() => {
-    return swaping || !!swapInputError || !isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError || (noRoute && userHasSpecifiedInputOutput)
-  }, [swaping, swapInputError, isValid, priceImpactSeverity, isExpertMode, swapCallbackError, noRoute, userHasSpecifiedInputOutput])
+    return !account || swaping || !!swapInputError || !isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError || (noRoute && userHasSpecifiedInputOutput)
+  }, [swaping, swapInputError, isValid, priceImpactSeverity, isExpertMode, swapCallbackError, noRoute, userHasSpecifiedInputOutput, account])
 
   return (
     <>

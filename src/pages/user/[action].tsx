@@ -4,6 +4,7 @@ import IndexPage from "../../views/Swap";
 import TokensPage from "../../views/Tokens";
 import TasksPage from "../../views/Tasks";
 import CompletedPage from "../../views/Completed";
+import InviteCodePage from "../../views/InviteCode";
 
 function UserPage() {
   const router = useRouter()
@@ -23,6 +24,9 @@ function UserPage() {
     }
     if (router.query.action === 'completed') {
       return <CompletedPage />
+    }
+    if (router.query.action === 'invite') {
+      return <InviteCodePage />
     }
   }
 

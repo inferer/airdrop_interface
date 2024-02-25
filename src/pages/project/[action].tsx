@@ -3,6 +3,7 @@ import IndexPage from "../../views/Swap";
 import TokensPage from "../../views/Tokens";
 import OngoingPage from "../../views/Project/Ongoing";
 import CompletedPage from "../../views/Project/Completed";
+import InviteCodePage from "../../views/InviteCode";
 
 function ProjectPage () {
   const router = useRouter()
@@ -20,6 +21,9 @@ function ProjectPage () {
     }
     if (router.query.action === 'completed') {
       return <CompletedPage />
+    }
+    if (router.query.action === 'invite') {
+      return <InviteCodePage />
     }
     
   }

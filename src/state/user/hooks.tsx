@@ -21,7 +21,7 @@ import {
   updateUserAction,
   updateRightMenu
 } from './actions'
-import { airdropV2, airdropV2Swap, getUserNonce } from './api'
+import { airdropV2, airdropV2Swap, getUserInfo, getUserInviteCode, getUserNonce, verify2join } from './api'
 import { useUserModeInputCurrency } from '../swap/hooks'
 import { useRouter } from 'next/router'
 
@@ -410,4 +410,28 @@ export function useAirdrop() {
     handleAirdropSwap
   }
   
+}
+
+export function useUserInfo() {
+
+  const handleGetUserInfo = useCallback(async (account: string) => {
+    const res = await getUserInfo(account)
+    return res
+  }, [])
+
+  const handleGetUserInviteCode = useCallback(async (account: string) => {
+    const res = await getUserInviteCode(account)
+    return res
+  }, [])
+
+  const handleUserJoin = useCallback(async (account: string, code: string) => {
+    const res = await verify2join(account, code)
+  }, [])
+
+  return {
+    handleGetUserInfo,
+    handleGetUserInviteCode,
+    handleUserJoin
+  }
+
 }

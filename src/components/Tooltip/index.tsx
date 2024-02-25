@@ -32,7 +32,7 @@ export function MouseoverTooltip({ children, ...rest }: Omit<TooltipProps, 'show
 
 export function Tooltip2({ children, text, className }: { children: React.ReactNode, text?: string, className?: string}) {
   return (
-    <div className={`b3-tooltips b3-tooltips__n ${className}`} aria-label={text}>
+    <div className={`b3-tooltips b3-tooltips__n ${className}`} style={{ color: '#ffffff'}} aria-label={text}>
       { children }
     </div>
   )
