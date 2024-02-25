@@ -2,17 +2,16 @@ import React from 'react'
 import styled from 'styled-components'
 import { escapeRegExp } from '../../utils'
 
-const StyledInput = styled.input<{ error?: boolean; fontSize?: string; align?: string }>`
-  color: ${({ error, theme }) => (error ? theme.red1 : theme.text1)};
-  width: 420px;
-  height: 41px;
+const StyledInput = styled.input<{ error?: boolean; fontSize?: string; align?: string, color?: string }>`
+  color: ${({ color }) => (color ? color : 'rgba(0, 0, 0, 0.80)')};
+  width: 100%;
+  height: 100%;
   position: relative;
   font-weight: 500;
   outline: none;
-  border: 1px solid gray;
   flex: 1 1 auto;
   background-color: ${({ theme }) => theme.bg1};
-  font-size: ${({ fontSize }) => fontSize ?? '16px'};
+  font-size: ${({ fontSize }) => fontSize ?? '14px'};
   text-align: ${({ align }) => align && align};
   white-space: nowrap;
   overflow: hidden;

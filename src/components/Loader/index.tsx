@@ -89,6 +89,7 @@ export function LoadingUser({ size = '30px', stroke = '#6BBEE1', ...rest }: { si
     </StyledSVG2>
   )
 }
+
 export function LoadingProjectBalance({ size = '15px', stroke = '#6BBEE1', ...rest }: { size?: string; stroke?: string }) {
   return (
     <StyledSVG2 viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" size={size}>
@@ -112,6 +113,13 @@ export function LoadingUserBalance({ size = '15px', stroke = '#6BBEE1', ...rest 
         <stop offset="1" stopColor="#8AE899"/>
         </linearGradient>
       </defs>
+    </StyledSVG2>
+  )
+}
+export function LoadingContract({ size = '20px', stroke = '#6BBEE1', ...rest }: { size?: string; stroke?: string }) {
+  return (
+    <StyledSVG2 viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" size={size}>
+        <path d="M3.03149 11.9587C2.58875 10.4147 2.66935 8.7676 3.26072 7.2742C3.85209 5.78079 4.92099 4.52504 6.30076 3.70272C7.68053 2.8804 9.29362 2.53774 10.8885 2.72817C12.4834 2.9186 13.9705 3.63141 15.1179 4.75546C16.2652 5.87951 17.0084 7.35163 17.2316 8.94228C17.4547 10.5329 17.1453 12.1527 16.3515 13.5491C15.5576 14.9455 14.3241 16.0399 12.8432 16.6618C12.1026 16.9728 11.3209 17.1569 10.5303 17.2119" stroke="#7B78FF" strokeOpacity="0.5" strokeWidth="1.1642" strokeLinecap="round" strokeLinejoin="round"/>
     </StyledSVG2>
   )
 }

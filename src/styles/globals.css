@@ -138,5 +138,8 @@ body {
 .view-etherscan:hover .link4{
   display: inline-block;
 }
+.container__editor textarea {
+  outline: 0;
+}
 
 

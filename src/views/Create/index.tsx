@@ -5,15 +5,17 @@ import { useActiveWeb3React } from '../../hooks'
 import { CreateBody, ItemBox, ItemBox2, ItemCenter, ItemTitle, ItemWrap, TitleWrap, TokenInfo } from './styleds'
 import LazyImage, { LazyImage2 } from '../../components/LazyImage'
 import Input from '../../components/TextInput/Input'
-import Select from './Select'
+import TextInput from '../../components/TextInput'
+import Select, { SelectChain } from './Select'
 import { useCreateAirdrop, useCreateCallback } from '../../hooks/useAirdropSender'
 import { ApprovalState } from '../../hooks/useApproveCallback'
-import { Loading, LoadingX } from '../../components/Loader'
+import { Loading, LoadingContract, LoadingX } from '../../components/Loader'
 import { ETHER, Token } from '@uniswap/sdk'
-import { AIRDROP_DURATION, CHANNEL_LIST, TWITTER_ACTION, TWITTER_UNIT, CONTRACT_ACTION } from '../../constants'
+import { AIRDROP_DURATION, CHANNEL_LIST, TWITTER_ACTION, TWITTER_UNIT, CONTRACT_ACTION, CHAIN_LIST } from '../../constants'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { useRouter } from 'next/router'
 import { othersContracts } from '../../constants/contractsLocal'
+import ContractABI from './ContractABI'
 
 let globalApproveCount = 0
 
@@ -121,6 +123,7 @@ export default function Create() {
 
   return (
     <CreateBody>
+      
       <TitleWrap>
         {/* <Link to="/swap">
           <div>
@@ -208,7 +211,7 @@ export default function Create() {
         </div>
         <ItemCenter></ItemCenter>
         <div>
-          <ItemBox width={664} height={244}>
+          {/* <ItemBox width={664} height={244}>
             <div className='flex w-full'>
               <div>
                 <ItemTitle>Channel</ItemTitle>
@@ -231,11 +234,9 @@ export default function Create() {
               <div className='ml-[34px] shrink-0'>
                 <ItemTitle>Offer per unit</ItemTitle>
                 <div className='mt-2'>
-                  {/* <Select title='2X' /> */}
                   <div className='flex items-center justify-between font-fsemibold text-[16px] py-3 px-4 bg-[rgba(85,123,241,0.02)] rounded-[8px]'>
                     <div>{TWITTER_UNIT[action]} x</div>
                     <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
-                      {/* <LazyImage src='/images/airdrop/airdrop_icon.svg' /> */}
                       <CurrencyLogo currency={outputAmount?.currency} size={'20px'} />
                       <div className=' font-fmedium text-[#A1CEA8] ml-1'>
                         {outputAmount?.currency?.symbol}
@@ -257,6 +258,72 @@ export default function Create() {
                 
                 </textarea>
               </div>
+            </div>
+          </ItemBox> */}
+          <ItemBox width={664} height={244}>
+            <div className='flex w-full'>
+              <div className=' shrink-0'>
+                <ItemTitle>Chain</ItemTitle>
+                <div className='mt-2 font-fmedium'>
+                  <SelectChain defaultValue={{}} options={CHAIN_LIST} onChange={handleChangeChannel} />
+                </div>
+              </div>
+              <div className='ml-[20px] w-full'>
+                <ItemTitle>Contract</ItemTitle>
+                <div className='mt-2 font-fmedium '>
+                  <div className=' rounded-xl border border-[rgba(85,123,241,0.10)] px-4 py-3 flex items-center h-[44px]'>
+                    <LazyImage src='/images/airdrop/contract_logo.svg' className=' shrink-0 mr-2' />
+                    <TextInput  value={''} onUserInput={value => {
+
+                    }} />
+                    {/* <LoadingContract /> */}
+                    <div className=' cursor-pointer'>
+                      <LazyImage src='/images/airdrop/contract_code.svg' />
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='flex w-full mt-4'>
+              <div className=' shrink-0 w-[300px]'>
+                <ItemTitle>Function</ItemTitle>
+                <div className='mt-2 font-fmedium'>
+                  <SelectChain defaultValue={{}} options={CHAIN_LIST} onChange={handleChangeChannel} />
+                </div>
+              </div>
+              <div className='ml-[34px]'>
+                <div className='mt-1'>
+                  <LazyImage src='/images/airdrop/to.svg' />
+                </div>
+                
+              </div>
+              <div className='ml-[34px] shrink-0'>
+                <ItemTitle>Offer per unit</ItemTitle>
+                <div className='mt-2'>
+                  <div className='flex items-center justify-between font-fsemibold text-[14px] h-[44px] py-3 px-4 bg-[rgba(85,123,241,0.02)] rounded-[8px]'>
+                    <div>{TWITTER_UNIT[action]} x</div>
+                    <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
+                      <CurrencyLogo currency={outputAmount?.currency} size={'20px'} />
+                      <div className=' font-fmedium text-[#A1CEA8] ml-1'>
+                        {outputAmount?.currency?.symbol}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='mt-1 flex items-center text-[12px] text-[rgba(0,0,0,0.60)]'>
+              <LazyImage className='mr-1' src='/images/airdrop/info.svg' />
+              <div className=' '>Function must call ‘Inferer Airdrop Interface’. Check API document</div>
+              <LazyImage className='mx-1 cursor-pointer' src='/images/airdrop/link5.svg' />
+              <div> for more details.</div>
+            </div>
+            <div className='mt-[10px] text-[14px] text-[rgba(0,0,0,0.60)] flex items-center'>
+              <div className='flex items-center text-[12px] justify-center w-[16px] h-[16px] bg-[rgba(0,0,0,0.06)] rounded-[4px]'>
+                1
+              </div>
+              <div className='ml-2'>Please check the calculated offer per unit</div>
             </div>
           </ItemBox>
           
@@ -365,7 +432,7 @@ export default function Create() {
         }
         </div>
       </div>
-      
+      <ContractABI />
     </CreateBody>
   )
 }

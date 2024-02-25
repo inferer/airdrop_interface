@@ -13,9 +13,9 @@ import { SUPPORTED_WALLETS } from '../../constants'
 import { ExternalLink } from '../../theme'
 import MetamaskIcon from '../../assets/images/metamask.png'
 import Close from '../../assets/images/x.svg'
-import { injected, fortmatic, portis, APP_INFERER_CONNECTOR } from '../../connectors'
+import { injected, fortmatic, APP_INFERER_CONNECTOR } from '../../connectors'
 import { OVERLAY_READY } from '../../connectors/Fortmatic'
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
+// import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { InjectedConnector } from '@web3-react/injected-connector'
 
@@ -175,9 +175,9 @@ export default function WalletModal({
     setWalletView(WALLET_VIEWS.PENDING)
 
     // if the connector is walletconnect and the user has already tried to connect, manually reset the connector
-    if (connector instanceof WalletConnectConnector && connector.walletConnectProvider?.wc?.uri) {
-      connector.walletConnectProvider = undefined
-    }
+    // if (connector instanceof WalletConnectConnector && connector.walletConnectProvider?.wc?.uri) {
+    //   connector.walletConnectProvider = undefined
+    // }
     if (connector instanceof InjectedConnector) {
       localStorage.setItem(APP_INFERER_CONNECTOR, 'true')
     }
@@ -207,9 +207,9 @@ export default function WalletModal({
       // check for mobile options
       if (isMobile) {
         //disable portis on mobile for now
-        if (option.connector === portis) {
-          return null
-        }
+        // if (option.connector === portis) {
+        //   return null
+        // }
 
         if (!window.web3 && !window.ethereum && option.mobile) {
           return (

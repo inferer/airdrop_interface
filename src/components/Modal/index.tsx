@@ -13,7 +13,6 @@ const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
     z-index: 9999;
     background-color: transparent;
     overflow: hidden;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -24,7 +23,7 @@ const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
 
 const AnimatedDialogContent = animated(DialogContent)
 // destructure to not pass custom props to Dialog DOM element
-const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, ...rest }) => (
+const StyledDialogContent = styled(({ minHeight, maxHeight, minWidth, maxWidth, mobile, isOpen, ...rest }) => (
   <AnimatedDialogContent {...rest} />
 )).attrs({
   'aria-label': 'dialog'
@@ -35,12 +34,12 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, ...r
     background-color: ${({ theme }) => theme.bg1};
     box-shadow: 0 4px 8px 0 ${({ theme }) => transparentize(0.95, theme.shadow1)};
     padding: 0px;
-    width: 50vw;
+    width: ${({ minWidth }) => minWidth || '50vw'};
     overflow: hidden;
 
     align-self: ${({ mobile }) => (mobile ? 'flex-end' : 'center')};
 
-    max-width: 420px;
+    max-width: ${({ maxWidth }) => maxWidth || '420px'};
     ${({ maxHeight }) =>
       maxHeight &&
       css`
@@ -75,6 +74,8 @@ interface ModalProps {
   onDismiss: () => void
   minHeight?: number | false
   maxHeight?: number
+  minWidth?: string
+  maxWidth?: string
   initialFocusRef?: React.RefObject<any>
   children?: React.ReactNode
 }
@@ -84,6 +85,8 @@ export default function Modal({
   onDismiss,
   minHeight = false,
   maxHeight = 50,
+  minWidth = '50vw',
+  maxWidth = '420px',
   initialFocusRef,
   children
 }: ModalProps) {
@@ -123,6 +126,8 @@ export default function Modal({
                 aria-label="dialog content"
                 minHeight={minHeight}
                 maxHeight={maxHeight}
+                minWidth={minWidth}
+                maxWidth={maxWidth}
                 mobile={isMobile}
               >
                 {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}

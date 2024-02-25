@@ -1,7 +1,7 @@
 import { ChainId, JSBI, Percent, Token, WETH } from '@uniswap/sdk'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 
-import { fortmatic, injected, portis, walletconnect, walletlink } from '../connectors'
+import { fortmatic, injected } from '../connectors'
 import { ethers } from 'ethers'
 import contractList from './contractsLocal'
 
@@ -106,23 +106,23 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     href: null,
     color: '#E8831D'
   },
-  WALLET_CONNECT: {
-    connector: walletconnect,
-    name: 'WalletConnect',
-    iconName: 'walletConnectIcon.svg',
-    description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
-    href: null,
-    color: '#4196FC',
-    mobile: true
-  },
-  WALLET_LINK: {
-    connector: walletlink,
-    name: 'Coinbase Wallet',
-    iconName: 'coinbaseWalletIcon.svg',
-    description: 'Use Coinbase Wallet app on mobile device',
-    href: null,
-    color: '#315CF5'
-  },
+  // WALLET_CONNECT: {
+  //   connector: walletconnect,
+  //   name: 'WalletConnect',
+  //   iconName: 'walletConnectIcon.svg',
+  //   description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
+  //   href: null,
+  //   color: '#4196FC',
+  //   mobile: true
+  // },
+  // WALLET_LINK: {
+  //   connector: walletlink,
+  //   name: 'Coinbase Wallet',
+  //   iconName: 'coinbaseWalletIcon.svg',
+  //   description: 'Use Coinbase Wallet app on mobile device',
+  //   href: null,
+  //   color: '#315CF5'
+  // },
   COINBASE_LINK: {
     name: 'Open in Coinbase Wallet',
     iconName: 'coinbaseWalletIcon.svg',
@@ -196,6 +196,10 @@ export enum UserAction {
 export const CHANNEL_LIST = [
   { value: 'twitter', label: 'Twitter' },
   { value: 'contract', label: 'Contract' },
+]
+
+export const CHAIN_LIST = [
+  { value: 'localtest', label: 'Local Test', icon: '/images/airdrop/chain_local.svg' },
 ]
 
 export const TWITTER_ACTION = [
