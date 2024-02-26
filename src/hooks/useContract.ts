@@ -19,6 +19,7 @@ import { AirdropReceiver_ABI, AirdropReceiver_NETWORKS } from '../constants/aird
 import { AirdropManager_ABI, AirdropManager_NETWORKS } from '../constants/airdropManager'
 import { AirdropTokenScore_ABI, AirdropTokenScore_NETWORKS } from '../constants/airdropTokenScore'
 import { AirdropAssetTreasury_ABI, AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury'
+import { AirdropUserPool_ABI, AirdropUserPool_NETWORKS } from '../constants/airdropUserPool';
 import { PROJECTDEMO_ABI, PROJECTDEMO_NETWORKS } from '../constants/projectDemo'
 
 // returns null on errors
@@ -110,6 +111,11 @@ export function useAirdropManagerContract(): Contract | null {
 export function useAirdropTokenScoreContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && AirdropTokenScore_NETWORKS[chainId], AirdropTokenScore_ABI, true)
+}
+
+export function useAirdropUserPoolContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && AirdropUserPool_NETWORKS[chainId], AirdropUserPool_ABI, true)
 }
 
 export function useAirdropAssetTreasuryContract(): Contract | null {

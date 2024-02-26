@@ -1,6 +1,6 @@
 
 
-import { useAirdropTokenScoreContract, useMulticallContract } from "./useContract";
+import { useAirdropTokenScoreContract, useMulticallContract,useAirdropUserPoolContract } from "./useContract";
 import multicall from "../utils/multicall";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useActiveWeb3React } from ".";
@@ -17,13 +17,24 @@ import { fetcher,userPoolSrvcFetcher } from "../utils/axios";
 import { useUserLabelScore } from "../state/airdrop/hooks";
 import { useShowToast } from "../state/application/hooks";
 
+const zeroPadByte32 = (numberAsString:string) =>{
+  if(numberAsString.length === 66){
+      return numberAsString;
+  }
+  if(numberAsString.indexOf("0x")>=0){
+      numberAsString = numberAsString.slice(2);
+  }
+  return "0x" + ("0".repeat(64 - numberAsString.length)) + numberAsString;
+}
+
 export const getAirdropTokenScoreAddress = () => {
   return AirdropTokenScore_NETWORKS[NETWORK_CHAIN_ID as ChainId]
 }
 
 export const getAccountProof = async (account: string, label: string) => {
 
-  const res = await fetcher(`/api/airdrop/getTokenProof`, { account, label })
+  // const res = await fetcher(`/api/airdrop/getTokenProof`, { account, label })
+  const res = await userPoolSrvcFetcher(`/api/userpool/getTokenProof`, { account, label })
   if (res.code === 0 && res.data) {
     return res.data.hexProof || []
   }
@@ -97,7 +108,7 @@ export function useAirdropTokenScore() {
   const dispatch = useDispatch<AppDispatch>()
   const { account } = useActiveWeb3React()
   const multi = useMulticallContract()
-  const airdropTokenScore = useAirdropTokenScoreContract()
+  const airdropTokenScore = useAirdropUserPoolContract();// useAirdropTokenScoreContract()
   const allAlgToken = useAlgLabelAllTokens()
 
   const handleGetAlgTokenList = useCallback(async () => {
@@ -129,9 +140,17 @@ export function useAirdropTokenScore() {
       setClaimStatus(1)
       try {
         const proof = await getAccountProof(account, _label)
-        
-        if (proof.length > 0) {
-          const tx = await airdropTokenScore.claimToken(tokenAddress, score * 100, proof)
+        // const {elementIndex,elementHash,siblingsHashes,peaksHashes,elementsCount} = proof;
+        if (proof.siblingsHashes.length > 0) {
+          // const tx = await airdropTokenScore.claimToken(tokenAddress, score * 100, proof)
+          const tx = await airdropTokenScore.claimToken(
+            tokenAddress,
+            proof.elementIndex, 
+            zeroPadByte32(proof.elementHash), 
+            proof.siblingsHashes.map((v: string)=>zeroPadByte32(v)), 
+            proof.peaksHashes.map((v:string)=>zeroPadByte32(v)), 
+            proof.elementsCount
+        )
           const receipt = await tx.wait()
           if (receipt.status) {
             handleGetAlgTokenList()
