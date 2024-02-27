@@ -7,7 +7,7 @@ import LazyImage, { LazyImage2 } from '../../components/LazyImage'
 import Input from '../../components/TextInput/Input'
 import TextInput from '../../components/TextInput'
 import Select, { SelectChain } from './Select'
-import { useCreateAirdrop, useCreateCallback } from '../../hooks/useAirdropSender'
+import { useCreateAirdrop, useCreateCallback, useCreateContractAirdrop } from '../../hooks/useAirdropSender'
 import { ApprovalState } from '../../hooks/useApproveCallback'
 import { Loading, LoadingContract, LoadingX } from '../../components/Loader'
 import { ETHER, Token } from '@uniswap/sdk'
@@ -16,6 +16,8 @@ import CurrencyLogo from '../../components/CurrencyLogo'
 import { useRouter } from 'next/router'
 import { othersContracts } from '../../constants/contractsLocal'
 import ContractABI from './ContractABI'
+import { isAddress } from '../../utils'
+import { useCreateContractABI } from '../../state/airdrop/hooks'
 
 let globalApproveCount = 0
 
@@ -28,6 +30,8 @@ const contractContent = othersContracts.projectContract.toLowerCase() + '.commen
 export default function Create() {
   const router = useRouter()
   const { account } = useActiveWeb3React()
+  const [open, setOpen] = useState(false)
+
   const [name, setName] = useState('')
   const [nameError, setNameError] = useState(false)
   const [errorCode, setErrorCode] = useState(1)
@@ -52,6 +56,8 @@ export default function Create() {
   } = useCreateCallback(undefined, undefined, undefined, null)
 
   const { createStatus, handleCreateAirdrop } = useCreateAirdrop(args, lockedCurrency as Token ?? undefined)
+  const { handleUpdateContractABI } = useCreateContractAirdrop()
+  const contractABI = useCreateContractABI()
 
   const label = useMemo(() => {
     return outputAmount?.currency?.symbol?.slice(4) || ''
@@ -79,6 +85,36 @@ export default function Create() {
   const handleDurationChange = (data: any) => {
     setDutation(data.value)
   }
+
+  const [chain, setChain] = useState('')
+  const handleChangeChain = (data: any) => {
+    setChain(data.value)
+  }
+  const [contractAddress, setContractAddress] = useState('')
+  const [verifying, setVerifying] = useState(false)
+  const [verifyStatus, setVerifyStatus] = useState(true)
+  const handleChangeAddress = useCallback(value => {
+    if (verifying) return
+    setContractAddress(value)
+    if (isAddress(value)) {
+      setVerifying(true)
+      setTimeout(() => {
+        setVerifying(false)
+        setVerifyStatus(false)
+      }, 1500)
+    }
+  }, [verifying, setVerifying])
+
+  const [funName, setFunName] = useState(contractABI[0] ? contractABI[0].value : '')
+  const handleChangeFun = useCallback((data: any) => {
+    setFunName(data.value)
+  }, [setFunName])
+
+  useEffect(() => {
+    if (contractABI.length > 0) {
+      setVerifyStatus(true)
+    }
+  }, [contractABI])
 
   const [approveLoading, setApproveLoading] = useState(true)
   const [unApproveList, setUnApproveList] = useState<string[]>(globalApproveList)
@@ -120,6 +156,39 @@ export default function Create() {
     }
     return CONTRACT_ACTION
   }, [channel])
+
+  const contractTip = useMemo(() => {
+    let tip = {
+      num: 1,
+      text: 'Please select the target chain to continue'
+    }
+    if (chain && contractABI.length <= 0) {
+      tip = {
+        num: 2,
+        text: 'Please input the contract address'
+      }
+    }
+    if (chain && contractAddress && !verifyStatus && contractABI.length <= 0) {
+      tip = {
+        num: 3,
+        text: 'Please fill contract ABI for verification'
+      }
+    }
+    if (chain && contractAddress && contractABI.length > 0) {
+      tip = {
+        num: 4,
+        text: 'Please select the target function and check the calculated offer per unit'
+      }
+    }
+    return tip
+
+  }, [chain, contractAddress, contractABI, verifyStatus, isAddress])
+
+  useEffect(() => {
+    return () => {
+      handleUpdateContractABI([])
+    }
+  }, [])
 
   return (
     <CreateBody>
@@ -261,70 +330,101 @@ export default function Create() {
             </div>
           </ItemBox> */}
           <ItemBox width={664} height={244}>
-            <div className='flex w-full'>
-              <div className=' shrink-0'>
-                <ItemTitle>Chain</ItemTitle>
-                <div className='mt-2 font-fmedium'>
-                  <SelectChain defaultValue={{}} options={CHAIN_LIST} onChange={handleChangeChannel} />
-                </div>
-              </div>
-              <div className='ml-[20px] w-full'>
-                <ItemTitle>Contract</ItemTitle>
-                <div className='mt-2 font-fmedium '>
-                  <div className=' rounded-xl border border-[rgba(85,123,241,0.10)] px-4 py-3 flex items-center h-[44px]'>
-                    <LazyImage src='/images/airdrop/contract_logo.svg' className=' shrink-0 mr-2' />
-                    <TextInput  value={''} onUserInput={value => {
-
-                    }} />
-                    {/* <LoadingContract /> */}
-                    <div className=' cursor-pointer'>
-                      <LazyImage src='/images/airdrop/contract_code.svg' />
+            <div className=' flex flex-col justify-between items-stretch h-full'>
+              <div>
+                <div className='flex w-full'>
+                  <div className=' shrink-0'>
+                    <ItemTitle>Chain</ItemTitle>
+                    <div className='mt-2 font-fmedium'>
+                      <SelectChain defaultValue={{}} options={CHAIN_LIST} onChange={handleChangeChain} />
                     </div>
-                    
                   </div>
-                </div>
-              </div>
-            </div>
-            <div className='flex w-full mt-4'>
-              <div className=' shrink-0 w-[300px]'>
-                <ItemTitle>Function</ItemTitle>
-                <div className='mt-2 font-fmedium'>
-                  <SelectChain defaultValue={{}} options={CHAIN_LIST} onChange={handleChangeChannel} />
-                </div>
-              </div>
-              <div className='ml-[34px]'>
-                <div className='mt-1'>
-                  <LazyImage src='/images/airdrop/to.svg' />
-                </div>
-                
-              </div>
-              <div className='ml-[34px] shrink-0'>
-                <ItemTitle>Offer per unit</ItemTitle>
-                <div className='mt-2'>
-                  <div className='flex items-center justify-between font-fsemibold text-[14px] h-[44px] py-3 px-4 bg-[rgba(85,123,241,0.02)] rounded-[8px]'>
-                    <div>{TWITTER_UNIT[action]} x</div>
-                    <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
-                      <CurrencyLogo currency={outputAmount?.currency} size={'20px'} />
-                      <div className=' font-fmedium text-[#A1CEA8] ml-1'>
-                        {outputAmount?.currency?.symbol}
+                  {
+                    chain && 
+                    <div className='ml-[20px] w-full'>
+                      <ItemTitle>Contract</ItemTitle>
+                      <div className='mt-2 font-fmedium '>
+                        <div className=' rounded-xl border border-[rgba(85,123,241,0.10)] px-4 py-3 flex items-center h-[44px]'>
+                          <LazyImage src='/images/airdrop/contract_logo.svg' className=' shrink-0 mr-2' />
+                          <TextInput  value={contractAddress} onUserInput={value => {
+                            handleChangeAddress(value)
+                          }} />
+                          {
+                            verifying && <LoadingContract /> 
+                          }
+                          {
+                            !verifyStatus && contractABI.length <= 0 &&
+                            <div className=' cursor-pointer'
+                              onClick={e => {
+                                e.stopPropagation()
+                                setOpen(true)
+                              }}
+                            >
+                              <LazyImage src='/images/airdrop/contract_code.svg' />
+                            </div>
+                          }
+                          {
+                            contractABI.length > 0 && 
+                            <div className=' cursor-pointer'
+                            >
+                              <LazyImage src='/images/airdrop/contract_verify.svg' />
+                            </div>
+                          }
+                          
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  }
+                  
                 </div>
+                {
+                  chain && contractAddress && contractABI.length > 0 &&
+                  <>
+                    <div className='flex w-full mt-4'>
+                    <div className=' shrink-0 w-[300px]'>
+                      <ItemTitle>Function</ItemTitle>
+                      <div className='mt-2 font-fmedium'>
+                        <SelectChain defaultValue={contractABI[0]} options={contractABI} onChange={handleChangeFun} />
+                      </div>
+                    </div>
+                    <div className='mx-[51px]'>
+                      <div className='mt-1'>
+                        <LazyImage src='/images/airdrop/to.svg' />
+                      </div>
+                    </div>
+                    <div className='shrink-0'>
+                      <ItemTitle>Offer per unit</ItemTitle>
+                      <div className='mt-2'>
+                        <div className='flex items-center justify-between font-fsemibold text-[14px] h-[44px] py-3 px-4 bg-[rgba(85,123,241,0.02)] rounded-[8px]'>
+                          <div>{TWITTER_UNIT[action]} x</div>
+                          <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
+                            <CurrencyLogo currency={outputAmount?.currency} size={'20px'} />
+                            <div className=' font-fmedium text-[#A1CEA8] ml-1'>
+                              {outputAmount?.currency?.symbol}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div className='mt-1 flex items-center text-[12px] text-[rgba(0,0,0,0.60)]'>
+                      <LazyImage className='mr-1' src='/images/airdrop/info.svg' />
+                      <div className=' '>Function must call ‘Inferer Airdrop Interface’. Check API document</div>
+                      <LazyImage className='mx-1 cursor-pointer' src='/images/airdrop/link5.svg' />
+                      <div> for more details.</div>
+                    </div>
+                  </>
+                }
+                
+              </div>
+              <div className='mt-[10px] text-[14px] text-[rgba(0,0,0,0.60)] flex items-center'>
+                <div className='flex items-center text-[12px] justify-center w-[16px] h-[16px] bg-[rgba(0,0,0,0.06)] rounded-[4px]'>
+                  { contractTip.num }
+                </div>
+                <div className='ml-2'>{ contractTip.text }</div>
               </div>
             </div>
-            <div className='mt-1 flex items-center text-[12px] text-[rgba(0,0,0,0.60)]'>
-              <LazyImage className='mr-1' src='/images/airdrop/info.svg' />
-              <div className=' '>Function must call ‘Inferer Airdrop Interface’. Check API document</div>
-              <LazyImage className='mx-1 cursor-pointer' src='/images/airdrop/link5.svg' />
-              <div> for more details.</div>
-            </div>
-            <div className='mt-[10px] text-[14px] text-[rgba(0,0,0,0.60)] flex items-center'>
-              <div className='flex items-center text-[12px] justify-center w-[16px] h-[16px] bg-[rgba(0,0,0,0.06)] rounded-[4px]'>
-                1
-              </div>
-              <div className='ml-2'>Please check the calculated offer per unit</div>
-            </div>
+
           </ItemBox>
           
           <div className='h-[121px] bg-[rgba(123,120,255,0.06)] rounded-xl px-4 py-[18px] mt-5'>
@@ -419,7 +519,8 @@ export default function Create() {
                   setErrorCode(-1)
                   return
                 }
-                
+                console.log(chain, contractAddress, funName, TWITTER_UNIT[action])
+                return
                 handleCreateAirdrop(name, label, duration, channel, action, TWITTER_UNIT[action], content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)
               }}
             >
@@ -432,7 +533,9 @@ export default function Create() {
         }
         </div>
       </div>
-      <ContractABI />
+      <ContractABI isOpen={open} onClose={() => {
+        setOpen(false)
+      }} />
     </CreateBody>
   )
 }

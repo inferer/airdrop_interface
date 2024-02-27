@@ -425,6 +425,7 @@ export function useUserInfo() {
   const { account, activate, deactivate } = useActiveWeb3React()
 
   const [joinStatus, setJoinStatus] = useState(0)
+  const [codeStatus, setCodeStatus] = useState(0)
 
   const handleGetUserInfo = useCallback(async (account: string) => {
     dispatch(updateLoginUserInfo({ userInfo: {id: 0, address: '', pAddress: '', inviteCode: '', createdAt: ''} }))
@@ -445,17 +446,33 @@ export function useUserInfo() {
       dispatch(updateLoginUserInfo({ userInfo: res }))
       router.push('/project/swap')
     } else {
-      handleShow({ type: 'error', content: `Invalid invite code !`, title: 'Error' })
+      handleShow({ type: 'error', content: `Invalid invitation code!`, title: 'Fail' })
       deactivate()
     }
     setJoinStatus(0)
+    setCodeStatus(0)
   }, [account, deactivate, dispatch])
+
+  const handleVerifyInviteCode = useCallback(async (code: string) => {
+    setCodeStatus(1)
+    const res = await verify2join('', code)
+    if (res && res.address) {
+      setCodeStatus(2)
+      return 1
+    } else {
+      setCodeStatus(0)
+      handleShow({ type: 'error', content: `Invalid invitation code!`, title: 'Fail' })
+      return -1
+    }
+  }, [])
 
   return {
     handleGetUserInfo,
     handleGetUserInviteCode,
     handleUserJoin,
-    joinStatus
+    handleVerifyInviteCode,
+    joinStatus,
+    codeStatus
   }
 
 }

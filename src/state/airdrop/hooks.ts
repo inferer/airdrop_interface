@@ -139,3 +139,10 @@ export function useUserDepositBalance(address: string = ethers.constants.Address
     return userDepositBalanceList.find(token => token?.address?.toLowerCase() === address.toLowerCase()) || ({} as TokenLocked)
   }, [userDepositBalanceList, address])
 }
+
+export function useCreateContractABI() {
+  const createContractABI = useSelector<AppState, AppState['airdrop']['createContractABI']>(state => state.airdrop.createContractABI)
+  return useMemo(() => {
+    return createContractABI.map(item => ({ value: item.name, label: item.name, icon: '/images/airdrop/fun.svg' }))
+  }, [createContractABI])
+}

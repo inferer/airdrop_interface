@@ -199,7 +199,7 @@ export const CHANNEL_LIST = [
 ]
 
 export const CHAIN_LIST = [
-  { value: 'localtest', label: 'Local Test', icon: '/images/airdrop/chain_local.svg' },
+  { value: 'localtest', label: 'Local Test', icon: '/images/airdrop/chain_airdrop.svg' },
 ]
 
 export const TWITTER_ACTION = [

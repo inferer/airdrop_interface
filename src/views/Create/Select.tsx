@@ -104,13 +104,14 @@ export const SelectChain: React.FC<{
   const label = useMemo(() => {
     return current.label || defaultValue.label || 'Select'
   }, [defaultValue, current])
+
   return (
-    <div className="flex items-center justify-between bg-[rgba(85,123,241,0.02)] rounded-[8px] cursor-pointer min-w-[161px] relative">
+    <div className="flex items-center justify-between bg-[rgba(85,123,241,0.02)] rounded-[8px] cursor-pointer min-w-[170px] relative">
       <div className="flex justify-between items-center w-full py-3 px-4  h-[44px] text-[14px]"
         onClick={handleClick}
       >
         <div className="flex items-center">
-          <LazyImage2 src={current.icon || '/images/airdrop/chain_local.svg'} />
+          <LazyImage2 src={current.icon || (defaultValue && defaultValue.icon) || '/images/airdrop/chain_local.svg'} />
           <span className={`mr-5 ml-2 ${label === 'Select' ? 'text-[rgba(0,0,0,0.40)]' : ''}`}>{label}</span>
         </div>
         
@@ -138,7 +139,10 @@ export const SelectChain: React.FC<{
                 e.stopPropagation()
                 handleClickItem(item)
               }}
-              className="flex items-center text-[14px] font-fmedium h-[41px] px-4 cursor-pointer bg-[rgba(85,123,241,0.02)] hover:bg-[rgba(85,123,241,0.08)]">{item.label}</div>
+              className="flex items-center text-[14px] font-fmedium h-[41px] px-4 cursor-pointer bg-[rgba(85,123,241,0.02)] hover:bg-[rgba(85,123,241,0.08)]">
+                <LazyImage2 className="mr-5" src={item.icon || '/images/airdrop/chain_local.svg'} />
+                {item.label}
+              </div>
           })
         }
         

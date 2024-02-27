@@ -37,7 +37,7 @@ import {
   useSwapActionHandlers,
   useSwapState
 } from '../../state/swap/hooks'
-import { useExpertModeManager, useIsUserAction, useUserDeadline, useUserInfo, useUserSlippageTolerance } from '../../state/user/hooks'
+import { useExpertModeManager, useIsUserAction, useLoginUserInfo, useUserDeadline, useUserSlippageTolerance } from '../../state/user/hooks'
 import { LinkStyledButton, TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
@@ -66,8 +66,8 @@ export default function Swap() {
     setDismissTokenWarning(true)
   }, [])
 
-  const { handleGetUserInfo } = useUserInfo()
   const { account, deactivate } = useActiveWeb3React()
+  const userLoginInfo = useLoginUserInfo()
   const theme = useContext(ThemeContext)
 
   // toggle wallet when disconnected
@@ -426,7 +426,7 @@ export default function Swap() {
           <BottomGrouping>
             {
               
-            !account ? (
+            (!account || !userLoginInfo.address)  ? (
               <ButtonSwap onClick={toggleWalletModal}>
                 <div className='btn-text'>
                   Connect Wallet

@@ -16,6 +16,9 @@ import { useSwapCallArguments } from './useSwapCallback'
 import { useAddPopup } from '../state/application/hooks'
 import { useAirTokenPercent, useAirTokenPercentBalance } from '../state/airdrop/hooks'
 import { Field } from '../state/swap/actions'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../state'
+import { IABIItem, updateCreateContractABI } from '../state/airdrop/actions'
 
 
 export function useCreateCallback(
@@ -167,3 +170,15 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
   }
 }
 
+export function useCreateContractAirdrop() {
+  const dispatch = useDispatch<AppDispatch>()
+
+  const handleUpdateContractABI = useCallback((ABIList: IABIItem[]) => {
+    dispatch(updateCreateContractABI({ ABIList }))
+  }, [dispatch])
+
+  return {
+    handleUpdateContractABI
+  }
+
+}

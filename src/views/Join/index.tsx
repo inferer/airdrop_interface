@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import styled from "styled-components"
 import { useActiveWeb3React } from "../../hooks"
 import { useWalletModalToggle } from "../../state/application/hooks"
-import { LoadingX } from "../../components/Loader"
+import { LoadingJoin } from "../../components/Loader"
 
 export const JoinBody = styled.div`
   width: 540px;
@@ -33,19 +33,47 @@ export const JoinTitle = styled.div`
   margin-top: 9px;
 `
 
+export const CharText = styled.div<{
+  focus?: boolean
+}>`
+  position: relative;
+  height: 100%;
+  .cursor {
+    position: absolute;
+    height: 25px;
+    left: 0;
+    top: 7px;
+    width: 1px;
+    background: rgba(0, 0, 0, 0.60);
+    opacity: ${({ focus }) => (focus ? 1 : 0)};
+  }
+
+`
+
 function CodeItem ({
   code,
-  onClick
+  onClick,
+  focus
 }: {
   code: string,
-  onClick?: () => void
+  onClick?: () => void,
+  focus?: boolean
 }) {
+  const codeDom = useMemo(() => {
+    return code.split('')
+  }, [code])
+
   return (
     <div className=" relative ">
       <div onClick={e => {
         e.stopPropagation()
         onClick && onClick()
-      }} className="text-[rgba(0,0,0,0.60)] text-[32px] font-fsemibold leading-[40px] h-[40px]" style={{letterSpacing: '5px'}}>{code}</div>
+      }} className={`text-[rgba(0,0,0,0.60)] text-[24px] font-fsemibold leading-[40px] h-[40px] grid grid-cols-4`} >
+        <CharText focus={code.length === 0 && focus} >{codeDom[0] || ' '} <div className="cursor"></div> </CharText>
+        <CharText focus={code.length === 1 && focus}>{codeDom[1] || ' '} <div className="cursor"></div></CharText>
+        <CharText focus={code.length === 2 && focus}>{codeDom[2] || ' '} <div className="cursor"></div></CharText>
+        <CharText focus={code.length === 3 && focus}>{codeDom[3] || ' '} <div className="cursor"></div></CharText>
+      </div>
       <div className={`h-[3px] absolute left-0 -bottom-[3px] w-full ${code.length >=4 ? 'bg-[rgba(0,0,0,0.1)]' : 'bg-[rgba(0,0,0,0.03)]'}`}></div>
     </div>
   )
@@ -71,14 +99,26 @@ function Join() {
     }
   }, [codeValue])
 
-  const { joinStatus, handleUserJoin } = useUserInfo()
-  
+  const { joinStatus, handleUserJoin, codeStatus, handleVerifyInviteCode } = useUserInfo()
+
   useEffect(() => {
-    if (account && codeList.code1.length >= 4) {
+    if (codeList.code4.length >= 4) {
+      const code = codeList.code1 + '-' + codeList.code2 + '-' + codeList.code3 + '-' + codeList.code4
+      handleVerifyInviteCode(code.toLowerCase())
+        .then(status => {
+          if (status === -1) {
+            setCodeValue('')
+          }
+        })
+    }
+  }, [codeList, handleVerifyInviteCode])
+
+  useEffect(() => {
+    if (account && codeList.code4.length >= 4 && codeStatus === 2) {
       const code = codeList.code1 + '-' + codeList.code2 + '-' + codeList.code3 + '-' + codeList.code4
       handleUserJoin(account, code.toLowerCase())
     }
-  }, [account, codeList, handleUserJoin, deactivate])
+  }, [account, codeList, handleUserJoin, codeStatus])
 
   return (
     <JoinBody >
@@ -89,29 +129,37 @@ function Join() {
           Hi, nice to have you here
         </div>
         <div className="mt-[15px] grid grid-cols-4 gap-[8px]">
-          <CodeItem code={codeList.code1} 
+          <CodeItem code={codeList.code1}
+            focus={codeValue.length < 4} 
             onClick={() => {
               inputRef.current?.focus()
             }} />
-          <CodeItem code={codeList.code2} 
+          <CodeItem code={codeList.code2}
+            focus={codeValue.length >= 4 && codeValue.length < 8}
             onClick={() => {
               inputRef.current?.focus()
             }} />
           <CodeItem code={codeList.code3} 
+            focus={codeValue.length >= 8 && codeValue.length < 12}
             onClick={() => {
               inputRef.current?.focus()
             }} />
           <CodeItem code={codeList.code4} 
+            focus={codeValue.length >= 12 && codeValue.length < 16}
             onClick={() => {
               inputRef.current?.focus()
             }} />
           
         </div>
         <input ref={inputRef} type="text" className=" fixed left-[1000%]" value={codeValue} onChange={e => {
-          if (e.target.value.length >= 16) {
-            inputRef.current?.blur()
+          const pattern = /^[a-zA-Z0-9]+$/;
+          if (e.target.value === '' || pattern.test(e.target.value)) {
+            if (e.target.value.length >= 16) {
+              inputRef.current?.blur()
+            }
+            onChange(e.target.value)
           }
-          onChange(e.target.value)
+          
         }}  />
         <div className="text-[rgba(0,0,0,0.40)] font-normal text-[14px] mt-[11px]">
           invitation code
@@ -122,13 +170,17 @@ function Join() {
             onClick={e => {
               e.stopPropagation()
               if (codeValue.length < 16 || joinStatus === 1) return
-              toggleWalletModal()
-
+              if (codeStatus !== 2) {
+                const code = codeList.code1 + '-' + codeList.code2 + '-' + codeList.code3 + '-' + codeList.code4
+                handleVerifyInviteCode(code.toLowerCase())
+              } else {
+                toggleWalletModal()
+              }
             }}
           >
             {
-              joinStatus === 1 ? 
-              <LoadingX /> : 
+              (joinStatus === 1 || codeStatus === 1) ? 
+              <LoadingJoin /> : 
               <div className="btn-text">
                 Join protocol now
               </div>

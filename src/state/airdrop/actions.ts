@@ -45,6 +45,14 @@ export type TokenLocked = {
   "lockedAmount": string
 }
 
+export type IABIItem = {
+  "inputs": any[],
+  "name": string,
+  "outputs": any[],
+  "stateMutability": string,
+  "type": string
+}
+
 
 export const updateAirdropList = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateAirdropList')
 export const updateAirdropListOne = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateAirdropListOne')
@@ -59,3 +67,4 @@ export const updateProjectUSDTLocked = createAction<{ tokenLockedList: TokenLock
 export const updateUserAlgTokenLocked = createAction<{ tokenLockedList: TokenLocked[] }>('airdrop/updateUserAlgTokenLocked')
 export const updateUserDepositBalance = createAction<{ tokenLockedList: TokenLocked[] }>('airdrop/updateUserDepositBalance')
 export const updateProjectAirdropList = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateProjectAirdropList')
+export const updateCreateContractABI = createAction<{ ABIList: IABIItem[] }>('airdrop/updateCreateContractABI')

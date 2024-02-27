@@ -16,7 +16,7 @@ import {
   useSwapActionHandlers,
   useSwapState
 } from '../../state/swap/hooks'
-import {  useIsUserAction, useUserAction, useUserRoleMode } from '../../state/user/hooks'
+import {  useIsUserAction, useLoginUserInfo, useUserAction, useUserRoleMode } from '../../state/user/hooks'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { TYPE } from '../../theme'
 import Score from './Score'
@@ -27,6 +27,7 @@ import { useAccountLabelScore } from '../../hooks/useAirdropTokenScore'
 
 export default function Search() {
   const { account } = useActiveWeb3React()
+  const userLoginInfo = useLoginUserInfo()
   // toggle wallet when disconnected
   const toggleWalletModal = useWalletModalToggle()
   const { userAction, setUserAction }  = useUserAction()
@@ -153,25 +154,26 @@ export default function Search() {
           </AutoColumn>
           <BottomGrouping>
             {
-              isUserCollect ?
-                <ButtonSwap 
-                  disabled={disabled}
-                  onClick={e => {
-                    e.stopPropagation()
-                    if (disabled) return
-                    if (!!collectInputError) return
-                    handleAction()
-                  }} >
-                  <div className='btn-text'>
-                    {
-                      (isProjectSwap || isUserSwap) ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'
-                    }
-                  </div>
-                    
-                </ButtonSwap> :
-            !account ? (
-              <ButtonSwap onClick={toggleWalletModal}>Connect Wallet</ButtonSwap>
-            ) : null}
+            (!account || !userLoginInfo.address) ? (
+              <ButtonSwap onClick={toggleWalletModal}>
+                <div className='btn-text'>Connect Wallet</div>
+              </ButtonSwap>
+            ) : isUserCollect ?
+            <ButtonSwap 
+              disabled={disabled}
+              onClick={e => {
+                e.stopPropagation()
+                if (disabled) return
+                if (!!collectInputError) return
+                handleAction()
+              }} >
+              <div className='btn-text'>
+                {
+                  (isProjectSwap || isUserSwap) ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'
+                }
+              </div>
+                
+            </ButtonSwap> : null}
           </BottomGrouping>
         </Wrapper>
       </SwapBody>
