@@ -10,6 +10,7 @@ import { RowBetween } from '../Row'
 import QuestionHelper from '../QuestionHelper'
 import { useIsUserAction, useUserAction, useUserRoleMode } from '../../state/user/hooks'
 import { UserAction } from '../../constants'
+import { useActiveWeb3React } from '../../hooks'
 
 const Tabs = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -165,11 +166,13 @@ const StyledNavLink2 = styled.div<{
 
 export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => void}) {
   const router = useRouter()
+  const { account } = useActiveWeb3React()
   const { t } = useTranslation()
-  const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
-  const [active, setActive] = useState<'collect' | 'rewards'>('collect')
+  const [ isProjectMode ] = useUserRoleMode()
+  const [active, setActive] = useState<'collect' | 'rewards' | ''>('')
 
   const handleTab = useCallback((type) => {
+    if (!account && type === 'rewards') return
     setActive(type)
     if (type === 'rewards') {
       router.push(isProjectMode ? '/project/rewards' :  '/user/rewards')
@@ -178,14 +181,15 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
     }
     // onClick && onClick(type)
 
-  }, [active, isProjectMode])
+  }, [active, isProjectMode, account])
 
   useEffect(() => {
     if (router.pathname.indexOf('/rewards') > -1 || router.pathname.indexOf('/consumption') > -1) {
-
       setActive('rewards')
-    } else {
+    } else if (router.query.action === 'swap') {
       setActive('collect')
+    } else {
+      setActive('')
     }
   }, [])
 

@@ -443,15 +443,17 @@ export function useUserInfo() {
     setJoinStatus(1)
     const res = await verify2join(account, code)
     if (res && res.address) {
+      setJoinStatus(0)
+      setCodeStatus(0)
       dispatch(updateLoginUserInfo({ userInfo: res }))
       router.push('/project/swap')
     } else {
-      handleShow({ type: 'error', content: `Invalid invitation code!`, title: 'Fail' })
+      handleShow({ type: 'error', content: `Invalid invitation code.`, title: 'Fail' })
       deactivate()
     }
     setJoinStatus(0)
     setCodeStatus(0)
-  }, [account, deactivate, dispatch])
+  }, [account, deactivate, dispatch, setCodeStatus, setJoinStatus])
 
   const handleVerifyInviteCode = useCallback(async (code: string) => {
     setCodeStatus(1)
@@ -461,16 +463,21 @@ export function useUserInfo() {
       return 1
     } else {
       setCodeStatus(0)
-      handleShow({ type: 'error', content: `Invalid invitation code!`, title: 'Fail' })
+      handleShow({ type: 'error', content: `Invalid invitation code.`, title: 'Fail' })
       return -1
     }
-  }, [])
+  }, [setCodeStatus])
+
+  const handleSetCodeStatus = useCallback(async () => {
+    setCodeStatus(-1)
+  }, [setCodeStatus])
 
   return {
     handleGetUserInfo,
     handleGetUserInviteCode,
     handleUserJoin,
     handleVerifyInviteCode,
+    handleSetCodeStatus,
     joinStatus,
     codeStatus
   }

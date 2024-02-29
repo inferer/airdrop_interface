@@ -1,4 +1,4 @@
-import { useUserInfo } from "../../state/user/hooks"
+import { useUserInfo, useUserRoleMode } from "../../state/user/hooks"
 import { ButtonJoin } from "../../components/Button"
 import LazyImage from "../../components/LazyImage"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
@@ -6,6 +6,7 @@ import styled from "styled-components"
 import { useActiveWeb3React } from "../../hooks"
 import { useWalletModalToggle } from "../../state/application/hooks"
 import { LoadingJoin } from "../../components/Loader"
+import { useRouter } from "next/router"
 
 export const JoinBody = styled.div`
   width: 540px;
@@ -80,15 +81,18 @@ function CodeItem ({
 }
 
 function Join() {
+  const router = useRouter()
   const { account, activate, deactivate } = useActiveWeb3React()
   const toggleWalletModal = useWalletModalToggle()
+  const { joinStatus, handleUserJoin, codeStatus, handleVerifyInviteCode, handleSetCodeStatus, handleGetUserInfo } = useUserInfo()
   
   const inputRef = useRef<HTMLInputElement>(null)
   const [codeValue, setCodeValue] = useState('')
   const onChange = useCallback((value: string) => {
     
     setCodeValue(value)
-  }, [codeValue]) 
+    handleSetCodeStatus()
+  }, [codeValue, handleSetCodeStatus]) 
 
   const codeList = useMemo(() => {
     return {
@@ -99,26 +103,39 @@ function Join() {
     }
   }, [codeValue])
 
-  const { joinStatus, handleUserJoin, codeStatus, handleVerifyInviteCode } = useUserInfo()
 
+  // useEffect(() => {
+  //   if (codeList.code4.length >= 4) {
+  //     const code = codeList.code1 + '-' + codeList.code2 + '-' + codeList.code3 + '-' + codeList.code4
+  //     handleVerifyInviteCode(code.toLowerCase())
+  //       .then(status => {
+  //         if (status === -1) {
+  //           setCodeValue('')
+  //         }
+  //       })
+  //   }
+  // }, [codeList, handleVerifyInviteCode])
+
+  // 82fd5a4d416599f1
+  const [ isProjectMode ] = useUserRoleMode()
+  const [hasClick, setHasClick] = useState(false)
   useEffect(() => {
-    if (codeList.code4.length >= 4) {
-      const code = codeList.code1 + '-' + codeList.code2 + '-' + codeList.code3 + '-' + codeList.code4
-      handleVerifyInviteCode(code.toLowerCase())
-        .then(status => {
-          if (status === -1) {
-            setCodeValue('')
+    if (account) {
+      handleGetUserInfo(account)
+        .then((userInfo: any) => {
+          if (userInfo && userInfo.id) {
+            router.push(isProjectMode ? '/project/swap' : '/user/swap')
           }
         })
     }
-  }, [codeList, handleVerifyInviteCode])
+  }, [account, isProjectMode])
 
   useEffect(() => {
-    if (account && codeList.code4.length >= 4 && codeStatus === 2) {
+    if (account && hasClick && codeList.code4.length >= 4 && codeStatus === 2) {
       const code = codeList.code1 + '-' + codeList.code2 + '-' + codeList.code3 + '-' + codeList.code4
       handleUserJoin(account, code.toLowerCase())
     }
-  }, [account, codeList, handleUserJoin, codeStatus])
+  }, [account, hasClick, codeList, handleUserJoin, codeStatus])
 
   return (
     <JoinBody >
@@ -169,12 +186,29 @@ function Join() {
             disabled={codeValue.length < 16 || joinStatus === 1}  
             onClick={e => {
               e.stopPropagation()
+              console.log(codeStatus)
               if (codeValue.length < 16 || joinStatus === 1) return
               if (codeStatus !== 2) {
                 const code = codeList.code1 + '-' + codeList.code2 + '-' + codeList.code3 + '-' + codeList.code4
                 handleVerifyInviteCode(code.toLowerCase())
+                  .then(status => {
+                    if (status === -1) {
+                      setCodeValue('')
+                    } else {
+                      setHasClick(true)
+                      if (account) {
+                        
+                      } else {
+                        toggleWalletModal()
+                      }
+                      
+                    }
+                  })
               } else {
-                toggleWalletModal()
+                setHasClick(true)
+                if (!account) {
+                  toggleWalletModal()
+                }
               }
             }}
           >

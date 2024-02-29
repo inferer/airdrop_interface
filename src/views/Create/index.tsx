@@ -63,7 +63,7 @@ export default function Create() {
     return outputAmount?.currency?.symbol?.slice(4) || ''
   }, [outputAmount])
 
-  const [channel, setChannel] = useState<string>('twitter')
+  const [channel, setChannel] = useState<string>('contract')
   const handleChangeChannel = (data: any) => {
     setChannel(data.value)
     if (data.value === 'twitter') {
@@ -76,7 +76,7 @@ export default function Create() {
     }
   }
 
-  const [action, setAction] = useState<string>('like')
+  const [action, setAction] = useState<string>('function')
   const handleChange = (data: any) => {
     setAction(data.value)
   }
@@ -519,9 +519,10 @@ export default function Create() {
                   setErrorCode(-1)
                   return
                 }
-                console.log(chain, contractAddress, funName, TWITTER_UNIT[action])
-                return
-                handleCreateAirdrop(name, label, duration, channel, action, TWITTER_UNIT[action], content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)
+                const _content = contractAddress + '.' + (funName ? funName : contractABI[0].value)
+                console.log(chain, contractAddress, funName, TWITTER_UNIT[action], _content)
+                // return
+                handleCreateAirdrop(name, label, duration, channel, action, TWITTER_UNIT[action], _content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)
               }}
             >
               <div className='btn-text'>
