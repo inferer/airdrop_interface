@@ -30,7 +30,7 @@ const contractContent = othersContracts.projectContract.toLowerCase() + '.commen
 export default function Create() {
   const router = useRouter()
   const { account } = useActiveWeb3React()
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
 
   const [name, setName] = useState('')
   const [nameError, setNameError] = useState(false)
@@ -439,7 +439,7 @@ export default function Create() {
             bgColor='#FAFAFA'
             onClick={e => {
               e.stopPropagation()
-              router.push('/project/swap')
+              router.push('/project/create')
             }}
           >
             <span className=' btn-text'>Cancel</span>

@@ -15,9 +15,9 @@ const ContractABI: React.FC<{
   const [funList, setFunList] = useState<any[]>([])
   const onEditorChange = useCallback(async (code: string) => {
     try {
-      setFunList(eval(code))
+      setFunList(eval(code) || [])
     } catch(err) {
-
+      setFunList([])
     }
   }, [])
 
@@ -54,22 +54,31 @@ const ContractABI: React.FC<{
               <LazyImage src="/images/airdrop/info5.svg" className="mr-2" />
               Contract verification info
             </div>
-            <div className=" text-[12px] font-fnormal text-[rgba(0,0,0,0.80)] mt-[25px]">
-              Functions available:
-            </div>
-            <div className="mt-3 border border-[rgba(85,123,241,0.10)] p-4 h-[331px] rounded-xl overflow-auto scrollbar-container">
-              {
-                funList.map(fun => {
-                  return (
-                    <div key={fun.name} className="flex items-center mb-4">
-                      <LazyImage src="/images/airdrop/fun.svg" />
-                      <div className=" text-black text-[14px] font-fmedium ml-2">{fun.name}</div>
-                    </div>
-                  )
-                  
-                })
-              }
-            </div>
+            {
+              funList.length <=0 ? 
+                <div className=" mt-[29px] pb-[36px]">
+                  <LazyImage src="/images/airdrop/abi_bg.png" className="w-[430px] h-[322px]" />
+                </div> :
+                <div>
+                  <div className=" text-[12px] font-fnormal text-[rgba(0,0,0,0.80)] mt-[25px]">
+                    Functions available:
+                  </div>
+                  <div className="mt-3 border border-[rgba(85,123,241,0.10)] p-4 h-[331px] rounded-xl overflow-auto scrollbar-container">
+                    {
+                      funList.map(fun => {
+                        return (
+                          <div key={fun.name} className="flex items-center mb-4">
+                            <LazyImage src="/images/airdrop/fun.svg" />
+                            <div className=" text-black text-[14px] font-fmedium ml-2">{fun.name}</div>
+                          </div>
+                        )
+                        
+                      })
+                    }
+                  </div>
+                </div>
+            }
+            
             <div className="grid grid-cols-2 gap-x-[32px] px-[81px] mt-[25px]">
               <ButtonCancel height="48px"
                 onClick={e => {
@@ -79,7 +88,9 @@ const ContractABI: React.FC<{
               >
                 <div className="btn-text">Cancel</div>
               </ButtonCancel>
-              <ButtonSwap height="48px"
+              <ButtonSwap 
+                disabled={funList.length <= 0}
+                height="48px"
                 onClick={e => {
                   e.stopPropagation()
                   handleUpdateContractABI(funList)

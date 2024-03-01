@@ -95,34 +95,40 @@ export default function RightMenu() {
     // setTimeout(() => {
     //   toggleShowRightMenu()
     // }, 300)
-    console.log(router.pathname)
+    console.log(router.pathname, router.query.action)
     if (action === 'switch') {
       localStorage.setItem('airdrop_model', !isProjectMode ? 'true' : 'false')
       if (router.pathname === '/project/[action]') {
-        if (router.query.action === 'rewards') {
-          router.push('/user/rewards')
-        } else if (router.query.action === 'consumption') {
-          router.push('/user/consumption')
-        } else if (router.query.action === 'invite') {
-          router.push('/user/invite')
+        if (router.query.action === 'create') {
+          router.push('/user/collect')
         } else {
-          router.push('/user/swap')
+          router.push(`/user/${router.query.action}`)
         }
+        // if (router.query.action === 'rewards') {
+        //   router.push('/user/rewards')
+        // } else if (router.query.action === 'consumption') {
+        //   router.push('/user/consumption')
+        // } else if (router.query.action === 'invite') {
+        //   router.push('/user/invite')
+        // } else {
+        //   router.push('/user/swap')
+        // }
       } else if (router.pathname === '/user/[action]') {
         // router.push('/project/swap')
-        if (router.query.action === 'rewards') {
-          router.push('/project/rewards')
-        } else if (router.query.action === 'consumption') {
-          router.push('/project/consumption')
-        } else if (router.query.action === 'invite') {
-          router.push('/project/invite')
-        } else {
-          router.push('/project/swap')
-        }
+        // if (router.query.action === 'rewards') {
+        //   router.push('/project/rewards')
+        // } else if (router.query.action === 'consumption') {
+        //   router.push('/project/consumption')
+        // } else if (router.query.action === 'invite') {
+        //   router.push('/project/invite')
+        // } else {
+        //   router.push('/project/swap')
+        // }
+        router.push(`/project/${router.query.action}`)
       } else if (router.pathname === '/collect/[[...id]]') {
         router.push('/project/swap')
       } else if (router.pathname === '/create') {
-        router.push('/user/swap')
+        router.push('/user/collect')
       }
     }
     if (action === 'tokens') {
@@ -243,7 +249,7 @@ export default function RightMenu() {
               onClick={() => handleClick('completed')}
             />
             <MenuLine />
-            <MenuItem icon='/images/airdrop/completed.svg' text='Invite code' isProjectMode={isProjectMode} 
+            <MenuItem icon='/images/airdrop/completed.svg' text='Invitation code' isProjectMode={isProjectMode} 
               onClick={() => handleClick('invite')}
             />
           </div>

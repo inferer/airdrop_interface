@@ -49,8 +49,8 @@ const AirdropList: React.FC<{
               <TableHeadCell className="flex-1 w-[250px]">
                 <div className=''><span className="">Name</span></div>
               </TableHeadCell>
-              <TableHeadCell className="w-[135px] ">
-                <span>Inferer Labels</span> 
+              <TableHeadCell className="w-[180px] ">
+                <span>Pools</span> 
               </TableHeadCell>
               {/* <TableHeadCell className="w-[120px] ">
                 <span>Units</span> 
@@ -78,7 +78,7 @@ const AirdropList: React.FC<{
                     >
                       <>
                         <TableCell className="flex-1 w-[250px]">
-                          <div className=' text-[16px] text-black'>
+                          <div className='text-[16px] font-fsemibold text-black'>
                             <span className="">{airdrop.name}</span>
                             <div className=" text-gray-400 text-[14px]">taskId: {airdrop.id}</div>
                           </div>

@@ -235,29 +235,31 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
       {
         isProjectMode ? (
           <>
-            <StyledNavLink2 id={`swap-btn-click`} className={isProjectSwap ? 'airdrop' : ''}
-              onClick={() => handleTab('/project/swap')}
-            >
-              {t('Swap')}
-            </StyledNavLink2>
             <StyledNavLink2 id={`create-btn-click`} className={isProjectCreate ?  'airdrop' : ''}
               onClick={() => handleTab('/project/create')}
             >
               {t('Create')}
             </StyledNavLink2>
-          </>
-        ) : (
-          <>
-            <StyledNavLink2 id={`userswap-btn-click`} className={isUserSwap ? 'create' : ''}
-              onClick={() => handleTab('/user/swap')}
+            <StyledNavLink2 id={`swap-btn-click`} className={isProjectSwap ? 'airdrop' : ''}
+              onClick={() => handleTab('/project/swap')}
             >
               {t('Swap')}
             </StyledNavLink2>
+            
+          </>
+        ) : (
+          <>
             <StyledNavLink2 id={`collect-btn-click`} className={isUserCollect ?  'airdrop' : ''}
               onClick={() => handleTab('/user/collect')}
             >
               {t('Collect')}
             </StyledNavLink2>
+            <StyledNavLink2 id={`userswap-btn-click`} className={isUserSwap ? 'create' : ''}
+              onClick={() => handleTab('/user/swap')}
+            >
+              {t('Swap')}
+            </StyledNavLink2>
+            
           </>
         )
       }
@@ -284,15 +286,15 @@ export function SwapCollectTabs({ onClick }: { onClick?: (type: UserAction) => v
   return (
     <Tabs style={{ justifyContent: 'flex-start', marginBottom: 22 }}>
       <>
-        <StyledNavLink2 id={`userswap-btn-click`} className={''}
-          onClick={() => handleTab(UserAction.USER_SWAP)}
-        >
-          {t('Swap')}
-        </StyledNavLink2>
         <StyledNavLink2 id={`collect-btn-click`} className={'airdrop'}
           onClick={() => handleTab(UserAction.USER_COLLECT)}
         >
           {t('Collect')}
+        </StyledNavLink2>
+        <StyledNavLink2 id={`userswap-btn-click`} className={''}
+          onClick={() => handleTab(UserAction.USER_SWAP)}
+        >
+          {t('Swap')}
         </StyledNavLink2>
       </>
     </Tabs>

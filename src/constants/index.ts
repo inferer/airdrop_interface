@@ -224,7 +224,7 @@ export const TWITTER_UNIT: {[key: string]: string} = {
   like: '1',
   follow: '2',
   comment: '3',
-  function: '1'
+  function: '2'
 }
 
 export const AddressZero_ETH = {
