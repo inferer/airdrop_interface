@@ -148,9 +148,9 @@ export default function RightMenu() {
     }
     if (action === 'home') {
       if (isProjectMode) {
-        router.push('/project/swap')
+        router.push('/project/create')
       } else {
-        router.push('/user/swap')
+        router.push('/user/collect')
       }
     }
     if (action === 'completed') {
