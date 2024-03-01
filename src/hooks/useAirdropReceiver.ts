@@ -238,8 +238,7 @@ export function useProjectContractDemo() {
     if (account && contractDemo) {
       setConfirmStatus(1)
       let gasLimit = '5000000'
-      // const baseInfo = await contractDemo.getBaseInfo('comment')
-      // console.log(baseInfo, 11111111)
+      
       try {
         const gasEstimate = await contractDemo.estimateGas['comment']()
         gasLimit = gasEstimate.toString()

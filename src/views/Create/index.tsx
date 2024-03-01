@@ -519,7 +519,7 @@ export default function Create() {
                   setErrorCode(-1)
                   return
                 }
-                const _content = contractAddress + '.' + (funName ? funName : contractABI[0].value)
+                const _content = contractAddress.toLowerCase() + '.' + (funName ? funName : contractABI[0].value)
                 console.log(chain, contractAddress, funName, TWITTER_UNIT[action], _content)
                 // return
                 handleCreateAirdrop(name, label, duration, channel, action, TWITTER_UNIT[action], _content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)

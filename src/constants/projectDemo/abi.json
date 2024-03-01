@@ -24,6 +24,11 @@
     "outputs": [
       {
         "internalType": "string",
+        "name": "hashStr",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
         "name": "content",
         "type": "string"
       },
@@ -31,6 +36,25 @@
         "internalType": "uint256",
         "name": "airdropId",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_function",
+        "type": "string"
+      }
+    ],
+    "name": "getBaseInfo1",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "hashStr",
+        "type": "string"
       }
     ],
     "stateMutability": "view",
