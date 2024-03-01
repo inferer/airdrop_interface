@@ -12,6 +12,7 @@ import { fetcher, poster } from '../utils/axios'
 import { getAlgTokenByLabel } from '../utils/getTokenList'
 import { useAirdropManager } from './useAirdropManager'
 import { useShowToast } from '../state/application/hooks'
+import { othersContracts } from '../constants/contractsLocal'
 
 
 export const getAccountScoreProof = async (account: string, label: string) => {
@@ -100,6 +101,9 @@ export function useAirdropReceiver(algToken?: string) {
       const algToken = getAlgTokenByLabel(label)
       // const airdropInfo = await handleGetAirdropOne2(Number(airdropId))
       // console.log(airdropInfo)
+      
+      // const res = await airdropReceiver.getAirdropBaseInfoByHash(othersContracts.projectContract + '.comment')
+      // console.log(res)
 
       const proof = await getAccountScoreProof(account, label)
 
@@ -234,6 +238,8 @@ export function useProjectContractDemo() {
     if (account && contractDemo) {
       setConfirmStatus(1)
       let gasLimit = '5000000'
+      // const baseInfo = await contractDemo.getBaseInfo('comment')
+      // console.log(baseInfo, 11111111)
       try {
         const gasEstimate = await contractDemo.estimateGas['comment']()
         gasLimit = gasEstimate.toString()

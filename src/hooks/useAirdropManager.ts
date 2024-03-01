@@ -161,7 +161,7 @@ export const getUserAirdropConfirmed = async (multi: Contract, account: string) 
 
 export const getUserAirdropConfirmed2 = async (airdropManager: Contract, account: string) => {
   const userAirdropConfirmed = await airdropManager.getUserAirdropConfirmed(account)
-
+  console.log(userAirdropConfirmed)
   return userAirdropConfirmed && userAirdropConfirmed[0] ? userAirdropConfirmed.map((item: any) => {
     const tempItem = item
     const labelTokenData = getLabelTokenByAddress(tempItem[7])

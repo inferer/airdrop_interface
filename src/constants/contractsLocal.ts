@@ -37,9 +37,9 @@ const contractList =
 }
 
 export const othersContracts = {
-  "projectContract": "0xb007167714e2940013EC3bb551584130B7497E22",
-  "infererTrackManagerLogic": "0x6b39b761b1b64C8C095BF0e3Bb0c6a74705b4788",
-  "infererTrackManager": "0x74Df809b1dfC099E8cdBc98f6a8D1F5c2C3f66f8",
+  "projectContract": "0x4CF4dd3f71B67a7622ac250f8b10d266Dc5aEbcE",
+  "infererTrackManagerLogic": "0x2498e8059929e18e2a2cED4e32ef145fa2F4a744",
+  "infererTrackManager": "0x6DcBc91229d812910b54dF91b5c2b592572CD6B0",
 }
 
 export default contractList

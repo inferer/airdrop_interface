@@ -2,8 +2,38 @@
   {
     "inputs": [],
     "name": "comment",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_function",
+        "type": "string"
+      }
+    ],
+    "name": "getBaseInfo",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "content",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "airdropId",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -17,19 +47,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_airdropId",
-        "type": "uint256"
-      }
-    ],
-    "name": "setAirdropId",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
