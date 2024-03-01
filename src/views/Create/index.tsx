@@ -30,7 +30,7 @@ const contractContent = othersContracts.projectContract.toLowerCase() + '.commen
 export default function Create() {
   const router = useRouter()
   const { account } = useActiveWeb3React()
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
 
   const [name, setName] = useState('')
   const [nameError, setNameError] = useState(false)
