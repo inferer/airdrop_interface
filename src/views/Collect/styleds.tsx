@@ -14,8 +14,8 @@ export const CollectBody = styled.div`
   border-radius: 24px;
   background: #FFF;
   padding: 40px;
-  margin-top: 56px;
-  margin-bottom: 56px;
+  margin-top: 52px;
+  margin-bottom: 52px;
 `
 
 export const TitleWrap = styled.div`
@@ -30,7 +30,7 @@ export const TitleWrap = styled.div`
 
 export const LabelText = ({ children }: { children: React.ReactElement | string}) => {
   return (
-    <div className='text-[rgba(0,0,0,0.40)] text-[16px] font-fsemibold '>{ children }</div>
+    <div className='text-[rgba(0,0,0,0.50)] text-[14px] font-fsemibold '>{ children }</div>
   )
 }
 

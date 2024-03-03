@@ -124,9 +124,13 @@ export default function RightMenu() {
         // } else {
         //   router.push('/project/swap')
         // }
-        router.push(`/project/${router.query.action}`)
+        if (router.query.action === 'collect') {
+          router.push('/project/create')
+        } else {
+          router.push(`/project/${router.query.action}`)
+        }
       } else if (router.pathname === '/collect/[[...id]]') {
-        router.push('/project/swap')
+        router.push('/project/create')
       } else if (router.pathname === '/create') {
         router.push('/user/collect')
       }
@@ -249,7 +253,7 @@ export default function RightMenu() {
               onClick={() => handleClick('completed')}
             />
             <MenuLine />
-            <MenuItem icon='/images/airdrop/completed.svg' text='Invitation code' isProjectMode={isProjectMode} 
+            <MenuItem icon='/images/airdrop/invite.svg' text='Invitation code' isProjectMode={isProjectMode} 
               onClick={() => handleClick('invite')}
             />
           </div>

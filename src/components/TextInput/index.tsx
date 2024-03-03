@@ -64,7 +64,7 @@ export const Input = React.memo(function InnerInput({
       value={value}
       onChange={event => {
         // replace commas with periods, because uniswap exclusively uses period as the decimal separator
-        enforcer(event.target.value.replace(/,/g, '.'))
+        enforcer(event.target.value)
       }}
       // universal input options
       inputMode="decimal"

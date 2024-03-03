@@ -16,10 +16,14 @@ import CurrencyLogo from '../../components/CurrencyLogo'
 import { useRouter } from 'next/router'
 import { othersContracts } from '../../constants/contractsLocal'
 import ContractABI from './ContractABI'
-import { isAddress } from '../../utils'
+import { formatInput, isAddress } from '../../utils'
 import { useCreateContractABI } from '../../state/airdrop/hooks'
 
-let globalApproveCount = 0
+// ["airdrop 01","Social"]
+// ["0x8797847c9d63D8Ed9C30B058F408d4257A33B76C","0x8797847c9d63D8Ed9C30B058F408d4257A33B76C"]
+// ["100000000","1000000000000000000"]
+// 176890023123
+
 
 let globalApproveList: string[] = ['usdt', 'label']
 
@@ -106,9 +110,19 @@ export default function Create() {
   }, [verifying, setVerifying])
 
   const [funName, setFunName] = useState(contractABI[0] ? contractABI[0].value : '')
+  const [parameter, setParameter] = useState(contractABI[0] ? contractABI[0].inputs : [])
+  const handleParameterChange = useCallback((val, index) => {
+    parameter[index].value = val
+    setParameter(parameter)
+  }, [parameter, setParameter])
+
   const handleChangeFun = useCallback((data: any) => {
     setFunName(data.value)
-  }, [setFunName])
+    setParameter(data.inputs)
+  }, [setFunName, setParameter])
+
+const [ladningPage, setLandingPage] = useState('')
+
 
   useEffect(() => {
     if (contractABI.length > 0) {
@@ -186,7 +200,7 @@ export default function Create() {
 
   useEffect(() => {
     return () => {
-      handleUpdateContractABI([])
+      // handleUpdateContractABI([])
     }
   }, [])
 
@@ -329,9 +343,9 @@ export default function Create() {
               </div>
             </div>
           </ItemBox> */}
-          <ItemBox width={664} height={244}>
+          <ItemBox width={664} height={244} style={{paddingRight: 0}}>
             <div className=' flex flex-col justify-between items-stretch h-full'>
-              <div>
+              <div className='h-[200px] overflow-auto pr-4'>
                 <div className='flex w-full'>
                   <div className=' shrink-0'>
                     <ItemTitle>Chain</ItemTitle>
@@ -381,20 +395,91 @@ export default function Create() {
                   chain && contractAddress && contractABI.length > 0 &&
                   <>
                     <div className='flex w-full mt-4'>
-                    <div className=' shrink-0 w-[300px]'>
-                      <ItemTitle>Function</ItemTitle>
-                      <div className='mt-2 font-fmedium'>
-                        <SelectChain defaultValue={contractABI[0]} options={contractABI} onChange={handleChangeFun} />
+                      <div className=' shrink-0 w-[300px]'>
+                        <ItemTitle>Function</ItemTitle>
+                        <div className='mt-2 font-fmedium'>
+                          <SelectChain defaultValue={contractABI[0]} options={contractABI} onChange={handleChangeFun} />
+                        </div>
+                      </div>
+                      
+                      
+                    </div>
+                    
+                    <div className='mt-1 flex items-center text-[12px] text-[rgba(0,0,0,0.60)]'>
+                      <LazyImage className='mr-1' src='/images/airdrop/info.svg' />
+                      <div className=' '>Function must call ‘Inferer Airdrop Interface’. Check API document</div>
+                      <LazyImage className='mx-1 cursor-pointer' src='/images/airdrop/link5.svg' />
+                      <div> for more details.</div>
+                    </div>
+
+                    <div className=' shrink-0 w-full mt-4 pb-1'>
+                      <ItemTitle>Parameter</ItemTitle>
+                      <div className='mt-3'>
+                        {
+                          parameter.map((pv, index) => {
+                            return (
+                              <div key={pv.name} className='flex justify-between items-center mb-3'>
+                                <div className=' w-full flex items-center'>
+                                  <LazyImage src='/images/airdrop/param.svg' />
+                                  <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>{pv.name} ({pv.type})</div>
+                                </div>
+                                <div className='w-[300px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
+                                  <TextInput  
+                                    color='rgba(0,0,0,0.40)'
+                                    fontSize='13px'
+                                    value={parameter[index].pValue} 
+                                    onUserInput={value => {
+                                      handleParameterChange(value, index)
+                                    }} 
+                                  />
+                                </div>
+                              </div>
+                            )
+                          })
+                        }
+                        
+                        {/* <div className='flex justify-between items-center mb-3'>
+                          <div className=' w-full flex items-center'>
+                            <LazyImage src='/images/airdrop/param.svg' />
+                            <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>_stakingAddress (address)</div>
+                          </div>
+                          <div className='w-[300px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
+                            <TextInput  
+                              color='rgba(0,0,0,0.40)'
+                              fontSize='13px'
+                              value={''} 
+                              onUserInput={value => {
+
+                              }} 
+                            />
+                          </div>
+                        </div>
+                        <div className='flex justify-between items-center mb-3'>
+                          <div className=' w-full flex items-center'>
+                            <LazyImage src='/images/airdrop/param.svg' />
+                            <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>_depositCalldata (bytes)</div>
+                          </div>
+                          <div className='w-[300px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
+                            <TextInput  
+                              color='rgba(0,0,0,0.40)'
+                              fontSize='13px'
+                              value={''} 
+                              onUserInput={value => {
+
+                              }} 
+                            />
+                          </div>
+                        </div> */}
+                        
                       </div>
                     </div>
-                    <div className='mx-[51px]'>
-                      <div className='mt-1'>
-                        <LazyImage src='/images/airdrop/to.svg' />
-                      </div>
-                    </div>
-                    <div className='shrink-0'>
+                    <div className='shrink-0 mt-4'>
                       <ItemTitle>Offer per unit</ItemTitle>
-                      <div className='mt-2'>
+                      <div className='mt-3 flex items-center'>
+                        <LazyImage src='/images/airdrop/card_from.svg' className='' />
+                        <div className='ml-[40px] mr-[30px]'>
+                          <LazyImage src='/images/airdrop/to.svg' className='' />
+                        </div>
                         <div className='flex items-center justify-between font-fsemibold text-[14px] h-[44px] py-3 px-4 bg-[rgba(85,123,241,0.02)] rounded-[8px]'>
                           <div>{TWITTER_UNIT[action]} x</div>
                           <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
@@ -406,13 +491,22 @@ export default function Create() {
                         </div>
                       </div>
                     </div>
+                    <div className='shrink-0 mt-4'>
+                      <ItemTitle>Landing Page</ItemTitle>
+                      <div className='mt-3 flex items-center'>
+                        <div className='w-full shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
+                          <TextInput  
+                            color='rgba(0,0,0,0.40)'
+                            fontSize='13px'
+                            value={ladningPage} 
+                            onUserInput={value => {
+                              setLandingPage(value)
+                            }} 
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className='mt-1 flex items-center text-[12px] text-[rgba(0,0,0,0.60)]'>
-                      <LazyImage className='mr-1' src='/images/airdrop/info.svg' />
-                      <div className=' '>Function must call ‘Inferer Airdrop Interface’. Check API document</div>
-                      <LazyImage className='mx-1 cursor-pointer' src='/images/airdrop/link5.svg' />
-                      <div> for more details.</div>
-                    </div>
+                    
                   </>
                 }
                 
@@ -519,10 +613,10 @@ export default function Create() {
                   setErrorCode(-1)
                   return
                 }
-                const _content = contractAddress.toLowerCase() + '.' + (funName ? funName : contractABI[0].value)
+                const _content = contractAddress.toLowerCase() + '|' + (funName ? funName : contractABI[0].value)
                 console.log(chain, contractAddress, funName, TWITTER_UNIT[action], _content)
                 // return
-                handleCreateAirdrop(name, label, duration, channel, action, TWITTER_UNIT[action], _content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB)
+                handleCreateAirdrop(name, label, duration, channel, action, TWITTER_UNIT[action], _content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, chain, parameter, ladningPage)
               }}
             >
               <div className='btn-text'>

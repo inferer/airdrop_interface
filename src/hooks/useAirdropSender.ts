@@ -19,6 +19,7 @@ import { Field } from '../state/swap/actions'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../state'
 import { IABIItem, updateCreateContractABI } from '../state/airdrop/actions'
+import { formatInput } from '../utils'
 
 
 export function useCreateCallback(
@@ -119,20 +120,34 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
     unint: string,
     content: string,
     lockedAmountA: string,
-    lockedAmountB: string
+    lockedAmountB: string,
+    chain: string,
+    parameter: any[],
+    ladningPage: string
   ) => {
     if (airdropSender && account && lockedToken) {
       setCreateStatus(1)
+      console.log(content, lockedAmountA, lockedAmountB, chain, parameter, ladningPage)
+      try {
+        const params = parameter.map(item => {
+          return formatInput(item.value, item.type)
+        })
+        console.log(params)
+      } catch (err) {
+
+      }
+      const paramStr = JSON.stringify(parameter.map(item => ({name: item.name, type: item.type, value: item.value})))
+      const _content = content + '|' + chain + '|' + paramStr + '|' + ladningPage
       const isETH = lockedToken === ETHER
-      const baseInfo = [name, label, channel, action, content]
+      const baseInfo = [name, label, channel, action, _content]
       const route = args[2]
       console.log(lockedAmountA, lockedAmountB, args[1], unint)
       const offer_label_token = [isETH ? ethers.constants.AddressZero : lockedToken.address, route[0], route[route.length - 1], account]
       const offer_label_locked = [lockedAmountA, lockedAmountB, args[1], unint]
       const duration = parseInt(_duration) * 24 * 60 * 60
-      
-      console.log(baseInfo, offer_label_token, offer_label_locked, duration, content, lockedAmountA, lockedAmountB)
+      console.log(baseInfo, offer_label_token, offer_label_locked, duration)
       let gasLimit = '5000000'
+      
 
       try {
         const gasEstimate = await airdropSender.estimateGas['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, 

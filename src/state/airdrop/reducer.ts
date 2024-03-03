@@ -1,6 +1,8 @@
 import { createReducer } from '@reduxjs/toolkit'
 import { IAirdrop, IAlgAirdrop, updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed, updateUserAlgAirdropList, updateUserLabelScore, updateMaxUnits, updateAirTokenPercent, updateProjectLabelLocked, TokenLocked, updateProjectUSDTLocked, updateUserAlgTokenLocked, updateUserAirdropConfirmedByTaskId, updateProjectAirdropList, updateUserDepositBalance, updateCreateContractABI, IABIItem } from './actions'
 
+import { PROJECTDEMO_ABI } from '../../constants/projectDemo'
+
 
 export interface AirdropState {
   airdropList: IAirdrop[]

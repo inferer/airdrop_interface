@@ -20,6 +20,71 @@ export function isAddress(value: any): string | false {
   }
 }
 
+export function StringToBytes(str: string, byteSize = 32) {
+  let inputByte32 = new Uint8Array(byteSize)
+  // inputByte32.set((new TextEncoder()).encode(string))
+  const encoder = new TextEncoder();
+  encoder.encodeInto(str, inputByte32)
+  return str;
+}
+export function ArrayNumToBytes(childArray: any[], byteSize = 32) {
+  let arrayByte = childArray.map(item => {
+    if (isNaN(item)) {
+      throw "Not a number item: " + item;
+    }
+    else {
+      return Number(item);
+    }
+  })
+  let inputByte32 = new Uint8Array(byteSize)
+  if (childArray.length <= byteSize) {
+    inputByte32.set(arrayByte);
+  }
+  else {
+    //slice input
+    inputByte32.set(childArray.slice(0, byteSize));
+  }
+  return inputByte32;
+}
+
+export function formatInput(inputValue: string, inputType: string) {
+  try {
+    if (inputType.indexOf("[") > -1) {
+      if (Array.isArray(JSON.parse(inputValue))) {
+        let arrayType = inputType.slice(0, inputType.indexOf("["));
+        let arrayInput = JSON.parse(inputValue).map((item: string) => {
+          return formatInput(item, arrayType)
+        });
+        return arrayInput;
+      } else {
+        throw "Array is expected. Ex: [1,2,3]";
+      }
+    }
+    else {
+      if (inputType.indexOf("bytes") > -1) {
+        let numByte = Number(inputType.substr(5));
+        try {
+          if (Array.isArray(JSON.parse(inputValue))) {
+            return ArrayNumToBytes(JSON.parse(inputValue), numByte)
+          } else {
+            throw "treat as string";
+          }
+        } catch (e) {
+          //if error treat like string
+          return StringToBytes(inputValue, numByte);
+        }
+      } else if(inputType === 'bool') {
+        return inputValue === 'false' ? false : true
+      }
+      else {
+        return inputValue;
+      }
+    }
+  } catch (error) {
+  }
+  
+}
+
 const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
   1: '',
   11155111: 'sepolia.',

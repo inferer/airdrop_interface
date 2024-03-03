@@ -143,6 +143,11 @@ export function useUserDepositBalance(address: string = ethers.constants.Address
 export function useCreateContractABI() {
   const createContractABI = useSelector<AppState, AppState['airdrop']['createContractABI']>(state => state.airdrop.createContractABI)
   return useMemo(() => {
-    return createContractABI.map(item => ({ value: item.name, label: item.name, icon: '/images/airdrop/fun.svg' }))
+    return createContractABI
+      .filter(item => item.type.toLowerCase() !== 'event' && item.type.toLowerCase() !== 'constructor')
+      .map(item => {
+        const inputs = item.inputs.map(subItem => ({...subItem, value: ''}))
+        return { ...item, inputs, value: item.name, label: item.name, icon: '/images/airdrop/fun.svg'}
+      })
   }, [createContractABI])
 }

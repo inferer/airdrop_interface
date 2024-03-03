@@ -73,16 +73,16 @@ const Select: React.FC<{
 }
 
 export const SelectChain: React.FC<{
-  defaultValue: {[key: string]: string},
-  options: {[key: string]: string}[],
-  onChange?: (data: {[key: string]: string}) => void
+  defaultValue: any,
+  options: any[],
+  onChange?: (data: any) => void
 }> = ({
   defaultValue,
   options,
   onChange
 }) => {
   const [showOptions, setShowOptions] = useState(false)
-  const [current, setCurrent] = useState<{[key: string]: string}>({})
+  const [current, setCurrent] = useState<any>({})
   const handleClick = useCallback(async (e) => {
     e.stopPropagation()
     e.preventDefault()

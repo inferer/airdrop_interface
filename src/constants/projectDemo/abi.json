@@ -85,5 +85,33 @@
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string[]",
+        "name": "_baseInfo",
+        "type": "string[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "_offer_label_token",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_offer_label_locked",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint64",
+        "name": "_duration",
+        "type": "uint64"
+      }
+    ],
+    "name": "createAirdrop",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
   }
 ]
