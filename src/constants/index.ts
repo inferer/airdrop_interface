@@ -177,7 +177,7 @@ export const BETTER_TRADE_LINK_THRESHOLD = new Percent(JSBI.BigInt(75), JSBI.Big
 
 export const API_ROOT = process.env.NEXT_PUBLIC_API_ROOT
 
-export const USER_POOL_SERVICE_ROOT = process.env.USER_POOL_SERVICE_ROOT
+export const USER_POOL_SERVICE_ROOT = process.env.NEXT_PUBLIC_USER_POOL_SERVICE_ROOT
 
 export enum UserRoleMode {
   PROJECT,

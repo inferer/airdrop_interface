@@ -36,9 +36,9 @@ export const getAccountProof = async (account: string, label: string) => {
   // const res = await fetcher(`/api/airdrop/getTokenProof`, { account, label })
   const res = await userPoolSrvcFetcher(`/api/userpool/getTokenProof`, { account, label })
   if (res.code === 0 && res.data) {
-    return res.data.hexProof || []
+    return res.data.hexProof
   }
-  return []
+  return null
 }
 
 
@@ -141,7 +141,7 @@ export function useAirdropTokenScore() {
       try {
         const proof = await getAccountProof(account, _label)
         // const {elementIndex,elementHash,siblingsHashes,peaksHashes,elementsCount} = proof;
-        if (proof.siblingsHashes.length > 0) {
+        if (proof && proof.elementHash) {
           // const tx = await airdropTokenScore.claimToken(tokenAddress, score * 100, proof)
           const tx = await airdropTokenScore.claimToken(
             tokenAddress,
