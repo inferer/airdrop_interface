@@ -57,7 +57,7 @@ const AirdropConfirm: React.FC<{
   }, [approvalState])
 
   const contentJson = useMemo(() => {
-    let obj = {
+    let obj: any = {
       contractAddress: '',
       functionName: '',
       chain: '',
@@ -66,13 +66,14 @@ const AirdropConfirm: React.FC<{
     }
     if (airdrop.content) {
       console.log(airdrop.content)
-      const contentArr = airdrop.content.split('|')
+      const contentArr = airdrop.content.split('.')
       obj.contractAddress = contentArr[0]
       obj.functionName = contentArr[1]
-      obj.chain = contentArr[2]
-      obj.parameter = JSON.parse(contentArr[3])
-      obj.landingPage = contentArr[4]
     }
+    obj.chain = airdrop.chain ?? ''
+    obj.landingPage = airdrop.landingPage ?? ''
+    obj.parameter = airdrop.parameterInfo ?? []
+
     return obj
   }, [airdrop])
 
@@ -274,7 +275,7 @@ const AirdropConfirm: React.FC<{
                           <LazyImage src='/images/airdrop/param.svg' />
                           <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>{item.name} ({item.type})</div>
                         </div>
-                        <div className='w-[300px] shrink-0 overflow-auto rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px] text-[13px] text-[rgba(0,0,0,0.40)]'>
+                        <div className='w-[300px] whitespace-nowrap shrink-0 overflow-auto rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px] text-[13px] text-[rgba(0,0,0,0.40)]'>
                           {item.value}
                         </div>
                       </div>
@@ -388,7 +389,7 @@ const AirdropConfirm: React.FC<{
           </ButtonSwapUser> : null
         }
         {
-          !approveLoading && approvalState === ApprovalState.APPROVED && airdrop.channel !== 'contract' && 
+          !approveLoading && approvalState === ApprovalState.APPROVED && 
           <ButtonSwapUser 
             onClick={e => {
               e.stopPropagation()
@@ -403,7 +404,7 @@ const AirdropConfirm: React.FC<{
             </div>
           </ButtonSwapUser>
         }
-        {
+        {/* {
           !approveLoading && approvalState === ApprovalState.APPROVED && airdrop.channel === 'contract' && 
           <ButtonSwapUser 
             onClick={e => {
@@ -418,7 +419,7 @@ const AirdropConfirm: React.FC<{
               }
             </div>
           </ButtonSwapUser>
-        }
+        } */}
           
         </div>
       </div>

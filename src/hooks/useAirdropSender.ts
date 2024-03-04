@@ -136,10 +136,11 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       } catch (err) {
 
       }
-      const paramStr = JSON.stringify(parameter.map(item => ({name: item.name, type: item.type, value: item.value})))
-      const _content = content + '|' + chain + '|' + paramStr + '|' + ladningPage
+      const parameterType = JSON.stringify(parameter.map(item => ({name: item.name, type: item.type})))
+      const parameterValue = parameter.map(item =>(item.type === 'address' ? item.value.toLowerCase() : item.value)).join('|')
+      const _content = chain + '|' + parameterType + '|' + ladningPage
       const isETH = lockedToken === ETHER
-      const baseInfo = [name, label, channel, action, _content]
+      const baseInfo = [name, label, channel, action, content, _content, parameterValue]
       const route = args[2]
       console.log(lockedAmountA, lockedAmountB, args[1], unint)
       const offer_label_token = [isETH ? ethers.constants.AddressZero : lockedToken.address, route[0], route[route.length - 1], account]

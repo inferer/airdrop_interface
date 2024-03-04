@@ -1,4 +1,4 @@
-import router from 'next/router'
+import router, { useRouter } from 'next/router'
 import { BigNumber } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useCallback, useMemo, useState } from 'react'
@@ -239,8 +239,11 @@ export function useProjectContractDemo() {
       setConfirmStatus(1)
       let gasLimit = '5000000'
       
+      const inviteAddress = '0x70997970c51812dc3a010c7d01b50e0d17dc79c8'.toLowerCase()
+      const inviteNo = 1
+      const shareUrl = 'https://twitter.com/intent/like?tweet_id=1720373913576952121'
       try {
-        const gasEstimate = await contractDemo.estimateGas['comment']()
+        const gasEstimate = await contractDemo.estimateGas['share'](inviteAddress, inviteNo, shareUrl, 5)
         gasLimit = gasEstimate.toString()
       } catch (error: any) {
         console.log(error)
@@ -251,7 +254,7 @@ export function useProjectContractDemo() {
         return
       }
       try {
-        const tx = await contractDemo.comment({ gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await contractDemo.share(inviteAddress, inviteNo, shareUrl, 5, { gasPrice: '1000000000', gasLimit: gasLimit })
         const receipt = await tx.wait()
         if (receipt.status) {
           handleShow({ type: 'success', content: `Success.`, title: 'Success' })

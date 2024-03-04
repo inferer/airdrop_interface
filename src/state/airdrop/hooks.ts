@@ -146,7 +146,7 @@ export function useCreateContractABI() {
     return createContractABI
       .filter(item => item.type.toLowerCase() !== 'event' && item.type.toLowerCase() !== 'constructor')
       .map(item => {
-        const inputs = item.inputs.map(subItem => ({...subItem, value: ''}))
+        const inputs = item.inputs.filter(item => item.name !== '_taskId').map(subItem => ({...subItem, value: ''}))
         return { ...item, inputs, value: item.name, label: item.name, icon: '/images/airdrop/fun.svg'}
       })
   }, [createContractABI])

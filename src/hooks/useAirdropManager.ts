@@ -99,7 +99,11 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
       const expireOnTimestamp = Number(airdrop[5].toString()) * 1000 + Number(airdrop[4].toString()) * 1000
       const _labelLocked = (Number(airdrop[3][2]) / (10 ** (labelTokenData?.decimals ?? 18))).toFixed(4)
       const _claimed = (Number(airdrop[6].toString()) / (10 ** (labelTokenData?.decimals ?? 18))).toFixed(4)
-      
+
+      const _otherContent = airdrop[1][5] ? airdrop[1][5].split('|') : []
+      const parameterType = _otherContent[1] ? JSON.parse(_otherContent[1] ?? '""') : []
+      const parameterValue = airdrop[1][6] ? airdrop[1][6].split('|') : []
+      const parameterInfo = parameterType.map((item: any, index: number) => ({...item, value: parameterValue[index] }))
       const tempData: any = {
         airdropId: airdrop[0].toString(),
         name: airdrop[1][0],
@@ -107,6 +111,9 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
         channel: airdrop[1][2],
         action: airdrop[1][3],
         content: airdrop[1][4],
+        chain: _otherContent[0],
+        landingPage: _otherContent[2],
+        parameterInfo: parameterInfo,
         offerToken: {
           ...offerTokenData,
         },
@@ -161,7 +168,6 @@ export const getUserAirdropConfirmed = async (multi: Contract, account: string) 
 
 export const getUserAirdropConfirmed2 = async (airdropManager: Contract, account: string) => {
   const userAirdropConfirmed = await airdropManager.getUserAirdropConfirmed(account)
-  console.log(userAirdropConfirmed)
   return userAirdropConfirmed && userAirdropConfirmed[0] ? userAirdropConfirmed.map((item: any) => {
     const tempItem = item
     const labelTokenData = getLabelTokenByAddress(tempItem[7])

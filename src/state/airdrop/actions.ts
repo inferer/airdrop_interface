@@ -23,7 +23,10 @@ export interface IAirdrop {
   claimed: string,
   completed?: boolean,
   accountScore?: number
-  airAmount?: number
+  airAmount?: number,
+  chain?: string,
+  landingPage?: string,
+  parameterInfo?: any[]
 }
 export interface IAlgAirdrop {
   claimed: string,

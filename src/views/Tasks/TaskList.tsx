@@ -9,6 +9,7 @@ import { useActiveWeb3React } from "../../hooks";
 import { IAirdrop } from "../../state/airdrop/actions";
 import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
 import CurrencyLogo from "../../components/CurrencyLogo";
+import { openBrowser } from "../../utils";
 
 const AirdropList: React.FC<{
   onChecked?: (keys: IAirdrop[]) => void
@@ -46,10 +47,16 @@ const AirdropList: React.FC<{
         <>
           <TableHead>
             <>
-              <TableHeadCell className="flex-1 w-[250px]">
-                <div className=''><span className="">Name</span></div>
+              <TableHeadCell className="flex-1 w-[243px]">
+                <div className='flex items-center'>
+                  <div className="w-[35px]">ID</div>
+                  <span className="">Name</span>
+                </div>
               </TableHeadCell>
-              <TableHeadCell className="w-[180px] ">
+              <TableHeadCell className="w-[100px] ">
+                <div>TaskID</div> 
+              </TableHeadCell>
+              <TableHeadCell className="w-[118px] ">
                 <span>Pools</span> 
               </TableHeadCell>
               {/* <TableHeadCell className="w-[120px] ">
@@ -64,8 +71,8 @@ const AirdropList: React.FC<{
               <TableHeadCell className="w-[140px]">
                 <span>Content</span>
               </TableHeadCell>
-              <TableHeadCell className="w-[74px]">
-                <span>Complete</span>
+              <TableHeadCell className="w-[95px]">
+                <span>Landing Page</span>
               </TableHeadCell>
             </>
           </TableHead>
@@ -77,13 +84,23 @@ const AirdropList: React.FC<{
                     <TableRow key={airdrop.airdropId + index} 
                     >
                       <>
-                        <TableCell className="flex-1 w-[250px]">
-                          <div className='text-[16px] font-fsemibold text-black'>
+                        <TableCell className="flex-1 w-[243px]">
+                        <div className='flex items-center text-[16px] font-fsemibold text-black'>
+                          <div className="w-[35px]">{index + 1}</div>
+                          <div className=''>
                             <span className="">{airdrop.name}</span>
-                            <div className=" text-gray-400 text-[14px]">taskId: {airdrop.id}</div>
+                            {/* <div className=" text-gray-400 text-[14px]">taskId: {airdrop.id}</div> */}
                           </div>
+                        </div>
+                          
                         </TableCell>
-                        <TableCell className="w-[135px] ">
+                        <TableHeadCell className="w-[100px] ">
+                          <div className=" grid grid-cols-2 w-full text-[16px] font-fsemibold text-black">
+                            <div className=" text-center">{airdrop.id}</div>
+                            <div></div>
+                          </div>
+                        </TableHeadCell>
+                        <TableCell className="w-[118px] ">
                           <div className="bg-[rgba(63,60,255,0.05)] rounded-lg h-[35px] px-[8px] flex items-center justify-center text-[rgba(63,60,255,0.80)] font-fmedium text-[16px]">
                             {airdrop.label}
                           </div>
@@ -107,12 +124,20 @@ const AirdropList: React.FC<{
                             <span className=" text-[16px] font-fsemibold shrink-0">{airdrop.action}</span>
                           </div>
                         </TableCell>
-                        <TableCell className="w-[74px]">
+                        <TableCell className="w-[95px]">
                           <div className="flex justify-center w-full">
                             
-                            {
+                            {/* {
                               airdrop.completed ? <div className=" text-gray-400 text-sm">Completed</div> : <CheckedWrap airdrop={airdrop} handleChecked={handleChecked} />
-                            }
+                            } */}
+                            <div
+                              onClick={e => {
+                                e.stopPropagation()
+                                openBrowser('/contract-demo?taskId=' + airdrop.id)
+                              }}
+                            >
+                              <LazyImage src="/images/airdrop/landing.svg" className="w-[24px] h-[24px]" />
+                            </div>
                             
                           </div>
                         </TableCell>
