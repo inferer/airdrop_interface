@@ -25,7 +25,8 @@ function Collect() {
           <div className='py-3'>Contract: {othersContracts.projectContract}</div>
           <div className='py-3'>Function: comment</div>
           <div className='w-[260px] mt-10'>
-            <ButtonSwapUser 
+            <button 
+              className='border p-2'
               onClick={e => {
                 e.stopPropagation()
                 if (confirmStatus === 1) return
@@ -37,7 +38,7 @@ function Collect() {
                   confirmStatus === 1 ? <LoadingXUser /> : 'Complete Task'
                 }
               </div>
-            </ButtonSwapUser>
+            </button>
           </div>
         </div>
 

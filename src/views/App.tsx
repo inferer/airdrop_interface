@@ -48,6 +48,7 @@ const Marginer = styled.div`
 export default function App({ children }: any) {
 
   const router = useRouter()
+  console.log(router.pathname)
   const [isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
   
   // useEffect(() => {
@@ -67,9 +68,13 @@ export default function App({ children }: any) {
 
   return (
     <AppWrapper>
-      <HeaderWrapper>
-        <Header />
-      </HeaderWrapper>
+      {
+        router.pathname !== '/contract-demo' &&
+        <HeaderWrapper>
+          <Header />
+        </HeaderWrapper>
+      }
+      
       <BodyWrapper>
         <Popups />
         <PopupsNew />
