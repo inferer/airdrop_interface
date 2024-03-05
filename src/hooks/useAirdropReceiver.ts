@@ -3,16 +3,17 @@ import { BigNumber } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useCallback, useMemo, useState } from 'react'
 import { useActiveWeb3React } from './index'
-import { useAirdropReceiverContract, useContractDemoContract } from './useContract'
+import { useAirdropManagerContract, useAirdropReceiverContract, useContractDemoContract } from './useContract'
 import { useCurrency } from './Tokens'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import { useApproveCallback } from './useApproveCallback'
 import { AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury'
 import { fetcher, poster } from '../utils/axios'
-import { getAlgTokenByLabel } from '../utils/getTokenList'
+import { getAlgTokenByLabel, getLabelTokenByAddress, getUSDTTokenByAddress } from '../utils/getTokenList'
 import { useAirdropManager } from './useAirdropManager'
 import { useShowToast } from '../state/application/hooks'
 import { othersContracts } from '../constants/contractsLocal'
+import { transformTime } from '../utils'
 
 
 export const getAccountScoreProof = async (account: string, label: string) => {
@@ -232,6 +233,7 @@ export function useProjectContractDemo() {
   const [confirmStatus, setConfirmStatus] = useState(0)
   const { account } = useActiveWeb3React()
   const contractDemo: Contract | null = useContractDemoContract()
+  const airdropManager = useAirdropManagerContract()
   const { handleShow } = useShowToast()
   const router = useRouter()
 
@@ -244,7 +246,6 @@ export function useProjectContractDemo() {
       const inviteNo = 1
       const shareUrl = 'https://twitter.com/intent/like?tweet_id=1720373913576952121'
       const taskId = router.query.taskId
-      console.log(taskId)
       try {
         const gasEstimate = await contractDemo.estimateGas['share'](inviteAddress, inviteNo, shareUrl, taskId)
         gasLimit = gasEstimate.toString()
@@ -270,8 +271,64 @@ export function useProjectContractDemo() {
     }
   }, [account, contractDemo])
 
+  const [airdropInfo, setAirdropInfo] = useState<any>({})
+  // getUserAirdropConfirmedByIndex
+  const handleGetTaskInfo = useCallback(async (account: string) => {
+    if (airdropManager) {
+      const taskId = router.query.taskId
+      const taskInfo = await airdropManager.getUserAirdropConfirmedByIndex(account, taskId)
+      const airdrop = await airdropManager.getAirdrop(taskInfo.airdropId.toString())
+
+      const offerTokenData = getUSDTTokenByAddress(airdrop[2][0])
+      const labelTokenData = getLabelTokenByAddress(airdrop[2][2])
+      const subDecimals = String((10 ** (offerTokenData?.decimals ?? 18))).length - (airdrop[3][0].toString()).length
+      const _offerLocked = (Number(airdrop[3][0].toString()) / (10 ** (offerTokenData?.decimals ?? 18))).toFixed(subDecimals < 0 ?  0 : subDecimals)
+      const expireOnTimestamp = Number(airdrop[5].toString()) * 1000 + Number(airdrop[4].toString()) * 1000
+      const _labelLocked = (Number(airdrop[3][2]) / (10 ** (labelTokenData?.decimals ?? 18))).toFixed(4)
+      const _claimed = (Number(airdrop[6].toString()) / (10 ** (labelTokenData?.decimals ?? 18))).toFixed(4)
+
+      const _otherContent = airdrop[1][5] ? airdrop[1][5].split('|') : []
+      const parameterType = _otherContent[1] ? JSON.parse(_otherContent[1] ?? '""') : []
+      const parameterValue = airdrop[1][6] ? airdrop[1][6].split('|') : []
+      const parameterInfo = parameterType.map((item: any, index: number) => ({...item, value: parameterValue[index] }))
+      const tempData: any = {
+        airdropId: airdrop[0].toString(),
+        name: airdrop[1][0],
+        label: airdrop[1][1],
+        channel: airdrop[1][2],
+        action: airdrop[1][3],
+        content: airdrop[1][4],
+        chain: _otherContent[0],
+        landingPage: _otherContent[2],
+        parameterInfo: parameterInfo,
+        offerToken: {
+          ...offerTokenData,
+        },
+        offerAirToken: airdrop[2][1],
+        labelToken: {
+          ...labelTokenData
+        },
+        sender: airdrop[2][3],
+        // offerLocked: BigNumber.from(airdrop[3][0]).div(BigNumber.from((10 ** (offerTokenData?.decimals ?? 18)).toString())).toString(),
+        offerLocked: _offerLocked,
+        offerLabelLocked: BigNumber.from(airdrop[3][1]).div(BigNumber.from((10 ** (labelTokenData?.decimals ?? 1)).toString())).toString(),
+        labelLocked: _labelLocked,
+        unit: BigNumber.from(airdrop[3][3]).toString(),
+        duration: airdrop[4].toString(),
+        startTimestamp: airdrop[5].toString(),
+        expireOn: transformTime(expireOnTimestamp),
+        claimed: _claimed,
+        completed: expireOnTimestamp < Date.now() || (Number(_labelLocked) - Number(_claimed) < 1)
+      }
+      setAirdropInfo(tempData)
+    }
+
+  }, [airdropManager])
+
   return {
     handleCommentAction,
-    confirmStatus
+    confirmStatus,
+    handleGetTaskInfo,
+    airdropInfo
   }
 }
