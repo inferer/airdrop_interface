@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import {  TYPE } from '../../theme'
 import { ButtonCancel, ButtonSwap } from '../../components/Button'
 import { useActiveWeb3React } from '../../hooks'
@@ -200,9 +200,20 @@ const [ladningPage, setLandingPage] = useState('')
 
   useEffect(() => {
     return () => {
-      // handleUpdateContractABI([])
+      handleUpdateContractABI([])
     }
   }, [])
+  const functionRef = useRef<any>(null)
+  useEffect(() => {
+    if (chain && contractAddress && contractABI.length > 0) {
+
+      if (functionRef.current) {
+        setTimeout(() => {
+          functionRef.current.scrollTop = 88
+        }, 500)
+      }
+    }
+  }, [chain, contractAddress, contractABI])
 
   return (
     <CreateBody>
@@ -345,7 +356,7 @@ const [ladningPage, setLandingPage] = useState('')
           </ItemBox> */}
           <ItemBox width={664} height={244} style={{paddingRight: 0}}>
             <div className=' flex flex-col justify-between items-stretch h-full'>
-              <div className='h-[200px] overflow-auto pr-4'>
+              <div ref={functionRef} className='h-[200px] overflow-auto pr-4 function_ref'>
                 <div className='flex w-full'>
                   <div className=' shrink-0'>
                     <ItemTitle>Chain</ItemTitle>
@@ -611,6 +622,12 @@ const [ladningPage, setLandingPage] = useState('')
                 if (createStatus === 1) return
                 if (name.length <= 0) {
                   setErrorCode(-1)
+                  return
+                }
+                if (!contractAddress) {
+                  return
+                }
+                if (!funName) {
                   return
                 }
                 const _content = contractAddress.toLowerCase() + '.' + (funName ? funName : contractABI[0].value)

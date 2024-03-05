@@ -14,7 +14,7 @@ export const CollectBody = styled.div`
   border-radius: 24px;
   background: #FFF;
   padding: 40px;
-  margin-top: 52px;
+  margin-top: 36px;
   margin-bottom: 52px;
 `
 

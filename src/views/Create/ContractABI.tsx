@@ -15,7 +15,14 @@ const ContractABI: React.FC<{
   const [funList, setFunList] = useState<any[]>([])
   const onEditorChange = useCallback(async (code: string) => {
     try {
-      setFunList(eval(code) || [])
+      const codeVal = eval(code)
+      if (Array.isArray(codeVal) && codeVal.length > 0) {
+        const newList = codeVal.filter(item => item.name && item.type)
+        if (newList.length > 0) {
+          setFunList(newList)
+        }
+      }
+      
     } catch(err) {
       setFunList([])
     }
@@ -65,7 +72,7 @@ const ContractABI: React.FC<{
                   </div>
                   <div className="mt-3 border border-[rgba(85,123,241,0.10)] p-4 h-[331px] rounded-xl overflow-auto scrollbar-container">
                     {
-                      funList.map(fun => {
+                      funList.map && funList.map(fun => {
                         return (
                           <div key={fun.name} className="flex items-center mb-4">
                             <LazyImage src="/images/airdrop/fun.svg" />

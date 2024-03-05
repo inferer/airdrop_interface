@@ -4,8 +4,10 @@ import { useActiveWeb3React } from '../../hooks'
 import { LoadingXUser } from '../../components/Loader'
 import { useProjectContractDemo } from '../../hooks/useAirdropReceiver'
 import { othersContracts } from '../../constants/contractsLocal'
+import { useRouter } from 'next/router'
 
 function Collect() {
+  const router = useRouter()
   const { account } = useActiveWeb3React()
 
   const { confirmStatus, handleCommentAction, handleGetTaskInfo, airdropInfo } = useProjectContractDemo()
@@ -77,13 +79,13 @@ function Collect() {
               className='border p-2'
               onClick={e => {
                 e.stopPropagation()
-                if (confirmStatus === 1) return
-                handleCommentAction()
+                if (confirmStatus === 1 || airdropInfo.taskCompleted) return
+                handleCommentAction(airdropInfo.parameterInfo[0].value, airdropInfo.parameterInfo[1].value, airdropInfo.parameterInfo[2].value)
               }}
             >
               <div className="btn-text">
                 {
-                  confirmStatus === 1 ? <LoadingXUser /> : 'Complete Task'
+                  confirmStatus === 1 ? <LoadingXUser /> : airdropInfo.taskCompleted ? 'Has completed' : 'Complete Task'
                 }
               </div>
             </button>

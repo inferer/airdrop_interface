@@ -6,12 +6,15 @@ import { useUserAirdropConfirmedList } from "../../state/airdrop/hooks";
 import { useAirdropManager } from "../../hooks/useAirdropManager";
 import { useActiveWeb3React } from "../../hooks";
 import CurrencyLogo from "../../components/CurrencyLogo";
+import { Tooltip2 } from "../../components/Tooltip";
+import useCopyClipboard from "../../hooks/useCopyClipboard";
+import { shortenAddress } from "../../utils";
 
 const AirdropList: React.FC<{
 }> = ({
 }) => {
   const { account } = useActiveWeb3React()
-
+  const [ isCopied, staticCopy ] = useCopyClipboard()
   const { handleGetUserAirdropConfirmed } = useAirdropManager()
   const airdropList = useUserAirdropConfirmedList()
   const userConfirmedList = useMemo(() => {
@@ -29,23 +32,29 @@ const AirdropList: React.FC<{
         <>
           <TableHead>
             <>
-              <TableHeadCell className="flex-1 w-[250px]">
-                <div className=''><span className="">Name</span></div>
+              <TableHeadCell className="flex-1 w-[243px]">
+                <div className='flex items-center'>
+                  <div className="w-[35px]">ID</div>
+                  <span className="">Name</span>
+                </div>
               </TableHeadCell>
-              <TableHeadCell className="w-[200px] ">
+              <TableHeadCell className="w-[100px] ">
+                <div>TaskID</div> 
+              </TableHeadCell>
+              <TableHeadCell className="w-[118px] ">
                 <span>Pool</span> 
               </TableHeadCell>
               {/* <TableHeadCell className="w-[120px] ">
                 <span>Units</span> 
               </TableHeadCell> */}
-              <TableHeadCell className="w-[250px]">
+              <TableHeadCell className="w-[200px]">
                 <span>Rewards</span>
               </TableHeadCell>
-              <TableHeadCell className="w-[200px]">
-                <span>Expire On</span>
-              </TableHeadCell>
-              <TableHeadCell className="w-[180px]">
+              <TableHeadCell className="w-[234px]">
                 <span>Content</span>
+              </TableHeadCell>
+              <TableHeadCell className="w-[143px]">
+                <span>Expire On</span>
               </TableHeadCell>
             </>
           </TableHead>
@@ -58,12 +67,20 @@ const AirdropList: React.FC<{
                     >
                       <>
                         <TableCell className="flex-1 w-[250px]">
-                          <div className=' text-[16px] text-black'>
-                            <span className="">{airdrop.name}</span>
-                            <div className=" text-gray-400">taskId: {airdrop.id}</div>
+                          <div className='flex items-center text-[16px] font-fsemibold text-black'>
+                            <div className="w-[35px]">{index + 1}</div>
+                            <div className=''>
+                              <span className="">{airdrop.name}</span>
+                            </div>
                           </div>
                         </TableCell>
-                        <TableCell className="w-[200px] ">
+                        <TableHeadCell className="w-[100px] ">
+                          <div className=" grid grid-cols-2 w-full text-[16px] font-fsemibold text-black">
+                            <div className=" text-center">{airdrop.id}</div>
+                            <div></div>
+                          </div>
+                        </TableHeadCell>
+                        <TableCell className="w-[118px] ">
                           <div className="bg-[rgba(63,60,255,0.05)] rounded-lg h-[35px] px-[8px] flex items-center justify-center text-[rgba(63,60,255,0.80)] font-fmedium text-[16px]">
                             {airdrop.label}
                           </div>
@@ -71,22 +88,33 @@ const AirdropList: React.FC<{
                         {/* <TableCell className="w-[120px] ">
                           <span className="text-[#79D0C4] font-fmedium">2x</span> 
                         </TableCell> */}
-                        <TableCell className="w-[250px]">
+                        <TableCell className="w-[200px]">
                           <div className="flex items-center">
                             <span className="mr-2">{airdrop.airAmount} {airdrop.labelToken?.symbol}</span>
                             <CurrencyLogo currency={airdrop.labelToken} size="24" />
                           </div>
                         </TableCell>
-                        <TableCell className="w-[200px]">
-                          <span>{airdrop.expireOn}</span>
-                        </TableCell>
-                        <TableCell className="w-[180px]">
+                        <TableCell className="w-[234px]">
                           <div className="min-w-[93px] h-[36px] flex items-center rounded border border-[rgba(0,0,0,0.06)] px-2">
-                            <LazyImage src="/images/channel/twitter.svg" className=" w-5 h-5 rounded-full shrink-0" />
+                            <LazyImage src="/images/airdrop/chain_airdrop.svg" className=" w-5 h-5 rounded-full shrink-0" />
                             <div className="w-[1px] h-[14px] mx-3 bg-[rgba(0,0,0,0.06)] shrink-0"></div>
-                            <span className=" text-[16px] font-fsemibold shrink-0">{airdrop.action}</span>
+                            <div
+                              className="shrink-0"
+                              onClick={e => {
+                                e.stopPropagation()
+                                staticCopy(account || '')
+                              }}>
+                              <Tooltip2 text={isCopied ? 'Copied' : 'Copy' } >
+                                <span className=" cursor-pointer text-[16px] font-fnormal text-black">{shortenAddress(airdrop.content?.slice(0, 42))}</span>
+                              </Tooltip2>
+                            </div>
+                            
                           </div>
                         </TableCell>
+                        <TableCell className="w-[143px]">
+                          <span>{airdrop.expireOn}</span>
+                        </TableCell>
+                        
                       </>
                     </TableRow>
                   )

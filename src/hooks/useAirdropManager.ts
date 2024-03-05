@@ -226,9 +226,7 @@ export function useAirdropManager() {
     if (multi) {
       if (account) {
         let airdropIds = await getUserAirdropIds(multi, account)
-        console.log(airdropIds)
         const list = await getAirdropList(multi, airdropIds)
-        console.log(list)
         dispatch(updateProjectAirdropList({ airdropList: list as any }))
       }
       

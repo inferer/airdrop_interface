@@ -237,14 +237,14 @@ export function useProjectContractDemo() {
   const { handleShow } = useShowToast()
   const router = useRouter()
 
-  const handleCommentAction = useCallback(async () => {
+  const handleCommentAction = useCallback(async (inviteAddress: string, inviteNo: number, shareUrl: string) => {
     if (account && contractDemo) {
       setConfirmStatus(1)
       let gasLimit = '5000000'
       
-      const inviteAddress = '0x70997970c51812dc3a010c7d01b50e0d17dc79c8'.toLowerCase()
-      const inviteNo = 1
-      const shareUrl = 'https://twitter.com/intent/like?tweet_id=1720373913576952121'
+      // const inviteAddress = '0x70997970c51812dc3a010c7d01b50e0d17dc79c8'.toLowerCase()
+      // const inviteNo = 1
+      // const shareUrl = 'https://twitter.com/intent/like?tweet_id=1720373913576952121'
       const taskId = router.query.taskId
       try {
         const gasEstimate = await contractDemo.estimateGas['share'](inviteAddress, inviteNo, shareUrl, taskId)
@@ -318,7 +318,8 @@ export function useProjectContractDemo() {
         startTimestamp: airdrop[5].toString(),
         expireOn: transformTime(expireOnTimestamp),
         claimed: _claimed,
-        completed: expireOnTimestamp < Date.now() || (Number(_labelLocked) - Number(_claimed) < 1)
+        completed: expireOnTimestamp < Date.now() || (Number(_labelLocked) - Number(_claimed) < 1),
+        taskCompleted: taskInfo.completed
       }
       setAirdropInfo(tempData)
     }

@@ -196,7 +196,7 @@ const AirdropConfirm: React.FC<{
                       }
                       
                       <div className=' font-fmedium text-[#A1CEA8] ml-1'>
-                        {airdrop.offerToken?.symbol}
+                        {airdrop.labelToken?.symbol}
                       </div>
                     </div>
                   </div>
@@ -239,7 +239,7 @@ const AirdropConfirm: React.FC<{
           </div>
         </div>
         <div className="h-[335px] rounded-xl border border-[rgba(85, 123, 241, 0.1)] overflow-hidden mt-5 p-5">
-          <div className="h-[194px] overflow-auto">
+          <div className="h-[94px] overflow-auto">
             <div className=" flex ">
               <div>
                 <LabelText>Chain</LabelText>
@@ -320,7 +320,14 @@ const AirdropConfirm: React.FC<{
                 </div>
               </div>
             </div>
-            
+          </div>
+          <div className="bg-[rgba(147,205,155,0.04)] rounded-xl p-3 mt-5 text-[rgba(147,205,155,0.80)]">
+            <div className=" text-[14px] font-fsemibold leading-normal mb-2">
+              Airdrop token would be issued from contract.
+            </div>
+            <div className="text-[13px] font-fnormal leading-4">
+              Once you confirmed the airdrop, the alg-* token would be locked in protocol until the airdrop content gets done. And the alg-* token would be transformed into air-* token and transferred into your account for later trade in airdrop pools.
+            </div>
           </div>
         </div>
       </div>
