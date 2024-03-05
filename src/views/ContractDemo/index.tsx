@@ -27,7 +27,6 @@ function Collect() {
       landingPage: ''
     }
     if (airdropInfo.content) {
-      console.log(airdropInfo.content)
       const contentArr = airdropInfo.content.split('.')
       obj.contractAddress = contentArr[0]
       obj.functionName = contentArr[1]
@@ -71,7 +70,7 @@ function Collect() {
               }
             </div>
           </div>
-          <div className='py-3'>Reward: {airdropInfo.unit} {airdropInfo.labelToken.symbol}</div>
+          <div className='py-3'>Reward: {airdropInfo.unit} {airdropInfo.labelToken?.symbol}</div>
 
           <div className='w-[260px] mt-10'>
             <button 
