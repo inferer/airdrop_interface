@@ -41,11 +41,13 @@ function Collect() {
   }, [airdropInfo])
 
   return (
-    <div className='w-[1217px] mx-auto'>
+    <div className='bg-white w-full h-[100vh] fixed left-0 top-0 pt-32'>
+
+    <div className='w-[1217px] mx-auto '>
       <div>
         <div className='flex items-center mb-10'>
           <div className=' font-fsemibold text-[32px]'>
-            {'Contract Task Test'} 
+            {'Project Contract Task Test'} 
           </div>
         </div>
         <div className='px-10'>
@@ -83,9 +85,9 @@ function Collect() {
                 handleCommentAction(airdropInfo.parameterInfo[0].value, airdropInfo.parameterInfo[1].value, airdropInfo.parameterInfo[2].value)
               }}
             >
-              <div className="btn-text">
+              <div className="btn-text w-[120px]">
                 {
-                  confirmStatus === 1 ? <LoadingXUser /> : airdropInfo.taskCompleted ? 'Has completed' : 'Complete Task'
+                  confirmStatus === 1 ? 'Processing...' : airdropInfo.taskCompleted ? 'Has completed' : 'Complete Task'
                 }
               </div>
             </button>
@@ -96,6 +98,8 @@ function Collect() {
         
       </div>
     </div>
+    </div>
+
     
   )
 }

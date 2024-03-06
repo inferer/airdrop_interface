@@ -47,6 +47,41 @@ export function ArrayNumToBytes(childArray: any[], byteSize = 32) {
   return inputByte32;
 }
 
+export function verifyInput(inputValue: string, inputType: string) {
+  console.log(inputValue, inputType)
+  try {
+    if (inputType.indexOf("[") > -1) {
+      if (Array.isArray(JSON.parse(inputValue))) {
+        let arrayType = inputType.slice(0, inputType.indexOf("["));
+        let arrayInput = JSON.parse(inputValue).map((item: string) => {
+          return formatInput(item, arrayType)
+        });
+        return arrayInput;
+      } else {
+        throw "Array is expected. Ex: [1,2,3]";
+      }
+    }
+    else {
+      if (inputType.indexOf("bytes") > -1) {
+        let numByte = Number(inputType.substr(5));
+        if (inputValue.indexOf('0x')) return true
+        return false
+      } else if(inputType === 'bool') {
+        return inputValue === 'false' || inputValue === 'true' ? true : false
+      } else if (inputType === 'address') {
+        return !!isAddress(inputValue) 
+      } else if (inputType.indexOf('uint') > -1) {
+        return /^\d+$/.test(inputValue)
+      }
+      return true
+    }
+  } catch (error) {
+    return false
+  }
+  
+}
+
+
 export function formatInput(inputValue: string, inputType: string) {
   try {
     if (inputType.indexOf("[") > -1) {

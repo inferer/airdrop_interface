@@ -238,8 +238,8 @@ const AirdropConfirm: React.FC<{
             </div>
           </div>
         </div>
-        <div className="h-[335px] rounded-xl border border-[rgba(85, 123, 241, 0.1)] overflow-hidden mt-5 p-5">
-          <div className="h-[94px] overflow-auto">
+        <div className="h-[335px] rounded-xl border border-[rgba(85, 123, 241, 0.1)]  overflow-auto mt-5 p-5">
+          <div className="">
             <div className=" flex ">
               <div>
                 <LabelText>Chain</LabelText>

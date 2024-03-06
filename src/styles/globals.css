@@ -167,4 +167,11 @@ body {
   background-color: rgba(0, 0, 0, 0.08); /* 设置滑块hover状态时的背景颜色 */
 }
 
+.blue-text {
+  background: linear-gradient(96deg, #3F3CFF 0%, #6BBEE1 101.71%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 

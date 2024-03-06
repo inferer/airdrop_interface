@@ -9,14 +9,14 @@ import TextInput from '../../components/TextInput'
 import Select, { SelectChain } from './Select'
 import { useCreateAirdrop, useCreateCallback, useCreateContractAirdrop } from '../../hooks/useAirdropSender'
 import { ApprovalState } from '../../hooks/useApproveCallback'
-import { Loading, LoadingContract, LoadingX } from '../../components/Loader'
+import { Loading, LoadingContract, LoadingUint, LoadingX } from '../../components/Loader'
 import { ETHER, Token } from '@uniswap/sdk'
 import { AIRDROP_DURATION, CHANNEL_LIST, TWITTER_ACTION, TWITTER_UNIT, CONTRACT_ACTION, CHAIN_LIST } from '../../constants'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { useRouter } from 'next/router'
 import { othersContracts } from '../../constants/contractsLocal'
 import ContractABI from './ContractABI'
-import { formatInput, isAddress } from '../../utils'
+import { formatInput, isAddress, verifyInput } from '../../utils'
 import { useCreateContractABI } from '../../state/airdrop/hooks'
 
 // ["airdrop 01","Social"]
@@ -109,11 +109,22 @@ export default function Create() {
     }
   }, [verifying, setVerifying])
 
-  const [funName, setFunName] = useState(contractABI[0] ? contractABI[0].value : '')
-  const [parameter, setParameter] = useState(contractABI[0] ? contractABI[0].inputs : [])
+  const [funName, setFunName] = useState('')
+  const [parameter, setParameter] = useState<any>([])
+
+  // useEffect(() => {
+  //   if (contractABI[0]) {
+  //     setFunName(contractABI[0].value)
+  //     setParameter(contractABI[0].inputs)
+  //   }
+  // }, [contractABI])
+
   const handleParameterChange = useCallback((val, index) => {
+    const status = verifyInput(val, parameter[index].type)
+    
     parameter[index].value = val
-    setParameter(parameter)
+    parameter[index].status = Number(status)
+    setParameter([...parameter])
   }, [parameter, setParameter])
 
   const handleChangeFun = useCallback((data: any) => {
@@ -121,9 +132,7 @@ export default function Create() {
     setParameter(data.inputs)
   }, [setFunName, setParameter])
 
-const [ladningPage, setLandingPage] = useState('')
-
-
+  const [ladningPage, setLandingPage] = useState('')
   useEffect(() => {
     if (contractABI.length > 0) {
       setVerifyStatus(true)
@@ -171,6 +180,18 @@ const [ladningPage, setLandingPage] = useState('')
     return CONTRACT_ACTION
   }, [channel])
 
+  const paremeterVerify = useMemo(() => {
+    const filterList = parameter.filter((item: { status: number }) => item.status === 1)
+    return funName && filterList.length === parameter.length
+  }, [parameter, funName])
+
+  const landingPageVerify = useMemo(() => {
+    return /^(https?:\/\/)?(www\.)?([a-zA-Z0-9\-\_]+\.)+[a-zA-Z]{2,}(\/.*)?$/.test(ladningPage)
+  }, [ladningPage])
+
+  const [verifyUint, setVerifyUint] = useState(0)
+
+
   const contractTip = useMemo(() => {
     let tip = {
       num: 1,
@@ -188,15 +209,33 @@ const [ladningPage, setLandingPage] = useState('')
         text: 'Please fill contract ABI for verification'
       }
     }
-    if (chain && contractAddress && contractABI.length > 0) {
+    if (chain && contractAddress && contractABI.length > 0 && !funName) {
       tip = {
         num: 4,
-        text: 'Please select the target function and check the calculated offer per unit'
+        text: 'Please select the target function'
+      }
+    }
+    if (chain && contractAddress && contractABI.length > 0 && funName && parameter.length > 0 && !paremeterVerify) {
+      tip = {
+        num: 5,
+        text: 'Please fill in the required parameters'
+      }
+    }
+    if (chain && contractAddress && contractABI.length > 0 && funName && paremeterVerify) {
+      tip = {
+        num: 6,
+        text: 'Please fill in the required landing page'
+      }
+    }
+    if (chain && contractAddress && contractABI.length > 0 && funName && paremeterVerify && landingPageVerify) {
+      tip = {
+        num: 7,
+        text: 'Please check the calculated offer per unit'
       }
     }
     return tip
 
-  }, [chain, contractAddress, contractABI, verifyStatus, isAddress])
+  }, [chain, contractAddress, contractABI, verifyStatus, isAddress, funName, parameter, paremeterVerify, landingPageVerify])
 
   useEffect(() => {
     return () => {
@@ -214,6 +253,19 @@ const [ladningPage, setLandingPage] = useState('')
       }
     }
   }, [chain, contractAddress, contractABI])
+
+  const createDisabled = useMemo(() => {
+    return !name || !chain || !isAddress(contractAddress) || (!funName && !contractABI[0]) || !paremeterVerify || !landingPageVerify
+  }, [name, chain, contractAddress, funName, contractABI, paremeterVerify, landingPageVerify])
+
+  useEffect(() => {
+    if (createDisabled) {
+      setVerifyUint(1)
+      setTimeout(() => {
+        setVerifyUint(2)
+      }, 1000)
+    }
+  }, [createDisabled])
 
   return (
     <CreateBody>
@@ -354,9 +406,9 @@ const [ladningPage, setLandingPage] = useState('')
               </div>
             </div>
           </ItemBox> */}
-          <ItemBox width={664} height={244} style={{paddingRight: 0}}>
+          <ItemBox width={664} height={385} style={{paddingRight: 0}}>
             <div className=' flex flex-col justify-between items-stretch h-full'>
-              <div ref={functionRef} className='h-[200px] overflow-auto pr-4 function_ref'>
+              <div ref={functionRef} className={`h-[320px] overflow-auto pr-4 function_ref ${contractABI.length > 0 ? 'pb-[0px]' : ''}`}>
                 <div className='flex w-full'>
                   <div className=' shrink-0'>
                     <ItemTitle>Chain</ItemTitle>
@@ -409,7 +461,7 @@ const [ladningPage, setLandingPage] = useState('')
                       <div className=' shrink-0 w-[300px]'>
                         <ItemTitle>Function</ItemTitle>
                         <div className='mt-2 font-fmedium'>
-                          <SelectChain defaultValue={contractABI[0]} options={contractABI} onChange={handleChangeFun} />
+                          <SelectChain defaultValue={{}} options={contractABI} onChange={handleChangeFun} />
                         </div>
                       </div>
                       
@@ -422,102 +474,148 @@ const [ladningPage, setLandingPage] = useState('')
                       <LazyImage className='mx-1 cursor-pointer' src='/images/airdrop/link5.svg' />
                       <div> for more details.</div>
                     </div>
-
-                    <div className=' shrink-0 w-full mt-4 pb-1'>
-                      <ItemTitle>Parameter</ItemTitle>
-                      <div className='mt-3'>
-                        {
-                          parameter.map((pv, index) => {
-                            return (
-                              <div key={pv.name} className='flex justify-between items-center mb-3'>
-                                <div className=' w-full flex items-center'>
-                                  <LazyImage src='/images/airdrop/param.svg' />
-                                  <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>{pv.name} ({pv.type})</div>
+                    {
+                      parameter.length > 0 && 
+                        <div className=' shrink-0 w-full mt-4 pb-1'>
+                        <ItemTitle>Parameter</ItemTitle>
+                        <div className='mt-3'>
+                          {
+                            parameter.map((pv: any, index: number) => {
+                              return (
+                                <div key={pv.name} className='flex justify-between items-center mb-3'>
+                                  <div className=' w-full flex items-center'>
+                                    <LazyImage src='/images/airdrop/param.svg' />
+                                    <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>{pv.name} ({pv.type})</div>
+                                  </div>
+                                  <div className='w-[348px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 mx-3 flex items-center h-[32px]'>
+                                    <TextInput  
+                                      color='rgba(0,0,0,0.40)'
+                                      fontSize='13px'
+                                      value={parameter[index].pValue} 
+                                      onUserInput={value => {
+                                        handleParameterChange(value, index)
+                                      }} 
+                                    />
+                                  </div>
+                                  <div className=' shrink-0'>
+                                    <LazyImage2 src={pv.status ? '/images/airdrop/status_1.svg' : '/images/airdrop/status_0.svg'} />
+                                  </div>
                                 </div>
-                                <div className='w-[300px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
-                                  <TextInput  
-                                    color='rgba(0,0,0,0.40)'
-                                    fontSize='13px'
-                                    value={parameter[index].pValue} 
-                                    onUserInput={value => {
-                                      handleParameterChange(value, index)
-                                    }} 
-                                  />
-                                </div>
-                              </div>
-                            )
-                          })
-                        }
-                        
-                        {/* <div className='flex justify-between items-center mb-3'>
-                          <div className=' w-full flex items-center'>
-                            <LazyImage src='/images/airdrop/param.svg' />
-                            <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>_stakingAddress (address)</div>
-                          </div>
-                          <div className='w-[300px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
-                            <TextInput  
-                              color='rgba(0,0,0,0.40)'
-                              fontSize='13px'
-                              value={''} 
-                              onUserInput={value => {
+                              )
+                            })
+                          }
+                          
+                          {/* <div className='flex justify-between items-center mb-3'>
+                            <div className=' w-full flex items-center'>
+                              <LazyImage src='/images/airdrop/param.svg' />
+                              <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>_stakingAddress (address)</div>
+                            </div>
+                            <div className='w-[300px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
+                              <TextInput  
+                                color='rgba(0,0,0,0.40)'
+                                fontSize='13px'
+                                value={''} 
+                                onUserInput={value => {
 
-                              }} 
-                            />
+                                }} 
+                              />
+                            </div>
                           </div>
+                          <div className='flex justify-between items-center mb-3'>
+                            <div className=' w-full flex items-center'>
+                              <LazyImage src='/images/airdrop/param.svg' />
+                              <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>_depositCalldata (bytes)</div>
+                            </div>
+                            <div className='w-[300px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
+                              <TextInput  
+                                color='rgba(0,0,0,0.40)'
+                                fontSize='13px'
+                                value={''} 
+                                onUserInput={value => {
+
+                                }} 
+                              />
+                            </div>
+                          </div> */}
+                          
                         </div>
-                        <div className='flex justify-between items-center mb-3'>
-                          <div className=' w-full flex items-center'>
-                            <LazyImage src='/images/airdrop/param.svg' />
-                            <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>_depositCalldata (bytes)</div>
-                          </div>
-                          <div className='w-[300px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
-                            <TextInput  
-                              color='rgba(0,0,0,0.40)'
-                              fontSize='13px'
-                              value={''} 
-                              onUserInput={value => {
-
-                              }} 
-                            />
-                          </div>
-                        </div> */}
-                        
-                      </div>
                     </div>
-                    <div className='shrink-0 mt-4'>
-                      <ItemTitle>Offer per unit</ItemTitle>
-                      <div className='mt-3 flex items-center'>
-                        <LazyImage src='/images/airdrop/card_from.svg' className='' />
-                        <div className='ml-[40px] mr-[30px]'>
-                          <LazyImage src='/images/airdrop/to.svg' className='' />
-                        </div>
-                        <div className='flex items-center justify-between font-fsemibold text-[14px] h-[44px] py-3 px-4 bg-[rgba(85,123,241,0.02)] rounded-[8px]'>
-                          <div>{TWITTER_UNIT[action]} x</div>
-                          <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
-                            <CurrencyLogo currency={outputAmount?.currency} size={'20px'} />
-                            <div className=' font-fmedium text-[#A1CEA8] ml-1'>
-                              {outputAmount?.currency?.symbol}
+                    }
+                    
+                    {
+                      paremeterVerify && 
+                        <div className='shrink-0 mt-4'>
+                          <ItemTitle>Landing Page</ItemTitle>
+                          <div className='mt-3 flex items-center'>
+                            <div className='w-[524px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
+                              <TextInput  
+                                color='rgba(0,0,0,0.40)'
+                                fontSize='13px'
+                                value={ladningPage} 
+                                onUserInput={value => {
+                                  setLandingPage(value)
+                                }} 
+                              />
+                            </div>
+                            <div className=' shrink-0 ml-3'>
+                              <LazyImage2 src={landingPageVerify ? '/images/airdrop/status_1.svg' : '/images/airdrop/status_0.svg'} />
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className='shrink-0 mt-4'>
-                      <ItemTitle>Landing Page</ItemTitle>
-                      <div className='mt-3 flex items-center'>
-                        <div className='w-full shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
-                          <TextInput  
-                            color='rgba(0,0,0,0.40)'
-                            fontSize='13px'
-                            value={ladningPage} 
-                            onUserInput={value => {
-                              setLandingPage(value)
-                            }} 
-                          />
+                    }
+                    {
+                      paremeterVerify && landingPageVerify &&
+                        <div className='shrink-0 mt-4'>
+                          <ItemTitle>Offer per unit</ItemTitle>
+                          <div className='mt-3 flex items-center cursor-pointer h-[44px]'>
+                            <div
+                              onClick={e => {
+                                e.stopPropagation()
+                                setVerifyUint(1)
+                                setTimeout(() => {
+                                  setVerifyUint(2)
+                                }, 1000)
+                              }}
+                            >
+                              <LazyImage src='/images/airdrop/card_from.svg' className='' />
+                            </div>
+
+                            {
+                              verifyUint === 1 &&
+                              <div className='ml-3'>
+                                <LoadingUint />
+                              </div>
+                            }
+                             
+                            {
+                              verifyUint === 2 && 
+                              <>
+                                <div className='ml-[40px] mr-[30px]'>
+                                  <LazyImage src='/images/airdrop/to.svg' className='' />
+                                </div>
+                                <div className='flex items-center justify-between font-fsemibold text-[14px] h-[44px] py-3 px-4 bg-[rgba(85,123,241,0.02)] rounded-[8px]'>
+                                  <div>{TWITTER_UNIT[action]} x</div>
+                                  <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
+                                    <CurrencyLogo currency={outputAmount?.currency} size={'20px'} />
+                                    <div className=' font-fmedium text-[16px] ml-1 blue-text'>
+                                      {outputAmount?.currency?.symbol}
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                              </>
+                            }
+                          </div>
                         </div>
+                    }
+                     
+                    {
+                      paremeterVerify && landingPageVerify && verifyUint === 2 && 
+                      <div className='h-[121px] bg-[rgba(123,120,255,0.06)] rounded-xl px-4 py-[18px] mt-5'>
+                        <div className=' font-fsemibold text-[#7B78FF] text-[14px] leading-normal'>Airdrop assets would be locked in contract.</div>
+                        <div className=' text-[#7B78FF] text-[13px] mt-3 leading-[18px]'>When you try to create an airdrop, the associated token assets would be locked in contract, and you would receive same amount of correspondant “Air-” tokens, which are permitted to trade in airdrop pools.</div>
                       </div>
-                    </div>
-                    
+                    }
                   </>
                 }
                 
@@ -532,10 +630,7 @@ const [ladningPage, setLandingPage] = useState('')
 
           </ItemBox>
           
-          <div className='h-[121px] bg-[rgba(123,120,255,0.06)] rounded-xl px-4 py-[18px] mt-5'>
-            <div className=' font-fsemibold text-[#7B78FF] text-base leading-normal'>Airdrop assets would be locked in contract.</div>
-            <div className=' text-[#7B78FF] text-[14px] mt-3 leading-[18px]'>When you try to create an airdrop, the associated token assets would be locked in contract, and you would receive same amount of correspondant “Air-” tokens, which are permitted to trade in airdrop pools.</div>
-          </div>
+          
         </div>
       </ItemWrap>
       <div className='flex justify-end mt-5'>
@@ -617,19 +712,11 @@ const [ladningPage, setLandingPage] = useState('')
         {
           !approveLoading && approvalState === ApprovalState.APPROVED && approvalStateLabel === ApprovalState.APPROVED &&
             <ButtonSwap 
+              disabled={createDisabled}
               onClick={e => {
                 e.stopPropagation()
                 if (createStatus === 1) return
-                if (name.length <= 0) {
-                  setErrorCode(-1)
-                  return
-                }
-                if (!contractAddress) {
-                  return
-                }
-                if (!funName) {
-                  return
-                }
+                if (createDisabled) return
                 const _content = contractAddress.toLowerCase() + '.' + (funName ? funName : contractABI[0].value)
                 console.log(chain, contractAddress, funName, TWITTER_UNIT[action], _content)
                 // return

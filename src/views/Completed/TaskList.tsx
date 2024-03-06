@@ -8,7 +8,7 @@ import { useActiveWeb3React } from "../../hooks";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import { Tooltip2 } from "../../components/Tooltip";
 import useCopyClipboard from "../../hooks/useCopyClipboard";
-import { shortenAddress } from "../../utils";
+import { openBrowser, shortenAddress } from "../../utils";
 
 const AirdropList: React.FC<{
 }> = ({
@@ -55,6 +55,9 @@ const AirdropList: React.FC<{
               </TableHeadCell>
               <TableHeadCell className="w-[143px]">
                 <span>Expire On</span>
+              </TableHeadCell>
+              <TableHeadCell className="w-[95px]">
+                <span>Landing Page</span>
               </TableHeadCell>
             </>
           </TableHead>
@@ -114,7 +117,25 @@ const AirdropList: React.FC<{
                         <TableCell className="w-[143px]">
                           <span>{airdrop.expireOn}</span>
                         </TableCell>
-                        
+                        <TableCell className="w-[95px]">
+                          <div className="flex justify-center w-full">
+                            
+                            {/* {
+                              airdrop.completed ? <div className=" text-gray-400 text-sm">Completed</div> : <CheckedWrap airdrop={airdrop} handleChecked={handleChecked} />
+                            } */}
+                            <Tooltip2 text={window.location.origin + '/contract-demo?taskId=' + airdrop.id } >
+                              <div
+                                onClick={e => {
+                                  e.stopPropagation()
+                                  openBrowser('/contract-demo?taskId=' + airdrop.id)
+                                }}
+                              >
+                                <LazyImage src="/images/airdrop/landing.svg" className="w-[24px] h-[24px]" />
+                              </div>
+                            </Tooltip2>
+                            
+                          </div>
+                        </TableCell>
                       </>
                     </TableRow>
                   )

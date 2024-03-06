@@ -90,6 +90,7 @@ const ContractABI: React.FC<{
               <ButtonCancel height="48px"
                 onClick={e => {
                   e.stopPropagation()
+                  setFunList([])
                   onClose && onClose()
                 }}
               >
