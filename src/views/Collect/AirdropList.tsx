@@ -9,12 +9,17 @@ import { getALgTokenFromAirToken, getAlgLabelTokenByAddress } from "../../utils/
 import { useActiveWeb3React } from "../../hooks";
 import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
 import { useCollectSwapInfo } from "../../state/swap/hooks";
+import { Tooltip2 } from "../../components/Tooltip";
+import { openBrowser, shortenAddress } from "../../utils";
+import CurrencyLogo from "../../components/CurrencyLogo";
+import useCopyClipboard from "../../hooks/useCopyClipboard";
 
 const AirdropList: React.FC<{
 
 }> = () => {
   const { account } = useActiveWeb3React()
   const router = useRouter()
+  const [ isCopied, staticCopy ] = useCopyClipboard()
 
   const [algToken, setAlgToken] = useState('')
 
@@ -74,23 +79,29 @@ const AirdropList: React.FC<{
         <>
           <TableHead>
             <>
-              <TableHeadCell className="flex-1 w-[300px]">
-                <div className=''>No. <span className="pl-5">Name</span></div>
+            <TableHeadCell className="flex-1 w-[243px]">
+                <div className='flex items-center'>
+                  <div className="w-[35px]">ID</div>
+                  <span className="">Name</span>
+                </div>
               </TableHeadCell>
-              <TableHeadCell className="w-[135px] ">
+              <TableHeadCell className="w-[118px] ">
                 <span>Pool</span> 
               </TableHeadCell>
-              <TableHeadCell className="w-[120px] ">
-                <span>Units</span> 
-              </TableHeadCell>
-              <TableHeadCell className="w-[200px]">
+              <TableHeadCell className="w-[126px]">
                 <span>Fund</span>
               </TableHeadCell>
-              <TableHeadCell className="w-[180px]">
+              <TableHeadCell className="w-[182px] ">
+                <span>Offer per unit</span> 
+              </TableHeadCell>
+              <TableHeadCell className="w-[234px]">
+                <span>Content</span>
+              </TableHeadCell>
+              <TableHeadCell className="w-[143px]">
                 <span>Expire On</span>
               </TableHeadCell>
-              <TableHeadCell className="w-[140px]">
-                <span>Content</span>
+              <TableHeadCell className="w-[95px]">
+                <span>Landing Page</span>
               </TableHeadCell>
             </>
           </TableHead>
@@ -106,20 +117,24 @@ const AirdropList: React.FC<{
                       }}
                     >
                       <>
-                        <TableCell className="flex-1 w-[300px]">
-                          <div className=' text-[16px] font-fsemibold text-black'>{airdrop.airdropId} <span className="pl-6">{airdrop.name}</span></div>
+                        <TableCell className="flex-1 w-[243px]">
+                          <div className=' text-[16px] font-fsemibold text-black flex items-center'>
+                            <span className='w-[35px]'>{airdrop.airdropId} </span>
+                            <span className="">{airdrop.name}</span>
+                          </div>
                         </TableCell>
-                        <TableCell className="w-[135px] ">
+                        <TableCell className="w-[118px] ">
                           <div className="bg-[rgba(63,60,255,0.05)] rounded-lg h-[35px] px-[8px] flex items-center justify-center text-[rgba(63,60,255,0.80)] font-fmedium text-[16px]">
                             {airdrop.label}
                           </div>
                         </TableCell>
-                        <TableCell className="w-[120px] ">
-                          <span className="text-[#79D0C4] font-fmedium">{airdrop.unit}x</span> 
-                        </TableCell>
-                        <TableCell className="w-[200px]">
-                          <div>
-                            <span>{airdrop.offerLocked} {airdrop.offerToken?.symbol || 'ETH' }</span>
+                        <TableCell className="w-[126px]">
+                          <div className='flex items-center'>
+                            <span className='mr-2'>{airdrop.offerLocked}</span>
+                            {
+                              airdrop.offerToken && <CurrencyLogo currency={airdrop.offerToken} />
+                            }
+                            
                             {
                               Number(airdrop.offerLabelLocked) > 0 && 
                               <>
@@ -131,14 +146,55 @@ const AirdropList: React.FC<{
                           </div>
                           
                         </TableCell>
-                        <TableCell className="w-[180px]">
+                        
+                        <TableCell className="w-[182px] ">
+                          <div className=' text-[16px] font-fnormal flex items-center'>
+                            <div>{airdrop.unit}</div>
+                            <div className='mx-2'>{airdrop.labelToken?.symbol}</div>
+                            {
+                              airdrop.labelToken && <CurrencyLogo currency={airdrop.labelToken} />
+                            }
+                            
+                          </div>
+                          {/* <span className="text-[#79D0C4] font-fmedium">{airdrop.unit}x</span>  */}
+                        </TableCell>
+                        <TableCell className="w-[234px]">
+                          <div className="min-w-[93px] h-[36px] flex items-center rounded border border-[rgba(0,0,0,0.06)] px-2">
+                            <LazyImage src="/images/airdrop/chain_airdrop.svg" className=" w-5 h-5 rounded-full shrink-0" />
+                            <div className="w-[1px] h-[14px] mx-3 bg-[rgba(0,0,0,0.06)] shrink-0"></div>
+                            <div
+                              className="shrink-0"
+                              onClick={e => {
+                                e.stopPropagation()
+                                staticCopy(account || '')
+                              }}>
+                              <Tooltip2 text={isCopied ? 'Copied' : 'Copy' } >
+                                <span className=" cursor-pointer text-[16px] font-fnormal text-black">{shortenAddress(airdrop.content?.slice(0, 42))}</span>
+                              </Tooltip2>
+                            </div>
+                            
+                          </div>
+                        </TableCell>
+                        <TableCell className="w-[143px]">
                           <span>{airdrop.expireOn}</span>
                         </TableCell>
-                        <TableCell className="w-[140px]">
-                          <div className="min-w-[93px] h-[36px] flex items-center rounded border border-[rgba(0,0,0,0.06)] px-2">
-                            <LazyImage src="/images/channel/twitter.svg" className=" w-5 h-5 rounded-full shrink-0" />
-                            <div className="w-[1px] h-[14px] mx-3 bg-[rgba(0,0,0,0.06)] shrink-0"></div>
-                            <span className=" shrink-0 text-[16px] font-fsemibold">{airdrop.action}</span>
+                        <TableCell className="w-[95px]">
+                          <div className="flex justify-center w-full">
+                            
+                            {/* {
+                              airdrop.completed ? <div className=" text-gray-400 text-sm">Completed</div> : <CheckedWrap airdrop={airdrop} handleChecked={handleChecked} />
+                            } */}
+                            <Tooltip2 text={airdrop.landingPage} >
+                              <div
+                                onClick={e => {
+                                  e.stopPropagation()
+                                  airdrop.landingPage && openBrowser(airdrop.landingPage)
+                                }}
+                              >
+                                <LazyImage src="/images/airdrop/landing.svg" className="w-[24px] h-[24px]" />
+                              </div>
+                            </Tooltip2>
+                            
                           </div>
                         </TableCell>
                       </>
