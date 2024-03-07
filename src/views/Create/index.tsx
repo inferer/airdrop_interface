@@ -245,7 +245,6 @@ export default function Create() {
   const functionRef = useRef<any>(null)
   useEffect(() => {
     if (chain && contractAddress && contractABI.length > 0) {
-
       if (functionRef.current) {
         setTimeout(() => {
           functionRef.current.scrollTop = 88
@@ -259,13 +258,27 @@ export default function Create() {
   }, [name, chain, contractAddress, funName, contractABI, paremeterVerify, landingPageVerify])
 
   useEffect(() => {
-    if (createDisabled) {
-      setVerifyUint(1)
-      setTimeout(() => {
-        setVerifyUint(2)
-      }, 1000)
-    }
+    // if (createDisabled) {
+    //   setVerifyUint(1)
+    //   setTimeout(() => {
+    //     setVerifyUint(2)
+    //   }, 1000)
+    // }
   }, [createDisabled])
+
+  useEffect(() => {
+    if (paremeterVerify && landingPageVerify && funName && contractAddress) {
+      if (functionRef.current) {
+        setTimeout(() => {
+          functionRef.current.scrollTop = 888
+        }, 300)
+        setVerifyUint(1)
+        setTimeout(() => {
+          setVerifyUint(2)
+        }, 1500)
+      }
+    }
+  }, [paremeterVerify, landingPageVerify, funName, contractAddress])
 
   return (
     <CreateBody>
@@ -489,7 +502,7 @@ export default function Create() {
                                   </div>
                                   <div className='w-[348px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 mx-3 flex items-center h-[32px]'>
                                     <TextInput  
-                                      color='rgba(0,0,0,0.40)'
+                                      color='rgba(0,0,0,0, 1)'
                                       fontSize='13px'
                                       value={parameter[index].pValue} 
                                       onUserInput={value => {
@@ -547,10 +560,12 @@ export default function Create() {
                         <div className='shrink-0 mt-4'>
                           <ItemTitle>Landing Page</ItemTitle>
                           <div className='mt-3 flex items-center'>
-                            <div className='w-[524px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
+                            <div className='w-[524px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[44px]'>
+                              <LazyImage src='/images/airdrop/landing.svg' className='mr-2' />
+
                               <TextInput  
-                                color='rgba(0,0,0,0.40)'
-                                fontSize='13px'
+                                color='rgba(0,0,0,0.80)'
+                                fontSize='14px'
                                 value={ladningPage} 
                                 onUserInput={value => {
                                   setLandingPage(value)

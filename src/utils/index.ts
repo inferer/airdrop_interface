@@ -72,6 +72,8 @@ export function verifyInput(inputValue: string, inputType: string) {
         return !!isAddress(inputValue) 
       } else if (inputType.indexOf('uint') > -1) {
         return /^\d+$/.test(inputValue)
+      } else if (inputType === 'string') {
+        return inputValue.length > 0
       }
       return true
     }
