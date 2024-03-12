@@ -5,6 +5,7 @@ import TokensPage from "../../views/Tokens";
 import TasksPage from "../../views/Tasks";
 import CompletedPage from "../../views/Completed";
 import InviteCodePage from "../../views/InviteCode";
+import AirdropDetails from "../../views/Collect/AirdropDetails";
 
 function UserPage() {
   const router = useRouter()
@@ -20,6 +21,9 @@ function UserPage() {
       return <SearchPage />
     }
     if (router.query.action === 'ongoing') {
+      if (router.query.id) {
+        return <AirdropDetails />
+      }
       return <TasksPage />
     }
     if (router.query.action === 'completed') {

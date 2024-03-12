@@ -173,5 +173,15 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.bg0006 {
+  background-color: rgba(0, 0, 0, 0);
+}
+.bg0006 .bg_left {
+  background-color: rgba(85, 123, 241, 0.06);
+}
+
+.bg0006 .bg_right {
+  background-color: rgba(85, 123, 241, 0.04);
+}
 
 

@@ -13,7 +13,7 @@ export const CollectBody = styled.div`
   margin: 0 auto;
   border-radius: 24px;
   background: #FFF;
-  padding: 40px;
+  padding: 30px;
   margin-top: 36px;
   margin-bottom: 52px;
 `

@@ -4,11 +4,11 @@ import TokensPage from "../../views/Tokens";
 import OngoingPage from "../../views/Project/Ongoing";
 import CompletedPage from "../../views/Project/Completed";
 import InviteCodePage from "../../views/InviteCode";
+import AirdropDetails from "../../views/Collect/AirdropDetails";
 
 function ProjectPage () {
   const router = useRouter()
 
-  console.log(router.pathname)
   if (
     router.query.action === 'rewards' ||
     router.query.action === 'consumption'
@@ -17,6 +17,9 @@ function ProjectPage () {
   }
   if (router.pathname === '/project/[action]') {
     if (router.query.action === 'ongoing') {
+      if (router.query.id) {
+        return <AirdropDetails />
+      }
       return <OngoingPage />
     }
     if (router.query.action === 'completed') {

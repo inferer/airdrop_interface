@@ -75,8 +75,7 @@ export const OngoingList: React.FC<{
                   return (
                     <TableRow key={airdrop.airdropId} 
                       onClick={() => {
-                        // const _algToken = getALgTokenFromAirToken(airdrop.labelToken.address)
-                        // router.push(`/collect/${algToken || _algToken}/${airdrop.airdropId}`)
+                        router.push(`/project/ongoing?id=${airdrop.airdropId}`)
                       }}
                     >
                       <>

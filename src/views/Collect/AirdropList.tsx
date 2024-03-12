@@ -92,7 +92,7 @@ const AirdropList: React.FC<{
                 <span>Fund</span>
               </TableHeadCell>
               <TableHeadCell className="w-[182px] ">
-                <span>Offer per unit</span> 
+                <span>Rewards</span> 
               </TableHeadCell>
               <TableHeadCell className="w-[234px]">
                 <span>Content</span>
