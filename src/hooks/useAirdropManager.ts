@@ -143,6 +143,29 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
 
 }
 
+export const getAirdropUserConfirmed = async (multi: Contract, airdropId: number) => {
+  const calls = []
+    calls.push({
+      address: getAirdropManagerAddress(),
+      name: 'getAirdropTaskList',
+      params: [airdropId]
+    })
+
+  const userAirdropConfirmed = await multicall(multi, AirdropManager_ABI, calls)
+  return userAirdropConfirmed[0] && userAirdropConfirmed[0][0] && userAirdropConfirmed[0][0][0] ? userAirdropConfirmed.map((item: any[]) => {
+    const tempItem = item[0][0]
+    if (tempItem) {
+      return {
+        completed: tempItem.completed,
+        airdropId: tempItem[2]?.toString(),
+        userAddress: tempItem[3],
+        amount: tempItem[4]?.toString(),
+        confirmedTimestamp: tempItem[8]?.toString()
+      }
+    }
+  }) : []
+}
+
 export const getUserAirdropConfirmed = async (multi: Contract, account: string) => {
   const calls = []
     calls.push({
@@ -258,6 +281,14 @@ export function useAirdropManager() {
     }
   }, [multi, airdropManager, account, airdropList, dispatch])
 
+  const [airdropUserConfirmed, setAirdropUserComfirmed] = useState<any[]>([])
+  const handleGetAirdropUserConfirmed = useCallback(async (airdropId: number) => {
+    if (multi && airdropManager && account) {
+      let list = await getAirdropUserConfirmed(multi, airdropId) 
+      setAirdropUserComfirmed(list)
+    }
+  }, [multi, airdropManager, account, dispatch])
+
   const handleGetUserTaskConfirmed = useCallback(async (airdropId: string) => {
     if (airdropManager && account) {
       let userTaskConfirmed = await getUserTaskConfirmed(airdropManager, airdropId, account) 
@@ -295,7 +326,9 @@ export function useAirdropManager() {
     handleUpdateUserAirdropConfirmedByTaskId,
     handleGetUserAirdropList,
     handleGetAirdropOne2,
-    handleUpdateAirdropList
+    handleUpdateAirdropList,
+    handleGetAirdropUserConfirmed,
+    airdropUserConfirmed
   }
 
 }

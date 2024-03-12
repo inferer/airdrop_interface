@@ -5,15 +5,12 @@ import {  TYPE } from '../../theme'
 import { useActiveWeb3React } from '../../hooks'
 import { CollectBody, TitleWrap } from './styleds'
 import LazyImage, { LazyImage2 } from '../../components/LazyImage'
-import router from 'next/router'
-import { useIsRoleProjectMode } from '../../state/user/hooks'
 import AirdropConfirmDetails from './AirdropConfirmDetails'
 
 function Collect() {
   const theme = useContext(ThemeContext)
   const { account } = useActiveWeb3React()
-  const isProjectMode = useIsRoleProjectMode()
-  const isAirdropConfirm = router.query.id && router.query.id[1]
+  
 
   return (
     <div className='w-[1217px] mx-auto'>

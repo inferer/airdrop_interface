@@ -48,7 +48,6 @@ export function ArrayNumToBytes(childArray: any[], byteSize = 32) {
 }
 
 export function verifyInput(inputValue: string, inputType: string) {
-  console.log(inputValue, inputType)
   try {
     if (inputType.indexOf("[") > -1) {
       if (Array.isArray(JSON.parse(inputValue))) {

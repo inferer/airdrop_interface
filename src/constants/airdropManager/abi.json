@@ -1,10 +1,5 @@
 [
   {
-    "inputs": [],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
@@ -244,6 +239,11 @@
         "internalType": "uint256",
         "name": "claimed",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "completed",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -325,6 +325,103 @@
         "type": "uint256"
       }
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "airdropUserTaskList",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "completed",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "userCompleted",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "airdropId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "userAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "algAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "airAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "algToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "airToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint64",
+        "name": "confirmedTimestamp",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint64",
+        "name": "completedTimestamp",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint64",
+        "name": "userCompletedTimestamp",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_airdropId",
+        "type": "uint256"
+      }
+    ],
+    "name": "completeAirdrop",
+    "outputs": [],
     "stateMutability": "view",
     "type": "function"
   },
@@ -451,12 +548,31 @@
     "name": "confirmTaskMulti",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "name": "contractAirdropId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -557,11 +673,74 @@
             "internalType": "uint256",
             "name": "claimed",
             "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "completed",
+            "type": "bool"
           }
         ],
         "internalType": "struct IAirdropManager.Airdrop",
         "name": "_airdrop",
         "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_airdropId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getAirdropBaseInfo",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_label",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_channel",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_action",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_content",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_hash",
+        "type": "string"
+      }
+    ],
+    "name": "getAirdropIdByHash",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_airdropId",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -586,6 +765,87 @@
         "internalType": "address",
         "name": "offerAddress",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_airdropId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getAirdropTaskList",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "completed",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "userCompleted",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "airdropId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "userAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "algAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "airAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "algToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "airToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint64",
+            "name": "confirmedTimestamp",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "completedTimestamp",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "userCompletedTimestamp",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IAirdropManager.UserTask[]",
+        "name": "_taskList",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -675,6 +935,92 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_airdropId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "getAirdropUserTaskList",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "completed",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "userCompleted",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "airdropId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "userAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "algAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "airAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "algToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "airToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint64",
+            "name": "confirmedTimestamp",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "completedTimestamp",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "userCompletedTimestamp",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IAirdropManager.UserTask[]",
+        "name": "_userTaskList",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "",
         "type": "address"
@@ -710,6 +1056,80 @@
         "internalType": "uint256[]",
         "name": "_labelAirdropIds",
         "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_source",
+        "type": "string"
+      }
+    ],
+    "name": "getSourceAirdropList",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string[]",
+            "name": "baseInfo",
+            "type": "string[]"
+          },
+          {
+            "internalType": "address[]",
+            "name": "offer_label_token",
+            "type": "address[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "offer_label_locked",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint64",
+            "name": "duration",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "startTimestamp",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint256",
+            "name": "claimed",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "completed",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct IAirdropManager.Airdrop[]",
+        "name": "_airdropList",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getSourceList",
+    "outputs": [
+      {
+        "internalType": "string[]",
+        "name": "_sourceList",
+        "type": "string[]"
       }
     ],
     "stateMutability": "view",
@@ -1031,6 +1451,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -1109,6 +1536,69 @@
     "name": "setOperator",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "sourceAirdropList",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint64",
+        "name": "duration",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint64",
+        "name": "startTimestamp",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint256",
+        "name": "claimed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "completed",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "sourceList",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -1304,24 +1794,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_tokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "withdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

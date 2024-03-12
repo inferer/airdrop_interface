@@ -4,13 +4,41 @@ import { FlexCenter, LabelText } from "./styleds";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import LazyImage from "../../components/LazyImage";
 import { openBrowser, shortenAddress } from "../../utils";
+import { Currency } from "@uniswap/sdk";
+
+const ProgressItem = ({
+  amount,
+  token
+}: {
+  amount: string,
+  token: Currency
+}) => {
+  return (
+    <div className="flex">
+      <div className="flex items-center mt-3 rounded-lg border border-[rgba(85,123,241,0.10)] h-[36px] px-[10px]">
+        <div className=" font-semibold text-[16px]">{amount}</div>
+        <div className=" font-semibold text-[16px] mx-2">x</div>
+        <div className="px-2 py-[1px] rounded flex items-center" style={{background: 'linear-gradient(96deg, rgba(63, 60, 255, 0.05) 0%, rgba(107, 190, 225, 0.05) 101.71%)'}}>
+          <CurrencyLogo currency={token} size="20px" />
+          <div className="blue-text text-[16px] font-medium ml-1">{token?.symbol}</div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const AirdropInfo = ({ 
-  airdrop
+  airdrop,
+  from = 'project',
+  confirm = false,
+  taskList
 }: {
-  airdrop: IAirdrop
+  airdrop: IAirdrop,
+  from?: string,
+  confirm?: boolean,
+  taskList?: any[]
 }) => {
-
+  console.log(airdrop)
   const contentJson = useMemo(() => {
     let obj: any = {
       contractAddress: '',
@@ -201,16 +229,66 @@ const AirdropInfo = ({
               </div>
             </div>
           </div>
-        </div>
-        <div className="bg-[rgba(147,205,155,0.04)] rounded-xl p-3 mt-5 text-[rgba(147,205,155,0.80)]">
-          <div className=" text-[14px] font-fsemibold leading-normal mb-2">
-            Airdrop token would be issued from contract.
+        </div> 
+        {
+          confirm && 
+          <div className="bg-[rgba(147,205,155,0.04)] rounded-xl p-3 mt-5 text-[rgba(147,205,155,0.80)]">
+            <div className=" text-[14px] font-fsemibold leading-normal mb-2">
+              Airdrop token would be issued from contract.
+            </div>
+            <div className="text-[13px] font-fnormal leading-4">
+              Once you confirmed the airdrop, the alg-* token would be locked in protocol until the airdrop content gets done. And the alg-* token would be transformed into air-* token and transferred into your account for later trade in airdrop pools.
+            </div>
           </div>
-          <div className="text-[13px] font-fnormal leading-4">
-            Once you confirmed the airdrop, the alg-* token would be locked in protocol until the airdrop content gets done. And the alg-* token would be transformed into air-* token and transferred into your account for later trade in airdrop pools.
-          </div>
-        </div>
+        }
+        
       </div>
+      {
+        from === 'project' && 
+        <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 py-5">
+          <div className="text-[18px] font-semibold text-black mb-4 pl-5">Progress</div>
+          <div className="">
+            <div className=" grid grid-cols-4">
+              <div className="pl-5">
+                <LabelText>Total Value Locked</LabelText>
+                <ProgressItem amount={airdrop.labelLocked} token={airdrop.labelToken} />
+              </div>
+              <div className="pl-5 flex items-center">
+                <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
+                <div>
+                  <LabelText>Consumed Value</LabelText>
+                  <ProgressItem amount={airdrop.claimed} token={airdrop.labelToken} />
+                </div>
+              </div>
+              <div className="pl-5 flex items-center">
+                <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
+                <div>
+                  <LabelText>Remaing Value</LabelText>
+                  <ProgressItem amount={String(Number(airdrop.labelLocked) - Number(airdrop.claimed))} token={airdrop.labelToken} />
+                </div>
+                
+              </div>
+              <div className="pl-5 flex items-center">
+                <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
+                <div>
+                  <LabelText>Executed Tasks</LabelText>
+                  <div className="flex">
+                    <div className="flex items-center mt-3 rounded-lg border border-[rgba(85,123,241,0.10)] h-[36px] px-[10px]">
+                      <div className=" font-semibold text-[16px]">{taskList ? taskList.length : 0}</div>
+                      <div className=" font-semibold text-[16px] mx-2">x</div>
+                      <div className="ml-1">
+                        <LazyImage src="/images/airdrop/tasks.svg" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+      
     </div>
   )
 }

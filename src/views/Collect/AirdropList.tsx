@@ -61,6 +61,8 @@ const AirdropList: React.FC<{
     return tempList
   }, [maxUnits, airdropList, accountScore, parsedAmountOUTPUT])
 
+  console.log(filterAirdropList, 1111111)
+
   useEffect(() => {
     let _algToken = ''
     if (router.query.id) {
