@@ -173,6 +173,12 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.blue-text2 {
+  background: linear-gradient(96deg, #3F3CFF 0%, #6BBEE1 101.71%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 .bg0006 {
   background-color: rgba(0, 0, 0, 0);
 }

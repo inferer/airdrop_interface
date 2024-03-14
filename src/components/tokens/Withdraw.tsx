@@ -43,7 +43,7 @@ const Withdraw = ({
   }
 
   const handleInputClick = useCallback((e) => {
-    e.stopPropagation()
+    
     if (editable) return
     setEditable(true)
     if (inputRef.current) {
@@ -76,14 +76,12 @@ const Withdraw = ({
       <div 
         style={{width: inputWrapWidth}}
         className={`flex items-center px-2 h-[26px] max-w-full hover:bg-[rgba(107,190,225,0.10)] rounded-sm cursor-pointer mr-2 ${ inputFocus ? 'bg-[rgba(107,190,225,0.10)]' : ''}`}
-        onClick={handleInputClick}
       >
         <div className="text-[18px] font-fmedium"
         >
           <input 
             ref={inputRef}
             type="text" aria-autocomplete="none" autoComplete="off"
-            disabled={!editable}
             value={inputValue}
             onChange={e => {
               enforcer(e.target.value.replace(/,/g, '.'))
@@ -98,9 +96,9 @@ const Withdraw = ({
             `}
           />
         </div>
-        <div className="pl-1 cursor-pointer shrink-0">
+        {/* <div className="pl-1 cursor-pointer shrink-0">
           <LazyImage2 src={isProjectMode ? "/images/airdrop/edit2.svg" : "/images/airdrop/edit.svg"} />
-        </div>
+        </div> */}
       </div>
       
       <div className=" cursor-pointer shrink-0 w-[15px]">

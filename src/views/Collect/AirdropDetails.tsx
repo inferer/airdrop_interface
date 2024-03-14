@@ -6,12 +6,11 @@ import { useActiveWeb3React } from '../../hooks'
 import { CollectBody, TitleWrap } from './styleds'
 import LazyImage, { LazyImage2 } from '../../components/LazyImage'
 import AirdropConfirmDetails from './AirdropConfirmDetails'
+import { useRouter } from 'next/router'
 
 function Collect() {
-  const theme = useContext(ThemeContext)
-  const { account } = useActiveWeb3React()
-  
-
+  const router = useRouter()
+  const isOngoing = router.query.action === 'ongoing'
   return (
     <div className='w-[1217px] mx-auto'>
       <CollectBody>
@@ -19,7 +18,7 @@ function Collect() {
           <LazyImage src='/images/airdrop/label_icon.svg' className=' w-[24px] h-[24px] mr-3' />
           
           <div className=' font-fsemibold text-[32px]'>
-            {true ? 'Ongoing airdrop' : 'Airdrops'} 
+            {isOngoing ? 'Ongoing airdrop' : 'Completed airdrop'} 
           </div>
         </div>
         

@@ -19,7 +19,7 @@ function Collect() {
   }, [account])
 
   console.log(airdropInfo)
-
+  const [parameter, setParameter] = useState<any>([])
   const contentJson = useMemo(() => {
     let obj: any = {
       contractAddress: '',
@@ -36,9 +36,14 @@ function Collect() {
     obj.chain = airdropInfo.chain ?? ''
     obj.landingPage = airdropInfo.landingPage ?? ''
     obj.parameter = airdropInfo.parameterInfo ?? []
-
+    setParameter(obj.parameter)
     return obj
   }, [airdropInfo])
+
+  const handleOnChange = useCallback((value, index) => {
+    parameter[index].value = value
+    setParameter([...parameter])
+  }, [parameter])
 
   return (
     <div className='bg-white w-full h-[100vh] fixed left-0 top-0 pt-32'>
@@ -59,15 +64,22 @@ function Collect() {
             </div>
             <div>
               {
-                contentJson.parameter.map((item: any) => {
+                parameter.map((item: any, index: number) => {
                   return (
                     <div key={item.name} className='flex justify-between items-center mb-3'>
                       <div className=' w-full flex items-center'>
                         <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>{item.name} ({item.type})</div>
                       </div>
-                      <div className='w-[400px] whitespace-nowrap shrink-0 overflow-auto rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px] text-[13px] text-[rgba(0,0,0,0.40)]'>
+                      <input type="text"
+                        className='w-[400px] whitespace-nowrap shrink-0 overflow-auto rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px] text-[13px] text-[rgba(0,0,0,0.40)]'
+                        value={parameter[index].value}
+                        onChange={e => {
+                          handleOnChange(e.target.value, index)
+                        }}
+                      />
+                      {/* <div className='w-[400px] whitespace-nowrap shrink-0 overflow-auto rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px] text-[13px] text-[rgba(0,0,0,0.40)]'>
                         {item.value}
-                      </div>
+                      </div> */}
                     </div>
                   )
                 })

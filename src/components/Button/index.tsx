@@ -321,7 +321,7 @@ export const ButtonSwap = styled.div<{
   justify-content: center;
   flex-wrap: nowrap;
   align-items: center;
-  cursor: pointer;
+  cursor: ${({ disabled }) => ( disabled ? 'default' : 'pointer' )} ;
   position: relative;
   z-index: 1;
   padding-left: 15px;

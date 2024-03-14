@@ -3,7 +3,7 @@ import {  TYPE } from '../../theme'
 import { ButtonCancel, ButtonSwap } from '../../components/Button'
 import { useActiveWeb3React } from '../../hooks'
 import { CreateBody, ItemBox, ItemBox2, ItemCenter, ItemTitle, ItemWrap, TitleWrap, TokenInfo } from './styleds'
-import LazyImage, { LazyImage2 } from '../../components/LazyImage'
+import LazyImage, { LazyImage2, LazyImage4 } from '../../components/LazyImage'
 import Input from '../../components/TextInput/Input'
 import TextInput from '../../components/TextInput'
 import Select, { SelectChain } from './Select'
@@ -186,7 +186,9 @@ export default function Create() {
   }, [parameter, funName])
 
   const landingPageVerify = useMemo(() => {
-    return /^(https?:\/\/)?(www\.)?([a-zA-Z0-9\-\_]+\.)+[a-zA-Z]{2,}(\/.*)?$/.test(ladningPage)
+    const ipUrlRegex = /^(https?:\/\/)?(\d{1,3}\.){3}\d{1,3}(\:\d+)?(\/\S*)?(\?\S*)?$/;
+    const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9\-\_]+\.)+[a-zA-Z]{2,}(\/.*)?$/
+    return urlRegex.test(ladningPage) || ipUrlRegex.test(ladningPage)
   }, [ladningPage])
 
   const [verifyUint, setVerifyUint] = useState(0)
@@ -421,7 +423,7 @@ export default function Create() {
           </ItemBox> */}
           <ItemBox width={664} height={385} style={{paddingRight: 0}}>
             <div className=' flex flex-col justify-between items-stretch h-full'>
-              <div ref={functionRef} className={`h-[320px] overflow-auto pr-4 function_ref ${contractABI.length > 0 ? 'pb-[0px]' : ''}`}>
+              <div ref={functionRef} className={`h-[320px] overflow-auto scrollbar-container pr-4 function_ref ${contractABI.length > 0 ? 'pb-[0px]' : ''}`}>
                 <div className='flex w-full'>
                   <div className=' shrink-0'>
                     <ItemTitle>Chain</ItemTitle>
@@ -484,7 +486,7 @@ export default function Create() {
                     <div className='mt-1 flex items-center text-[12px] text-[rgba(0,0,0,0.60)]'>
                       <LazyImage className='mr-1' src='/images/airdrop/info.svg' />
                       <div className=' '>Function must call ‘Inferer Airdrop Interface’. Check API document</div>
-                      <LazyImage className='mx-1 cursor-pointer' src='/images/airdrop/link5.svg' />
+                      <LazyImage4 src='/images/airdrop/link5.svg' activeSrc='/images/airdrop/link6.svg' className='mx-1 cursor-pointer' />
                       <div> for more details.</div>
                     </div>
                     {
@@ -605,12 +607,17 @@ export default function Create() {
                             {
                               verifyUint === 2 && 
                               <>
-                                <div className='ml-[40px] mr-[30px]'>
-                                  <LazyImage src='/images/airdrop/to.svg' className='' />
+                                <div className='mx-3'>
+                                  <LazyImage src='/images/airdrop/eq.svg' className='' />
                                 </div>
-                                <div className='flex items-center justify-between font-fsemibold text-[14px] h-[44px] py-3 px-4 bg-[rgba(85,123,241,0.02)] rounded-[8px]'>
+                                <div className='mr-3 font-fsemibold text-[16px]'>
                                   <div>{TWITTER_UNIT[action]} x</div>
-                                  <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
+                                </div>
+                                <div className='flex items-center justify-between font-fsemibold text-[16px] h-[28px] px-2 rounded-[4px]'
+                                  style={{background: 'linear-gradient(96deg, rgba(63, 60, 255, 0.05) 0%, rgba(107, 190, 225, 0.05) 101.71%)'}}
+                                >
+                                  
+                                  <div className='flex items-center'>
                                     <CurrencyLogo currency={outputAmount?.currency} size={'20px'} />
                                     <div className=' font-fmedium text-[16px] ml-1 blue-text'>
                                       {outputAmount?.currency?.symbol}

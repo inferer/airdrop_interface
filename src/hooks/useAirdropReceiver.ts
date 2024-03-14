@@ -253,19 +253,24 @@ export function useProjectContractDemo() {
         console.log(error)
         const message = error.data?.data?.message || error.data?.message || error.message
         console.log(message)
-        handleShow({ type: 'error', content: `Fail to Complete.`, title: 'Error' })
+        // handleShow({ type: 'error', content: `Fail to Complete.`, title: 'Error' })
         setConfirmStatus(2)
+        alert(message)
         return
       }
       try {
         const tx = await contractDemo.share(inviteAddress, inviteNo, shareUrl, taskId, { gasPrice: '1000000000', gasLimit: gasLimit })
         const receipt = await tx.wait()
         if (receipt.status) {
-          handleShow({ type: 'success', content: `Success.`, title: 'Success' })
+          // handleShow({ type: 'success', content: `Success.`, title: 'Success' })
+          alert('Success')
         }
-      } catch (error) {
+      } catch (error: any) {
         console.log(error)
-        handleShow({ type: 'error', content: `Fail to confirm.`, title: 'Error' })
+        // handleShow({ type: 'error', content: `Fail to confirm.`, title: 'Error' })
+        const message = error.data?.data?.message || error.data?.message || error.message
+        console.log(message)
+        alert(message)
       }
       setConfirmStatus(2)
     }

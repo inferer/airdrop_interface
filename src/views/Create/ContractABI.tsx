@@ -21,6 +21,8 @@ const ContractABI: React.FC<{
         if (newList.length > 0) {
           setFunList(newList)
         }
+      } else {
+        setFunList([])
       }
       
     } catch(err) {
@@ -52,8 +54,10 @@ const ContractABI: React.FC<{
               <LazyImage src="/images/airdrop/code2.svg" className="mr-2" />
               Fill the contract ABI below
             </div>
-            <div className=" overflow-auto w-[388px] h-[446px] border border-[rgba(85,123,241,0.10)] px-4 py-3 mt-3 rounded-xl scrollbar-container">
-              <AbiEditor onChange={onEditorChange} />
+            <div className=" w-[388px] h-[446px] border border-[rgba(85,123,241,0.10)] pl-4 py-3 mt-3 rounded-xl">
+              <div className="h-full overflow-auto pr-4 scrollbar-container">
+                <AbiEditor onChange={onEditorChange} />
+              </div>
             </div>
           </div>
           <div className="w-[50%] shrink-0">
@@ -101,6 +105,9 @@ const ContractABI: React.FC<{
                 height="48px"
                 onClick={e => {
                   e.stopPropagation()
+                  if (funList.length <= 0) {
+                    return
+                  }
                   handleUpdateContractABI(funList)
                   onClose && onClose()
                 }}

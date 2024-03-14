@@ -83,9 +83,22 @@ export const SelectChain: React.FC<{
 }) => {
   const [showOptions, setShowOptions] = useState(false)
   const [current, setCurrent] = useState<any>({})
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const node = useRef<HTMLDivElement>(null)
+
   const handleClick = useCallback(async (e) => {
     e.stopPropagation()
     e.preventDefault()
+    if (wrapRef.current) {
+      const rect = wrapRef.current.getBoundingClientRect()
+      console.log(rect)
+      if (node.current) {
+        node.current.style.left = rect.left + 'px'
+        node.current.style.right = rect.right + 'px'
+        node.current.style.top = rect.y + rect.height + 'px'
+        node.current.style.width = rect.width + 'px'
+      }
+    }
     setShowOptions(!showOptions)
   }, [showOptions])
 
@@ -99,14 +112,13 @@ export const SelectChain: React.FC<{
     const height = options.length * 41
     return height
   }, [options])
-  const node = useRef<HTMLDivElement>(null)
   useOnClickOutside(node, showOptions ? () => setShowOptions(false) : undefined)
   const label = useMemo(() => {
     return current.label || defaultValue.label || 'Select'
   }, [defaultValue, current])
 
   return (
-    <div className="flex items-center justify-between bg-[rgba(85,123,241,0.02)] rounded-[8px] cursor-pointer min-w-[170px] relative">
+    <div ref={wrapRef} className="flex items-center justify-between bg-[rgba(85,123,241,0.02)] rounded-[8px] cursor-pointer min-w-[170px] relative">
       <div className="flex justify-between items-center w-full py-3 px-4  h-[44px] text-[14px]"
         onClick={handleClick}
       >
@@ -129,23 +141,26 @@ export const SelectChain: React.FC<{
       
       <div 
         ref={node}
-        style={{ height: showOptions ? optionsHeight : 0 }}
-        className={`options absolute left-0 right-0 top-[110%] z-50 bg-white rounded-lg overflow-hidden transition-all `}>
-        {
-          options.map(item => {
-            return <div
-              key={item.value} 
-              onClick={e => {
-                e.stopPropagation()
-                handleClickItem(item)
-              }}
-              className="flex items-center text-[14px] font-fmedium h-[41px] px-4 cursor-pointer bg-[rgba(85,123,241,0.02)] hover:bg-[rgba(85,123,241,0.08)]">
-                <LazyImage2 className="mr-5" src={item.icon || '/images/airdrop/chain_local.svg'} />
-                {item.label}
-              </div>
-          })
-        }
-        
+        style={{ height: showOptions ? 'auto' : 0 }}
+        className={`options fixed z-50 bg-white rounded-lg transition-all py-2 `}>
+          <div className="overflow-auto scrollbar-container h-full max-h-[200px]"
+            style={{ height: showOptions ? optionsHeight : 0 }}
+          >
+            {
+              options.map(item => {
+                return <div
+                  key={item.value} 
+                  onClick={e => {
+                    e.stopPropagation()
+                    handleClickItem(item)
+                  }}
+                  className="flex items-center text-[14px] font-fmedium h-[41px] px-4 cursor-pointer bg-[rgba(85,123,241,0.02)] hover:bg-[rgba(85,123,241,0.08)]">
+                    <LazyImage2 className="mr-5" src={item.icon || '/images/airdrop/chain_local.svg'} />
+                    {item.label}
+                  </div>
+              })
+            }
+          </div>
       </div>
     </div>
   )
