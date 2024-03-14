@@ -190,4 +190,7 @@ body {
   background-color: rgba(85, 123, 241, 0.04);
 }
 
-
+.disabled{
+  opacity: 0.3;
+  cursor:not-allowed;
+}
