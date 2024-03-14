@@ -95,7 +95,7 @@ function CodeItem ({
   const codeDom = useMemo(() => {
     return code.split('')
   }, [code])
-  
+
   return (
     <div className=" relative ">
       <div onClick={e => {
@@ -147,6 +147,9 @@ function Join() {
   const onChange = useCallback((value: string) => {
     setCodeValue(value)
     handleSetCodeStatus()
+    if (value.length >= 16) {
+      setGlobalFocus(false)
+    }
   }, [codeValue, handleSetCodeStatus]) 
 
   const codeList = useMemo(() => {
