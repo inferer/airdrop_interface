@@ -67,9 +67,14 @@ const Withdraw = ({
   }, [inputValue])
 
   const handleWithdraw = useCallback(() => {
-    if (currentTokenAddress) return
+    if (currentTokenAddress || isActionDisable) return
     onClick && onClick(inputValue, token)
   }, [inputValue, token, currentTokenAddress])
+
+  const isActionDisable = useMemo(()=>{
+    let value = parseInt(inputValue);
+    return !value
+  },[inputValue])
 
   return (
     <div className=" flex items-center">
@@ -106,13 +111,17 @@ const Withdraw = ({
           // @ts-ignore
           currentTokenAddress === token.address ? 
             <Loading2 /> :
-            <div className=""
+            <div className={[isActionDisable ? 'disabled' : ''].join(' ')}
               onClick={e => {
                 e.stopPropagation()
                 handleWithdraw()
               }}
             >
-              <LazyImage2 src={isDeposit ? "/images/airdrop/deposit2.svg" : isProjectMode ? "/images/airdrop/card2.svg" : "/images/airdrop/card.svg"} />
+              <LazyImage2 src={
+                isDeposit ? "/images/airdrop/deposit2.svg" : 
+                isProjectMode ? "/images/airdrop/card2.svg" : 
+                "/images/airdrop/card.svg"
+              }  />
             </div>
         }
         
