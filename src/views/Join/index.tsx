@@ -7,6 +7,7 @@ import { useActiveWeb3React } from "../../hooks"
 import { useWalletModalToggle } from "../../state/application/hooks"
 import { LoadingJoin } from "../../components/Loader"
 import { useRouter } from "next/router"
+import { useOnClickOutside } from "../../hooks/useOnClickOutside"
 
 export const JoinBody = styled.div`
   width: 540px;
@@ -36,17 +37,46 @@ export const JoinTitle = styled.div`
 
 export const CharText = styled.div<{
   focus?: boolean
+  focus2?: boolean
 }>`
   position: relative;
   height: 100%;
+  width: 28px;
+  text-align: center;
   .cursor {
     position: absolute;
-    height: 25px;
+    height: 20px;
     left: 0;
-    top: 7px;
+    top: 10px;
     width: 1px;
-    background: rgba(0, 0, 0, 0.60);
+    background: rgba(0, 0, 0, 1);
     opacity: ${({ focus }) => (focus ? 1 : 0)};
+    animation: ${({ focus }) => (focus ? 'blink 0.7s infinite alternate' : 'none')};
+  }
+  .cursor2 {
+    position: absolute;
+    height: 20px;
+    right: 0;
+    top: 10px;
+    width: 1px;
+    background: rgba(0, 0, 0, 1);
+    opacity: ${({ focus2 }) => (focus2 ? 1 : 0)};
+    animation: ${({ focus2 }) => (focus2 ? 'blink 0.7s infinite alternate' : 'none')};
+  }
+
+  .line {
+    position: absolute;
+    top: 16px;
+    right: 0;
+  }
+
+  @keyframes blink {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
   }
 
 `
@@ -54,26 +84,50 @@ export const CharText = styled.div<{
 function CodeItem ({
   code,
   onClick,
-  focus
+  focus,
+  focus2
 }: {
   code: string,
   onClick?: () => void,
   focus?: boolean
+  focus2?: boolean
 }) {
   const codeDom = useMemo(() => {
     return code.split('')
   }, [code])
-
+  
   return (
     <div className=" relative ">
       <div onClick={e => {
         e.stopPropagation()
         onClick && onClick()
-      }} className={`text-[rgba(0,0,0,0.60)] text-[24px] font-fsemibold leading-[40px] h-[40px] grid grid-cols-4`} >
-        <CharText focus={code.length === 0 && focus} >{codeDom[0] || ' '} <div className="cursor"></div> </CharText>
-        <CharText focus={code.length === 1 && focus}>{codeDom[1] || ' '} <div className="cursor"></div></CharText>
-        <CharText focus={code.length === 2 && focus}>{codeDom[2] || ' '} <div className="cursor"></div></CharText>
-        <CharText focus={code.length === 3 && focus}>{codeDom[3] || ' '} <div className="cursor"></div></CharText>
+      }} className={`text-[rgba(0,0,0,0.60)] text-[20px] font-fsemibold leading-[40px] h-[40px] grid grid-cols-4`} >
+        <CharText focus={code.length === 0 && focus} >{codeDom[0] || ' '} 
+          <div className="cursor"></div>
+          <div className="line">
+            <LazyImage src="/images/airdrop/join_line.svg" />
+          </div>
+        </CharText>
+        <CharText focus={code.length === 1 && focus}>{codeDom[1] || ' '} 
+          <div className="cursor"></div>
+          <div className="line">
+            <LazyImage src="/images/airdrop/join_line.svg" />
+          </div>
+        </CharText>
+        <CharText focus={code.length === 2 && focus}>{codeDom[2] || ' '} 
+          <div className="cursor"></div>
+          <div className="line">
+            <LazyImage src="/images/airdrop/join_line.svg" />
+          </div>
+        </CharText>
+        <CharText 
+          focus={code.length === 3 && focus}
+          focus2={code.length === 4 && focus2}
+        >
+          {codeDom[3] || ' '} 
+          <div className="cursor"></div>
+          <div className="cursor2"></div>
+        </CharText>
       </div>
       <div className={`h-[3px] absolute left-0 -bottom-[3px] w-full ${code.length >=4 ? 'bg-[rgba(0,0,0,0.1)]' : 'bg-[rgba(0,0,0,0.03)]'}`}></div>
     </div>
@@ -88,8 +142,9 @@ function Join() {
   
   const inputRef = useRef<HTMLInputElement>(null)
   const [codeValue, setCodeValue] = useState('')
+  const [globalFocus, setGlobalFocus] = useState(false)
+
   const onChange = useCallback((value: string) => {
-    
     setCodeValue(value)
     handleSetCodeStatus()
   }, [codeValue, handleSetCodeStatus]) 
@@ -104,18 +159,19 @@ function Join() {
   }, [codeValue])
 
 
-  // useEffect(() => {
-  //   if (codeList.code4.length >= 4) {
-  //     const code = codeList.code1 + '-' + codeList.code2 + '-' + codeList.code3 + '-' + codeList.code4
-  //     handleVerifyInviteCode(code.toLowerCase())
-  //       .then(status => {
-  //         if (status === -1) {
-  //           setCodeValue('')
-  //         }
-  //       })
-  //   }
-  // }, [codeList, handleVerifyInviteCode])
-
+  useEffect(() => {
+    if (codeList.code4.length >= 4) {
+      const code = codeList.code1 + '-' + codeList.code2 + '-' + codeList.code3 + '-' + codeList.code4
+      handleVerifyInviteCode(code.toLowerCase())
+        .then((status: number) => {
+          // if (status === -1) {
+          //   setCodeValue('')
+          // }
+        })
+    }
+  }, [codeList, handleVerifyInviteCode])
+  // 61eb208745d2b442
+  // 61eb208745d2b441
   // 82fd5a4d416599f1
   const [ isProjectMode ] = useUserRoleMode()
   const [hasClick, setHasClick] = useState(false)
@@ -137,6 +193,11 @@ function Join() {
     }
   }, [account, hasClick, codeList, handleUserJoin, codeStatus])
 
+  const node = useRef<HTMLDivElement>(null)
+  useOnClickOutside(node, () => {
+    setGlobalFocus(false)
+  })
+
   return (
     <JoinBody >
       <div>
@@ -145,26 +206,31 @@ function Join() {
         <div className="text-[rgba(0,0,0,0.40)] font-fmedium text-[16px] mt-[67px]">
           Hi, nice to have you here
         </div>
-        <div className="mt-[15px] grid grid-cols-4 gap-[8px]">
+        <div ref={node} className="mt-[15px] grid grid-cols-4 gap-[8px]">
           <CodeItem code={codeList.code1}
-            focus={codeValue.length < 4} 
+            focus={codeValue.length < 4 && globalFocus} 
             onClick={() => {
               inputRef.current?.focus()
+              setGlobalFocus(true)
             }} />
           <CodeItem code={codeList.code2}
-            focus={codeValue.length >= 4 && codeValue.length < 8}
+            focus={codeValue.length >= 4 && codeValue.length < 8 && globalFocus}
             onClick={() => {
               inputRef.current?.focus()
+              setGlobalFocus(true)
             }} />
           <CodeItem code={codeList.code3} 
-            focus={codeValue.length >= 8 && codeValue.length < 12}
+            focus={codeValue.length >= 8 && codeValue.length < 12 && globalFocus}
             onClick={() => {
               inputRef.current?.focus()
+              setGlobalFocus(true)
             }} />
           <CodeItem code={codeList.code4} 
-            focus={codeValue.length >= 12 && codeValue.length < 16}
+            focus={codeValue.length >= 12 && codeValue.length < 16 && globalFocus}
+            focus2={codeValue.length === 16 && globalFocus}
             onClick={() => {
               inputRef.current?.focus()
+              setGlobalFocus(true)
             }} />
           
         </div>

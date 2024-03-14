@@ -20,7 +20,7 @@ import Link from 'next/link'
 import LazyImage, { LazyImage2, LazyImage3 } from '../LazyImage'
 import { AirdropTokensTabs } from '../NavigationTabs'
 
-import router from 'next/router'
+import router, { useRouter } from 'next/router'
 import WalletModal from '../WalletModal'
 import useENSName from '../../hooks/useENSName'
 
@@ -169,6 +169,8 @@ const NETWORK_LABELS: { [chainId in ChainId]: string | null } = {
 }
 
 export default function Header() {
+  const router = useRouter()
+  
   const { account, chainId } = useActiveWeb3React()
   const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
   const { showRightMenu, toggleShowRightMenu } = useShowRightMenu()
@@ -183,15 +185,25 @@ export default function Header() {
     <HeaderFrame>
       <div className='h-[84px] flex items-center justify-between w-full'>
         <HeaderElement>
-          <Link href={ isProjectMode ? '/project/swap' :  '/user/swap'}>
+          <div
+            onClick={e => {
+              e.stopPropagation()
+              if (router.pathname === '/join') return
+              router.push(isProjectMode ? '/project/swap' :  '/user/swap')
+            }}
+          >
             <UniIcon className=' cursor-pointer'>
               <LazyImage src="/images/logo.png" alt="logo" />
             </UniIcon>
-          </Link>
-          <TitleText>
-            <AirdropTokensTabs />
-            <LazyImage src="/images/assets/more.svg" className='more' alt="more" />
-          </TitleText>
+          </div>
+          {
+            router.pathname !== '/join' && 
+            <TitleText>
+              <AirdropTokensTabs />
+              <LazyImage src="/images/assets/more.svg" className='more' alt="more" />
+            </TitleText>
+          }
+          
         </HeaderElement>
         {
           account && loginUserInfo.address && 
