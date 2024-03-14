@@ -132,7 +132,7 @@ export default function Create() {
     setParameter(data.inputs)
   }, [setFunName, setParameter])
 
-  const [ladningPage, setLandingPage] = useState('')
+  const [ladningPage, setLandingPage] = useState('http://36.26.92.165:13880/contract-demo')
   useEffect(() => {
     if (contractABI.length > 0) {
       setVerifyStatus(true)
@@ -485,8 +485,11 @@ export default function Create() {
                     
                     <div className='mt-1 flex items-center text-[12px] text-[rgba(0,0,0,0.60)]'>
                       <LazyImage className='mr-1' src='/images/airdrop/info.svg' />
-                      <div className=' '>Function must call ‘Inferer Airdrop Interface’. Check API document</div>
-                      <LazyImage4 src='/images/airdrop/link5.svg' activeSrc='/images/airdrop/link6.svg' className='mx-1 cursor-pointer' />
+                      <div className=' '>Function must call ‘Inferer Airdrop Interface’. </div>
+                      <div className='flex items-center cursor-pointer'>
+                        Check API document
+                        <LazyImage4 src='/images/airdrop/link5.svg' activeSrc='/images/airdrop/link6.svg' className='mx-1' />
+                      </div>
                       <div> for more details.</div>
                     </div>
                     {
