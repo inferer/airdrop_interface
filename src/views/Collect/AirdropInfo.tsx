@@ -62,7 +62,7 @@ const AirdropInfo = ({
   return (
     <div className="">
       <div className="h-[171px] rounded-xl border border-[rgba(85, 123, 241, 0.1)] overflow-hidden">
-        <div className="h-[64px] w-full flex items-center bg-[rgba(85,123,241,0.02)] pl-5 text-[24px] font-fsemibold"> {airdrop.name}</div>
+        <div className="h-[64px] w-full flex items-center bg-[rgba(85,123,241,0.10)] pl-5 text-[24px] font-fsemibold"> {airdrop.name}</div>
         <div className="grid grid-cols-4 mt-5">
           <div className="pl-5">
             <LabelText>Pool</LabelText>
@@ -87,7 +87,7 @@ const AirdropInfo = ({
                   } */}
                   <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
                     {
-                      airdrop.labelToken && <CurrencyLogo currency={airdrop.labelToken} size={'20px'} />
+                      airdrop.labelToken && <CurrencyLogo type="confirm" currency={airdrop.labelToken} size={'20px'} />
                     }
                     
                     <div className=' font-fmedium text-[#A1CEA8] ml-1'>
@@ -134,14 +134,14 @@ const AirdropInfo = ({
         </div>
       </div>
       <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
-        <div className="text-[18px] font-semibold text-black mb-4">Contract task info</div>
+        <LabelText>Contract</LabelText>
         <div className="">
           <div className=" grid grid-cols-3 rounded-lg bg-[rgba(85,123,241,0.04)] py-[13px]">
             <div className="pl-5">
               <LabelText>Chain</LabelText>
               <div className="flex items-center mt-3 ">
                 <LazyImage src="/images/airdrop/chain_airdrop.svg" />
-                <div className="text-[14px] font-fmedium ml-2">{contentJson.chain}</div>
+                <div className="text-[14px] font-fmedium ml-2">{contentJson.chain === 'localtest' ? 'Airdrop' : contentJson.chain}</div>
               </div>
             </div>
             <div className="pl-5 flex items-center">
@@ -216,14 +216,16 @@ const AirdropInfo = ({
         <div className="mt-5">
           <LabelText>Landing Page</LabelText>
           <div className="flex">
-            <div className="h-[44px] flex items-center mt-3 px-4 border border-[rgba(85,123,241,0.10)] rounded-xl">
+            <div className="h-[44px] flex items-center mt-3 px-4 bg-[rgba(247,100,135,0.01)]"
+              onClick={e => {
+                e.stopPropagation()
+                openBrowser(contentJson.landingPage)
+              }}
+            >
               <LazyImage src="/images/airdrop/landing.svg" />
               <div className="text-[14px] font-fnormal mx-2">{contentJson.landingPage}</div>
               <div className=" cursor-pointer"
-                onClick={e => {
-                  e.stopPropagation()
-                  openBrowser(contentJson.landingPage)
-                }}
+                
               >
                 <LazyImage src="/images/airdrop/share6.svg" />
               </div>

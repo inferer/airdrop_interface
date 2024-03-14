@@ -52,7 +52,7 @@ const AirdropConfirm: React.FC<{
   return (
     <div className="py-5 pt-0">
       <AirdropInfo airdrop={airdrop} from="user" confirm />
-      <div className=" flex justify-center mt-[50px]">
+      <div className=" flex justify-center mt-[20px]">
         <div className='w-[260px] mr-[180px]'>
           <ButtonCancel
             onClick={e => {
