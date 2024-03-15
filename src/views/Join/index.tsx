@@ -250,12 +250,12 @@ function Join() {
         </div>
         <input ref={inputRef} type="text" className=" fixed left-[1000%]" value={codeValue} onChange={e => {
           const pattern = /^[a-zA-Z0-9]+$/;
-          if (e.target.value === '' || pattern.test(e.target.value)) {
+          // if (e.target.value === '' || pattern.test(e.target.value)) {
             if (e.target.value.length >= 16) {
               inputRef.current?.blur()
             }
-            onChange(e.target.value)
-          }
+            onChange(e.target.value.slice(0, 16))
+          // }
           
         }}  />
         <div className="text-[rgba(0,0,0,0.40)] font-normal text-[14px] mt-[11px]">

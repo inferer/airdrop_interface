@@ -75,10 +75,12 @@ const Select: React.FC<{
 export const SelectChain: React.FC<{
   defaultValue: any,
   options: any[],
+  icon?: string
   onChange?: (data: any) => void
 }> = ({
   defaultValue,
   options,
+  icon,
   onChange
 }) => {
   const [showOptions, setShowOptions] = useState(false)
@@ -111,7 +113,7 @@ export const SelectChain: React.FC<{
         onClick={handleClick}
       >
         <div className="flex items-center">
-          <LazyImage2 src={current.icon || (defaultValue && defaultValue.icon) || '/images/airdrop/chain_local.svg'} />
+          <LazyImage2 src={current.icon || (defaultValue && defaultValue.icon) || icon || '/images/airdrop/chain_local.svg'} />
           <span className={`mr-5 ml-2 ${label === 'Select' ? 'text-[rgba(0,0,0,0.40)]' : ''}`}>{label}</span>
         </div>
         

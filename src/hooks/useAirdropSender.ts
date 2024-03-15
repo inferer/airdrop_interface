@@ -6,7 +6,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE, ROUTER_ADDRESS } from '../constants'
 import { useActiveWeb3React } from './index'
 import { useAirdropSenderContract } from './useContract'
-import { useDerivedSwapInfo } from '../state/swap/hooks'
+import { useDerivedSwapInfo, useSwapState } from '../state/swap/hooks'
 import { useCurrency } from './Tokens'
 import { getUSDTTokenFromAirToken } from '../utils/getTokenList'
 import { useApproveCallback } from './useApproveCallback'
@@ -37,6 +37,7 @@ export function useCreateCallback(
     currencies,
     inputError: swapInputError
   } = useDerivedSwapInfo()
+  const { independentField, typedValue, recipient } = useSwapState()
   const airPercent = useAirTokenPercent()
 
   const swapCalls = useSwapCallArguments(v2Trade, allowedSlippage, deadline, recipientAddressOrName)
@@ -54,12 +55,19 @@ export function useCreateCallback(
   const lockedCurrencyAmount = useCurrencyBalance(account ?? undefined, lockedCurrency ?? undefined)
   const lockedAmount = useMemo(() => {
     if (args[0] && lockedCurrency) {
-      const div1 = BigNumber.from(parseInt(args[0], 16).toString()).toString()
-      const div2 = BigNumber.from((10 ** lockedCurrency?.decimals).toString(10)).toString()
-      return (Number(div1) / Number(div2)).toString()
+      if (independentField === Field.INPUT) {
+        const div1 = BigNumber.from(parseInt(args[0], 16).toString()).toString()
+        const div2 = BigNumber.from((10 ** lockedCurrency?.decimals).toString(10)).toString()
+        return (Number(div1) / Number(div2)).toString()
+      } else {
+        const div1 = BigNumber.from(parseInt(args[1], 16).toString()).toString()
+        const div2 = BigNumber.from((10 ** lockedCurrency?.decimals).toString(10)).toString()
+        return (Number(div1) / Number(div2)).toString()
+      }
+      
     }
     return '0'
-  }, [args, lockedCurrency])
+  }, [args, lockedCurrency, independentField])
   const lockedLabelCurrency = useCurrency(lockedLabel)
   const lockedLabelCurrencyAmount = useCurrencyBalance(account ?? undefined, lockedLabelCurrency ?? undefined)
   const percentBalance = useAirTokenPercentBalance(lockedLabelCurrencyAmount)

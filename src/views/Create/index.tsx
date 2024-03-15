@@ -84,7 +84,7 @@ export default function Create() {
   const handleChange = (data: any) => {
     setAction(data.value)
   }
-  
+
   const [duration, setDutation] = useState('1')
   const handleDurationChange = (data: any) => {
     setDutation(data.value)
@@ -121,7 +121,7 @@ export default function Create() {
 
   const handleParameterChange = useCallback((val, index) => {
     const status = verifyInput(val, parameter[index].type)
-    
+
     parameter[index].value = val
     parameter[index].status = Number(status)
     setParameter([...parameter])
@@ -282,16 +282,36 @@ export default function Create() {
     }
   }, [paremeterVerify, landingPageVerify, funName, contractAddress])
 
+  useEffect(() => {
+    if (paremeterVerify && landingPageVerify && funName && contractAddress) {
+      if (functionRef.current && verifyUint === 2) {
+        setTimeout(() => {
+          functionRef.current.scrollTop = 888
+        }, 300)
+      }
+    }
+  }, [paremeterVerify, landingPageVerify, funName, contractAddress, verifyUint])
+
+  useEffect(() => {
+    if (paremeterVerify && funName && contractAddress) {
+      if (functionRef.current) {
+        setTimeout(() => {
+          functionRef.current.scrollTop = 888
+        }, 300)
+      }
+    }
+  }, [paremeterVerify, funName, contractAddress])
+
   return (
     <CreateBody>
-      
+
       <TitleWrap>
         {/* <Link to="/swap">
           <div>
           <LazyImage className='icon-left cursor-pointer' src="/images/airdrop/arrow-left.svg" />
           </div>
         </Link> */}
-        
+
         <div className=' text-[32px] font-fsemibold text-black leading-normal' style={{lineHeight: 'normal'}}>Create the airdrop</div>
       </TitleWrap>
       <ItemWrap>
@@ -302,7 +322,7 @@ export default function Create() {
           >
             <div className='content bg-white h-full'>
               <ItemTitle>airdrop name</ItemTitle>
-              <Input style={{ lineHeight: '40px'}} focus value={name} 
+              <Input style={{ lineHeight: '40px'}} focus value={name}
                 onFocus={e => {
                   setErrorCode(1)
                 }}
@@ -312,10 +332,10 @@ export default function Create() {
                 onUserInput={value => {
                   setName(value)
                   setErrorCode(value.length <= 0 ? -1 : 1)
-                }} 
+                }}
               />
             </div>
-            
+
           </ItemBox2>
           <ItemBox style={{ marginTop: 20, height: '144px'}}>
             <ItemTitle>offer</ItemTitle>
@@ -331,7 +351,7 @@ export default function Create() {
               </TokenInfo>
             </div>
             {
-              Number(lockedAmountAB.lockedAmountBShow) > 0 ? 
+              Number(lockedAmountAB.lockedAmountBShow) > 0 ?
               <div className='flex justify-end mt-2'>
                 <div className='bg-[rgba(200,206,255,0.20)] rounded-[100px] h-[26px] px-[6px] flex items-center text-[rgba(0,0,0,0.40)] text-[14px]'>
                   <div className=' flex items-center'>
@@ -345,10 +365,10 @@ export default function Create() {
                     <span className='mx-1'>{lockedAmountAB.lockedAmountBShow}</span>
                     {outputAmount?.currency?.symbol}
                   </div>
-                </div> 
+                </div>
               </div> : null
             }
-            
+
 
           </ItemBox>
           <div className='flex justify-between mt-5'>
@@ -357,7 +377,7 @@ export default function Create() {
               <div className=' text-[14px] font-fsemibold mt-2 text-[rgba(0,0,0,0.40)]'>
                 <div className="flex items-center justify-between bg-[rgba(85,123,241,0.02)] rounded-[8px] cursor-pointer min-w-[120px] relative py-3 px-4 ">
                   {label}
-                  
+
                 </div>
               </div>
             </ItemBox>
@@ -390,7 +410,7 @@ export default function Create() {
                 <div className='mt-1'>
                   <LazyImage src='/images/airdrop/to.svg' />
                 </div>
-                
+
               </div>
               <div className='ml-[34px] shrink-0'>
                 <ItemTitle>Offer per unit</ItemTitle>
@@ -413,10 +433,10 @@ export default function Create() {
                 <textarea className=' w-full h-full bg-[rgba(85,123,241,0)] outline-none leading-6 resize-none'
                   value={content}
                   onChange={() => {
-                    
+
                   }}
                 >
-                
+
                 </textarea>
               </div>
             </div>
@@ -432,7 +452,7 @@ export default function Create() {
                     </div>
                   </div>
                   {
-                    chain && 
+                    chain &&
                     <div className='ml-[20px] w-full'>
                       <ItemTitle>Contract</ItemTitle>
                       <div className='mt-2 font-fmedium '>
@@ -442,7 +462,7 @@ export default function Create() {
                             handleChangeAddress(value)
                           }} />
                           {
-                            verifying && <LoadingContract /> 
+                            verifying && <LoadingContract />
                           }
                           {
                             !verifyStatus && contractABI.length <= 0 &&
@@ -456,47 +476,47 @@ export default function Create() {
                             </div>
                           }
                           {
-                            contractABI.length > 0 && 
+                            contractABI.length > 0 &&
                             <div className=' cursor-pointer'
                             >
                               <LazyImage src='/images/airdrop/contract_verify.svg' />
                             </div>
                           }
-                          
+
                         </div>
                       </div>
                     </div>
                   }
-                  
+
                 </div>
                 {
                   chain && contractAddress && contractABI.length > 0 &&
                   <>
-                    <div className='flex w-full mt-4'>
+                    <div className='flex w-full mt-6'>
                       <div className=' shrink-0 w-[300px]'>
                         <ItemTitle>Function</ItemTitle>
                         <div className='mt-2 font-fmedium'>
-                          <SelectChain defaultValue={{}} options={contractABI} onChange={handleChangeFun} />
+                          <SelectChain icon='/images/airdrop/fun1.svg' defaultValue={{}} options={contractABI} onChange={handleChangeFun} />
                         </div>
                       </div>
-                      
-                      
+
+
                     </div>
-                    
+
                     <div className='mt-1 flex items-center text-[12px] text-[rgba(0,0,0,0.60)]'>
                       <LazyImage className='mr-1' src='/images/airdrop/info.svg' />
                       <div className=' '>Function must call ‘Inferer Airdrop Interface’. </div>
-                      <div className='flex items-center cursor-pointer group hover:text-[rgba(79,88,127,1)] pl-[2px]'>
+                      <div className='flex items-center cursor-pointer group hover:text-[rgba(79,88,127,1)] pl-[4px]'>
                          Check API document
-                        <LazyImage src='/images/airdrop/link5.svg' className='mx-1 inline-block group-hover:hidden' />
-                        <LazyImage src='/images/airdrop/link6.svg' className='mx-1 hidden group-hover:inline-block' />
+                        <img src='/images/airdrop/link5.svg' className='mx-1 inline-block group-hover:hidden' />
+                        <img src='/images/airdrop/link6.svg' className='mx-1 hidden group-hover:inline-block' />
                         {/* <LazyImage4 src='/images/airdrop/link5.svg' activeSrc='/images/airdrop/link6.svg' className='mx-1' /> */}
                       </div>
                       <div> for more details.</div>
                     </div>
                     {
-                      parameter.length > 0 && 
-                        <div className=' shrink-0 w-full mt-4 pb-1'>
+                      parameter.length > 0 &&
+                        <div className=' shrink-0 w-full mt-6 pb-1'>
                         <ItemTitle>Parameter</ItemTitle>
                         <div className='mt-3'>
                           {
@@ -508,13 +528,13 @@ export default function Create() {
                                     <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>{pv.name} ({pv.type})</div>
                                   </div>
                                   <div className='w-[348px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 mx-3 flex items-center h-[32px]'>
-                                    <TextInput  
+                                    <TextInput
                                       color='rgba(0,0,0,0, 1)'
                                       fontSize='13px'
-                                      value={parameter[index].pValue} 
+                                      value={parameter[index].pValue}
                                       onUserInput={value => {
                                         handleParameterChange(value, index)
-                                      }} 
+                                      }}
                                     />
                                   </div>
                                   <div className=' shrink-0'>
@@ -524,20 +544,20 @@ export default function Create() {
                               )
                             })
                           }
-                          
+
                           {/* <div className='flex justify-between items-center mb-3'>
                             <div className=' w-full flex items-center'>
                               <LazyImage src='/images/airdrop/param.svg' />
                               <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>_stakingAddress (address)</div>
                             </div>
                             <div className='w-[300px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
-                              <TextInput  
+                              <TextInput
                                 color='rgba(0,0,0,0.40)'
                                 fontSize='13px'
-                                value={''} 
+                                value={''}
                                 onUserInput={value => {
 
-                                }} 
+                                }}
                               />
                             </div>
                           </div>
@@ -547,47 +567,47 @@ export default function Create() {
                               <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>_depositCalldata (bytes)</div>
                             </div>
                             <div className='w-[300px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
-                              <TextInput  
+                              <TextInput
                                 color='rgba(0,0,0,0.40)'
                                 fontSize='13px'
-                                value={''} 
+                                value={''}
                                 onUserInput={value => {
 
-                                }} 
+                                }}
                               />
                             </div>
                           </div> */}
-                          
+
                         </div>
                     </div>
                     }
-                    
+
                     {
-                      paremeterVerify && 
-                        <div className='shrink-0 mt-4'>
+                      paremeterVerify &&
+                        <div className='shrink-0 mt-6'>
                           <ItemTitle>Landing Page</ItemTitle>
                           <div className='mt-3 flex items-center'>
                             <div className='w-[524px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[44px]'>
                               <LazyImage src='/images/airdrop/landing.svg' className='mr-2' />
 
-                              <TextInput  
+                              <TextInput
                                 color='rgba(0,0,0,0.80)'
                                 fontSize='14px'
-                                value={ladningPage} 
+                                value={ladningPage}
                                 onUserInput={value => {
                                   setLandingPage(value)
-                                }} 
+                                }}
                               />
                             </div>
                             <div className=' shrink-0 ml-3'>
-                              <LazyImage2 src={landingPageVerify ? '/images/airdrop/status_1.svg' : '/images/airdrop/status_0.svg'} />
+                              <LazyImage2 src={landingPageVerify ? '/images/airdrop/status_2.svg' : '/images/airdrop/status_0.svg'} />
                             </div>
                           </div>
                         </div>
                     }
                     {
                       paremeterVerify && landingPageVerify &&
-                        <div className='shrink-0 mt-4'>
+                        <div className='shrink-0 mt-6'>
                           <ItemTitle>Offer per unit</ItemTitle>
                           <div className='mt-3 flex items-center cursor-pointer h-[44px]'>
                             <div
@@ -608,9 +628,9 @@ export default function Create() {
                                 <LoadingUint />
                               </div>
                             }
-                             
+
                             {
-                              verifyUint === 2 && 
+                              verifyUint === 2 &&
                               <>
                                 <div className='mx-3'>
                                   <LazyImage src='/images/airdrop/eq.svg' className='' />
@@ -621,7 +641,7 @@ export default function Create() {
                                 <div className='flex items-center justify-between font-fsemibold text-[16px] h-[28px] px-2 rounded-[4px]'
                                   style={{background: 'linear-gradient(96deg, rgba(63, 60, 255, 0.05) 0%, rgba(107, 190, 225, 0.05) 101.71%)'}}
                                 >
-                                  
+
                                   <div className='flex items-center'>
                                     <CurrencyLogo currency={outputAmount?.currency} size={'20px'} />
                                     <div className=' font-fmedium text-[16px] ml-1 blue-text'>
@@ -629,15 +649,15 @@ export default function Create() {
                                     </div>
                                   </div>
                                 </div>
-                                
+
                               </>
                             }
                           </div>
                         </div>
                     }
-                     
+
                     {
-                      paremeterVerify && landingPageVerify && verifyUint === 2 && 
+                      paremeterVerify && landingPageVerify && verifyUint === 2 &&
                       <div className='h-[121px] bg-[rgba(123,120,255,0.06)] rounded-xl px-4 py-[18px] mt-5'>
                         <div className=' font-fsemibold text-[#7B78FF] text-[14px] leading-normal'>Airdrop assets would be locked in contract.</div>
                         <div className=' text-[#7B78FF] text-[13px] mt-3 leading-[18px]'>When you try to create an airdrop, the associated token assets would be locked in contract, and you would receive same amount of correspondant “Air-” tokens, which are permitted to trade in airdrop pools.</div>
@@ -645,7 +665,7 @@ export default function Create() {
                     }
                   </>
                 }
-                
+
               </div>
               <div className='mt-[10px] text-[14px] text-[rgba(0,0,0,0.60)] flex items-center'>
                 <div className='flex items-center text-[12px] justify-center w-[16px] h-[16px] bg-[rgba(0,0,0,0.06)] rounded-[4px]'>
@@ -656,13 +676,13 @@ export default function Create() {
             </div>
 
           </ItemBox>
-          
-          
+
+
         </div>
       </ItemWrap>
       <div className='flex justify-end mt-5'>
         <div className='w-[260px]'>
-          <ButtonCancel 
+          <ButtonCancel
             bgColor='#FAFAFA'
             onClick={e => {
               e.stopPropagation()
@@ -674,20 +694,20 @@ export default function Create() {
         </div>
         <div className='min-w-[260px] ml-[50px]'>
         {
-          approveLoading ? 
-          <ButtonSwap 
+          approveLoading ?
+          <ButtonSwap
             bgColor='rgba(123,120,255,0.1)'
             onClick={e => {
               e.stopPropagation()
             }}
           >
             <Loading />
-            
-          </ButtonSwap> : 
+
+          </ButtonSwap> :
           <>
           {
-            approveA ? 
-            <ButtonSwap 
+            approveA ?
+            <ButtonSwap
               onClick={async e => {
                 e.stopPropagation()
                 if (name.length <= 0) {
@@ -701,13 +721,13 @@ export default function Create() {
               <div className='btn-text'>
                 Approve {lockedCurrency?.symbol} (1/{approveB ? 2 : 1})
               </div>
-              
+
             </ButtonSwap> : null
-            
+
           }
           {
-            approveB && unApproveList.length === 1 ? 
-            <ButtonSwap 
+            approveB && unApproveList.length === 1 ?
+            <ButtonSwap
               onClick={async e => {
                 e.stopPropagation()
                 if (name.length <= 0) {
@@ -720,12 +740,12 @@ export default function Create() {
               <div className='btn-text'>
                 Approve {outputAmount?.currency?.symbol} ({approvedTokenA ? 2 : 1}/{approveA || approvedTokenA ? 2 : 1})
               </div>
-              
+
             </ButtonSwap> : null
           }
           {
             (approvalState === ApprovalState.PENDING || approvalStateLabel === ApprovalState.PENDING ) ?
-            <ButtonSwap 
+            <ButtonSwap
               bgColor='rgba(123,120,255,0.1)'
               onClick={e => {
                 e.stopPropagation()
@@ -738,7 +758,7 @@ export default function Create() {
         }
         {
           !approveLoading && approvalState === ApprovalState.APPROVED && approvalStateLabel === ApprovalState.APPROVED &&
-            <ButtonSwap 
+            <ButtonSwap
               disabled={createDisabled}
               onClick={e => {
                 e.stopPropagation()

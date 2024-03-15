@@ -4,7 +4,7 @@ import { useAirdropList0 } from "../../state/airdrop/hooks";
 import router, { useRouter } from 'next/router'
 import { useAirdropManager } from "../../hooks/useAirdropManager";
 import AirdropInfo from "./AirdropInfo";
-import { ButtonSwap } from "../../components/Button";
+import { ButtonSwap, ButtonSwapUser } from "../../components/Button";
 import { useIsRoleProjectMode } from "../../state/user/hooks";
 
 const AirdropConfirmDetails: React.FC<{
@@ -21,24 +21,34 @@ const AirdropConfirmDetails: React.FC<{
     }
   }, [router.query])
 
-
   const airdrop = useAirdropList0(router.query.id as string)
-
-
   return (
     <div className="py-5 pt-0">
       <AirdropInfo airdrop={airdrop} from={isProjectMode ? 'project' : 'user'} taskList={airdropUserConfirmed} />
       <div className=" flex justify-center">
         <div className="w-[260px] mt-5">
-          <ButtonSwap
-            onClick={() => {
-              router.back()
-            }}
-          >
-            <div className="btn-text">
-              Return
-            </div>
-          </ButtonSwap>
+          {
+            isProjectMode ? 
+            <ButtonSwap
+              onClick={() => {
+                router.back()
+              }}
+            >
+              <div className="btn-text">
+                Return
+              </div>
+            </ButtonSwap> :
+            <ButtonSwapUser
+              onClick={() => {
+                router.back()
+              }}
+            >
+              <div className="btn-text">
+                Return
+              </div>
+            </ButtonSwapUser>
+          }
+          
         </div>
       </div>
     </div>

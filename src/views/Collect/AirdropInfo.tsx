@@ -167,63 +167,50 @@ const AirdropInfo = ({
               
             </div>
           </div>
-          <div className="mt-5">
-            <LabelText>Parameter</LabelText>
-            <div className=" grid grid-cols-2 mt-4">
-              {
-                contentJson.parameter.map((item: any, index: number) => {
-                  return (
-                    <div key={item.name} className={`flex items-center h-[36px] bg-[rgba(85,123,241,0.02)] ${ (index % 3 === 0 || index % 3 === 1) && index !== 1 && index !== 6 ? 'bg0006' : ''}`}>
-                      <div className='flex items-center justify-between w-[261px] shrink-0 bg_left pl-5 h-full'>
-                        <div className="flex items-center">
-                          <LazyImage src='/images/airdrop/param.svg' />
-                          <div className="w-[1px] h-[12px] mx-2 bg-[rgba(85,123,241,0.15)]"></div>
-                          <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>{item.name} ({item.type})</div>
+          {
+            contentJson.parameter.length > 0 && 
+            <div className="mt-5">
+              <LabelText>Parameter</LabelText>
+              <div className=" grid grid-cols-2 mt-4">
+                {
+                  contentJson.parameter.map((item: any, index: number) => {
+                    return (
+                      <div key={item.name} className={`flex items-center h-[36px] bg-[rgba(85,123,241,0.02)] ${ (index % 3 === 0 || index % 3 === 1) && index !== 1 && index !== 6 ? 'bg0006' : ''}`}>
+                        <div className='flex items-center justify-between w-[261px] shrink-0 bg_left pl-5 h-full'>
+                          <div className="flex items-center">
+                            <LazyImage src='/images/airdrop/param.svg' />
+                            <div className="w-[1px] h-[12px] mx-2 bg-[rgba(85,123,241,0.15)]"></div>
+                            <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>{item.name} ({item.type})</div>
+                          </div>
+                          <div className="w-[1px] h-[12px] mr-4 bg-[rgba(85,123,241,0.15)]">&nbsp;</div>
                         </div>
-                        <div className="w-[1px] h-[12px] mr-4 bg-[rgba(85,123,241,0.15)]">&nbsp;</div>
-                      </div>
-                      <div className='w-[296px] shrink-0 pr-4 flex items-center h-[36px] text-[13px] text-[rgba(0,0,0,0.40)] bg_right'>
-                        <div className="truncate">
-                          {item.value}
+                        <div className='w-[296px] shrink-0 pr-4 flex items-center h-[36px] text-[13px] text-[rgba(0,0,0,0.40)] bg_right'>
+                          <div className="truncate">
+                            {item.value}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )
-                })
-              }
-              
-              {/* <div className='flex justify-between items-center mt-3'>
-                <div className=' w-full flex items-center'>
-                  <LazyImage src='/images/airdrop/param.svg' />
-                  <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>_maxDepositsCount (uint256)</div>
-                </div>
-                <div className='w-[300px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
-                  <TextInput  
-                    color='rgba(0,0,0,0.40)'
-                    fontSize='13px'
-                    value={''} 
-                    onUserInput={value => {
-
-                    }} 
-                  />
-                </div>
-              </div> */}
-              
+                    )
+                  })
+                }
+                
+              </div>
             </div>
-          </div>
+          }
+          
         </div>
         
         <div className="mt-5">
           <LabelText>Landing Page</LabelText>
           <div className="flex">
-            <div className="h-[44px] flex items-center mt-3 px-4 bg-[#FFFCFD] cursor-pointer"
+            <div className="h-[44px] flex items-center mt-3 px-4 bg-[rgba(247,100,135,0.015)] cursor-pointer"
               onClick={e => {
                 e.stopPropagation()
                 openBrowser(contentJson.landingPage + '?airdropId=' + airdrop.airdropId)
               }}
             >
               <LazyImage src="/images/airdrop/landing.svg" />
-              <div className="text-[14px] font-fnormal mx-2">{contentJson.landingPage}</div>
+              <div className="text-[14px] font-fnormal mx-2">{contentJson.landingPage + '?airdropId=' + airdrop.airdropId}</div>
               <div className=" "
                 
               >
