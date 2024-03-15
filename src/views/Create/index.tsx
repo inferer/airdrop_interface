@@ -486,9 +486,11 @@ export default function Create() {
                     <div className='mt-1 flex items-center text-[12px] text-[rgba(0,0,0,0.60)]'>
                       <LazyImage className='mr-1' src='/images/airdrop/info.svg' />
                       <div className=' '>Function must call ‘Inferer Airdrop Interface’. </div>
-                      <div className='flex items-center cursor-pointer'>
-                        Check API document
-                        <LazyImage4 src='/images/airdrop/link5.svg' activeSrc='/images/airdrop/link6.svg' className='mx-1' />
+                      <div className='flex items-center cursor-pointer group hover:text-[rgba(79,88,127,1)] pl-[2px]'>
+                         Check API document
+                        <LazyImage src='/images/airdrop/link5.svg' className='mx-1 inline-block group-hover:hidden' />
+                        <LazyImage src='/images/airdrop/link6.svg' className='mx-1 hidden group-hover:inline-block' />
+                        {/* <LazyImage4 src='/images/airdrop/link5.svg' activeSrc='/images/airdrop/link6.svg' className='mx-1' /> */}
                       </div>
                       <div> for more details.</div>
                     </div>

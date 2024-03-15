@@ -183,7 +183,7 @@ function Join() {
       handleGetUserInfo(account)
         .then((userInfo: any) => {
           if (userInfo && userInfo.id) {
-            router.push(isProjectMode ? '/project/swap' : '/user/swap')
+            router.push(isProjectMode ? '/project/create' : '/user/collect')
           }
         })
     }
@@ -201,6 +201,17 @@ function Join() {
     setGlobalFocus(false)
   })
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (inputRef.current) {
+        clearInterval(timer)
+        inputRef.current?.focus()
+        setGlobalFocus(true)
+      }
+      
+    }, 100)
+  }, [])
+
   return (
     <JoinBody >
       <div>
@@ -209,7 +220,7 @@ function Join() {
         <div className="text-[rgba(0,0,0,0.40)] font-fmedium text-[16px] mt-[67px]">
           Hi, nice to have you here
         </div>
-        <div ref={node} className="mt-[15px] grid grid-cols-4 gap-[8px]">
+        <div ref={node} className="mt-[15px] grid grid-cols-4 gap-[8px] cursor-pointer">
           <CodeItem code={codeList.code1}
             focus={codeValue.length < 4 && globalFocus} 
             onClick={() => {

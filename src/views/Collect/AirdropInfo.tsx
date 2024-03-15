@@ -216,10 +216,10 @@ const AirdropInfo = ({
         <div className="mt-5">
           <LabelText>Landing Page</LabelText>
           <div className="flex">
-            <div className="h-[44px] flex items-center mt-3 px-4 bg-[rgba(247,100,135,0.01)] cursor-pointer"
+            <div className="h-[44px] flex items-center mt-3 px-4 bg-[#FFFCFD] cursor-pointer"
               onClick={e => {
                 e.stopPropagation()
-                openBrowser(contentJson.landingPage)
+                openBrowser(contentJson.landingPage + '?airdropId=' + airdrop.airdropId)
               }}
             >
               <LazyImage src="/images/airdrop/landing.svg" />

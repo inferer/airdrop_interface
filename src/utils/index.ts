@@ -128,7 +128,16 @@ const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
 }
 
 export function openBrowser(url: string, target = '_blank') {
-  window.open(url, target)
+  let newUrl = url
+  if (url.indexOf('http') === 0) {
+    newUrl = url
+  } else {
+    newUrl = url.replace(/https:\/\//gi, '');
+    newUrl = newUrl.replace(/http:\/\//, '')
+    newUrl = 'https://' + url
+  }
+  
+  window.open(newUrl, target)
 }
 
 export function getEtherscanLink(chainId: ChainId, data: string, type: 'transaction' | 'token' | 'address'): string {
