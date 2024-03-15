@@ -135,7 +135,7 @@ const AirdropInfo = ({
       </div>
       <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
         <LabelText>Contract</LabelText>
-        <div className="">
+        <div className="mt-4">
           <div className=" grid grid-cols-3 rounded-lg bg-[rgba(85,123,241,0.04)] py-[13px]">
             <div className="pl-5">
               <LabelText>Chain</LabelText>
@@ -216,7 +216,7 @@ const AirdropInfo = ({
         <div className="mt-5">
           <LabelText>Landing Page</LabelText>
           <div className="flex">
-            <div className="h-[44px] flex items-center mt-3 px-4 bg-[rgba(247,100,135,0.01)]"
+            <div className="h-[44px] flex items-center mt-3 px-4 bg-[rgba(247,100,135,0.01)] cursor-pointer"
               onClick={e => {
                 e.stopPropagation()
                 openBrowser(contentJson.landingPage)
@@ -224,7 +224,7 @@ const AirdropInfo = ({
             >
               <LazyImage src="/images/airdrop/landing.svg" />
               <div className="text-[14px] font-fnormal mx-2">{contentJson.landingPage}</div>
-              <div className=" cursor-pointer"
+              <div className=" "
                 
               >
                 <LazyImage src="/images/airdrop/share6.svg" />

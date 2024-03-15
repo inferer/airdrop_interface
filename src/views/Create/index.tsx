@@ -132,7 +132,7 @@ export default function Create() {
     setParameter(data.inputs)
   }, [setFunName, setParameter])
 
-  const [ladningPage, setLandingPage] = useState('http://36.26.92.165:13880/contract-demo')
+  const [ladningPage, setLandingPage] = useState('')
   useEffect(() => {
     if (contractABI.length > 0) {
       setVerifyStatus(true)
