@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
-import { useTranslation } from 'react-i18next'
 
 import { network } from '../../connectors'
 import { useEagerConnect, useInactiveListener } from '../../hooks'
@@ -22,7 +21,6 @@ const Message = styled.h2`
 `
 
 export default function Web3ReactManager({ children }: { children: JSX.Element }) {
-  const { t } = useTranslation()
   const { active, account, deactivate } = useWeb3React()
   const router = useRouter()
   const [ isProjectMode ] = useUserRoleMode()
@@ -85,7 +83,7 @@ export default function Web3ReactManager({ children }: { children: JSX.Element }
   if (!active && networkError) {
     return (
       <MessageWrapper>
-        <Message>{t('unknownError')}</Message>
+        <Message>{'unknownError'}</Message>
       </MessageWrapper>
     )
   }

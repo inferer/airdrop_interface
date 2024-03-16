@@ -9,10 +9,8 @@ import DoubleCurrencyLogo from '../DoubleLogo'
 import { RowBetween } from '../Row'
 import { TYPE } from '../../theme'
 import { Input as NumericalInput } from '../NumericalInput'
-import DropDown from '../../assets/images/dropdown.svg'
 
 import { useActiveWeb3React } from '../../hooks'
-import { useTranslation } from 'react-i18next'
 import { useIsUserAction } from '../../state/user/hooks'
 import LazyImage from '../LazyImage'
 import { useAirTokenPercent, useAirTokenPercentBalance } from '../../state/airdrop/hooks'
@@ -159,7 +157,6 @@ export default function  CurrencyInputPanel({
   id,
   showCommonBases,
 }: CurrencyInputPanelProps) {
-  const { t } = useTranslation()
   const { isProjectCreate, isProjectSwap, isUserCollect } = useIsUserAction()
   const [modalOpen, setModalOpen] = useState(false)
   const { account } = useActiveWeb3React()
@@ -246,7 +243,7 @@ export default function  CurrencyInputPanel({
                     ? currency.symbol.slice(0, 4) +
                       '...' +
                       currency.symbol.slice(currency.symbol.length - 5, currency.symbol.length)
-                    : payInput && isProjectCreate ? currency?.symbol?.slice(4) : currency?.symbol) || t('selectToken')}
+                    : payInput && isProjectCreate ? currency?.symbol?.slice(4) : currency?.symbol) || 'selectToken'}
                 </StyledTokenName>
               )}
               {!disableCurrencySelect &&  <img src='/images/airdrop/arrow-down.svg' /> }

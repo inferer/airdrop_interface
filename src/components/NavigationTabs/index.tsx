@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { darken } from 'polished'
-import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
@@ -86,14 +85,13 @@ const StyledArrowLeft = styled(ArrowLeft)`
 `
 
 export function SwapPoolTabs({ active }: { active: 'swap' | 'pool' }) {
-  const { t } = useTranslation()
   return (
     <Tabs style={{ marginBottom: '20px' }}>
       <NavLinkWrap id={`swap-nav-link`} className={active === 'swap' ? activeClassName : ''}>
-        <Link href={'/swap'} >{t('swap')}</Link>
+        <Link href={'/swap'} >{'swap'}</Link>
       </NavLinkWrap>
       <NavLinkWrap id={`pool-nav-link`} className={active === 'pool' ? activeClassName : ''}>
-        <Link href={'/pool'} >{t('pool')}</Link>
+        <Link href={'/pool'} >{'pool'}</Link>
       </NavLinkWrap>
       {/* <StyledNavLink id={`swap-nav-link`} href={'/swap'} className={active === 'swap' ? activeClassName : ''} >
         {t('swap')}
@@ -167,7 +165,6 @@ const StyledNavLink2 = styled.div<{
 export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => void}) {
   const router = useRouter()
   const { account } = useActiveWeb3React()
-  const { t } = useTranslation()
   const [ isProjectMode ] = useUserRoleMode()
   const [active, setActive] = useState<'collect' | 'rewards' | ''>('')
 
@@ -198,12 +195,12 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
       <StyledNavLink2 id={`airdrop-btn-click`} className={active === 'collect' ? 'airdrop' : ''}
         onClick={() => handleTab('collect')}
       >
-        {t('Airdrop')}
+        {'Airdrop'}
       </StyledNavLink2>
       <StyledNavLink2 id={`tokens-btn-click`} className={active === 'rewards' ?  'airdrop' : ''}
         onClick={() => handleTab('rewards')}
       >
-        {t('Tokens')}
+        {'Tokens'}
       </StyledNavLink2>
     </Tabs>
   )
@@ -212,7 +209,6 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
 
 export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => void}) {
   const router = useRouter()
-  const { t } = useTranslation()
   const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
   const { userAction, setUserAction }  = useUserAction()
   const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect } = useIsUserAction()
@@ -238,12 +234,12 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
             <StyledNavLink2 id={`create-btn-click`} className={isProjectCreate ?  'airdrop' : ''}
               onClick={() => handleTab('/project/create')}
             >
-              {t('Create')}
+              {'Create'}
             </StyledNavLink2>
             <StyledNavLink2 id={`swap-btn-click`} className={isProjectSwap ? 'airdrop' : ''}
               onClick={() => handleTab('/project/swap')}
             >
-              {t('Swap')}
+              {'Swap'}
             </StyledNavLink2>
             
           </>
@@ -252,12 +248,12 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
             <StyledNavLink2 id={`collect-btn-click`} className={isUserCollect ?  'airdrop' : ''}
               onClick={() => handleTab('/user/collect')}
             >
-              {t('Collect')}
+              {'Collect'}
             </StyledNavLink2>
             <StyledNavLink2 id={`userswap-btn-click`} className={isUserSwap ? 'create' : ''}
               onClick={() => handleTab('/user/swap')}
             >
-              {t('Swap')}
+              {'Swap'}
             </StyledNavLink2>
             
           </>
@@ -270,7 +266,6 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
 
 export function SwapCollectTabs({ onClick }: { onClick?: (type: UserAction) => void}) {
   const router = useRouter()
-  const { t } = useTranslation()
   const { userAction, setUserAction }  = useUserAction()
 
   const handleTab = useCallback((action: UserAction) => {
@@ -289,12 +284,12 @@ export function SwapCollectTabs({ onClick }: { onClick?: (type: UserAction) => v
         <StyledNavLink2 id={`collect-btn-click`} className={'airdrop'}
           onClick={() => handleTab(UserAction.USER_COLLECT)}
         >
-          {t('Collect')}
+          {'Collect'}
         </StyledNavLink2>
         <StyledNavLink2 id={`userswap-btn-click`} className={''}
           onClick={() => handleTab(UserAction.USER_SWAP)}
         >
-          {t('Swap')}
+          {'Swap'}
         </StyledNavLink2>
       </>
     </Tabs>
