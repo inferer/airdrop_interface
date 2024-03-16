@@ -38,7 +38,6 @@ const AirdropInfo = ({
   confirm?: boolean,
   taskList?: any[]
 }) => {
-  console.log(airdrop)
   const contentJson = useMemo(() => {
     let obj: any = {
       contractAddress: '',

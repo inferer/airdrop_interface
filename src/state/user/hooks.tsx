@@ -77,19 +77,20 @@ export function useUserAction() {
 
 export function useGetUserAction() {
   const router = useRouter()
+  const action = router.query.action ? router.query.action[0] : 'create'
   return useMemo(() => {
-    if (router.pathname === '/project/[action]') {
-      if (router.query.action === 'swap') {
+    if (router.pathname === '/project/[...action]') {
+      if (action === 'swap') {
         return UserAction.PROJECT_SWAP
       }
-      if (router.query.action === 'create') {
+      if (action === 'create') {
         return UserAction.CREATE
       }
     } else {
-      if (router.query.action === 'swap') {
+      if (action === 'swap') {
         return UserAction.USER_SWAP
       }
-      if (router.query.action === 'collect') {
+      if (action === 'collect') {
         return UserAction.USER_COLLECT
       }
     }

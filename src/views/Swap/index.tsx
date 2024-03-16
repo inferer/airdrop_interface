@@ -282,12 +282,12 @@ export default function Swap() {
 
   const handleAction = useCallback(() => {
     if (isProjectCreate) {
-      router.push('/create')
+      router.push('/project/create/' + currencies[Field.OUTPUT]?.symbol?.slice(4).toLowerCase())
     }
     if (isUserCollect) {
-      router.push('/collect')
+      router.push('/user/collect')
     }
-  }, [isProjectCreate, isUserCollect])
+  }, [isProjectCreate, isUserCollect, currencies])
 
   useEffect(() => {
     onUserInput(Field.INPUT, '')

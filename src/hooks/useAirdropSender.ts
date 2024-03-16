@@ -14,12 +14,12 @@ import { useCurrencyBalance } from '../state/wallet/hooks'
 import { AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury'
 import { useSwapCallArguments } from './useSwapCallback'
 import { useAddPopup } from '../state/application/hooks'
-import { useAirTokenPercent, useAirTokenPercentBalance } from '../state/airdrop/hooks'
+import { useAirTokenPercent, useAirTokenPercentBalance, useCreateContractABI, useCreateContractABIAll } from '../state/airdrop/hooks'
 import { Field } from '../state/swap/actions'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../state'
 import { IABIItem, updateCreateContractABI } from '../state/airdrop/actions'
-import { formatInput } from '../utils'
+import { formatInput, getContract } from '../utils'
 
 
 export function useCreateCallback(
@@ -188,9 +188,40 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
     }
   }, [airdropSender, account, args, lockedToken])
 
+  const contractABI = useCreateContractABIAll()
+  const handleEstimateGas = useCallback(async (contractAddress: string, funName: string, parameter: any[]) => {
+    let unit = 1
+    if (library && account && contractABI.length > 0) {
+      const contract = getContract(contractAddress, contractABI, library, account ? account : undefined)
+      try {
+        const parameterValue = parameter.map(pr => pr.value)
+        const tempItem = contractABI.find(item => item.name === funName)
+        const hasTaskId = tempItem?.inputs.find(item => item.name === '_taskId')
+        if (hasTaskId) {
+          parameterValue.push(0)
+        }
+        const gasEstimate = await contract.estimateGas[funName](...parameterValue)
+        console.log(gasEstimate.toString())
+        const gasLimit = Number(gasEstimate.toString())
+        if (gasLimit > 10000) {
+          unit = 2
+        } 
+        if (gasLimit > 100000) {
+          unit = 3
+        } 
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    return unit
+
+  }, [contractABI, library])
+
   return {
     createStatus,
     handleCreateAirdrop,
+    handleEstimateGas
   }
 }
 

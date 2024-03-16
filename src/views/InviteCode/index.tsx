@@ -81,7 +81,7 @@ const CodeItem = ({
 
 function InviteCode() {
   const router = useRouter()
-  const isProject = router.pathname === '/project/[action]'
+  const isProject = router.pathname === '/project/[...action]'
   const { account } = useActiveWeb3React()
   const [inviteCodeList, setInviteCodeList] = useState<any[]>([])
   const { handleGetUserInviteCode } = useUserInfo()

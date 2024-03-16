@@ -189,7 +189,7 @@ export default function Header() {
             onClick={e => {
               e.stopPropagation()
               if (router.pathname === '/join') return
-              router.push(isProjectMode ? '/project/swap' :  '/user/swap')
+              router.push(isProjectMode ? '/project/create' :  '/user/collect')
             }}
           >
             <UniIcon className=' cursor-pointer'>

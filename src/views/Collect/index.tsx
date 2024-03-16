@@ -14,7 +14,9 @@ function Collect() {
   const theme = useContext(ThemeContext)
   const { account } = useActiveWeb3React()
   const isProjectMode = useIsRoleProjectMode()
-  const isAirdropConfirm = router.query.id && router.query.id[1]
+  // const isAirdropConfirm = router.query.id && router.query.id[1]
+  const isAirdropConfirm = router.query.action ? router.query.action[2] : ''
+
 
   return (
     <div className='w-[1217px] mx-auto'>

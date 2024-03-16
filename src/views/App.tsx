@@ -48,23 +48,6 @@ const Marginer = styled.div`
 export default function App({ children }: any) {
 
   const router = useRouter()
-  console.log(router.pathname)
-  const [isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
-  
-  // useEffect(() => {
-  //   if (
-  //     router.pathname === '/swap' ||
-  //     router.pathname === '/create'
-  //   ) {
-  //     if (!isProjectMode) {
-  //       toggleSetUserRoleMode()
-  //     }
-  //   } else {
-  //     if (isProjectMode) {
-  //       toggleSetUserRoleMode()
-  //     }
-  //   }
-  // }, [router, isProjectMode, toggleSetUserRoleMode])
 
   return (
     <AppWrapper>

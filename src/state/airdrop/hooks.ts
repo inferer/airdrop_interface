@@ -151,3 +151,11 @@ export function useCreateContractABI() {
       })
   }, [createContractABI])
 }
+
+export function useCreateContractABIAll() {
+  const createContractABI = useSelector<AppState, AppState['airdrop']['createContractABI']>(state => state.airdrop.createContractABI)
+  return useMemo(() => {
+    return createContractABI
+      
+  }, [createContractABI])
+}

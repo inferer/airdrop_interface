@@ -26,7 +26,7 @@ const AirdropList: React.FC<{
   const { handleGetAirdropList, handleUpdateAirdropList } = useAirdropManager()
   const airdropList = useAirdropList()
   const maxUnits = useMaxUnits()
-  const accountScore = useAccountLabelScore(account || '', router.query.id && router.query.id[0] && getAlgLabelTokenByAddress(router.query.id[0])?.symbol?.slice(4) )
+  const accountScore = useAccountLabelScore(account || '', router.query.action && router.query.action[1] && getAlgLabelTokenByAddress(router.query.action[1])?.symbol?.slice(4) )
   const {
     currencyBalances,
     parsedAmount,
@@ -35,23 +35,25 @@ const AirdropList: React.FC<{
     currencies,
     inputError: collectInputError
   } = useCollectSwapInfo()
-
+  
   const filterAirdropList = useMemo(() => {
     const tempAirdropList = airdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits && !airdrop.completed && (Number(airdrop.labelLocked) - Number(airdrop.claimed) >= 1))
-    const algAmount = Number(parsedAmountOUTPUT?.toSignificant())
+    const algAmount = Number(router.query.airAmount ?? 1)
     let tempList = []
     let tempTotal = 0
-    if (maxUnits > 0 && accountScore > 0 && algAmount > 0 && tempAirdropList.length > 0) {
+    if (maxUnits > 0 && algAmount > 0 && tempAirdropList.length > 0) {
       for (let k = 0; k < tempAirdropList.length; k++) {
         if (tempList.length === 0) {
           tempList.push({...tempAirdropList[k]})
-          tempTotal += accountScore * Number(tempAirdropList[k].unit)
+          tempTotal += Number(tempAirdropList[k].unit)
         } else {
-          if (tempTotal + accountScore * Number(tempAirdropList[k].unit) <= algAmount) {
+          if (tempTotal + Number(tempAirdropList[k].unit) >= algAmount) {
             tempList.push({...tempAirdropList[k]})
-            tempTotal += accountScore * Number(tempAirdropList[k].unit)
-          } else {
+            tempTotal += Number(tempAirdropList[k].unit)
             break
+          } else {
+            tempList.push({...tempAirdropList[k]})
+            tempTotal += Number(tempAirdropList[k].unit)
           }
         }
         
@@ -59,14 +61,12 @@ const AirdropList: React.FC<{
     }
     // return airdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits && !airdrop.completed && (Number(airdrop.labelLocked) - Number(airdrop.claimed) >= accountScore))
     return tempList
-  }, [maxUnits, airdropList, accountScore, parsedAmountOUTPUT])
-
-  console.log(filterAirdropList, 1111111)
+  }, [maxUnits, airdropList, parsedAmountOUTPUT])
 
   useEffect(() => {
     let _algToken = ''
-    if (router.query.id) {
-      _algToken = router.query.id[0]
+    if (router.query.action) {
+      _algToken = router.query.action[1]
       setAlgToken(_algToken)
       handleGetAirdropList(_algToken)
     }
@@ -115,7 +115,7 @@ const AirdropList: React.FC<{
                     <TableRow key={airdrop.airdropId} 
                       onClick={() => {
                         const _algToken = getALgTokenFromAirToken(airdrop.labelToken.address)
-                        router.push(`/collect/${algToken || _algToken}/${airdrop.airdropId}`)
+                        router.push(`/user/collect/${algToken || _algToken}/${airdrop.airdropId}`)
                       }}
                     >
                       <>

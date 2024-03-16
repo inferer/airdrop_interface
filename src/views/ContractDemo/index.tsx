@@ -10,11 +10,12 @@ function Collect() {
   const router = useRouter()
   const { account } = useActiveWeb3React()
 
-  const { confirmStatus, handleCommentAction, handleGetTaskInfo, airdropInfo } = useProjectContractDemo()
+  const { confirmStatus, handleCommentAction, handleGetTaskInfo, airdropInfo, handleTestGas } = useProjectContractDemo()
 
   useEffect(() => {
     if (account) {
       handleGetTaskInfo(account)
+      // handleTestGas()
     }
   }, [account])
 

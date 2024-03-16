@@ -21,17 +21,17 @@ const AirdropConfirm: React.FC<{
     algTokenCurrency,
     approvalState, 
     approve 
-  } = useAirdropReceiver(router.query.id && router.query.id[0])
+  } = useAirdropReceiver(router.query.action && router.query.action[1])
   const { handleGetAirdropOne } = useAirdropManager()
 
   useEffect(() => {
-    if (router.query.id && router.query.id[1]) {
-      handleGetAirdropOne(Number(router.query.id[1]))
+    if (router.query.action && router.query.action[2]) {
+      handleGetAirdropOne(Number(router.query.action[2]))
     }
   }, [router.query])
 
 
-  const airdrop = useAirdropList0(router.query.id && router.query.id[1])
+  const airdrop = useAirdropList0(router.query.action && router.query.action[2])
   const accountScore = useAccountLabelScore(account || '', airdrop.labelToken?.symbol?.slice(4) || '' )
 
   useEffect(() => {

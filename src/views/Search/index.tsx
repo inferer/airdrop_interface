@@ -107,8 +107,9 @@ export default function Search() {
   const handleAction = useCallback(() => {
     if (isUserCollect) {
       const inputCurrency = currencies[Field.INPUT]
+      // localStorage.setItem('collectAlgAmount', parsedAmountOUTPUT?.toSignificant() || '')
       // @ts-ignore
-      router.push(`/collect/${inputCurrency?.address}`)
+      router.push(`/user/collect/${inputCurrency?.address}?airAmount=${parsedAmountOUTPUT?.toSignificant()}`)
     }
   }, [isUserCollect, currencies])
 

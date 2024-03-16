@@ -15,13 +15,14 @@ const AirdropConfirmDetails: React.FC<{
   const { handleGetAirdropOne, handleGetAirdropUserConfirmed, airdropUserConfirmed } = useAirdropManager()
 
   useEffect(() => {
-    if (router.query.id) {
-      handleGetAirdropOne(Number(router.query.id))
-      handleGetAirdropUserConfirmed(Number(router.query.id))
+    if (router.query.action) {
+      const id = router.query.action[1]
+      handleGetAirdropOne(Number(id))
+      handleGetAirdropUserConfirmed(Number(id))
     }
   }, [router.query])
 
-  const airdrop = useAirdropList0(router.query.id as string)
+  const airdrop = useAirdropList0(router.query?.action ? router.query?.action[1] as string : undefined)
   return (
     <div className="py-5 pt-0">
       <AirdropInfo airdrop={airdrop} from={isProjectMode ? 'project' : 'user'} taskList={airdropUserConfirmed} />

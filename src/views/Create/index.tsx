@@ -59,7 +59,7 @@ export default function Create() {
     approveAir
   } = useCreateCallback(undefined, undefined, undefined, null)
 
-  const { createStatus, handleCreateAirdrop } = useCreateAirdrop(args, lockedCurrency as Token ?? undefined)
+  const { createStatus, handleCreateAirdrop, handleEstimateGas } = useCreateAirdrop(args, lockedCurrency as Token ?? undefined)
   const { handleUpdateContractABI } = useCreateContractAirdrop()
   const contractABI = useCreateContractABI()
 
@@ -129,7 +129,7 @@ export default function Create() {
 
   const handleChangeFun = useCallback((data: any) => {
     setFunName(data.value)
-    setParameter(data.inputs)
+    setParameter(data.inputs.map((item: any) => ({ ...item, status: 0 })))
   }, [setFunName, setParameter])
 
   const [ladningPage, setLandingPage] = useState('')
@@ -267,7 +267,7 @@ export default function Create() {
     //   }, 1000)
     // }
   }, [createDisabled])
-
+  const [gasUnit, setGasUnit] = useState(1)
   useEffect(() => {
     if (paremeterVerify && landingPageVerify && funName && contractAddress) {
       if (functionRef.current) {
@@ -277,10 +277,17 @@ export default function Create() {
         setVerifyUint(1)
         setTimeout(() => {
           setVerifyUint(2)
-        }, 1500)
+          handleEstimateGas(contractAddress, funName, parameter)
+            .then((unit) => {
+              
+              setGasUnit(unit)
+            })
+        }, 500)
       }
+    } else {
+      setVerifyUint(1)
     }
-  }, [paremeterVerify, landingPageVerify, funName, contractAddress])
+  }, [paremeterVerify, landingPageVerify, funName, contractAddress, parameter, handleEstimateGas])
 
   useEffect(() => {
     if (paremeterVerify && landingPageVerify && funName && contractAddress) {
@@ -636,7 +643,7 @@ export default function Create() {
                                   <LazyImage src='/images/airdrop/eq.svg' className='' />
                                 </div>
                                 <div className='mr-3 font-fsemibold text-[16px]'>
-                                  <div>{TWITTER_UNIT[action]} x</div>
+                                  <div>{gasUnit} x</div>
                                 </div>
                                 <div className='flex items-center justify-between font-fsemibold text-[16px] h-[28px] px-2 rounded-[4px]'
                                   style={{background: 'linear-gradient(96deg, rgba(63, 60, 255, 0.05) 0%, rgba(107, 190, 225, 0.05) 101.71%)'}}
@@ -765,9 +772,9 @@ export default function Create() {
                 if (createStatus === 1) return
                 if (createDisabled) return
                 const _content = contractAddress.toLowerCase() + '.' + (funName ? funName : contractABI[0].value)
-                console.log(chain, contractAddress, funName, TWITTER_UNIT[action], _content)
+                console.log(chain, contractAddress, funName, gasUnit, _content)
                 // return
-                handleCreateAirdrop(name, label, duration, channel, action, TWITTER_UNIT[action], _content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, chain, parameter, ladningPage)
+                handleCreateAirdrop(name, label, duration, channel, action, String(gasUnit), _content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, chain, parameter, ladningPage)
               }}
             >
               <div className='btn-text'>

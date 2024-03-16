@@ -75,7 +75,7 @@ export const OngoingList: React.FC<{
                   return (
                     <TableRow key={airdrop.airdropId} 
                       onClick={() => {
-                        router.push(`/project/ongoing?id=${airdrop.airdropId}`)
+                        router.push(`/project/ongoing/${airdrop.airdropId}`)
                       }}
                     >
                       <>

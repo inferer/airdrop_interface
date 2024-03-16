@@ -182,12 +182,11 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
     // onClick && onClick(type)
 
   }, [active, isProjectMode, account])
-
+  const action = router.query.action ? router.query.action[0] : 'create'
   useEffect(() => {
-    console.log(router.query)
-    if (router.pathname.indexOf('/rewards') > -1 || router.pathname.indexOf('/consumption') > -1) {
+    if (action === 'rewards' || action === 'consumption') {
       setActive('rewards')
-    } else if (router.query.action === 'swap' || router.query.action === 'create' || router.query.action === 'collect') {
+    } else if (action === 'swap' || action === 'create' || action === 'collect') {
       setActive('collect')
     } else {
       setActive('')
