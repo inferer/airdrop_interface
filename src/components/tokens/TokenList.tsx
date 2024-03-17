@@ -160,7 +160,7 @@ const AirUSDTTokenItem = ({
 }
 const TokenList = () => {
   const router = useRouter()
-  const isRewards = router.query.action === "rewards"
+  const isRewards = (router.query.action && router.query.action[0]) === "rewards"
   const isProjectMode = useIsRoleProjectMode()
   const airLabelAllTokens = useAirLabelAllTokens()
   const usdtAllTokens = useUSDTAllTokens()

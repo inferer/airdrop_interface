@@ -95,7 +95,9 @@ function Collect() {
               onClick={e => {
                 e.stopPropagation()
                 if (confirmStatus === 1 || airdropInfo.taskCompleted) return
-                handleCommentAction(airdropInfo.parameterInfo[0].value, airdropInfo.parameterInfo[1].value, airdropInfo.parameterInfo[2].value)
+                const funName = airdropInfo.content.split('.')[1] || ''
+                console.log(funName)
+                handleCommentAction(funName, airdropInfo.parameterInfo)
               }}
             >
               <div className="btn-text w-[120px]">

@@ -237,17 +237,19 @@ export function useProjectContractDemo() {
   const { handleShow } = useShowToast()
   const router = useRouter()
 
-  const handleCommentAction = useCallback(async (inviteAddress: string, inviteNo: number, shareUrl: string) => {
+  const handleCommentAction = useCallback(async (funName: string, parameter: any[]) => {
     if (account && contractDemo) {
       setConfirmStatus(1)
       let gasLimit = '5000000'
-      
+      const parameterValue = parameter.map(pr => pr.value)
       // const inviteAddress = '0x70997970c51812dc3a010c7d01b50e0d17dc79c8'.toLowerCase()
       // const inviteNo = 1
       // const shareUrl = 'https://twitter.com/intent/like?tweet_id=1720373913576952121'
       const taskId = router.query.taskId
+      parameterValue.push(taskId)
+
       try {
-        const gasEstimate = await contractDemo.estimateGas['share'](inviteAddress, inviteNo, shareUrl, taskId)
+        const gasEstimate = await contractDemo.estimateGas[funName](...parameterValue)
         gasLimit = gasEstimate.toString()
       } catch (error: any) {
         console.log(error)
@@ -259,7 +261,7 @@ export function useProjectContractDemo() {
         return
       }
       try {
-        const tx = await contractDemo.share(inviteAddress, inviteNo, shareUrl, taskId, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await contractDemo[funName](...parameterValue, { gasPrice: '1000000000', gasLimit: gasLimit })
         const receipt = await tx.wait()
         if (receipt.status) {
           // handleShow({ type: 'success', content: `Success.`, title: 'Success' })

@@ -78,7 +78,8 @@ export function useCreateCallback(
     let lockedAmountBShow = ''
     if (args[0] && lockedCurrency && v2Trade) {
       const _lockedAmountB = percentBalance.balance2
-      const _lockedAmountA = BigNumber.from(parseInt(args[0], 16).toString())
+      // const _lockedAmountA = BigNumber.from(parseInt(args[0], 16).toString())
+      const _lockedAmountA = BigNumber.from(args[0])
       lockedAmountB = BigNumber.from((_lockedAmountB * (10 ** v2Trade.outputAmount.currency.decimals)).toString()).toHexString()
       lockedAmountA = _lockedAmountA.toHexString()
       lockedAmountAShow = (Number(_lockedAmountA.toString()) / (10 ** lockedCurrency?.decimals)).toString()
@@ -118,7 +119,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
   const { account, chainId, library } = useActiveWeb3React()
   const airdropSender: Contract | null = useAirdropSenderContract()
   const [createStatus, setCreateStatus] = useState(0)
-
+  const { independentField } = useSwapState()
   const handleCreateAirdrop = useCallback(async (
     name: string,
     label: string,
@@ -152,7 +153,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       const route = args[2]
       console.log(lockedAmountA, lockedAmountB, args[1], unint)
       const offer_label_token = [isETH ? ethers.constants.AddressZero : lockedToken.address, route[0], route[route.length - 1], account]
-      const offer_label_locked = [lockedAmountA, lockedAmountB, args[1], unint]
+      const offer_label_locked = independentField === Field.INPUT ? [lockedAmountA, lockedAmountB, args[1], unint] : [args[1], lockedAmountB, lockedAmountA, unint]
       const duration = parseInt(_duration) * 24 * 60 * 60
       console.log(baseInfo, offer_label_token, offer_label_locked, duration)
       let gasLimit = '5000000'
@@ -167,9 +168,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       }
       try {
         const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit, value: isETH ? lockedAmountA : '0' })
-        console.log(tx)
         const receipt = await tx.wait()
-        console.log(receipt)
         if (receipt.status) {
           router.push('/project/ongoing')
         }
@@ -186,7 +185,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       // await airdropSender.setAirdropAssetTreasury('0x59E56cDc025083c8D2cd6E01FAD0c56174c735E9')
       // console.log(airdropManager, airdropAssetTreasury)
     }
-  }, [airdropSender, account, args, lockedToken])
+  }, [airdropSender, account, args, lockedToken, independentField])
 
   const contractABI = useCreateContractABIAll()
   const handleEstimateGas = useCallback(async (contractAddress: string, funName: string, parameter: any[]) => {

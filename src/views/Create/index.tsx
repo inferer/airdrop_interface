@@ -512,9 +512,9 @@ export default function Create() {
 
                     <div className='mt-1 flex items-center text-[12px] text-[rgba(0,0,0,0.60)]'>
                       <LazyImage className='mr-1' src='/images/airdrop/info.svg' />
-                      <div className=' '>Function must call ‘Inferer Airdrop Interface’. </div>
+                      <div className=' '>Function must call ‘Inferer Airdrop Interface’. Check</div>
                       <div className='flex items-center cursor-pointer group hover:text-[rgba(79,88,127,1)] pl-[4px]'>
-                         Check API document
+                         API document
                         <img src='/images/airdrop/link5.svg' className='mx-1 inline-block group-hover:hidden' />
                         <img src='/images/airdrop/link6.svg' className='mx-1 hidden group-hover:inline-block' />
                         {/* <LazyImage4 src='/images/airdrop/link5.svg' activeSrc='/images/airdrop/link6.svg' className='mx-1' /> */}
@@ -664,7 +664,7 @@ export default function Create() {
                     }
 
                     {
-                      paremeterVerify && landingPageVerify && verifyUint === 2 &&
+                      paremeterVerify && landingPageVerify &&
                       <div className='h-[121px] bg-[rgba(123,120,255,0.06)] rounded-xl px-4 py-[18px] mt-5'>
                         <div className=' font-fsemibold text-[#7B78FF] text-[14px] leading-normal'>Airdrop assets would be locked in contract.</div>
                         <div className=' text-[#7B78FF] text-[13px] mt-3 leading-[18px]'>When you try to create an airdrop, the associated token assets would be locked in contract, and you would receive same amount of correspondant “Air-” tokens, which are permitted to trade in airdrop pools.</div>

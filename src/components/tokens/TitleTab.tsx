@@ -3,10 +3,10 @@ import React from "react";
 
 const TitleTab = () => {
   const router = useRouter()
-  const isRewards = router.query.action === "rewards"
+  const isRewards = (router.query.action && router.query.action[0]) === "rewards"
   const handleSwitchTab = (action: string) => {
-
-    router.push(router.pathname.replace('[action]', action))
+    let pathname = router.pathname
+    router.push(pathname.replace('[...action]', action))
   }
 
   return (

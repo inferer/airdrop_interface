@@ -146,11 +146,11 @@ const AirdropList: React.FC<{
                             {/* {
                               airdrop.completed ? <div className=" text-gray-400 text-sm">Completed</div> : <CheckedWrap airdrop={airdrop} handleChecked={handleChecked} />
                             } */}
-                            <Tooltip2 text={airdrop.landingPage + '?taskId=' + airdrop.id } >
+                            <Tooltip2 text={airdrop.landingPage + '?taskId=' + airdrop.id} >
                               <div
                                 onClick={e => {
                                   e.stopPropagation()
-                                  openBrowser('/contract-demo?taskId=' + airdrop.id)
+                                  openBrowser(airdrop.landingPage + '?taskId=' + airdrop.id)
                                 }}
                               >
                                 <LazyImage src="/images/airdrop/landing.svg" className="w-[24px] h-[24px]" />
