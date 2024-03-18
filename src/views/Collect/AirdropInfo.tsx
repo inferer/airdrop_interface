@@ -170,7 +170,7 @@ const AirdropInfo = ({
             contentJson.parameter.length > 0 && 
             <div className="mt-5">
               <LabelText>Parameter</LabelText>
-              <div className=" grid grid-cols-2 mt-4">
+              <div className=" grid grid-cols-2 mt-4 rounded-lg overflow-hidden">
                 {
                   contentJson.parameter.map((item: any, index: number) => {
                     return (

@@ -87,7 +87,7 @@ const AirdropList: React.FC<{
                   return (
                     <TableRow key={airdrop.airdropId + index} 
                       onClick={() => {
-                        router.push(`/user/ongoing/${airdrop.airdropId}`)
+                        router.push(`/user/ongoing/${airdrop.airdropId}?taskId=` + airdrop.id)
                       }}
                     >
                       <>
