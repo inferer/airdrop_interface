@@ -146,6 +146,7 @@ export function useIsRoleProjectMode(): boolean {
   // const roleMode = useSelector<AppState, AppState['user']['userRoleMode']>(state => state.user.userRoleMode)
   // return useMemo(() => roleMode === UserRoleMode.PROJECT , [roleMode])
   const router = useRouter()
+
   return useMemo(() => {
     if (
       router.pathname.indexOf('/project/') > -1 ||
@@ -153,6 +154,12 @@ export function useIsRoleProjectMode(): boolean {
     
     ) {
       return true
+    } else {
+      const isProjectMode = localStorage.getItem('airdrop_model')
+      if (isProjectMode !== 'false') {
+        return true
+      }
+      return false
     }
     return false
   }, [router])
