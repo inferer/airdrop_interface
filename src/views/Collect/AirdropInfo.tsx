@@ -5,6 +5,7 @@ import CurrencyLogo from "../../components/CurrencyLogo";
 import LazyImage from "../../components/LazyImage";
 import { openBrowser, shortenAddress } from "../../utils";
 import { Currency } from "@uniswap/sdk";
+import { useRouter } from "next/router";
 
 const ProgressItem = ({
   amount,
@@ -58,6 +59,8 @@ const AirdropInfo = ({
     return obj
   }, [airdrop])
   
+  const router = useRouter()
+
   return (
     <div className="">
       <div className="h-[171px] rounded-xl border border-[rgba(85, 123, 241, 0.1)] overflow-hidden">
@@ -202,14 +205,19 @@ const AirdropInfo = ({
         <div className="mt-5">
           <LabelText>Landing Page</LabelText>
           <div className="flex">
-            <div className="h-[44px] flex items-center mt-3 px-4 bg-[rgba(247,100,135,0.015)] cursor-pointer"
+            <div className="h-[44px] flex items-center mt-3 px-4 bg-[rgba(247,100,135,0.015)] cursor-pointer rounded-lg"
               onClick={e => {
                 e.stopPropagation()
                 openBrowser(contentJson.landingPage + '?airdropId=' + airdrop.airdropId)
               }}
             >
               <LazyImage src="/images/airdrop/landing.svg" />
-              <div className="text-[14px] font-fnormal mx-2">{contentJson.landingPage + '?airdropId=' + airdrop.airdropId}</div>
+              {
+                from === 'project' ? 
+                  <div className="text-[14px] font-fnormal mx-2">{contentJson.landingPage + '?airdropId=' + airdrop.airdropId}</div> :
+                  <div className="text-[14px] font-fnormal mx-2">{contentJson.landingPage + '?taskId=' + router.query.taskId}</div>
+              }
+              
               <div className=" "
                 
               >

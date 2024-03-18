@@ -10,7 +10,7 @@ import { useRouter } from 'next/router'
 
 function Collect() {
   const router = useRouter()
-  const isOngoing = router.query.action === 'ongoing'
+  const isOngoing = router.query.action && router.query.action[0] === 'ongoing'
   return (
     <div className='w-[1217px] mx-auto'>
       <CollectBody>

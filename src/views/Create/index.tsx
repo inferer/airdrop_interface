@@ -279,7 +279,8 @@ export default function Create() {
           handleEstimateGas(contractAddress, funName, parameter)
             .then((unit) => {
               setVerifyUint(2)
-              setGasUnit(unit)
+              // setGasUnit(unit)
+              setGasUnit(1)
             })
         }, 500)
       }
@@ -626,6 +627,7 @@ export default function Create() {
                               }}
                             >
                               <LazyImage src='/images/airdrop/card_from.svg' className='' />
+                              <img src='/images/airdrop/eq.svg' className=' fixed -z-10 left-[10000px]' />
                             </div>
 
                             {
@@ -639,7 +641,8 @@ export default function Create() {
                               verifyUint === 2 &&
                               <>
                                 <div className='mx-3'>
-                                  <LazyImage src='/images/airdrop/eq.svg' className='' />
+                                  <img src='/images/airdrop/eq.svg' className='w-3 h-3' />
+                                  {/* <span className=' text-[rgba(0,0,0,0.5)] text-[24px] relative -top-[1px]'>=</span> */}
                                 </div>
                                 <div className='mr-3 font-fsemibold text-[16px]'>
                                   <div>{gasUnit} x</div>
