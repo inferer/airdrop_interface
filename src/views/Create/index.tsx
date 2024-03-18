@@ -267,7 +267,7 @@ export default function Create() {
     //   }, 1000)
     // }
   }, [createDisabled])
-  const [gasUnit, setGasUnit] = useState(1)
+  const [gasUnit, setGasUnit] = useState(0)
   useEffect(() => {
     if (paremeterVerify && landingPageVerify && funName && contractAddress) {
       if (functionRef.current) {
@@ -276,10 +276,9 @@ export default function Create() {
         }, 300)
         setVerifyUint(1)
         setTimeout(() => {
-          setVerifyUint(2)
           handleEstimateGas(contractAddress, funName, parameter)
             .then((unit) => {
-              
+              setVerifyUint(2)
               setGasUnit(unit)
             })
         }, 500)
