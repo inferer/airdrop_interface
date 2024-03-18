@@ -212,7 +212,7 @@ export default function Swap() {
         const outputValue = formattedAmounts[Field.OUTPUT]
         const inputCurrency = currencies[Field.INPUT]
         const outputCurrency = currencies[Field.OUTPUT]
-        const content = `Swap ${inputValue} ${inputCurrency?.symbol} for ${outputValue} ${outputCurrency?.symbol}`
+        const content = `Swap ${parseFloat(inputValue).toFixed(3)} ${inputCurrency?.symbol} for ${parseFloat(outputValue).toFixed(3)} ${outputCurrency?.symbol}`
         handleShow({ type: 'success', content: content, title: 'Success', action: 'swap', hash: hash })
         setSwaping(false)
         onUserInput(Field.INPUT, '')
