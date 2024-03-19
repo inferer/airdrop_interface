@@ -94,11 +94,12 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
       const airdrop = data[0]
       const offerTokenData = getUSDTTokenByAddress(airdrop[2][0])
       const labelTokenData = getLabelTokenByAddress(airdrop[2][2])
-      const subDecimals = String((10 ** (offerTokenData?.decimals ?? 18))).length - (airdrop[3][0].toString()).length
-      const _offerLocked = (Number(airdrop[3][0].toString()) / (10 ** (offerTokenData?.decimals ?? 18))).toFixed(subDecimals < 0 ?  0 : subDecimals)
+      // const subDecimals = String((10 ** (offerTokenData?.decimals ?? 18))).length - (airdrop[3][0].toString()).length
+      const subDecimals = 18
+      const _offerLocked = (Number(airdrop[3][0].toString()) / (10 ** (offerTokenData?.decimals ?? 18))).toString()
       const expireOnTimestamp = Number(airdrop[5].toString()) * 1000 + Number(airdrop[4].toString()) * 1000
       const _labelLocked = (Number(airdrop[3][2]) / (10 ** (labelTokenData?.decimals ?? 18))).toFixed(4)
-      const _claimed = (Number(airdrop[6].toString()) / (10 ** (labelTokenData?.decimals ?? 18))).toFixed(4)
+      const _claimed = (Number(airdrop[6].toString()) / (10 ** (labelTokenData?.decimals ?? 18))).toString()
 
       const _otherContent = airdrop[1][5] ? airdrop[1][5].split('|') : []
       const parameterType = _otherContent[1] ? JSON.parse(_otherContent[1] ?? '""') : []

@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { FlexCenter, LabelText } from "./styleds";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import LazyImage from "../../components/LazyImage";
-import { openBrowser, shortenAddress } from "../../utils";
+import { formatStringNumber, openBrowser, shortenAddress } from "../../utils";
 import { Currency } from "@uniswap/sdk";
 import { useRouter } from "next/router";
 
@@ -107,7 +107,7 @@ const AirdropInfo = ({
               <div className="mt-3 flex">
                 <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px]">
                   <div className=" text-[16px] font-fsemibold mr-1">
-                    {airdrop.offerLocked}
+                    {formatStringNumber(airdrop.offerLocked)}
                   </div>
                   {
                     airdrop.offerToken && <CurrencyLogo currency={airdrop.offerToken} size={'20px'} />
@@ -247,20 +247,20 @@ const AirdropInfo = ({
             <div className=" grid grid-cols-4">
               <div className="pl-5">
                 <LabelText>Total Value Locked</LabelText>
-                <ProgressItem amount={airdrop.labelLocked} token={airdrop.labelToken} />
+                <ProgressItem amount={formatStringNumber(airdrop.labelLocked, 4)} token={airdrop.labelToken} />
               </div>
               <div className="pl-5 flex items-center">
                 <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
                 <div>
                   <LabelText>Consumed Value</LabelText>
-                  <ProgressItem amount={airdrop.claimed} token={airdrop.labelToken} />
+                  <ProgressItem amount={formatStringNumber(airdrop.claimed)} token={airdrop.labelToken} />
                 </div>
               </div>
               <div className="pl-5 flex items-center">
                 <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
                 <div>
                   <LabelText>Remaing Value</LabelText>
-                  <ProgressItem amount={String(Number(airdrop.labelLocked) - Number(airdrop.claimed))} token={airdrop.labelToken} />
+                  <ProgressItem amount={formatStringNumber(String(Number(airdrop.labelLocked) - Number(airdrop.claimed)), 4)} token={airdrop.labelToken} />
                 </div>
                 
               </div>

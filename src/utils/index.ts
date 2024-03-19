@@ -245,3 +245,10 @@ export function transformTime(timestamp: number) {
 
   return addZero(h) + ':' + addZero(m) + ' ' + addZero(M) + "/" + addZero(d) + ' ' + y;
 }
+
+export function formatStringNumber(num: string = '', decimals = 3) {
+  const idx = num.indexOf('.')
+  const subLength = num.slice(idx).length
+  if (subLength <= 3) return num
+  return Number(num).toFixed(decimals)
+}

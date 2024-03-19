@@ -16,7 +16,7 @@ import CurrencyLogo from '../../components/CurrencyLogo'
 import { useRouter } from 'next/router'
 import { othersContracts } from '../../constants/contractsLocal'
 import ContractABI from './ContractABI'
-import { formatInput, isAddress, verifyInput } from '../../utils'
+import { formatInput, formatStringNumber, isAddress, verifyInput } from '../../utils'
 import { useCreateContractABI } from '../../state/airdrop/hooks'
 
 // ["airdrop 01","Social"]
@@ -350,7 +350,7 @@ export default function Create() {
               {/* <Input value={''} placeholder='10' onUserInput={function (input: string): void {
                 throw new Error('Function not implemented.')
               } } /> */}
-              <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>{lockedAmount}</div>
+              <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>{formatStringNumber(lockedAmount)}</div>
               <TokenInfo className='flex items-center shrink-0'>
                 {/* <LazyImage2 src='/images/airdrop/eth.svg' /> */}
                 <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'24px'} />

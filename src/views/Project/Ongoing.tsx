@@ -8,7 +8,7 @@ import { useProjectAirdropList } from "../../state/airdrop/hooks";
 import { useRouter } from "next/router";
 import { useAirdropManager } from "../../hooks/useAirdropManager";
 import { Tooltip2 } from '../../components/Tooltip';
-import { openBrowser, shortenAddress } from '../../utils';
+import { formatStringNumber, openBrowser, shortenAddress } from '../../utils';
 import useCopyClipboard from '../../hooks/useCopyClipboard';
 import CurrencyLogo from '../../components/CurrencyLogo';
 
@@ -92,7 +92,7 @@ export const OngoingList: React.FC<{
                         </TableCell>
                         <TableCell className="w-[126px]">
                           <div className='flex items-center'>
-                            <span className='mr-2'>{airdrop.offerLocked}</span>
+                            <span className='mr-2'>{formatStringNumber(airdrop.offerLocked)}</span>
                             {/* {airdrop.offerToken?.symbol || 'ETH' } */}
                             {
                               airdrop.offerToken && <CurrencyLogo currency={airdrop.offerToken} />
