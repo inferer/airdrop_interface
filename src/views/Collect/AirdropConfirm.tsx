@@ -83,7 +83,7 @@ const AirdropConfirm: React.FC<{
               }}
             >
               <div className='btn-text'>
-                Approve {algTokenCurrency?.symbol} 
+                Approve {algTokenCurrency?.symbol?.replace('alg','Alg')} 
               </div>
               
             </ButtonSwapUser> : null
