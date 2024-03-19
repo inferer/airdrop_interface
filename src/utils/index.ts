@@ -252,3 +252,12 @@ export function formatStringNumber(num: string = '', decimals = 3) {
   if (subLength <= 3) return num
   return Number(num).toFixed(decimals)
 }
+
+export function upperCase0(str: string = '') {
+  if (str) {
+    let arr = str.split('')
+    arr[0] = arr[0].toUpperCase()
+    return arr.join('')
+  }
+  return str
+}

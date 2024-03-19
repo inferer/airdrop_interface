@@ -10,7 +10,7 @@ import { useActiveWeb3React } from "../../hooks";
 import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
 import { useCollectSwapInfo } from "../../state/swap/hooks";
 import { Tooltip2 } from "../../components/Tooltip";
-import { openBrowser, shortenAddress } from "../../utils";
+import { formatStringNumber, openBrowser, shortenAddress } from "../../utils";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import useCopyClipboard from "../../hooks/useCopyClipboard";
 
@@ -47,13 +47,15 @@ const AirdropList: React.FC<{
           tempList.push({...tempAirdropList[k]})
           tempTotal += Number(tempAirdropList[k].unit)
         } else {
-          if (tempTotal + Number(tempAirdropList[k].unit) >= algAmount) {
+          if (tempTotal < algAmount) {
             tempList.push({...tempAirdropList[k]})
             tempTotal += Number(tempAirdropList[k].unit)
-            break
+            if (tempTotal > algAmount) {
+              tempList.pop()
+              break
+            }
           } else {
-            tempList.push({...tempAirdropList[k]})
-            tempTotal += Number(tempAirdropList[k].unit)
+            break
           }
         }
         
@@ -132,7 +134,7 @@ const AirdropList: React.FC<{
                         </TableCell>
                         <TableCell className="w-[126px]">
                           <div className='flex items-center'>
-                            <span className='mr-2'>{airdrop.offerLocked}</span>
+                            <span className='mr-2'>{formatStringNumber(airdrop.offerLocked)}</span>
                             {
                               airdrop.offerToken && <CurrencyLogo currency={airdrop.offerToken} />
                             }

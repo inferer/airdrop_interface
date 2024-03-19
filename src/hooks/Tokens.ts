@@ -80,7 +80,6 @@ export function useAlgLabelAllTokens(): { [address: string]: Token } {
   const { chainId } = useActiveWeb3React()
   const userAddedTokens = useUserAddedTokens()
   const allTokens = useAlgLabelTokenList()
-
   return useMemo(() => {
     if (!chainId) return {}
     return (
@@ -191,7 +190,6 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 export function useCurrency(currencyId: string | undefined): Currency | null | undefined {
   const isETH = currencyId?.toUpperCase() === 'ETH'
   const token = useToken(currencyId)
-  
   return useMemo(() => {
     if (isETH) return ETHER
     return token

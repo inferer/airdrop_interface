@@ -9,7 +9,6 @@ import CreatePage from "../../views/Create";
 
 function ProjectPage () {
   const router = useRouter()
-  console.log(router)
   const action = router.query.action ? router.query.action[0] : 'create'
   const action1 = router.query.action ? router.query.action[1] : ''
   if (

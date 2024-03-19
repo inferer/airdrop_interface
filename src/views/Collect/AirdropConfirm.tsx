@@ -10,6 +10,7 @@ import Loader, { Loading, LoadingX, LoadingXUser } from '../../components/Loader
 import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
 import { useActiveWeb3React } from "../../hooks";
 import AirdropInfo from "./AirdropInfo";
+import { upperCase0 } from "../../utils";
 
 const AirdropConfirm: React.FC<{
 
@@ -83,7 +84,7 @@ const AirdropConfirm: React.FC<{
               }}
             >
               <div className='btn-text'>
-                Approve {algTokenCurrency?.symbol} 
+                Approve {upperCase0(algTokenCurrency?.symbol)} 
               </div>
               
             </ButtonSwapUser> : null

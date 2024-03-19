@@ -61,6 +61,11 @@ const AirdropInfo = ({
   
   const router = useRouter()
 
+  const landingPage = useMemo(() => {
+    if (from === 'project' || confirm) return contentJson.landingPage + '?airdropId=' + airdrop.airdropId
+    return contentJson.landingPage + '?taskId=' + router.query.taskId
+  }, [from, confirm, airdrop, contentJson])
+
   return (
     <div className="">
       <div className="h-[171px] rounded-xl border border-[rgba(85, 123, 241, 0.1)] overflow-hidden">
@@ -208,15 +213,11 @@ const AirdropInfo = ({
             <div className="h-[44px] flex items-center mt-3 px-4 bg-[rgba(247,100,135,0.015)] cursor-pointer rounded-lg"
               onClick={e => {
                 e.stopPropagation()
-                openBrowser(contentJson.landingPage + '?airdropId=' + airdrop.airdropId)
+                openBrowser(landingPage)
               }}
             >
               <LazyImage src="/images/airdrop/landing.svg" />
-              {
-                from === 'project' ? 
-                  <div className="text-[14px] font-fnormal mx-2">{contentJson.landingPage + '?airdropId=' + airdrop.airdropId}</div> :
-                  <div className="text-[14px] font-fnormal mx-2">{contentJson.landingPage + '?taskId=' + router.query.taskId}</div>
-              }
+              <div className="text-[14px] font-fnormal mx-2">{landingPage}</div>
               
               <div className=" "
                 
