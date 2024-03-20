@@ -279,8 +279,8 @@ export default function Create() {
           handleEstimateGas(contractAddress, funName, parameter)
             .then((unit) => {
               setVerifyUint(2)
-              // setGasUnit(unit)
-              setGasUnit(1)
+              setGasUnit(unit)
+              // setGasUnit(1)
             })
         }, 500)
       }
