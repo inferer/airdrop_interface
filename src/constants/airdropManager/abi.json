@@ -244,6 +244,11 @@
         "internalType": "bool",
         "name": "completed",
         "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "completedClaimed",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -422,7 +427,7 @@
     ],
     "name": "completeAirdrop",
     "outputs": [],
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -678,6 +683,11 @@
             "internalType": "bool",
             "name": "completed",
             "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "completedClaimed",
+            "type": "uint256"
           }
         ],
         "internalType": "struct IAirdropManager.Airdrop",
@@ -1072,51 +1082,9 @@
     "name": "getSourceAirdropList",
     "outputs": [
       {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "id",
-            "type": "uint256"
-          },
-          {
-            "internalType": "string[]",
-            "name": "baseInfo",
-            "type": "string[]"
-          },
-          {
-            "internalType": "address[]",
-            "name": "offer_label_token",
-            "type": "address[]"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "offer_label_locked",
-            "type": "uint256[]"
-          },
-          {
-            "internalType": "uint64",
-            "name": "duration",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
-            "name": "startTimestamp",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint256",
-            "name": "claimed",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bool",
-            "name": "completed",
-            "type": "bool"
-          }
-        ],
-        "internalType": "struct IAirdropManager.Airdrop[]",
+        "internalType": "uint256[]",
         "name": "_airdropList",
-        "type": "tuple[]"
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",
@@ -1555,28 +1523,8 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "id",
+        "name": "",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint64",
-        "name": "duration",
-        "type": "uint64"
-      },
-      {
-        "internalType": "uint64",
-        "name": "startTimestamp",
-        "type": "uint64"
-      },
-      {
-        "internalType": "uint256",
-        "name": "claimed",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "completed",
-        "type": "bool"
       }
     ],
     "stateMutability": "view",

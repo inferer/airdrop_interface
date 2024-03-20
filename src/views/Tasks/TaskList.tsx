@@ -25,7 +25,7 @@ const AirdropList: React.FC<{
   const { handleGetUserAirdropConfirmed } = useAirdropManager()
   const airdropList = useUserAirdropConfirmedList()
   const userConfirmedList = useMemo(() => {
-    return airdropList.filter((airdrop) => !airdrop.completed)
+    return airdropList.filter((airdrop) => !airdrop.userCompleted)
   }, [airdropList])
   useEffect(() => {
     // handleGetAirdropList()

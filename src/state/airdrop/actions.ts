@@ -27,7 +27,8 @@ export interface IAirdrop {
   chain?: string,
   landingPage?: string,
   parameterInfo?: any[]
-  realCompleted?: boolean
+  realCompleted?: boolean,
+  userCompleted?: boolean
 }
 export interface IAlgAirdrop {
   claimed: string,

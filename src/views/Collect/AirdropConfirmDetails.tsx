@@ -23,6 +23,7 @@ const AirdropConfirmDetails: React.FC<{
   }, [router.query])
 
   const airdrop = useAirdropList0(router.query?.action ? router.query?.action[1] as string : undefined)
+  
   return (
     <div className="py-5 pt-0">
       <AirdropInfo airdrop={airdrop} from={isProjectMode ? 'project' : 'user'} taskList={airdropUserConfirmed} />

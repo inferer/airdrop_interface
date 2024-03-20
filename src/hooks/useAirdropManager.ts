@@ -132,7 +132,7 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
         startTimestamp: airdrop[5].toString(),
         expireOn: transformTime(expireOnTimestamp),
         claimed: _claimed,
-        completed: expireOnTimestamp < Date.now() || (Number(_labelLocked) - Number(_claimed) < 1) || airdrop[7],
+        completed: expireOnTimestamp < Date.now() || airdrop[7],
         realCompleted: airdrop[7]
 
       }
@@ -154,8 +154,8 @@ export const getAirdropUserConfirmed = async (multi: Contract, airdropId: number
     })
 
   const userAirdropConfirmed = await multicall(multi, AirdropManager_ABI, calls)
-  return userAirdropConfirmed[0] && userAirdropConfirmed[0][0] && userAirdropConfirmed[0][0][0] ? userAirdropConfirmed.map((item: any[]) => {
-    const tempItem = item[0][0]
+  return (userAirdropConfirmed[0] && userAirdropConfirmed[0][0] && userAirdropConfirmed[0][0]) ? userAirdropConfirmed[0][0].map((item: any) => {
+    const tempItem = item
     if (tempItem) {
       return {
         completed: tempItem.completed,
@@ -196,9 +196,10 @@ export const getUserAirdropConfirmed2 = async (airdropManager: Contract, account
   return userAirdropConfirmed && userAirdropConfirmed[0] ? userAirdropConfirmed.map((item: any) => {
     const tempItem = item
     const labelTokenData = getLabelTokenByAddress(tempItem[7])
+    
     return {
       airAmount: Number(tempItem[5].toString()) / (10 ** (labelTokenData?.decimals ?? 18)),
-      completed: tempItem.completed,
+      userCompleted: tempItem.completed,
       airdropId: tempItem[2]?.toString(),
       userAddress: tempItem[3],
       confirmedTimestamp: tempItem[8]?.toString(),

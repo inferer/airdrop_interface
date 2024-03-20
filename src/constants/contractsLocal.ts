@@ -27,8 +27,10 @@ const contractList =
   "router02": "0x09635F643e140090A9A8Dcd712eD6285858ceBef",
   "airdropTokenScoreLogic": "0x67d269191c92Caf3cD7723F116c85e6E9bf55933",
   "airdropTokenScore": "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690",
-  "airdropManagerLogic": "0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9",
-  "airdropManager": "0x851356ae760d987E095750cCeb3bC6014560891C",
+  "airdropManagerLogic": "0x9fD16eA9E31233279975D99D5e8Fc91dd214c7Da",
+  "airdropManager": "0x987e855776C03A4682639eEb14e65b3089EE6310",
+  // "airdropManagerLogic": "0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9",
+  // "airdropManager": "0x851356ae760d987E095750cCeb3bC6014560891C",
   "airdropSenderLogic": "0x95401dc811bb5740090279Ba06cfA8fcF6113778",
   "airdropSender": "0x70e0bA845a1A0F2DA3359C97E0285013525FFC49",
   "airdropReceriverLogic": "0x8f86403A4DE0BB5791fa46B8e795C547942fE4Cf",
@@ -37,9 +39,9 @@ const contractList =
 }
 
 export const othersContracts = {
-  "projectContract": "0x70eE76691Bdd9696552AF8d4fd634b3cF79DD529",
-  "infererTrackManagerLogic": "0x7bc06c482DEAd17c0e297aFbC32f6e63d3846650",
-  "infererTrackManager": "0xFD471836031dc5108809D173A067e8486B9047A3",
+  "projectContract": "0x9c65f85425c619A6cB6D29fF8d57ef696323d188",
+  "infererTrackManagerLogic": "0x7Cf4be31f546c04787886358b9486ca3d62B9acf",
+  "infererTrackManager": "0x0c626FC4A447b01554518550e30600136864640B",
 }
 
 export default contractList
