@@ -293,7 +293,7 @@ const AirdropInfo = ({
                 <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
                 <div>
                   <LabelText>{label3 || ''}</LabelText>
-                  <ProgressItem amount={formatStringNumber(String(Number(airdrop.labelLocked) - Number(airdrop.completedClaimed)))} token={airdrop.labelToken} />
+                  <ProgressItem amount={formatStringNumber(String(Number(airdrop.labelLocked) - Number(airdrop.claimed)))} token={airdrop.labelToken} />
                 </div>
               </div>
               <div className="pl-5 flex items-center">

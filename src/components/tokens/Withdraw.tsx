@@ -106,12 +106,12 @@ const Withdraw = ({
         </div> */}
       </div>
       
-      <div className=" cursor-pointer shrink-0 w-[15px]">
+      <div className="  shrink-0 w-[15px]">
         {
           // @ts-ignore
           currentTokenAddress === token.address ? 
             <Loading2 /> :
-            <div className={[isActionDisable ? 'disabled' : ''].join(' ')}
+            <div className={[isActionDisable ? 'disabled' : 'cursor-pointer'].join(' ')}
               onClick={e => {
                 e.stopPropagation()
                 handleWithdraw()
