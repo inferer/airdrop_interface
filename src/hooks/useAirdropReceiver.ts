@@ -237,49 +237,6 @@ export function useProjectContractDemo() {
   const { handleShow } = useShowToast()
   const router = useRouter()
 
-  const handleCommentAction = useCallback(async (funName: string, parameter: any[]) => {
-    if (account && contractDemo) {
-      setConfirmStatus(1)
-      let gasLimit = '5000000'
-      const parameterValue = parameter.map(pr => pr.value)
-      // const inviteAddress = '0x70997970c51812dc3a010c7d01b50e0d17dc79c8'.toLowerCase()
-      // const inviteNo = 1
-      // const shareUrl = 'https://twitter.com/intent/like?tweet_id=1720373913576952121'
-      const taskId = router.query.taskId
-      parameterValue.push(taskId)
-
-      try {
-        const gasEstimate = await contractDemo.estimateGas[funName](...parameterValue)
-        gasLimit = gasEstimate.toString()
-      } catch (error: any) {
-        console.log(error)
-        const message = error.data?.data?.message || error.data?.message || error.message
-        console.log(message)
-        // handleShow({ type: 'error', content: `Fail to Complete.`, title: 'Error' })
-        setConfirmStatus(2)
-        alert(message)
-        return
-      }
-      try {
-        const tx = await contractDemo[funName](...parameterValue, { gasPrice: '1000000000', gasLimit: gasLimit })
-        const receipt = await tx.wait()
-        if (receipt.status) {
-          // handleShow({ type: 'success', content: `Success.`, title: 'Success' })
-          alert('Success')
-        }
-      } catch (error: any) {
-        console.log(error)
-        // handleShow({ type: 'error', content: `Fail to confirm.`, title: 'Error' })
-        const message = error.data?.data?.message || error.data?.message || error.message
-        console.log(message)
-        alert(message)
-      }
-      setConfirmStatus(2)
-    }
-  }, [account, contractDemo])
-
-  const [airdropInfo, setAirdropInfo] = useState<any>({})
-  // getUserAirdropConfirmedByIndex
   const handleGetTaskInfo = useCallback(async (account: string) => {
     if (airdropManager) {
       const taskId = router.query.taskId
@@ -332,6 +289,52 @@ export function useProjectContractDemo() {
     }
 
   }, [airdropManager])
+
+  const handleCommentAction = useCallback(async (funName: string, parameter: any[]) => {
+    if (account && contractDemo) {
+      setConfirmStatus(1)
+      let gasLimit = '5000000'
+      const parameterValue = parameter.map(pr => pr.value)
+      // const inviteAddress = '0x70997970c51812dc3a010c7d01b50e0d17dc79c8'.toLowerCase()
+      // const inviteNo = 1
+      // const shareUrl = 'https://twitter.com/intent/like?tweet_id=1720373913576952121'
+      const taskId = router.query.taskId
+      parameterValue.push(taskId)
+
+      try {
+        const gasEstimate = await contractDemo.estimateGas[funName](...parameterValue)
+        gasLimit = gasEstimate.toString()
+      } catch (error: any) {
+        console.log(error)
+        const message = error.data?.data?.message || error.data?.message || error.message
+        console.log(message)
+        // handleShow({ type: 'error', content: `Fail to Complete.`, title: 'Error' })
+        setConfirmStatus(2)
+        alert(message)
+        return
+      }
+      try {
+        const tx = await contractDemo[funName](...parameterValue, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const receipt = await tx.wait()
+        if (receipt.status) {
+          // handleShow({ type: 'success', content: `Success.`, title: 'Success' })
+          handleGetTaskInfo(account)
+          alert('Success')
+        }
+      } catch (error: any) {
+        console.log(error)
+        // handleShow({ type: 'error', content: `Fail to confirm.`, title: 'Error' })
+        const message = error.data?.data?.message || error.data?.message || error.message
+        console.log(message)
+        alert(message)
+      }
+      setConfirmStatus(2)
+    }
+  }, [account, contractDemo, handleGetTaskInfo])
+
+  const [airdropInfo, setAirdropInfo] = useState<any>({})
+  // getUserAirdropConfirmedByIndex
+
 
   const handleTestGas = useCallback( async () => {
     if (contractDemo && account) {
