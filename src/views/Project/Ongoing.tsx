@@ -13,6 +13,48 @@ import useCopyClipboard from '../../hooks/useCopyClipboard';
 import CurrencyLogo from '../../components/CurrencyLogo';
 import { IAirdrop } from '../../state/airdrop/actions';
 
+export const FundToken2 = ({
+  airdrop,
+  from
+}: {
+  airdrop: IAirdrop,
+  from?: string
+}) => {
+
+  const tipText = useMemo(() => {
+    return formatStringNumber(airdrop.offerLocked) + ' ' + airdrop.offerToken?.symbol + ' + ' + airdrop.offerLabelLocked + ' ' + airdrop.labelToken?.symbol
+  }, [airdrop])
+  return (
+    <div className=' relative'>
+
+      {
+        Number(airdrop.offerLabelLocked) > 0 ?
+        <Tooltip3 text={tipText} >
+        <div className=' flex items-center space-x-2 px-2 border rounded border-[rgba(0,0,0,0.06)] w-[88px] h-[36px]'>
+          {
+            airdrop.offerToken && <CurrencyLogo currency={airdrop.offerToken} />
+          }
+          <LazyImage src='/images/airdrop/add3.svg' />
+          {
+            airdrop.labelToken && <CurrencyLogo type={from === 'project' ? 'project' : ''}currency={airdrop.labelToken} size={'24px'} />
+          }
+          
+        </div>
+        </Tooltip3> :
+        <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px]">
+          <div className=" text-[16px] font-fsemibold mr-1">
+            {formatStringNumber(airdrop.offerLocked)}
+          </div>
+          {
+            airdrop.offerToken && <CurrencyLogo currency={airdrop.offerToken} size={'20px'} />
+          }
+          
+        </div>
+      }
+    </div>
+  )
+}
+
 export const FundToken = ({
   airdrop,
   from
@@ -46,15 +88,6 @@ export const FundToken = ({
           {
             airdrop.offerToken && <CurrencyLogo currency={airdrop.offerToken} />
           }
-          
-          {/* {
-            Number(airdrop.offerLabelLocked) > 0 && 
-            <>
-              <span className="px-1">+</span>
-              <span>{airdrop.offerLabelLocked} {airdrop.labelToken.symbol}</span>
-            </>
-          } */}
-          
         </div>
       }
     </div>
@@ -211,7 +244,7 @@ function Ongoing() {
       <CollectBody>
         <div className='text-[32px] font-fsemibold mb-10 flex items-center'>
           <LazyImage src='/images/airdrop/ongoing.svg' className=' w-[32px] h-[32px] mr-3' />
-          Ongoing airdrops
+          Ongoing Airdrops
         </div>
         <OngoingList />
       </CollectBody>

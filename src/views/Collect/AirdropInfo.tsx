@@ -6,7 +6,7 @@ import LazyImage from "../../components/LazyImage";
 import { formatStringNumber, openBrowser, shortenAddress } from "../../utils";
 import { Currency } from "@uniswap/sdk";
 import { useRouter } from "next/router";
-import { FundToken } from "../Project/Ongoing";
+import { FundToken, FundToken2 } from "../Project/Ongoing";
 
 const ProgressItem = ({
   amount,
@@ -134,7 +134,7 @@ const AirdropInfo = ({
             <div>
               <LabelText>Fund</LabelText>
               <div className="mt-3 flex">
-                <FundToken airdrop={airdrop} from={from} />
+                <FundToken2 airdrop={airdrop} from={from} />
                 {/* <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px]">
                   <div className=" text-[16px] font-fsemibold mr-1">
                     {formatStringNumber(airdrop.offerLocked)}

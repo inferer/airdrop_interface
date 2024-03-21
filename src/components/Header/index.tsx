@@ -200,7 +200,7 @@ export default function Header() {
             router.pathname !== '/join' && 
             <TitleText>
               <AirdropTokensTabs />
-              <LazyImage src="/images/assets/more.svg" className='more' alt="more" />
+              {/* <LazyImage src="/images/assets/more.svg" className='more' alt="more" /> */}
             </TitleText>
           }
           

@@ -207,25 +207,28 @@ export default function RightMenu() {
         </div>
         <div className='px-3'>
           <div className='mt-[65px] rounded-[6px]' style={{'background': isProjectMode ? 'linear-gradient(135deg, rgba(63, 60, 255, 0.09) 0%, rgba(107, 190, 225, 0.09) 100%)' : 'linear-gradient(135deg, rgba(107, 190, 225, 0.09) 0%, rgba(138, 232, 153, 0.09) 100%)'}}>
-            <MenuItem icon='/images/airdrop/switch2.svg' text='Switch airdrop role' isProjectMode={isProjectMode}
-              onClick={() => handleClick('switch')}
-            />
-            <MenuLine />
-            <MenuItem icon='/images/airdrop/airdrop2.svg' text='Airdrops tokens' isProjectMode={isProjectMode}
-              onClick={() => handleClick('tokens')}
-            />
-            <MenuLine />
-            <MenuItem icon='/images/airdrop/ongoing.svg' text='Ongoing airdrops' isProjectMode={isProjectMode} 
+           
+            <MenuItem icon='/images/airdrop/ongoing.svg' text='Ongoing Airdrops' isProjectMode={isProjectMode} 
               onClick={() => handleClick('ongoing')}
             />
             <MenuLine />
-            <MenuItem icon='/images/airdrop/completed.svg' text='Completed airdrops' isProjectMode={isProjectMode} 
+            <MenuItem icon='/images/airdrop/completed.svg' text='Completed Airdrops' isProjectMode={isProjectMode} 
               onClick={() => handleClick('completed')}
             />
             <MenuLine />
-            <MenuItem icon='/images/airdrop/invite.svg' text='Invitation code' isProjectMode={isProjectMode} 
+            <MenuItem icon='/images/airdrop/airdrop2.svg' text='Airdrops Tokens' isProjectMode={isProjectMode}
+              onClick={() => handleClick('tokens')}
+            />
+            <MenuLine />
+            <MenuItem icon='/images/airdrop/switch2.svg' text='Switch Airdrop Role' isProjectMode={isProjectMode}
+              onClick={() => handleClick('switch')}
+            />
+            <MenuLine />
+            <MenuItem icon='/images/airdrop/invite.svg' text='Invitation Code' isProjectMode={isProjectMode} 
               onClick={() => handleClick('invite')}
             />
+            
+
           </div>
         </div>
         

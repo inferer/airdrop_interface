@@ -78,7 +78,7 @@ function Collect() {
         <CollectBody>
           <div className='text-[32px] font-fsemibold mb-10 flex items-center'>
             <LazyImage src='/images/airdrop/ongoing.svg' className=' w-[32px] h-[32px] mr-3' />
-            Ongoing airdrops
+            Ongoing Airdrops
           </div>
           <TaskList onChecked={handleOnChecked} /> 
         </CollectBody>
