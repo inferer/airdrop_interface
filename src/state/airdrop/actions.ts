@@ -29,7 +29,8 @@ export interface IAirdrop {
   parameterInfo?: any[]
   realCompleted?: boolean,
   userCompleted?: boolean,
-  isExpired?: boolean
+  isExpired?: boolean,
+  completedClaimed?: string
 }
 export interface IAlgAirdrop {
   claimed: string,

@@ -12,6 +12,7 @@ import { useAirdropAssetTreasury } from "../../hooks/useAirdropAssetTreasury";
 import { Loading } from "../Loader";
 import LazyImage from "../LazyImage";
 import Withdraw from "./Withdraw";
+import { formatStringNumber } from "../../utils";
 
 const TokenItem = ({
   token,
@@ -44,18 +45,18 @@ const TokenItem = ({
       <div className="mt-10">
         <div className="flex justify-between items-center">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Balance</div>
-          <div className="text-[18px] font-fmedium">{balance?.toSignificant(6)}</div>
+          <div className="text-[18px] font-fmedium">{formatStringNumber(balance?.toSignificant(6))}</div>
         </div>
         {
           isProjectMode && 
           <>
             <div className="flex justify-between items-center mt-2">
               <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Locked</div>
-              <div className="text-[18px] font-fmedium">{ isRewards ? tokenLocked.lockedAmount : usdtLocked.lockedAmount }</div>
+              <div className="text-[18px] font-fmedium">{ formatStringNumber(isRewards ? tokenLocked.lockedAmount : usdtLocked.lockedAmount) }</div>
             </div>
             <div className="flex justify-between items-center mt-2">
               <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Deposit</div>
-              <Withdraw isDeposit isProjectMode={isProjectMode} token={token} onClick={onClick} currentTokenAddress={currentTokenAddress} balance={depositBalance?.lockedAmount ?? '0'} />
+              <Withdraw isDeposit isProjectMode={isProjectMode} token={token} onClick={onClick} currentTokenAddress={currentTokenAddress} balance={formatStringNumber(depositBalance?.lockedAmount ?? '0')} />
             </div>
           </>
         }
@@ -145,13 +146,19 @@ const AirUSDTTokenItem = ({
         <div className="flex justify-between items-center">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Balance</div>
           <div className="text-[18px] font-fmedium flex items-center">
-            {balance?.toSignificant(6)}
+            {formatStringNumber(balance?.toSignificant(6)) }
             <LazyImage src="/images/airdrop/lock.svg" className="ml-[3px]" />
           </div>
         </div>
         <div className="flex justify-between items-center mt-2">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Withdraw</div>
-          <Withdraw isProjectMode={isProjectMode} token={token} onClick={onClick} currentTokenAddress={currentTokenAddress} balance={balance ? balance?.toSignificant(6) : '0'} />
+          <Withdraw 
+            isProjectMode={isProjectMode} 
+            token={token} 
+            onClick={onClick} 
+            currentTokenAddress={currentTokenAddress} 
+            balance={formatStringNumber(balance ? balance?.toSignificant(6) : '0')} 
+          />
         </div>
         
       </div>

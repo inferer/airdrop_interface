@@ -27,6 +27,9 @@ export const getTokenLogoURL2 = (currency: any, type?: string) => {
   if (type === 'confirm') {
     return '/images/tokens/confirm.svg'
   }
+  if (type === 'project') {
+    return '/images/tokens/project.svg'
+  }
   return `/images/tokens/swap/${logoName}.svg`
 }
 

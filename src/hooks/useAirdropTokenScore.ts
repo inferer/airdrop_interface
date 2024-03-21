@@ -90,7 +90,7 @@ export const getLockedAlgAssets = async (multi: Contract, tokenAddress: string, 
 
   const supplyAmount = await multi.getLockedAlgAssets(tokenAddress, score)
   // const amount = BigNumber.from(supplyAmount.toString()).div(BigNumber.from(String(10 ** 18))).toString()
-  const amount =(Number(supplyAmount.toString()) / (10 ** 18)).toFixed(1)
+  const amount =(Number(supplyAmount.toString()) / (10 ** 18)).toString()
   return amount
 }
 

@@ -79,7 +79,7 @@ export function useCreateCallback(
     if (args[0] && lockedCurrency && v2Trade) {
       const _lockedAmountB = percentBalance.balance2
       // const _lockedAmountA = BigNumber.from(parseInt(args[0], 16).toString())
-      const _lockedAmountA = BigNumber.from(args[0])
+      const _lockedAmountA = independentField === Field.INPUT ? BigNumber.from(args[0]) : BigNumber.from(args[1])
       lockedAmountB = BigNumber.from((_lockedAmountB * (10 ** v2Trade.outputAmount.currency.decimals)).toString()).toHexString()
       lockedAmountA = _lockedAmountA.toHexString()
       lockedAmountAShow = (Number(_lockedAmountA.toString()) / (10 ** lockedCurrency?.decimals)).toString()
@@ -93,7 +93,7 @@ export function useCreateCallback(
       lockedAmountAShow,
       lockedAmountBShow
     }
-  }, [args, lockedCurrency, airPercent, v2Trade, percentBalance])
+  }, [args, lockedCurrency, airPercent, v2Trade, percentBalance, independentField])
 
   const [approvalState, approve] = useApproveCallback(lockedCurrencyAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
   const [approvalStateAir, approveAir] = useApproveCallback(v2Trade?.inputAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
@@ -203,10 +203,10 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
         const gasEstimate = await contract.estimateGas[funName](...parameterValue)
         console.log(gasEstimate.toString())
         const gasLimit = Number(gasEstimate.toString())
-        if (gasLimit > 10000) {
+        if (gasLimit > 80000) {
           unit = 2
         } 
-        if (gasLimit > 100000) {
+        if (gasLimit > 200000) {
           unit = 3
         } 
       } catch (error) {

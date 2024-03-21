@@ -7,10 +7,59 @@ import LazyImage from "../../components/LazyImage";
 import { useProjectAirdropList } from "../../state/airdrop/hooks";
 import { useRouter } from "next/router";
 import { useAirdropManager } from "../../hooks/useAirdropManager";
-import { Tooltip2 } from '../../components/Tooltip';
+import { Tooltip2, Tooltip3 } from '../../components/Tooltip';
 import { formatStringNumber, openBrowser, shortenAddress } from '../../utils';
 import useCopyClipboard from '../../hooks/useCopyClipboard';
 import CurrencyLogo from '../../components/CurrencyLogo';
+import { IAirdrop } from '../../state/airdrop/actions';
+
+export const FundToken = ({
+  airdrop,
+  from
+}: {
+  airdrop: IAirdrop,
+  from?: string
+}) => {
+
+  const tipText = useMemo(() => {
+    return formatStringNumber(airdrop.offerLocked) + ' ' + airdrop.offerToken?.symbol + ' + ' + airdrop.offerLabelLocked + ' ' + airdrop.labelToken?.symbol
+  }, [airdrop])
+  return (
+    <div className=' relative'>
+
+      {
+        Number(airdrop.offerLabelLocked) > 0 ?
+        <Tooltip3 text={tipText} >
+        <div className=' flex items-center space-x-2 px-2 border rounded border-[rgba(0,0,0,0.06)] w-[88px] h-[36px]'>
+          {
+            airdrop.offerToken && <CurrencyLogo currency={airdrop.offerToken} />
+          }
+          <LazyImage src='/images/airdrop/add3.svg' />
+          {
+            airdrop.labelToken && <CurrencyLogo type={from === 'project' ? 'project' : ''}currency={airdrop.labelToken} size={'24px'} />
+          }
+          
+        </div>
+        </Tooltip3> :
+        <div className='flex items-center'>
+          <span className='mr-2'>{formatStringNumber(airdrop.offerLocked)}</span>
+          {
+            airdrop.offerToken && <CurrencyLogo currency={airdrop.offerToken} />
+          }
+          
+          {/* {
+            Number(airdrop.offerLabelLocked) > 0 && 
+            <>
+              <span className="px-1">+</span>
+              <span>{airdrop.offerLabelLocked} {airdrop.labelToken.symbol}</span>
+            </>
+          } */}
+          
+        </div>
+      }
+    </div>
+  )
+}
 
 export const OngoingList: React.FC<{
   completed?: boolean
@@ -91,30 +140,14 @@ export const OngoingList: React.FC<{
                           </div>
                         </TableCell>
                         <TableCell className="w-[126px]">
-                          <div className='flex items-center'>
-                            <span className='mr-2'>{formatStringNumber(airdrop.offerLocked)}</span>
-                            {/* {airdrop.offerToken?.symbol || 'ETH' } */}
-                            {
-                              airdrop.offerToken && <CurrencyLogo currency={airdrop.offerToken} />
-                            }
-                            
-                            {
-                              Number(airdrop.offerLabelLocked) > 0 && 
-                              <>
-                                <span className="px-1">+</span>
-                                <span>{airdrop.offerLabelLocked} {airdrop.labelToken.symbol}</span>
-                              </>
-                            }
-                            
-                          </div>
-                          
+                          <FundToken airdrop={airdrop} from='project' />
                         </TableCell>
                         <TableCell className="w-[182px] ">
                           <div className=' text-[16px] font-fnormal flex items-center'>
                             <div>{airdrop.unit}</div>
                             <div className='mx-2'>{airdrop.labelToken?.symbol}</div>
                             {
-                              airdrop.labelToken && <CurrencyLogo currency={airdrop.labelToken} />
+                              airdrop.labelToken && <CurrencyLogo type='project' currency={airdrop.labelToken} />
                             }
                             
                           </div>

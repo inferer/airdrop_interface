@@ -37,3 +37,11 @@ export function Tooltip2({ children, text, className }: { children: React.ReactN
     </div>
   )
 }
+
+export function Tooltip3({ children, text, className }: { children: React.ReactNode, text?: string, className?: string}) {
+  return (
+    <div className={`b3-tooltips3 b3-tooltips3__n ${className}`} style={{ color: '#ffffff'}} aria-label={text}>
+      { children }
+    </div>
+  )
+}

@@ -39,7 +39,7 @@ export const getProjectLabelLocked = async (multi: Contract, account: string, to
     return {
       ...tokenList[index],
       // lockedAmount: BigNumber.from(item.toString()).div(BigNumber.from((10 ** tokenList[index].decimals).toString(10))).toString()
-      lockedAmount: (Number(item.toString()) / (10 ** tokenList[index].decimals)).toFixed(4)
+      lockedAmount: (Number(item.toString()) / (10 ** tokenList[index].decimals)).toString()
     }
   })
 }

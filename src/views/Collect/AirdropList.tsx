@@ -13,6 +13,7 @@ import { Tooltip2 } from "../../components/Tooltip";
 import { formatStringNumber, openBrowser, shortenAddress } from "../../utils";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import useCopyClipboard from "../../hooks/useCopyClipboard";
+import { FundToken } from "../Project/Ongoing";
 
 const AirdropList: React.FC<{
 
@@ -37,8 +38,14 @@ const AirdropList: React.FC<{
   } = useCollectSwapInfo()
   
   const filterAirdropList = useMemo(() => {
-    const tempAirdropList = airdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits && !airdrop.completed && (Number(airdrop.labelLocked) - Number(airdrop.claimed) >= Number(airdrop.unit)))
     const algAmount = Number(router.query.airAmount ?? 1)
+    let filterAirdropList = []
+    if (algAmount <= 3) {
+      filterAirdropList = airdropList.filter(airdrop => Number(airdrop.unit) <= algAmount)
+    } else {
+      filterAirdropList = airdropList
+    }
+    const tempAirdropList = filterAirdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits && !airdrop.completed && (Number(airdrop.labelLocked) - Number(airdrop.claimed) >= Number(airdrop.unit)))
     let tempList = []
     let tempTotal = 0
     if (maxUnits > 0 && algAmount > 0 && tempAirdropList.length > 0) {
@@ -133,22 +140,7 @@ const AirdropList: React.FC<{
                           </div>
                         </TableCell>
                         <TableCell className="w-[126px]">
-                          <div className='flex items-center'>
-                            <span className='mr-2'>{formatStringNumber(airdrop.offerLocked)}</span>
-                            {
-                              airdrop.offerToken && <CurrencyLogo currency={airdrop.offerToken} />
-                            }
-                            
-                            {
-                              Number(airdrop.offerLabelLocked) > 0 && 
-                              <>
-                                <span className="px-1">+</span>
-                                <span>{airdrop.offerLabelLocked} {airdrop.labelToken.symbol}</span>
-                              </>
-                            }
-                            
-                          </div>
-                          
+                          <FundToken airdrop={airdrop} from="user" />
                         </TableCell>
                         
                         <TableCell className="w-[182px] ">

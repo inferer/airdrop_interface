@@ -6,6 +6,7 @@ import LazyImage from "../../components/LazyImage";
 import { formatStringNumber, openBrowser, shortenAddress } from "../../utils";
 import { Currency } from "@uniswap/sdk";
 import { useRouter } from "next/router";
+import { FundToken } from "../Project/Ongoing";
 
 const ProgressItem = ({
   amount,
@@ -20,7 +21,7 @@ const ProgressItem = ({
         <div className=" font-semibold text-[16px]">{amount}</div>
         <div className=" font-semibold text-[16px] mx-2">x</div>
         <div className="px-2 py-[1px] rounded flex items-center" style={{background: 'linear-gradient(96deg, rgba(63, 60, 255, 0.05) 0%, rgba(107, 190, 225, 0.05) 101.71%)'}}>
-          <CurrencyLogo currency={token} size="20px" />
+          <CurrencyLogo type="project" currency={token} size="20px" />
           <div className="blue-text text-[16px] font-medium ml-1">{token?.symbol}</div>
         </div>
       </div>
@@ -78,6 +79,10 @@ const AirdropInfo = ({
   const filterTaskList = useMemo(() => {
     return taskList?.filter(task => task.completed)
   }, [taskList])
+  
+  const ongoing = useMemo(() => {
+    return !airdrop.completed
+  }, [airdrop])
 
   return (
     <div className="">
@@ -102,18 +107,24 @@ const AirdropInfo = ({
                   <div className=" text-[16px] font-semibold">
                     {airdrop.unit}  x
                   </div>
-                  {/* {
-                    airdrop.offerToken?.symbol && <div className="text-[16px] ml-2">{airdrop.offerToken?.symbol}</div>
-                  } */}
-                  <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
-                    {
-                      airdrop.labelToken && <CurrencyLogo type="confirm" currency={airdrop.labelToken} size={'20px'} />
-                    }
-                    
-                    <div className=' font-fmedium text-[#A1CEA8] ml-1'>
-                      {airdrop.labelToken?.symbol}
+                  {
+                    from === 'project' ?
+                    <div className="px-2 py-[1px] ml-[11px] rounded flex items-center" style={{background: 'linear-gradient(96deg, rgba(63, 60, 255, 0.05) 0%, rgba(107, 190, 225, 0.05) 101.71%)'}}>
+                      {
+                        airdrop.labelToken && <CurrencyLogo type="project" currency={airdrop.labelToken} size="20px" />
+                      }
+                      <div className="blue-text text-[16px] font-medium ml-1">{airdrop.labelToken?.symbol}</div>
+                    </div> : 
+                    <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
+                      {
+                        airdrop.labelToken && <CurrencyLogo type="confirm" currency={airdrop.labelToken} size={'20px'} />
+                      }
+                      <div className=' font-fmedium text-[#A1CEA8] ml-1'>
+                        {airdrop.labelToken?.symbol}
+                      </div>
                     </div>
-                  </div>
+                  }
+                  
                 </div>
               </div>
             </div>
@@ -123,7 +134,8 @@ const AirdropInfo = ({
             <div>
               <LabelText>Fund</LabelText>
               <div className="mt-3 flex">
-                <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px]">
+                <FundToken airdrop={airdrop} from={from} />
+                {/* <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px]">
                   <div className=" text-[16px] font-fsemibold mr-1">
                     {formatStringNumber(airdrop.offerLocked)}
                   </div>
@@ -131,10 +143,7 @@ const AirdropInfo = ({
                     airdrop.offerToken && <CurrencyLogo currency={airdrop.offerToken} size={'20px'} />
                   }
                   
-                  {/* {
-                    airdrop.offerToken?.symbol && <div className="text-[16px] ml-2">{airdrop.offerToken?.symbol}</div>
-                  } */}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -258,28 +267,40 @@ const AirdropInfo = ({
         <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 py-5">
           <div className="text-[18px] font-semibold text-black mb-4 pl-5">Progress</div>
           <div className="">
-            <div className=" grid grid-cols-4">
+            <div className=" grid grid-cols-4 gap-y-6">
               <div className="pl-5">
                 <LabelText>Total Value</LabelText>
-                <ProgressItem amount={formatStringNumber(airdrop.labelLocked, 4)} token={airdrop.labelToken} />
+                <ProgressItem amount={formatStringNumber(airdrop.labelLocked)} token={airdrop.labelToken} />
               </div>
               <div className="pl-5 flex items-center">
                 <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
                 <div>
                   <LabelText>Consumed Value</LabelText>
-                  <ProgressItem amount={formatStringNumber(airdrop.claimed)} token={airdrop.labelToken} />
+                  <ProgressItem amount={formatStringNumber(airdrop.completedClaimed || '')} token={airdrop.labelToken} />
                 </div>
               </div>
+              {
+                ongoing && 
+                <div className="pl-5 flex items-center">
+                  <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
+                  <div>
+                    <LabelText>Ongoing Value</LabelText>
+                    <ProgressItem amount={formatStringNumber(String(Number(airdrop.claimed) - Number(airdrop.completedClaimed)))} token={airdrop.labelToken} />
+                  </div>
+                </div>
+              }
               <div className="pl-5 flex items-center">
                 <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
                 <div>
                   <LabelText>{label3 || ''}</LabelText>
-                  <ProgressItem amount={formatStringNumber(String(Number(airdrop.labelLocked) - Number(airdrop.claimed)), 4)} token={airdrop.labelToken} />
+                  <ProgressItem amount={formatStringNumber(String(Number(airdrop.labelLocked) - Number(airdrop.completedClaimed)))} token={airdrop.labelToken} />
                 </div>
-                
               </div>
               <div className="pl-5 flex items-center">
-                <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
+                {
+                  !ongoing && <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
+                }
+                
                 <div>
                   <LabelText>Executed Tasks</LabelText>
                   <div className="flex">

@@ -100,6 +100,7 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
       const expireOnTimestamp = Number(airdrop[5].toString()) * 1000 + Number(airdrop[4].toString()) * 1000
       const _labelLocked = (Number(airdrop[3][2]) / (10 ** (labelTokenData?.decimals ?? 18))).toFixed(4)
       const _claimed = (Number(airdrop[6].toString()) / (10 ** (labelTokenData?.decimals ?? 18))).toString()
+      const _completedClaimed = (Number(airdrop[8].toString()) / (10 ** (labelTokenData?.decimals ?? 18))).toString()
 
       const _otherContent = airdrop[1][5] ? airdrop[1][5].split('|') : []
       const parameterType = _otherContent[1] ? JSON.parse(_otherContent[1] ?? '""') : []
@@ -134,7 +135,8 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
         claimed: _claimed,
         completed: expireOnTimestamp < Date.now() || airdrop[7],
         realCompleted: airdrop[7],
-        isExpired: expireOnTimestamp < Date.now()
+        isExpired: expireOnTimestamp < Date.now(),
+        completedClaimed: _completedClaimed
 
       }
       airdropList.push(tempData)
