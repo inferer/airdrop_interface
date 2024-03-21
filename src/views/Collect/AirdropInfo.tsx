@@ -66,6 +66,19 @@ const AirdropInfo = ({
     return contentJson.landingPage + '?taskId=' + router.query.taskId
   }, [from, confirm, airdrop, contentJson])
 
+  const action = router.query.action && router.query.action[0]
+
+  const label3 = useMemo(() => {
+    if (airdrop.isExpired) return 'Outdated Value'
+    if (action === 'completed') return 'Returned Value'
+    if (action === 'ongoing') return 'Remaining Value'
+
+  }, [action, airdrop])
+
+  const filterTaskList = useMemo(() => {
+    return taskList?.filter(task => task.completed)
+  }, [taskList])
+
   return (
     <div className="">
       <div className="h-[171px] rounded-xl border border-[rgba(85, 123, 241, 0.1)] overflow-hidden">
@@ -247,7 +260,7 @@ const AirdropInfo = ({
           <div className="">
             <div className=" grid grid-cols-4">
               <div className="pl-5">
-                <LabelText>Total Value Locked</LabelText>
+                <LabelText>Total Value</LabelText>
                 <ProgressItem amount={formatStringNumber(airdrop.labelLocked, 4)} token={airdrop.labelToken} />
               </div>
               <div className="pl-5 flex items-center">
@@ -260,7 +273,7 @@ const AirdropInfo = ({
               <div className="pl-5 flex items-center">
                 <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
                 <div>
-                  <LabelText>Remaing Value</LabelText>
+                  <LabelText>{label3 || ''}</LabelText>
                   <ProgressItem amount={formatStringNumber(String(Number(airdrop.labelLocked) - Number(airdrop.claimed)), 4)} token={airdrop.labelToken} />
                 </div>
                 
@@ -271,7 +284,7 @@ const AirdropInfo = ({
                   <LabelText>Executed Tasks</LabelText>
                   <div className="flex">
                     <div className="flex items-center mt-3 rounded-lg border border-[rgba(85,123,241,0.10)] h-[36px] px-[10px]">
-                      <div className=" font-semibold text-[16px]">{taskList ? taskList.length : 0}</div>
+                      <div className=" font-semibold text-[16px]">{filterTaskList ? filterTaskList.length : 0}</div>
                       <div className=" font-semibold text-[16px] mx-2">x</div>
                       <div className="ml-1">
                         <LazyImage src="/images/airdrop/tasks.svg" />

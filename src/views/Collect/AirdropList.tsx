@@ -37,7 +37,7 @@ const AirdropList: React.FC<{
   } = useCollectSwapInfo()
   
   const filterAirdropList = useMemo(() => {
-    const tempAirdropList = airdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits && !airdrop.completed && (Number(airdrop.labelLocked) - Number(airdrop.claimed) >= 1))
+    const tempAirdropList = airdropList.filter(airdrop => Number(airdrop.unit) <= maxUnits && !airdrop.completed && (Number(airdrop.labelLocked) - Number(airdrop.claimed) >= Number(airdrop.unit)))
     const algAmount = Number(router.query.airAmount ?? 1)
     let tempList = []
     let tempTotal = 0

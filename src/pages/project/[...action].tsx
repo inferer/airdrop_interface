@@ -24,6 +24,9 @@ function ProjectPage () {
     return <OngoingPage />
   }
   if (action === 'completed') {
+    if (action1) {
+      return <AirdropDetails />
+    }
     return <CompletedPage />
   }
   if (action === 'invite') {

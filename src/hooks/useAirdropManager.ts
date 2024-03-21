@@ -133,7 +133,8 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
         expireOn: transformTime(expireOnTimestamp),
         claimed: _claimed,
         completed: expireOnTimestamp < Date.now() || airdrop[7],
-        realCompleted: airdrop[7]
+        realCompleted: airdrop[7],
+        isExpired: expireOnTimestamp < Date.now()
 
       }
       airdropList.push(tempData)
