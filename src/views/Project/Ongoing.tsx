@@ -22,7 +22,7 @@ export const FundToken2 = ({
 }) => {
 
   const tipText = useMemo(() => {
-    return formatStringNumber(airdrop.offerLocked) + ' ' + airdrop.offerToken?.symbol + ' + ' + airdrop.offerLabelLocked + ' ' + airdrop.labelToken?.symbol
+    return formatStringNumber(airdrop.offerLocked) + ' ' + airdrop.offerToken?.symbol + ' + ' + formatStringNumber(airdrop.offerLabelLocked) + ' ' + airdrop.labelToken?.symbol
   }, [airdrop])
   return (
     <div className=' relative'>
@@ -64,7 +64,7 @@ export const FundToken = ({
 }) => {
 
   const tipText = useMemo(() => {
-    return formatStringNumber(airdrop.offerLocked) + ' ' + airdrop.offerToken?.symbol + ' + ' + airdrop.offerLabelLocked + ' ' + airdrop.labelToken?.symbol
+    return formatStringNumber(airdrop.offerLocked) + ' ' + airdrop.offerToken?.symbol + ' + ' + formatStringNumber(airdrop.offerLabelLocked) + ' ' + airdrop.labelToken?.symbol
   }, [airdrop])
   return (
     <div className=' relative'>

@@ -9,10 +9,12 @@ import CurrencyLogo from "../../components/CurrencyLogo";
 import { Tooltip2 } from "../../components/Tooltip";
 import useCopyClipboard from "../../hooks/useCopyClipboard";
 import { openBrowser, shortenAddress } from "../../utils";
+import { useRouter } from "next/router";
 
 const AirdropList: React.FC<{
 }> = ({
 }) => {
+  const router = useRouter()
   const { account } = useActiveWeb3React()
   const [ isCopied, staticCopy ] = useCopyClipboard()
   const { handleGetUserAirdropConfirmed } = useAirdropManager()
@@ -67,6 +69,9 @@ const AirdropList: React.FC<{
                 userConfirmedList.map((airdrop, index) => {
                   return (
                     <TableRow key={airdrop.airdropId + index} 
+                      onClick={() => {
+                        router.push(`/user/completed/${airdrop.airdropId}?taskId=` + airdrop.id)
+                      }}
                     >
                       <>
                         <TableCell className="flex-1 w-[250px]">

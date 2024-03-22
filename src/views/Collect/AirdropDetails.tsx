@@ -18,7 +18,7 @@ function Collect() {
           <LazyImage src='/images/airdrop/label_icon.svg' className=' w-[24px] h-[24px] mr-3' />
           
           <div className=' font-fsemibold text-[32px]'>
-            {isOngoing ? 'Ongoing airdrop' : 'Completed airdrop'} 
+            {isOngoing ? 'Ongoing Airdrop' : 'Completed Airdrop'} 
           </div>
         </div>
         

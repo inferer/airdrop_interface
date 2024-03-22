@@ -9,7 +9,7 @@ const IndexPage = () => {
     router.push(isProjectMode !== 'false' ? '/project/create' : '/user/collect')
   }, [])
   
-  return null
+  return <div></div>
 }
 
 export default IndexPage

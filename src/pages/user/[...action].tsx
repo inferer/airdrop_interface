@@ -31,6 +31,9 @@ function UserPage() {
     return <TasksPage />
   }
   if (action === 'completed') {
+    if (action1) {
+      return <AirdropDetails />
+    }
     return <CompletedPage />
   }
   if (action === 'invite') {
