@@ -15,7 +15,7 @@ function Collect() {
     <div className='w-[1217px] mx-auto'>
       <CollectBody>
         <div className='flex items-center mb-10'>
-          <LazyImage src='/images/airdrop/label_icon.svg' className=' w-[24px] h-[24px] mr-3' />
+          <LazyImage src={isOngoing ? '/images/airdrop/ongoing.svg' : '/images/airdrop/completed.svg'} className=' w-[32px] h-[32px] mr-3' />
           
           <div className=' font-fsemibold text-[32px]'>
             {isOngoing ? 'Ongoing Airdrop' : 'Completed Airdrop'} 

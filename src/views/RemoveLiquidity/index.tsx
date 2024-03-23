@@ -640,7 +640,7 @@ export default function RemoveLiquidity({
             )}
             <div style={{ position: 'relative' }}>
               {!account ? (
-                <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
+                <ButtonLight onClick={toggleWalletModal}>Connect Airdrop Network</ButtonLight>
               ) : (
                 <RowBetween>
                   <ButtonConfirmed

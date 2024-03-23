@@ -79,8 +79,8 @@ export function useAirTokenPercentBalance(otherCurrencyBalance: CurrencyAmount |
     let balance2 = 0
     if (airPercent && otherCurrencyBalance) {
       const currencyBalance = otherCurrencyBalance.toSignificant(6)
-      balance2 = Number((Number(currencyBalance) * airPercent / 100).toFixed(4))
-      balance1 = Number((Number(currencyBalance) - balance2).toFixed(4))
+      balance2 = Number((Number(currencyBalance) * airPercent / 100).toFixed(3))
+      balance1 = Number((Number(currencyBalance) - balance2).toFixed(3))
     }
 
     return {

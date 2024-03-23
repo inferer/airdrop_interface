@@ -164,7 +164,7 @@ export function useDerivedSwapInfo(): {
 
   let inputError: string | undefined
   if (!account) {
-    inputError = 'Connect Wallet'
+    inputError = 'Connect Airdrop Network'
   }
 
   if (!parsedAmount) {
@@ -272,7 +272,7 @@ export function useCollectSwapInfo(): {
 
   let inputError: string | undefined
   // if (!account) {
-  //   inputError = 'Connect Wallet'
+  //   inputError = 'Connect Airdrop Network'
   // }
 
   // if (!parsedAmount) {

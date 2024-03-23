@@ -187,7 +187,7 @@ export default function  CurrencyInputPanel({
   }, [onMax, isProjectCreate, payInput, selectedCurrencyBalanceUSDT])
 
   const airPercent = useAirTokenPercent()
-  const otherCurrencyBalance = useCurrencyBalance(account ?? undefined, otherCurrency ?? undefined)
+  const otherCurrencyBalance = useCurrencyBalance(account ?? undefined, (payInput ? otherCurrency : currency) ?? undefined)
   const percentBalance = useAirTokenPercentBalance(otherCurrencyBalance)
 
   return (
@@ -252,32 +252,32 @@ export default function  CurrencyInputPanel({
         </InputRow>
         {
           payInput ?
-        <BalanceWrap>
-          <div>
-            {
-              payInput && isProjectCreate && airPercent && airPercent > 0 ? 
-              <div className='bg-[rgba(200,206,255,0.20)] rounded-sm h-[26px] px-[6px] flex items-center text-[rgba(0,0,0,0.60)] text-[14px]'>
-                <div className=' flex items-center'>
-                  <CurrencyLogo currency={selectedCurrencyBalanceUSDT?.currency} size={'14px'} />
-                  <span className='mx-1'>{value}</span>
-                  {selectedCurrencyBalanceUSDT?.currency?.symbol}
-                </div>
-                {
-                  otherCurrency ? 
-                  <>
-                    <LazyImage src='/images/airdrop/add2.svg' className='mx-1' />
-                    <div className=' flex items-center'>
-                      <CurrencyLogo currency={otherCurrency} size={'14px'} />
-                      <span className='mx-1'>{percentBalance.balance2}</span>
-                      {otherCurrency?.symbol}
-                    </div>
-                  </> : null
-                }
-                
-                
-              </div> : null
-            }
-          </div>
+          <BalanceWrap>
+            <div>
+              {
+                payInput && isProjectCreate && airPercent && airPercent > 0 && percentBalance.balance2 > 0 ? 
+                <div className='bg-[rgba(200,206,255,0.20)] rounded-sm h-[26px] px-[6px] flex items-center text-[rgba(0,0,0,0.60)] text-[14px]'>
+                  <div className=' flex items-center'>
+                    <CurrencyLogo currency={selectedCurrencyBalanceUSDT?.currency} size={'14px'} />
+                    <span className='mx-1'>{value}</span>
+                    {selectedCurrencyBalanceUSDT?.currency?.symbol}
+                  </div>
+                  {
+                    otherCurrency ? 
+                    <>
+                      <LazyImage src='/images/airdrop/add2.svg' className='mx-1' />
+                      <div className=' flex items-center'>
+                        <CurrencyLogo currency={otherCurrency} size={'14px'} />
+                        <span className='mx-1'>{percentBalance.balance2}</span>
+                        {otherCurrency?.symbol}
+                      </div>
+                    </> : null
+                  }
+                  
+                  
+                </div> : null
+              }
+            </div>
           
             <div className='h-[26px]'>
             {account && (
@@ -306,7 +306,39 @@ export default function  CurrencyInputPanel({
                 <StyledBalanceMax onClick={handleOnMax} color={ isUserCollect ? '#8AE899' : undefined} >Max</StyledBalanceMax>
               )}
               </div>
-        </BalanceWrap> : <div className='h-[48px]'></div>
+          </BalanceWrap> : 
+          <BalanceWrap>
+            <div>
+              {
+                !payInput && isProjectCreate && airPercent && airPercent > 0 && percentBalance.balance2 > 0 && currency ? 
+                <div className='bg-[rgba(202,234,206,0.16)] rounded-sm h-[26px] px-[6px] flex items-center text-[rgba(0,0,0,0.60)] text-[14px]'>
+                  <div className=' flex items-center'>
+                    <LazyImage src='/images/airdrop/add2.svg' className='mr-[6px]' />
+                    <CurrencyLogo currency={currency} size={'14px'} />
+                    <span className='mx-1'>{percentBalance.balance2}</span>
+                    {currency?.symbol}
+                    <LazyImage src='/images/airdrop/eq.svg' className='mx-1' />
+                    <CurrencyLogo currency={currency} size={'14px'} />
+                    <span className='mx-1'>{(Number(value) + Number(percentBalance.balance2)).toFixed(3)}</span>
+                    {currency?.symbol}
+                  </div>
+                  {/* {
+                    otherCurrency ? 
+                    <>
+                      <LazyImage src='/images/airdrop/add2.svg' className='mx-1' />
+                      <div className=' flex items-center'>
+                        <CurrencyLogo currency={currency} size={'14px'} />
+                        <span className='mx-1'>{percentBalance.balance2}</span>
+                        {currency?.symbol}
+                      </div>
+                    </> : null
+                  } */}
+                  
+                  
+                </div> : null
+              }
+            </div>
+          </BalanceWrap> 
         }
 
       </Container>

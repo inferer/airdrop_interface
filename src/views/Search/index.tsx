@@ -157,7 +157,7 @@ export default function Search() {
             {
             (!account || !userLoginInfo.address) ? (
               <ButtonSwap onClick={toggleWalletModal}>
-                <div className='btn-text'>Connect Wallet</div>
+                <div className='btn-text'>Connect Airdrop Network</div>
               </ButtonSwap>
             ) : isUserCollect ?
             <ButtonSwap 

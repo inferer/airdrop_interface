@@ -13,7 +13,7 @@ import { SUPPORTED_WALLETS } from '../../constants'
 import { ExternalLink } from '../../theme'
 import MetamaskIcon from '../../assets/images/metamask.png'
 import Close from '../../assets/images/x.svg'
-import { injected, fortmatic, APP_INFERER_CONNECTOR } from '../../connectors'
+import { injected, fortmatic, APP_INFERER_CONNECTOR, setupNetwork, NETWORK_CHAIN_ID } from '../../connectors'
 import { OVERLAY_READY } from '../../connectors/Fortmatic'
 // import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { AbstractConnector } from '@web3-react/abstract-connector'
@@ -182,8 +182,14 @@ export default function WalletModal({
       localStorage.setItem(APP_INFERER_CONNECTOR, 'true')
     }
     connector &&
-      activate(connector, undefined, true).catch(error => {
+      activate(connector, undefined, true).catch(async (error) => {
         if (error instanceof UnsupportedChainIdError) {
+          console.log(error)
+          // const provider = await connector.getProvider()
+          // const hasSetup = await setupNetwork(NETWORK_CHAIN_ID, provider)
+          // if (hasSetup) {
+          //   activate(connector)
+          // }
           activate(connector) // a little janky...can't use setError because the connector isn't set
         } else {
           setPendingError(true)

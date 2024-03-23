@@ -6,6 +6,7 @@ import { InjectedConnector } from '@web3-react/injected-connector'
 
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
+import { ChainId } from '@uniswap/sdk'
 
 export const NETWORK_URL = process.env.NEXT_PUBLIC_NETWORK_URL
 const FORMATIC_KEY = process.env.NEXT_PUBLIC_FORTMATIC_KEY
@@ -29,7 +30,7 @@ export function getNetworkLibrary(): Web3Provider {
 }
 
 export const injected = new InjectedConnector({
-  supportedChainIds: [1, 11155111, 1337]
+  supportedChainIds: [1, 1337]
 })
 
 // mainnet only
@@ -46,16 +47,81 @@ export const fortmatic = new FortmaticConnector({
   chainId: 1
 })
 
-// mainnet only
-// export const portis = new PortisConnector({
-//   dAppId: PORTIS_ID ?? '',
-//   networks: [1]
-// })
+export const BASE_BSC_SCAN_URLS = {
+  [ChainId.MAINNET]: 'https://testnet.bscscan.com',
+  [ChainId.LOCAL]: 'https://bscscan.com'
+}
 
-// // mainnet only
-// export const walletlink = new WalletLinkConnector({
-//   url: NETWORK_URL,
-//   appName: 'Uniswap',
-//   appLogoUrl:
-//     'https://mpng.pngfly.com/20181202/bex/kisspng-emoji-domain-unicorn-pin-badges-sticker-unicorn-tumblr-emoji-unicorn-iphoneemoji-5c046729264a77.5671679315437924251569.jpg'
-// })
+export const BSC_RPC_URLS = [
+  'https://bsc-dataseed1.ninicoin.io',
+  'https://bsc-dataseed1.defibit.io',
+  'https://bsc-dataseed.binance.org'
+]
+
+export const BSC_RPC_URLS_LOCAL = [
+  'http://125.88.184.105:8545',
+]
+
+
+const NETWORK_CONFIG: any = {
+  [ChainId.MAINNET]: {
+    name: 'BNB Smart Chain Mainnet',
+    scanURL: BASE_BSC_SCAN_URLS[ChainId.MAINNET],
+    rpcUrls: BSC_RPC_URLS
+  },
+  [ChainId.LOCAL]: {
+    name: 'Airop Network',
+    scanURL: BASE_BSC_SCAN_URLS[ChainId.LOCAL],
+    rpcUrls: BSC_RPC_URLS_LOCAL
+  },
+
+}
+
+export const setupNetwork = async (chainId?: number, externalProvider?: any) => {
+  console.log('chainId', chainId)
+  const provider = externalProvider || window.ethereum
+  if (!chainId || !NETWORK_CONFIG[chainId]) {
+    console.error('Invalid chain id')
+    return false
+  }
+  if (provider && provider.request) {
+    try {
+      await provider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: `0x${chainId.toString(16)}` }]
+      })
+      return true
+    } catch (switchError) {
+      if ((switchError as any)?.code === 4902) {
+        try {
+          const chainData = NETWORK_CONFIG[chainId]
+          await provider.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: `0x${chainId.toString(16)}`,
+                chainName: NETWORK_CONFIG[chainId].name,
+                nativeCurrency: {
+                  name: chainData.symbol ? chainData.symbol : 'ETH',
+                  symbol: chainData.symbol ? chainData.symbol : 'ETH',
+                  decimals: 18
+                },
+                rpcUrls: NETWORK_CONFIG[chainId].rpcUrls,
+                blockExplorerUrls: [`${NETWORK_CONFIG[chainId].scanURL}/`]
+              }
+            ]
+          })
+          return true
+        } catch (error) {
+          console.error('Failed to setup the network in Metamask:', error)
+          return false
+        }
+      }
+      return false
+    }
+  } else {
+    console.error("Can't setup the network on metamask because window.ethereum is undefined")
+    return false
+  }
+}
+

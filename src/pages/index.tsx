@@ -1,6 +1,8 @@
-// import IndexPage from "../views/Swap";
+'use client'
+
 import Router, { useRouter } from "next/router"
 import { useEffect } from "react"
+import LandingPage from '../views/Landing'
 
 const IndexPage = () => {
   const router = useRouter()
@@ -9,7 +11,7 @@ const IndexPage = () => {
     router.push(isProjectMode !== 'false' ? '/project/create' : '/user/collect')
   }, [])
   
-  return <div></div>
+  return <LandingPage />
 }
 
 export default IndexPage

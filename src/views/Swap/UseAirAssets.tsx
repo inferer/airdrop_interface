@@ -1,14 +1,14 @@
 import LazyImage from "../../components/LazyImage";
 import { useAirTokenPercent, useUpdateAirTokenPercent } from "../../state/airdrop/hooks";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 
-const UseAirAssets: React.FC<{
-  value: string
-  onChange?: (percent: number) => void
-}> = ({
+const UseAirAssets = ({
   value,
   onChange
-}) => {
+}: {
+  value: string
+  onChange?: (percent: number) => void
+}, ref: React.Ref<unknown> | undefined) => {
   const updateAirTokenPercent = useUpdateAirTokenPercent()
   const airPercent = useAirTokenPercent()
 
@@ -38,11 +38,24 @@ const UseAirAssets: React.FC<{
     updateAirTokenPercent(0)
   }, [])
 
+  // useEffect(() => {
+  //   if (airPercent <= 0 && wrapInfo.width > 0) {
+  //     setWrapInfo({ ...wrapInfo, width: 0 })
+  //   }
+  // }, [airPercent, wrapInfo])
+
   const pointerLeft = useMemo(() => {
     if (selectWidth > wrapInfo.width - 3) return wrapInfo.width - 3
     return selectWidth
   }, [wrapInfo, selectWidth])
 
+  useImperativeHandle(ref, () => ({
+    initWrapInfo: () => {
+      // setWrapInfo({ left: 0, top: 0, width: 0})
+      setSelectWidth(0)
+      updateAirTokenPercent(0)
+    }
+  }))
 
   return (
     <div className="w-full h-[58px] rounded-xl border border-[#F5F5F5] flex items-center px-4">
@@ -98,4 +111,4 @@ const UseAirAssets: React.FC<{
   )
 }
 
-export default UseAirAssets
+export default forwardRef(UseAirAssets)

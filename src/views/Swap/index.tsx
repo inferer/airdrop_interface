@@ -1,9 +1,7 @@
 import router, { useRouter } from 'next/router'
 import { CurrencyAmount, JSBI, Token, Trade } from '@uniswap/sdk'
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowDown, Type } from 'react-feather'
-import ReactGA from 'react-ga'
-import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
 import AddressInputPanel from '../../components/AddressInputPanel'
 import { ButtonError, ButtonLight, ButtonPrimary, ButtonConfirmed, ButtonSwap } from '../../components/Button'
@@ -12,13 +10,9 @@ import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import { SwapCreateTabs, SwapPoolTabs } from '../../components/NavigationTabs'
 import { AutoRow, RowBetween } from '../../components/Row'
-import AdvancedSwapDetailsDropdown from '../../components/swap/AdvancedSwapDetailsDropdown'
-import BetterTradeLink from '../../components/swap/BetterTradeLink'
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
 import { ArrowWrapper, BottomGrouping, SwapBody, SwapCallbackError, Wrapper } from '../../components/swap/styleds'
-import TradePrice from '../../components/swap/TradePrice'
 import TokenWarningModal from '../../components/TokenWarningModal'
-import ProgressSteps from '../../components/ProgressSteps'
 
 import { BETTER_TRADE_LINK_THRESHOLD, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { getTradeVersion, isTradeBetter } from '../../data/V1'
@@ -47,6 +41,7 @@ import Loader, { LoadingProject, LoadingUser } from '../../components/Loader'
 import UseAirAssets from './UseAirAssets'
 
 import TradePriceDetails from '../../components/swap/TradePriceDetails'
+import { useAirTokenPercent } from '../../state/airdrop/hooks'
 
 export default function Swap() {
   const router = useRouter()
@@ -80,7 +75,7 @@ export default function Swap() {
   // get custom setting values for user
   const [deadline] = useUserDeadline()
   const [allowedSlippage] = useUserSlippageTolerance()
-
+  const airAssetsRef = useRef<any>(null)
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
   const {
@@ -160,7 +155,7 @@ export default function Swap() {
     [independentField]: typedValue,
     [dependentField]: showWrap
       ? parsedAmounts[independentField]?.toExact() ?? ''
-      : parsedAmounts[dependentField]?.toSignificant(6) ?? ''
+      : parsedAmounts[dependentField]?.toSignificant(4) ?? ''
   }
 
   const route = trade?.route
@@ -255,21 +250,38 @@ export default function Swap() {
   const handleAcceptChanges = useCallback(() => {
     setSwapState({ tradeToConfirm: trade, swapErrorMessage, txHash, attemptingTxn, showConfirm })
   }, [attemptingTxn, showConfirm, swapErrorMessage, trade, txHash])
-
+  const airPercent = useAirTokenPercent()
   const handleInputSelect = useCallback(
     inputCurrency => {
+      // @ts-ignore
+      if (currencies[Field.INPUT] && airPercent > 0 && inputCurrency?.address?.toLowerCase() !== currencies[Field.INPUT].address.toLowerCase()) {
+        if (airAssetsRef.current) {
+          airAssetsRef.current.initWrapInfo()
+        }
+      }
       setApprovalSubmitted(false) // reset 2 step UI for approvals
       onCurrencySelection(Field.INPUT, inputCurrency)
+      // 
     },
-    [onCurrencySelection]
+    [onCurrencySelection, currencies, airPercent]
   )
 
   const handleMaxInput = useCallback((maxAmount?: string) => {
     maxAmountInput && onUserInput(Field.INPUT, maxAmount ?? maxAmountInput.toExact())
   }, [maxAmountInput, onUserInput])
 
-  const handleOutputSelect = useCallback(outputCurrency => onCurrencySelection(Field.OUTPUT, outputCurrency), [
-    onCurrencySelection
+  const handleOutputSelect = useCallback(outputCurrency => {
+    // @ts-ignore
+    if (currencies[Field.OUTPUT] && airPercent > 0 && outputCurrency?.address?.toLowerCase() !== currencies[Field.OUTPUT].address.toLowerCase()) {
+      if (airAssetsRef.current) {
+        airAssetsRef.current.initWrapInfo()
+      }
+    }
+    onCurrencySelection(Field.OUTPUT, outputCurrency)
+  }, [
+    onCurrencySelection,
+    currencies,
+    airPercent
   ])
 
   const inputTokens = useInputTokens()
@@ -338,7 +350,7 @@ export default function Swap() {
               <AutoRow justify={isExpertMode ? 'space-between' : 'center'}>
                 {
                   isProjectCreate && 
-                    <UseAirAssets value={formattedAmounts[Field.INPUT]} />
+                    <UseAirAssets ref={airAssetsRef} value={formattedAmounts[Field.INPUT]} />
                 }
                 
 
@@ -429,7 +441,7 @@ export default function Swap() {
             (!account || !userLoginInfo.address)  ? (
               <ButtonSwap onClick={toggleWalletModal}>
                 <div className='btn-text'>
-                  Connect Wallet
+                  Connect Airdrop Network
                 </div>
                 
               </ButtonSwap>

@@ -131,7 +131,7 @@ export function useDerivedMintInfo(
 
   let error: string | undefined
   if (!account) {
-    error = 'Connect Wallet'
+    error = 'Connect Airdrop Network'
   }
 
   if (pairState === PairState.INVALID) {
