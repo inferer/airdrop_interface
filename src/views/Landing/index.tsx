@@ -37,7 +37,7 @@ function Landing() {
   return (
     <JoinBody >
       <div>
-        <LazyImage src="/images/airdrop/invite.png"/>
+        <LazyImage src="/images/airdrop/invite.png" className="w-[480px] h-[154px]" />
         <JoinTitle>Inferer Airdrop Protocol</JoinTitle>
         <div className="w-[480px] h-[235px] mt-10 relative">
           <LazyImage src="/images/airdrop/loading_bg.svg" className="w-full h-full" />
