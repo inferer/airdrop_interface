@@ -185,12 +185,12 @@ export default function WalletModal({
       activate(connector, undefined, true).catch(async (error) => {
         if (error instanceof UnsupportedChainIdError) {
           console.log(error)
-          // const provider = await connector.getProvider()
-          // const hasSetup = await setupNetwork(NETWORK_CHAIN_ID, provider)
-          // if (hasSetup) {
-          //   activate(connector)
-          // }
-          activate(connector) // a little janky...can't use setError because the connector isn't set
+          const provider = await connector.getProvider()
+          const hasSetup = await setupNetwork(NETWORK_CHAIN_ID, provider)
+          if (hasSetup) {
+            activate(connector)
+          }
+          // activate(connector) // a little janky...can't use setError because the connector isn't set
         } else {
           setPendingError(true)
           localStorage.removeItem(APP_INFERER_CONNECTOR)
