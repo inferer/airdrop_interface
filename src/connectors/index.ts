@@ -59,7 +59,7 @@ export const BSC_RPC_URLS = [
 ]
 
 export const BSC_RPC_URLS_LOCAL = [
-  'http://125.88.184.105:8545',
+  'https://node.inferer.xyz',
 ]
 
 
