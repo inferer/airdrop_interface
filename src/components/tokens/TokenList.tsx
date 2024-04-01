@@ -45,7 +45,7 @@ const TokenItem = ({
       <div className="mt-10">
         <div className="flex justify-between items-center">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Balance</div>
-          <div className="text-[18px] font-fmedium">{formatStringNumber(balance?.toSignificant(6))}</div>
+          <div className="text-[18px] font-fmedium">{formatStringNumber(balance?.toSignificant(8))}</div>
         </div>
         {
           isProjectMode && 
@@ -135,7 +135,7 @@ const AirUSDTTokenItem = ({
 }) => {
   const { account, chainId } = useActiveWeb3React()
   const balance = useCurrencyBalance(account ?? undefined, token)
-
+  
   return (
     <div className=" rounded-[6px] border border-[rgba(107,190,225,0.2)] px-5 py-4 flex flex-col justify-between min-h-[130px]">
       <div className="flex items-center">
@@ -146,7 +146,7 @@ const AirUSDTTokenItem = ({
         <div className="flex justify-between items-center">
           <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">Balance</div>
           <div className="text-[18px] font-fmedium flex items-center">
-            {formatStringNumber(balance?.toSignificant(6)) }
+            {formatStringNumber(balance?.toSignificant(8)) }
             <LazyImage src="/images/airdrop/lock.svg" className="ml-[3px]" />
           </div>
         </div>

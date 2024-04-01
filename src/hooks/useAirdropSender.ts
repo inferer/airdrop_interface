@@ -3,7 +3,7 @@ import { BigNumber, ethers } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { Currency, ETHER, Token, Trade } from '@uniswap/sdk'
 import { useCallback, useMemo, useState } from 'react'
-import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE, ROUTER_ADDRESS } from '../constants'
+import { DEFAULT_DEADLINE_FROM_NOW, INFERER_AIRDROP_SOURCE, INITIAL_ALLOWED_SLIPPAGE, ROUTER_ADDRESS } from '../constants'
 import { useActiveWeb3React } from './index'
 import { useAirdropSenderContract } from './useContract'
 import { useDerivedSwapInfo, useSwapState } from '../state/swap/hooks'
@@ -149,10 +149,11 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       const parameterValue = parameter.map(item =>(item.type === 'address' ? item.value.toLowerCase() : item.value)).join('|')
       const _content = chain + '|' + parameterType + '|' + ladningPage
       const isETH = lockedToken === ETHER
-      const baseInfo = [name, label, channel, action, content, _content, parameterValue, 'inferer']
+      const source = localStorage.getItem(INFERER_AIRDROP_SOURCE) || 'inferer'
+      const baseInfo = [name, label, channel, action, content, _content, parameterValue, source]
       const route = args[2]
       console.log(lockedAmountA, lockedAmountB, args[1], unint)
-      const offer_label_token = [isETH ? ethers.constants.AddressZero : lockedToken.address, route[0], route[route.length - 1], account]
+      const offer_label_token = [isETH ? ethers.constants.AddressZero : lockedToken.address, route[0], route[route.length - 1], source]
       const offer_label_locked = independentField === Field.INPUT ? [lockedAmountA, lockedAmountB, args[1], unint] : [args[1], lockedAmountB, lockedAmountA, unint]
       const duration = parseInt(_duration) * 24 * 60 * 60
       // const duration = 1 * 10 * 60
@@ -171,6 +172,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
         const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit, value: isETH ? lockedAmountA : '0' })
         const receipt = await tx.wait()
         if (receipt.status) {
+          localStorage.removeItem(INFERER_AIRDROP_SOURCE)
           router.push('/project/ongoing')
         }
       } catch(error) {

@@ -44,7 +44,7 @@ function Landing() {
           <div className=" absolute left-0 right-0 bottom-8">
             <div className=" flex justify-center text-[rgba(0,0,0,0.4)] text-[14px] font-normal">Loading...</div>
             <div className="flex justify-center">
-              <LazyImage src="/images/airdrop/loading_gif.svg" className="mt-3" />
+              <LazyImage src="/images/airdrop/loading_gif.gif" className="mt-3" />
             </div>
             
           </div>

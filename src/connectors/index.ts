@@ -70,7 +70,7 @@ const NETWORK_CONFIG: any = {
     rpcUrls: BSC_RPC_URLS
   },
   [ChainId.LOCAL]: {
-    name: 'Airop Network',
+    name: 'Airdrop Network',
     scanURL: BASE_BSC_SCAN_URLS[ChainId.LOCAL],
     rpcUrls: BSC_RPC_URLS_LOCAL
   },
@@ -106,6 +106,7 @@ export const setupNetwork = async (chainId?: number, externalProvider?: any) => 
                   symbol: chainData.symbol ? chainData.symbol : 'ETH',
                   decimals: 18
                 },
+                iconUrls: ['https://beta.inferer.xyz/images/logo.png'],
                 rpcUrls: NETWORK_CONFIG[chainId].rpcUrls,
                 blockExplorerUrls: [`${NETWORK_CONFIG[chainId].scanURL}/`]
               }

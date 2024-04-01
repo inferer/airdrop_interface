@@ -234,3 +234,5 @@ export const AddressZero_ETH = {
 }
 
 export const TEL_URL = 'https://t.me/+zTwxF2bS6a85NzI1'
+
+export const INFERER_AIRDROP_SOURCE = 'INFERER_AIRDROP_SOURCE'

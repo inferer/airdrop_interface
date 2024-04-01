@@ -13,7 +13,7 @@ import { ChainId, Currency, ETHER, JSBI, Token, TokenAmount } from "@uniswap/sdk
 import { updateProjectLabelLocked, updateProjectUSDTLocked, updateUserAlgTokenLocked, updateUserDepositBalance } from "../state/airdrop/actions"
 import { AddressZero_ETH } from "../constants"
 import { getUSDTTokenFromAirToken } from "../utils/getTokenList"
-import { getERC20Contract } from "../utils"
+import { getERC20Contract, isAddress } from "../utils"
 import { useShowToast } from '../state/application/hooks'
 
 
@@ -76,8 +76,6 @@ export const getUserAlgTokenLocked = async (multi: Contract, account: string, to
       params: [account, token.address]
     })
   })
-    
-
   const res = await multicall(multi, AirdropAssetTreasury_ABI, calls)
   return (res || []).map((item: any, index: number) => {
     const temp = new TokenAmount(tokenList[index], JSBI.BigInt(item.toString()))
@@ -87,6 +85,7 @@ export const getUserAlgTokenLocked = async (multi: Contract, account: string, to
     }
   })
 }
+
 
 export const getDepositBalance = async (multi: Contract, account: string, tokenList: Token[]) => {
 
@@ -156,7 +155,6 @@ export function useAirdropAssetTreasury() {
     if (account && multi && airdropAssetTreasury && usdtTokenList.length > 0 && chainId) {
       const ETHToken = AddressZero_ETH[chainId]
       const list = await getDepositBalance(multi, account, [ETHToken, ...usdtTokenList])
-      console.log(list)
       dispatch(updateUserDepositBalance({ tokenLockedList: list }))
     }
 
@@ -278,4 +276,182 @@ export function useAirdropAssetTreasury() {
     withdrawStatus
   }
 
+}
+
+export const getFeeOn = async (multi: Contract, source: string) => {
+
+  const calls: any[] = []
+  calls.push({
+    address: getAirdropAssetTreasuryAddress(),
+    name: 'getFeeTo',
+    params: []
+  })
+  calls.push({
+    address: getAirdropAssetTreasuryAddress(),
+    name: 'getFeeOn',
+    params: []
+  })
+  calls.push({
+    address: getAirdropAssetTreasuryAddress(),
+    name: 'getDiscountPercentage',
+    params: [source]
+  })
+  calls.push({
+    address: getAirdropAssetTreasuryAddress(),
+    name: 'getIncomePercentage',
+    params: [source]
+  })
+  const res = await multicall(multi, AirdropAssetTreasury_ABI, calls)
+
+  let feeOn = res[1] && res[1][0] || false
+  let feeTo = res[0] && res[0][0] || '0x0000000000000000000000000000000000000000'
+  let discountPercentage = res[2] && res[2][0] || '0'
+  let incomePercentage = res[3] && res[3][0] || '0'
+  let incomeAddress = res[4] && res[4][0] || '0x0000000000000000000000000000000000000000'
+  console.log(res)
+  return {
+    feeOn,
+    feeTo,
+    discountPercentage,
+    incomePercentage,
+    incomeAddress
+  }
+
+}
+
+export function useAirdropAssetTreasuryFeeOn() {
+  const { account, library, chainId } = useActiveWeb3React()
+  const multi = useMulticallContract()
+  const airdropAssetTreasury = useAirdropAssetTreasuryContract()
+  const { handleShow } = useShowToast()
+  const [feeStatus, setFeeStatus] = useState(0)
+
+  const handleGetFeeOn = useCallback(async (source: string) => {
+    if (multi && source) {
+      return await getFeeOn(multi, source)
+    }
+    return {
+
+    }
+
+  }, [multi])
+  
+  const handleSetFeeTo = useCallback(async (address: string) => {
+    if (account && airdropAssetTreasury) {
+      try {
+        if (!address || !isAddress(address)) {
+          alert(`Invalid address`)
+          return
+        }
+        setFeeStatus(1)
+        const tx = await airdropAssetTreasury.setFeeTo(address)
+        const receipt = await tx.wait()
+        console.log(receipt)
+        setFeeStatus(2)
+        if (receipt.status) {
+          alert('Success')
+        } else {
+          alert('Error')
+        }
+      } catch (error) {
+        console.log(error)
+        setFeeStatus(0)
+      }
+      
+
+    }
+  }, [account, airdropAssetTreasury])
+  const handleSetFeeOn = useCallback(async (on: boolean) => {
+    if (account && airdropAssetTreasury) {
+      try {
+        setFeeStatus(1)
+        const tx = await airdropAssetTreasury.setFeeOn(on)
+        const receipt = await tx.wait()
+        console.log(receipt)
+        setFeeStatus(2)
+        if (receipt.status) {
+          alert('Success')
+          const feeOn = await airdropAssetTreasury.feeOn()
+          console.log(feeOn)
+        } else {
+          alert('Error')
+        }
+      } catch (error) {
+        console.log(error)
+        setFeeStatus(0)
+      }
+    }
+  }, [account, airdropAssetTreasury])
+  const handleSetsAirdropDiscountPercentage = useCallback(async (source: string, percentage: string) => {
+    if (account && airdropAssetTreasury) {
+      try {
+        setFeeStatus(1)
+        const tx = await airdropAssetTreasury.setAirdropDiscountPercentage(source, percentage)
+        const receipt = await tx.wait()
+        console.log(receipt)
+        setFeeStatus(2)
+        if (receipt.status) {
+          alert('Success')
+          
+        } else {
+          alert('Error')
+        }
+      } catch (error) {
+        console.log(error)
+        setFeeStatus(0)
+      }
+    }
+  }, [account, airdropAssetTreasury])
+
+  const handleSetsIncomePercentage = useCallback(async (source: string, percentage: string) => {
+    if (account && airdropAssetTreasury) {
+      try {
+        setFeeStatus(1)
+        const tx = await airdropAssetTreasury.setIncomePercentage(source, percentage)
+        const receipt = await tx.wait()
+        console.log(receipt)
+        setFeeStatus(2)
+        if (receipt.status) {
+          alert('Success')
+          
+        } else {
+          alert('Error')
+        }
+      } catch (error) {
+        console.log(error)
+        setFeeStatus(0)
+      }
+    }
+  }, [account, airdropAssetTreasury])
+
+  const handleSetsIncomeAddress = useCallback(async (source: string, address: string) => {
+    if (account && airdropAssetTreasury) {
+      try {
+        setFeeStatus(1)
+        const tx = await airdropAssetTreasury.setIncomeAddress(source, address)
+        const receipt = await tx.wait()
+        console.log(receipt)
+        setFeeStatus(2)
+        if (receipt.status) {
+          alert('Success')
+          
+        } else {
+          alert('Error')
+        }
+      } catch (error) {
+        console.log(error)
+        setFeeStatus(0)
+      }
+    }
+  }, [account, airdropAssetTreasury])
+
+  return {
+    feeStatus,
+    handleSetFeeTo,
+    handleSetFeeOn,
+    handleGetFeeOn,
+    handleSetsAirdropDiscountPercentage,
+    handleSetsIncomePercentage,
+    handleSetsIncomeAddress
+  }
 }

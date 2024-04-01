@@ -29,8 +29,6 @@ const contractList =
   "airdropTokenScore": "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690",
   "airdropManagerLogic": "0x9fD16eA9E31233279975D99D5e8Fc91dd214c7Da",
   "airdropManager": "0x987e855776C03A4682639eEb14e65b3089EE6310",
-  // "airdropManagerLogic": "0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9",
-  // "airdropManager": "0x851356ae760d987E095750cCeb3bC6014560891C",
   "airdropSenderLogic": "0x95401dc811bb5740090279Ba06cfA8fcF6113778",
   "airdropSender": "0x70e0bA845a1A0F2DA3359C97E0285013525FFC49",
   "airdropReceriverLogic": "0x8f86403A4DE0BB5791fa46B8e795C547942fE4Cf",
