@@ -150,7 +150,7 @@ export function useAirdropTokenScore() {
             proof.siblingsHashes.map((v: string)=>zeroPadByte32(v)), 
             proof.peaksHashes.map((v:string)=>zeroPadByte32(v)), 
             proof.elementsCount
-        )
+          )
           const receipt = await tx.wait()
           if (receipt.status) {
             handleGetAlgTokenList()
