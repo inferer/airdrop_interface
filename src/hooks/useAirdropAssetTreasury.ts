@@ -278,7 +278,7 @@ export function useAirdropAssetTreasury() {
 
 }
 
-export const getFeeOn = async (multi: Contract, source: string) => {
+export const getFeeOn = async (multi: Contract, source?: string) => {
 
   const calls: any[] = []
   calls.push({
@@ -291,16 +291,19 @@ export const getFeeOn = async (multi: Contract, source: string) => {
     name: 'getFeeOn',
     params: []
   })
-  calls.push({
-    address: getAirdropAssetTreasuryAddress(),
-    name: 'getDiscountPercentage',
-    params: [source]
-  })
-  calls.push({
-    address: getAirdropAssetTreasuryAddress(),
-    name: 'getIncomePercentage',
-    params: [source]
-  })
+  if (source) {
+    calls.push({
+      address: getAirdropAssetTreasuryAddress(),
+      name: 'getDiscountPercentage',
+      params: [source]
+    })
+    calls.push({
+      address: getAirdropAssetTreasuryAddress(),
+      name: 'getIncomePercentage',
+      params: [source]
+    })
+  }
+
   const res = await multicall(multi, AirdropAssetTreasury_ABI, calls)
 
   let feeOn = res[1] && res[1][0] || false
@@ -326,8 +329,8 @@ export function useAirdropAssetTreasuryFeeOn() {
   const { handleShow } = useShowToast()
   const [feeStatus, setFeeStatus] = useState(0)
 
-  const handleGetFeeOn = useCallback(async (source: string) => {
-    if (multi && source) {
+  const handleGetFeeOn = useCallback(async (source?: string) => {
+    if (multi) {
       return await getFeeOn(multi, source)
     }
     return {

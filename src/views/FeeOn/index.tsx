@@ -7,6 +7,7 @@ import { othersContracts } from '../../constants/contractsLocal'
 import { useRouter } from 'next/router'
 import CheckBox from '../../components/CheckBox'
 import { useAirdropAssetTreasuryFeeOn } from '../../hooks/useAirdropAssetTreasury'
+import { isAddress } from '../../utils'
 
 // 0xfba7fE606D2253BDD2955f8a8fEC240A4c6f279a
 
@@ -30,6 +31,8 @@ function FeeOn() {
   const [feeOn, setFeeOn] = useState(false)
   const [discountPercentage, setDiscountPercentage] = useState('')
   const [incomePercentage, setIncomePercentage] = useState('')
+  const [discountPercentageAddress, setDiscountPercentageAddress] = useState('')
+  const [incomePercentageAddress, setIncomePercentageAddress] = useState('')
 
   const handleOnChange = useCallback((value, type) => {
     if (type === 'feeTo') {
@@ -46,8 +49,26 @@ function FeeOn() {
     }
   }, [])
 
+  const handleOnAddressChange = useCallback((value, type) => {
+    if (type === 'DiscountPercentage') {
+      setDiscountPercentageAddress(value)
+    }
+    if (type === 'IncomePercentage') {
+      setIncomePercentageAddress(value)
+    }
+    if (isAddress(value)) {
+      handleGetFeeOn(value)
+      .then((res: any) => {
+        setFeeOn(res.feeOn)
+        setFeeTo(res.feeTo)
+        setDiscountPercentage(res.discountPercentage)
+        setIncomePercentage(res.incomePercentage)
+      })
+    }
+  }, [handleGetFeeOn])
+
   useEffect(() => {
-    handleGetFeeOn(source)
+    handleGetFeeOn()
       .then((res: any) => {
         setFeeOn(res.feeOn)
         setFeeTo(res.feeTo)
@@ -71,6 +92,15 @@ function FeeOn() {
           <div className='py-3 flex items-center'>
             <span className='pr-5'>DiscountPercentage:</span> 
             <input type="text"
+              placeholder='Address'
+              className='w-[340px] whitespace-nowrap shrink-0 overflow-auto rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px] text-[13px] text-[rgba(0,0,0,0.40)]'
+              value={discountPercentageAddress}
+              onChange={e => {
+                handleOnAddressChange(e.target.value, 'DiscountPercentage')
+              }}
+            />
+            <span className='px-1'>-</span>
+            <input type="text"
               className='w-[120px] whitespace-nowrap shrink-0 overflow-auto rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px] text-[13px] text-[rgba(0,0,0,0.40)]'
               value={discountPercentage}
               onChange={e => {
@@ -83,8 +113,12 @@ function FeeOn() {
                 className='border p-2'
                 onClick={e => {
                   e.stopPropagation()
+                  if (!isAddress(discountPercentageAddress)) {
+                    alert('Invalid address')
+                    return
+                  }
                   if (feeStatus === 1) return
-                  handleSetsAirdropDiscountPercentage(source, discountPercentage)
+                  handleSetsAirdropDiscountPercentage(discountPercentageAddress, discountPercentage)
                 }}
               >
                 <div className="btn-text w-[120px]">
@@ -98,6 +132,15 @@ function FeeOn() {
           <div className='py-3 flex items-center'>
             <span className='pr-5'>IncomePercentage:</span> 
             <input type="text"
+              placeholder='Address'
+              className='w-[340px] whitespace-nowrap shrink-0 overflow-auto rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px] text-[13px] text-[rgba(0,0,0,0.40)]'
+              value={incomePercentageAddress}
+              onChange={e => {
+                handleOnAddressChange(e.target.value, 'IncomePercentage')
+              }}
+            />
+            <span className='px-1'>-</span>
+            <input type="text"
               className='w-[120px] whitespace-nowrap shrink-0 overflow-auto rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px] text-[13px] text-[rgba(0,0,0,0.40)]'
               value={incomePercentage}
               onChange={e => {
@@ -110,8 +153,12 @@ function FeeOn() {
                 className='border p-2'
                 onClick={e => {
                   e.stopPropagation()
+                  if (!isAddress(incomePercentageAddress)) {
+                    alert('Invalid address')
+                    return
+                  }
                   if (feeStatus === 1) return
-                  handleSetsIncomePercentage(source, incomePercentage)
+                  handleSetsIncomePercentage(incomePercentageAddress, incomePercentage)
                 }}
               >
                 <div className="btn-text w-[120px]">
