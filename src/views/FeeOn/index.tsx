@@ -90,6 +90,56 @@ function FeeOn() {
         </div>
         <div className='px-10'>
           <div className='py-3 flex items-center'>
+            <span className='pr-5'>Fee ON:</span> 
+            <CheckBox checked={feeOn} onChange={(value) => {
+              handleOnChange(value, 'FeeOn')
+            }} /> 
+            <div className=' ml-10'>
+              <button 
+                className='border p-2'
+                onClick={e => {
+                  e.stopPropagation()
+                  if (feeStatus === 1) return
+                  handleSetFeeOn(feeOn)
+                }}
+              >
+                <div className="btn-text w-[120px]">
+                  {
+                    feeStatus === 1 ? 'Processing...' : 'Confirm'
+                  }
+                </div>
+              </button>
+            </div>
+          </div>
+          <div className='py-3 flex items-center'>
+            <span className='pr-5'>Fee To:</span> 
+            <input type="text"
+              placeholder='Fee to address'
+              className='w-[400px] whitespace-nowrap shrink-0 overflow-auto rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px] text-[13px] text-[rgba(0,0,0,0.40)]'
+              value={feeTo}
+              onChange={e => {
+                handleOnChange(e.target.value, 'feeTo')
+              }}
+            />
+            <div className=' ml-10'>
+              <button 
+                
+                className='border p-2'
+                onClick={e => {
+                  e.stopPropagation()
+                  if (feeStatus === 1) return
+                  handleSetFeeTo(feeTo)
+                }}
+              >
+                <div className="btn-text w-[120px]">
+                  {
+                    feeStatus === 1 ? 'Processing...' : 'Confirm'
+                  }
+                </div>
+              </button>
+            </div>
+          </div>
+          <div className='py-3 flex items-center'>
             <span className='pr-5'>DiscountPercentage:</span> 
             <input type="text"
               placeholder='Address'
@@ -169,56 +219,8 @@ function FeeOn() {
               </button>
             </div>
           </div>
-          <div className='py-3 flex items-center'>
-            <span className='pr-5'>Fee To:</span> 
-            <input type="text"
-              placeholder='Fee to address'
-              className='w-[400px] whitespace-nowrap shrink-0 overflow-auto rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px] text-[13px] text-[rgba(0,0,0,0.40)]'
-              value={feeTo}
-              onChange={e => {
-                handleOnChange(e.target.value, 'feeTo')
-              }}
-            />
-            <div className=' ml-10'>
-              <button 
-                
-                className='border p-2'
-                onClick={e => {
-                  e.stopPropagation()
-                  if (feeStatus === 1) return
-                  handleSetFeeTo(feeTo)
-                }}
-              >
-                <div className="btn-text w-[120px]">
-                  {
-                    feeStatus === 1 ? 'Processing...' : 'Confirm'
-                  }
-                </div>
-              </button>
-            </div>
-          </div>
-          <div className='py-3 flex items-center'>
-            <span className='pr-5'>Fee ON:</span> 
-            <CheckBox checked={feeOn} onChange={(value) => {
-              handleOnChange(value, 'FeeOn')
-            }} /> 
-            <div className=' ml-10'>
-              <button 
-                className='border p-2'
-                onClick={e => {
-                  e.stopPropagation()
-                  if (feeStatus === 1) return
-                  handleSetFeeOn(feeOn)
-                }}
-              >
-                <div className="btn-text w-[120px]">
-                  {
-                    feeStatus === 1 ? 'Processing...' : 'Confirm'
-                  }
-                </div>
-              </button>
-            </div>
-          </div>
+
+          
           
         </div>
 
