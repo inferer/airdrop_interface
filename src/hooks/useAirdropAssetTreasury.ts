@@ -356,8 +356,9 @@ export function useAirdropAssetTreasuryFeeOn() {
         } else {
           alert('Error')
         }
-      } catch (error) {
+      } catch (error: any) {
         console.log(error)
+        alert(error.data?.message || error.message)
         setFeeStatus(0)
       }
       
@@ -379,8 +380,9 @@ export function useAirdropAssetTreasuryFeeOn() {
         } else {
           alert('Error')
         }
-      } catch (error) {
+      } catch (error: any) {
         console.log(error)
+        alert(error.data?.message || error.message)
         setFeeStatus(0)
       }
     }
@@ -399,8 +401,9 @@ export function useAirdropAssetTreasuryFeeOn() {
         } else {
           alert('Error')
         }
-      } catch (error) {
+      } catch (error: any) {
         console.log(error)
+        alert(error.data?.message || error.message)
         setFeeStatus(0)
       }
     }
@@ -420,8 +423,9 @@ export function useAirdropAssetTreasuryFeeOn() {
         } else {
           alert('Error')
         }
-      } catch (error) {
+      } catch (error: any) {
         console.log(error)
+        alert(error.data?.message || error.message)
         setFeeStatus(0)
       }
     }
@@ -441,8 +445,9 @@ export function useAirdropAssetTreasuryFeeOn() {
         } else {
           alert('Error')
         }
-      } catch (error) {
+      } catch (error: any) {
         console.log(error)
+        alert(error.data?.message || error.message)
         setFeeStatus(0)
       }
     }

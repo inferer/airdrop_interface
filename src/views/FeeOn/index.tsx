@@ -14,8 +14,7 @@ import { isAddress } from '../../utils'
 function FeeOn() {
   const router = useRouter()
   const { account } = useActiveWeb3React()
-
-  const source = router.query.source as string || ''
+  const isOwner = useMemo(() => '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' === account, [account])
 
   const { 
     feeStatus, 
@@ -95,20 +94,24 @@ function FeeOn() {
               handleOnChange(value, 'FeeOn')
             }} /> 
             <div className=' ml-10'>
-              <button 
-                className='border p-2'
-                onClick={e => {
-                  e.stopPropagation()
-                  if (feeStatus === 1) return
-                  handleSetFeeOn(feeOn)
-                }}
-              >
-                <div className="btn-text w-[120px]">
-                  {
-                    feeStatus === 1 ? 'Processing...' : 'Confirm'
-                  }
-                </div>
-              </button>
+              {
+                isOwner && 
+                <button 
+                  className='border p-2'
+                  onClick={e => {
+                    e.stopPropagation()
+                    if (feeStatus === 1) return
+                    handleSetFeeOn(feeOn)
+                  }}
+                >
+                  <div className="btn-text w-[120px]">
+                    {
+                      feeStatus === 1 ? 'Processing...' : 'Confirm'
+                    }
+                  </div>
+                </button>
+              }
+              
             </div>
           </div>
           <div className='py-3 flex items-center'>
@@ -122,21 +125,24 @@ function FeeOn() {
               }}
             />
             <div className=' ml-10'>
-              <button 
-                
-                className='border p-2'
-                onClick={e => {
-                  e.stopPropagation()
-                  if (feeStatus === 1) return
-                  handleSetFeeTo(feeTo)
-                }}
-              >
-                <div className="btn-text w-[120px]">
-                  {
-                    feeStatus === 1 ? 'Processing...' : 'Confirm'
-                  }
-                </div>
-              </button>
+              {
+                isOwner && 
+                <button 
+                  className='border p-2'
+                  onClick={e => {
+                    e.stopPropagation()
+                    if (feeStatus === 1) return
+                    handleSetFeeTo(feeTo)
+                  }}
+                >
+                  <div className="btn-text w-[120px]">
+                    {
+                      feeStatus === 1 ? 'Processing...' : 'Confirm'
+                    }
+                  </div>
+                </button>
+              }
+              
             </div>
           </div>
           <div className='py-3 flex items-center'>
@@ -159,24 +165,28 @@ function FeeOn() {
             /> 
             <span className='pl-2'>/ 1000</span>
             <div className=' ml-10'>
-              <button 
-                className='border p-2'
-                onClick={e => {
-                  e.stopPropagation()
-                  if (!isAddress(discountPercentageAddress)) {
-                    alert('Invalid address')
-                    return
-                  }
-                  if (feeStatus === 1) return
-                  handleSetsAirdropDiscountPercentage(discountPercentageAddress, discountPercentage)
-                }}
-              >
-                <div className="btn-text w-[120px]">
-                  {
-                    feeStatus === 1 ? 'Processing...' : 'Confirm'
-                  }
-                </div>
-              </button>
+              {
+                isOwner && 
+                <button 
+                  className='border p-2'
+                  onClick={e => {
+                    e.stopPropagation()
+                    if (!isAddress(discountPercentageAddress)) {
+                      alert('Invalid address')
+                      return
+                    }
+                    if (feeStatus === 1) return
+                    handleSetsAirdropDiscountPercentage(discountPercentageAddress, discountPercentage)
+                  }}
+                >
+                  <div className="btn-text w-[120px]">
+                    {
+                      feeStatus === 1 ? 'Processing...' : 'Confirm'
+                    }
+                  </div>
+                </button>
+              }
+              
             </div>
           </div>
           <div className='py-3 flex items-center'>
@@ -199,24 +209,28 @@ function FeeOn() {
             />
             <span className='pl-2'>/ 1000</span>
             <div className=' ml-10'>
-              <button 
-                className='border p-2'
-                onClick={e => {
-                  e.stopPropagation()
-                  if (!isAddress(incomePercentageAddress)) {
-                    alert('Invalid address')
-                    return
-                  }
-                  if (feeStatus === 1) return
-                  handleSetsIncomePercentage(incomePercentageAddress, incomePercentage)
-                }}
-              >
-                <div className="btn-text w-[120px]">
-                  {
-                    feeStatus === 1 ? 'Processing...' : 'Confirm'
-                  }
-                </div>
-              </button>
+              {
+                isOwner && 
+                <button 
+                  className='border p-2'
+                  onClick={e => {
+                    e.stopPropagation()
+                    if (!isAddress(incomePercentageAddress)) {
+                      alert('Invalid address')
+                      return
+                    }
+                    if (feeStatus === 1) return
+                    handleSetsIncomePercentage(incomePercentageAddress, incomePercentage)
+                  }}
+                >
+                  <div className="btn-text w-[120px]">
+                    {
+                      feeStatus === 1 ? 'Processing...' : 'Confirm'
+                    }
+                  </div>
+                </button>
+              }
+              
             </div>
           </div>
 
