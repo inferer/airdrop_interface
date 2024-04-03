@@ -149,7 +149,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       const parameterValue = parameter.map(item =>(item.type === 'address' ? item.value.toLowerCase() : item.value)).join('|')
       const _content = chain + '|' + parameterType + '|' + ladningPage
       const isETH = lockedToken === ETHER
-      const source = localStorage.getItem(INFERER_AIRDROP_SOURCE) || account
+      const source = localStorage.getItem(INFERER_AIRDROP_SOURCE) || ethers.constants.AddressZero
       const baseInfo = [name, label, channel, action, content, _content, parameterValue, 'inferer']
       const route = args[2]
       console.log(lockedAmountA, lockedAmountB, args[1], unint)
