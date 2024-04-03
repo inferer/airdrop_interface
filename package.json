@@ -35,7 +35,7 @@
     "ajv": "^6.12.3",
     "cids": "^1.0.0",
     "copy-to-clipboard": "^3.2.0",
-    "cross-env": "^7.0.2",
+    "cross-env": "^7.0.3",
     "eslint": "8.43.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
@@ -74,6 +74,7 @@
   "resolutions": {},
   "scripts": {
     "dev": "next dev",
+    "build:dev": "cross-env NODE_ENV=development next build",
     "build": "next build",
     "start": "next start -p 13880"
   },
