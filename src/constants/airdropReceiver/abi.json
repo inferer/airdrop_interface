@@ -153,6 +153,24 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_userAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_index",
+        "type": "uint256"
+      }
+    ],
+    "name": "completeTaskOne",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "_airdropId",
         "type": "uint256"
@@ -173,9 +191,36 @@
         "type": "uint8"
       },
       {
-        "internalType": "bytes32[]",
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "value",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "proof",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "peaks",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "elementsCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MmrProof",
         "name": "proof",
-        "type": "bytes32[]"
+        "type": "tuple"
       }
     ],
     "name": "confirmTask",
@@ -206,9 +251,36 @@
         "type": "uint8"
       },
       {
-        "internalType": "bytes32[]",
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "value",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "proof",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "peaks",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "elementsCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MmrProof",
         "name": "proof",
-        "type": "bytes32[]"
+        "type": "tuple"
       }
     ],
     "name": "confirmTaskMulti",
@@ -250,9 +322,36 @@
         "type": "uint8"
       },
       {
-        "internalType": "bytes32[]",
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "value",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "proof",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "peaks",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "elementsCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MmrProof",
         "name": "proof",
-        "type": "bytes32[]"
+        "type": "tuple"
       }
     ],
     "name": "confirmTaskMultiByTrackManager",
@@ -332,7 +431,7 @@
       },
       {
         "internalType": "string",
-        "name": "_action",
+        "name": "_parameterValue",
         "type": "string"
       },
       {
@@ -380,9 +479,36 @@
         "type": "uint8"
       },
       {
-        "internalType": "bytes32[]",
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "value",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "proof",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "peaks",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "elementsCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MmrProof",
         "name": "proof",
-        "type": "bytes32[]"
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -450,9 +576,36 @@
         "type": "uint8"
       },
       {
-        "internalType": "bytes32[]",
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "value",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "proof",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "peaks",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "elementsCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MmrProof",
         "name": "proof",
-        "type": "bytes32[]"
+        "type": "tuple"
       }
     ],
     "name": "registerTask",
