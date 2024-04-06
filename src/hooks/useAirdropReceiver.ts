@@ -8,16 +8,17 @@ import { useCurrency } from './Tokens'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import { useApproveCallback } from './useApproveCallback'
 import { AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury'
-import { fetcher, poster } from '../utils/axios'
+import { fetcher, poster, userPoolSrvcFetcher } from '../utils/axios'
 import { getAlgTokenByLabel, getLabelTokenByAddress, getUSDTTokenByAddress } from '../utils/getTokenList'
 import { useAirdropManager } from './useAirdropManager'
 import { useShowToast } from '../state/application/hooks'
 import { othersContracts } from '../constants/contractsLocal'
-import { transformTime } from '../utils'
+import { transformTime, zeroPadByte32 } from '../utils'
 
 
-export const getAccountScoreProof = async (account: string, label: string) => {
-  const res = await fetcher(`/api/airdrop/getScoreProof`, { account, label })
+export const getAccountScoreProof = async (account: string, label: string, score:number) => {
+  // const res = await fetcher(`/api/airdrop/getScoreProof`, { account, label })
+  const res = await userPoolSrvcFetcher(`/api/userpool/getScoreProof`, { account, label, score });
   if (res.code === 0 && res.data) {
     return res.data.hexProof || []
   }
@@ -56,7 +57,15 @@ export function useAirdropReceiver(algToken?: string) {
       // const airdropInfo = await handleGetAirdropOne2(Number(airdropId))
       // console.log(airdropInfo)
 
-      const proof = await getAccountScoreProof(account, label)
+      const pf = await getAccountScoreProof(account, label, accountScore)
+      
+      const proof = {
+        index:pf.elementIndex,
+        value:zeroPadByte32(pf.elementHash),
+        proof:pf.siblingsHashes.map((v:string)=>zeroPadByte32(v)),
+        peaks:pf.peaksHashes.map((v:string)=>zeroPadByte32(v)),
+        elementsCount:pf.elementsCount
+      }
 
       let gasLimit = '5000000'
       try {
@@ -106,7 +115,15 @@ export function useAirdropReceiver(algToken?: string) {
       // const res = await airdropReceiver.getAirdropBaseInfoByHash(othersContracts.projectContract + '.comment')
       // console.log(res)
 
-      const proof = await getAccountScoreProof(account, label)
+      const pf = await getAccountScoreProof(account, label, accountScore)
+      debugger
+      const proof = {
+        index:pf.elementIndex,
+        value:zeroPadByte32(pf.elementHash),
+        proof:pf.siblingsHashes.map((v:string)=>zeroPadByte32(v)),
+        peaks:pf.peaksHashes.map((v:string)=>zeroPadByte32(v)),
+        elementsCount:pf.elementsCount
+      }
 
       let gasLimit = '5000000'
       try {

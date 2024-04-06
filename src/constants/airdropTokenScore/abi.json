@@ -137,9 +137,36 @@
         "type": "uint8"
       },
       {
-        "internalType": "bytes32[]",
-        "name": "proof",
-        "type": "bytes32[]"
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "value",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "proof",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "peaks",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "elementsCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MmrProof",
+        "name": "mmrProof",
+        "type": "tuple"
       }
     ],
     "name": "checkScore",
@@ -166,9 +193,36 @@
         "type": "uint256"
       },
       {
-        "internalType": "bytes32[]",
-        "name": "proof",
-        "type": "bytes32[]"
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "value",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "proof",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "peaks",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "elementsCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct MmrProof",
+        "name": "mmrProof",
+        "type": "tuple"
       }
     ],
     "name": "claimToken",
@@ -251,7 +305,7 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct AirdropTokenScoreV2.UserToken",
+        "internalType": "struct AirdropUserPoolV1.UserToken",
         "name": "_userToken",
         "type": "tuple"
       }
@@ -340,6 +394,32 @@
       }
     ],
     "name": "setAirdropAssetTreasury",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "setAlgAmount",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "setAlgAmountMin",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -474,6 +554,50 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "value",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "proof",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "peaks",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "elementsCount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "root",
+        "type": "bytes32"
+      }
+    ],
+    "name": "verifyProof",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "pure",
     "type": "function"
   }
 ]

@@ -16,6 +16,7 @@ import { getAlgLabelTokenByAddress, getAlgTokenByLabel } from "../utils/getToken
 import { fetcher,userPoolSrvcFetcher } from "../utils/axios";
 import { useUserLabelScore } from "../state/airdrop/hooks";
 import { useShowToast } from "../state/application/hooks";
+import {zeroPadByte32} from '../utils'
 
 export const getAirdropTokenScoreAddress = () => {
   return AirdropTokenScore_NETWORKS[NETWORK_CHAIN_ID as ChainId]
@@ -23,7 +24,9 @@ export const getAirdropTokenScoreAddress = () => {
 
 export const getAccountProof = async (account: string, label: string) => {
 
-  const res = await fetcher(`/api/airdrop/getTokenProof`, { account, label })
+  // const res = await fetcher(`/api/airdrop/getTokenProof`, { account, label })
+  const res = await userPoolSrvcFetcher(`/api/userpool/getTokenProof`, { account, label })
+
   if (res.code === 0 && res.data) {
     return res.data.hexProof || []
   }
@@ -129,9 +132,34 @@ export function useAirdropTokenScore() {
       // }
       setClaimStatus(1)
       try {
-        const proof = await getAccountProof(account, _label)
-        
-        if (proof.length > 0) {
+
+        const pf = await getAccountProof(account, _label)
+        debugger
+        if (pf && pf.elementHash) {
+          const proof = {
+            index:pf.elementIndex,
+            value:zeroPadByte32(pf.elementHash),
+            proof:pf.siblingsHashes.map((v:string)=>zeroPadByte32(v)),
+            peaks:pf.peaksHashes.map((v:string)=>zeroPadByte32(v)),
+            elementsCount:pf.elementsCount
+          }
+          
+          const tx = await airdropTokenScore.claimToken(tokenAddress, score * 100, proof)
+          const receipt = await tx.wait()
+          if (receipt.status) {
+            handleGetAlgTokenList()
+            handleShow({ type: 'success', content: `Received ${lockedAmount} ${label} tokens successfully.` })
+          } else {
+            handleShow({ type: 'error', content: `Fail to received ${label} tokens.`, title: 'Error' })
+          }
+        }else if(score == 0){
+          const proof = {
+            index:0,
+            value:zeroPadByte32('0'),
+            proof:[],
+            peaks:[],
+            elementsCount:0
+          }
           const tx = await airdropTokenScore.claimToken(tokenAddress, score * 100, proof)
           const receipt = await tx.wait()
           if (receipt.status) {
@@ -141,7 +169,7 @@ export function useAirdropTokenScore() {
             handleShow({ type: 'error', content: `Fail to received ${label} tokens.`, title: 'Error' })
           }
         } else {
-          console.log(proof)
+          console.log(pf)          
           handleShow({ type: 'error', content: `Fail to received ${label} tokens.`, title: 'Error' })
         }
         setClaimStatus(0)
@@ -195,9 +223,8 @@ export function useAccountTokenSupply(tokenAddress: string, score: number, balan
   const { account } = useActiveWeb3React()
   const multi = useMulticallContract()
   const airdropTokenScore = useAirdropTokenScoreContract()
-
   useEffect(() => {
-    if (account && airdropTokenScore && tokenAddress && score) {
+    if (account && airdropTokenScore && tokenAddress && score >= 0) {
       getLockedAlgAssets(airdropTokenScore, tokenAddress, score * 100).then((amount) => {
         setSupplyAmount(amount)
       })

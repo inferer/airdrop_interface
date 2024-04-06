@@ -261,3 +261,12 @@ export function upperCase0(str: string = '') {
   }
   return str
 }
+export function zeroPadByte32(numberAsString:string){
+  if(numberAsString.length === 66){
+      return numberAsString;
+  }
+  if(numberAsString.indexOf("0x")>=0){
+      numberAsString = numberAsString.slice(2);
+  }
+  return "0x" + ("0".repeat(64 - numberAsString.length)) + numberAsString;
+}
