@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAirdropManagerContract, useMulticallContract } from "./useContract";
+import { useAirdropManagerContract, useAirdropUserTaskContract, useMulticallContract } from "./useContract";
 import { BigNumber, Contract } from "ethers";
 import { AirdropManager_ABI, AirdropManager_NETWORKS } from "../constants/airdropManager";
+import { AirdropUserTask_ABI, AirdropUserTask_NETWORKS } from "../constants/airdropUserTask";
 import { NETWORK_CHAIN_ID } from "../connectors";
 import { ChainId } from "@uniswap/sdk";
 import multicall from "../utils/multicall";
@@ -16,6 +17,10 @@ import { useMaxUnits, useUserAirdropConfirmedList } from "../state/airdrop/hooks
 
 export const getAirdropManagerAddress = () => {
   return AirdropManager_NETWORKS[NETWORK_CHAIN_ID as ChainId]
+}
+
+export const getAirdropUserTaskAddress = () => {
+  return AirdropUserTask_NETWORKS[NETWORK_CHAIN_ID as ChainId]
 }
 
 export const getAirdropLength = async (multi: Contract) => {
@@ -152,12 +157,12 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
 export const getAirdropUserConfirmed = async (multi: Contract, airdropId: number) => {
   const calls = []
     calls.push({
-      address: getAirdropManagerAddress(),
+      address: getAirdropUserTaskAddress(),
       name: 'getAirdropTaskList',
       params: [airdropId]
     })
 
-  const userAirdropConfirmed = await multicall(multi, AirdropManager_ABI, calls)
+  const userAirdropConfirmed = await multicall(multi, AirdropUserTask_ABI, calls)
   return (userAirdropConfirmed[0] && userAirdropConfirmed[0][0] && userAirdropConfirmed[0][0]) ? userAirdropConfirmed[0][0].map((item: any) => {
     const tempItem = item
     if (tempItem) {
@@ -230,6 +235,7 @@ export function useAirdropManager() {
   const airdropList = useUserAirdropConfirmedList()
   const multi = useMulticallContract()
   const airdropManager = useAirdropManagerContract()
+  const airdropUserTask = useAirdropUserTaskContract()
 
   const handleUpdateAirdropList = useCallback(async () => {
     dispatch(updateAirdropList({ airdropList: [] }))
@@ -278,15 +284,15 @@ export function useAirdropManager() {
   }, [multi, dispatch])
 
   const handleGetUserAirdropConfirmed = useCallback(async (refresh?: boolean) => {
-    if (multi && airdropManager && account && (refresh || airdropList.length <= 0) ) {
-      let userAirdropConfirmed = await getUserAirdropConfirmed2(airdropManager, account) 
+    if (multi && airdropUserTask && account && (refresh || airdropList.length <= 0) ) {
+      let userAirdropConfirmed = await getUserAirdropConfirmed2(airdropUserTask, account) 
       const userConfirmedIds = userAirdropConfirmed.map((item: { airdropId: any; }) => item.airdropId).filter((airdropId: string) => parseInt(airdropId) > 0)
       const list = await getAirdropList(multi, userConfirmedIds)
       const tempConfirmed = userAirdropConfirmed.reverse()
       const newList = list.map((item, index) => ({ ...item, ...tempConfirmed[index]}))
       dispatch(updateUserAirdropConfirmed({ airdropList: newList as any }))
     }
-  }, [multi, airdropManager, account, airdropList, dispatch])
+  }, [multi, airdropUserTask, airdropUserTask, account, airdropList, dispatch])
 
   const [airdropUserConfirmed, setAirdropUserComfirmed] = useState<any[]>([])
   const handleGetAirdropUserConfirmed = useCallback(async (airdropId: number) => {

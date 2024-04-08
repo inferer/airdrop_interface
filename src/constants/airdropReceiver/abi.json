@@ -102,16 +102,16 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "airdropUserTask",
+    "outputs": [
       {
-        "internalType": "uint256",
-        "name": "_airdropId",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
-    "name": "completeAirdrop",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -191,170 +191,12 @@
         "type": "uint8"
       },
       {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "index",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "value",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32[]",
-            "name": "proof",
-            "type": "bytes32[]"
-          },
-          {
-            "internalType": "bytes32[]",
-            "name": "peaks",
-            "type": "bytes32[]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "elementsCount",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct MmrProof",
+        "internalType": "bytes32[]",
         "name": "proof",
-        "type": "tuple"
-      }
-    ],
-    "name": "confirmTask",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_airdropId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_algToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_airToken",
-        "type": "address"
-      },
-      {
-        "internalType": "uint8",
-        "name": "score",
-        "type": "uint8"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "index",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "value",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32[]",
-            "name": "proof",
-            "type": "bytes32[]"
-          },
-          {
-            "internalType": "bytes32[]",
-            "name": "peaks",
-            "type": "bytes32[]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "elementsCount",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct MmrProof",
-        "name": "proof",
-        "type": "tuple"
+        "type": "bytes32[]"
       }
     ],
     "name": "confirmTaskMulti",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_userAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_airdropId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_algToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_airToken",
-        "type": "address"
-      },
-      {
-        "internalType": "uint8",
-        "name": "score",
-        "type": "uint8"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "index",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "value",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32[]",
-            "name": "proof",
-            "type": "bytes32[]"
-          },
-          {
-            "internalType": "bytes32[]",
-            "name": "peaks",
-            "type": "bytes32[]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "elementsCount",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct MmrProof",
-        "name": "proof",
-        "type": "tuple"
-      }
-    ],
-    "name": "confirmTaskMultiByTrackManager",
     "outputs": [
       {
         "internalType": "uint256",
@@ -405,116 +247,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_hash",
-        "type": "string"
-      }
-    ],
-    "name": "getAirdropBaseInfoByHash",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "_name",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_label",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_channel",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_parameterValue",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_content",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_airdropId",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_userAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_airdropId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getUserRegisterInfo",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "algToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "airToken",
-        "type": "address"
-      },
-      {
-        "internalType": "uint8",
-        "name": "score",
-        "type": "uint8"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "index",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "value",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32[]",
-            "name": "proof",
-            "type": "bytes32[]"
-          },
-          {
-            "internalType": "bytes32[]",
-            "name": "peaks",
-            "type": "bytes32[]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "elementsCount",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct MmrProof",
-        "name": "proof",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "initialize",
     "outputs": [],
@@ -551,66 +283,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_airdropId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_algToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_airToken",
-        "type": "address"
-      },
-      {
-        "internalType": "uint8",
-        "name": "score",
-        "type": "uint8"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "index",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "value",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32[]",
-            "name": "proof",
-            "type": "bytes32[]"
-          },
-          {
-            "internalType": "bytes32[]",
-            "name": "peaks",
-            "type": "bytes32[]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "elementsCount",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct MmrProof",
-        "name": "proof",
-        "type": "tuple"
-      }
-    ],
-    "name": "registerTask",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -668,6 +340,19 @@
       }
     ],
     "name": "setAirdropTokenScore",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_airdropUserTask",
+        "type": "address"
+      }
+    ],
+    "name": "setAirdropUserTask",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

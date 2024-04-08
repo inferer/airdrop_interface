@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 import { useCallback, useMemo, useState } from 'react'
 import { useActiveWeb3React } from './index'
-import { useAirdropManagerContract, useAirdropReceiverContract, useContractDemoContract } from './useContract'
+import { useAirdropManagerContract, useAirdropReceiverContract, useAirdropUserTaskContract, useContractDemoContract } from './useContract'
 import { useCurrency } from './Tokens'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import { useApproveCallback } from './useApproveCallback'
@@ -17,8 +17,8 @@ import { transformTime, zeroPadByte32 } from '../utils'
 
 
 export const getAccountScoreProof = async (account: string, label: string, score:number) => {
-  // const res = await fetcher(`/api/airdrop/getScoreProof`, { account, label })
-  const res = await userPoolSrvcFetcher(`/api/userpool/getScoreProof`, { account, label, score });
+  const res = await fetcher(`/api/airdrop/getScoreProof`, { account, label })
+  // const res = await userPoolSrvcFetcher(`/api/userpool/getScoreProof`, { account, label, score });
   if (res.code === 0 && res.data) {
     return res.data.hexProof || []
   }
@@ -56,21 +56,29 @@ export function useAirdropReceiver(algToken?: string) {
       const algToken = getAlgTokenByLabel(label)
       // const airdropInfo = await handleGetAirdropOne2(Number(airdropId))
       // console.log(airdropInfo)
-
-      const pf = await getAccountScoreProof(account, label, accountScore)
-      
-      const proof = {
-        index:pf.elementIndex,
-        value:zeroPadByte32(pf.elementHash),
-        proof:pf.siblingsHashes.map((v:string)=>zeroPadByte32(v)),
-        peaks:pf.peaksHashes.map((v:string)=>zeroPadByte32(v)),
-        elementsCount:pf.elementsCount
+      // let proof = {}
+      let proof2 = []
+      try {
+        const pf = await getAccountScoreProof(account, label, accountScore)
+        proof2 = pf
+        // proof = {
+        //   index:pf.elementIndex,
+        //   value: zeroPadByte32(pf.elementHash),
+        //   proof:pf.siblingsHashes.map((v:string)=>zeroPadByte32(v)),
+        //   peaks:pf.peaksHashes.map((v:string)=>zeroPadByte32(v)),
+        //   elementsCount:pf.elementsCount
+        // }
+      } catch (error) {
+        console.log(error)
+        handleShow({ type: 'error', content: `Fail to confirm.`, title: 'Error' })
+        setConfirmStatus(2)
+        return
       }
 
       let gasLimit = '5000000'
       try {
-        console.log(airdropId, algToken?.address, airToken, String(accountScore * 100), proof)
-        const gasEstimate = await airdropReceiver.estimateGas['confirmTaskMulti'](airdropId, algToken?.address, airToken, String(accountScore * 100), proof)
+        console.log(airdropId, algToken?.address, airToken, String(accountScore * 100), proof2)
+        const gasEstimate = await airdropReceiver.estimateGas['confirmTaskMulti'](airdropId, algToken?.address, airToken, String(accountScore * 100), proof2)
         gasLimit = gasEstimate.toString()
       } catch (error: any) {
         console.log(error)
@@ -81,7 +89,7 @@ export function useAirdropReceiver(algToken?: string) {
         return
       }
       try {
-        const tx = await airdropReceiver.confirmTaskMulti(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await airdropReceiver.confirmTaskMulti(airdropId, algToken?.address, airToken, String(accountScore * 100), proof2, { gasPrice: '1000000000', gasLimit: gasLimit })
         const receipt = await tx.wait()
         if (receipt.status) {
           router.push('/user/ongoing')
@@ -251,13 +259,14 @@ export function useProjectContractDemo() {
   const { account } = useActiveWeb3React()
   const contractDemo: Contract | null = useContractDemoContract()
   const airdropManager = useAirdropManagerContract()
+  const airdropUserTask = useAirdropUserTaskContract()
   const { handleShow } = useShowToast()
   const router = useRouter()
 
   const handleGetTaskInfo = useCallback(async (account: string) => {
-    if (airdropManager) {
+    if (airdropManager && airdropUserTask) {
       const taskId = router.query.taskId
-      const taskInfo = await airdropManager.getUserAirdropConfirmedByIndex(account, taskId)
+      const taskInfo = await airdropUserTask.getUserAirdropConfirmedByIndex(account, taskId)
       const airdrop = await airdropManager.getAirdrop(taskInfo.airdropId.toString())
 
       const offerTokenData = getUSDTTokenByAddress(airdrop[2][0])
@@ -305,7 +314,7 @@ export function useProjectContractDemo() {
       setAirdropInfo(tempData)
     }
 
-  }, [airdropManager])
+  }, [airdropManager, airdropUserTask])
 
   const handleCommentAction = useCallback(async (funName: string, parameter: any[]) => {
     if (account && contractDemo) {

@@ -371,6 +371,11 @@
         "internalType": "address",
         "name": "_source",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_sourceIncome",
+        "type": "address"
       }
     ],
     "name": "lockUSDTForLabelToken",

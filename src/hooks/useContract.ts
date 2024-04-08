@@ -20,6 +20,7 @@ import { AirdropManager_ABI, AirdropManager_NETWORKS } from '../constants/airdro
 import { AirdropTokenScore_ABI, AirdropTokenScore_NETWORKS } from '../constants/airdropTokenScore'
 import { AirdropAssetTreasury_ABI, AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury'
 import { PROJECTDEMO_ABI, PROJECTDEMO_NETWORKS } from '../constants/projectDemo'
+import { AirdropUserTask_ABI, AirdropUserTask_NETWORKS } from '../constants/airdropUserTask'
 
 // returns null on errors
 function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
@@ -105,6 +106,11 @@ export function useAirdropReceiverContract(): Contract | null {
 export function useAirdropManagerContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && AirdropManager_NETWORKS[chainId], AirdropManager_ABI, true)
+}
+
+export function useAirdropUserTaskContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && AirdropUserTask_NETWORKS[chainId], AirdropUserTask_ABI, true)
 }
 
 export function useAirdropTokenScoreContract(): Contract | null {

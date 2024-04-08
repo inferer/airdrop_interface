@@ -134,7 +134,7 @@ export function useAirdropTokenScore() {
       try {
 
         const pf = await getAccountProof(account, _label)
-        debugger
+        // debugger
         if (pf && pf.elementHash) {
           const proof = {
             index:pf.elementIndex,

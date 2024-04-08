@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { useTotalSupply } from '../../data/TotalSupply'
 
 import { useActiveWeb3React } from '../../hooks'
-import { useTokenBalance } from '../../state/wallet/hooks'
+import { usePairInfererBalance, useTokenBalance } from '../../state/wallet/hooks'
 import { ExternalLink } from '../../theme'
 import { currencyId } from '../../utils/currencyId'
 import { unwrappedToken } from '../../utils/wrappedCurrency'
@@ -46,7 +46,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
 
   const [showMore, setShowMore] = useState(false)
 
-  const userPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
+  const userPoolBalance = usePairInfererBalance(account ?? undefined, pair.liquidityToken)
   const totalPoolTokens = useTotalSupply(pair.liquidityToken)
 
   const [token0Deposited, token1Deposited] =

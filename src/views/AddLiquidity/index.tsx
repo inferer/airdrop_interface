@@ -77,6 +77,7 @@ export default function AddLiquidity() {
     poolTokenPercentage,
     error
   } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
+
   const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
 
   const isValid = !error
@@ -157,8 +158,10 @@ export default function AddLiquidity() {
       ]
       value = BigNumber.from((tokenBIsETH ? parsedAmountB : parsedAmountA).raw.toString())
     } else {
-      estimate = router.estimateGas.addLiquidity
-      method = router.addLiquidity
+      // estimate = router.estimateGas.addLiquidity
+      // method = router.addLiquidity
+      estimate = router.estimateGas.addLiquidityInferer
+      method = router.addLiquidityInferer
       args = [
         wrappedCurrency(currencyA, chainId)?.address ?? '',
         wrappedCurrency(currencyB, chainId)?.address ?? '',
