@@ -232,8 +232,8 @@ export function useAirdropAssetTreasury() {
           allowance = await tokenContract.allowance(account, spender)
         }
         
-        const amount = BigNumber.from((Number(value) * (10 ** airToken.decimals)).toString(10)).toString()
-        console.log(airToken, BigNumber.from((Number(value) * (10 ** airToken.decimals)).toString(10)).toString())
+        const amount = JSBI.multiply(JSBI.BigInt(value), JSBI.BigInt(10 ** airToken.decimals)).toString()
+        console.log(airToken, amount)
         console.log(allowance.toString())
         let approved = false
         if (Number(allowance) < Number(amount) && tokenContract) {

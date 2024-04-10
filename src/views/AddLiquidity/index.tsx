@@ -46,7 +46,7 @@ export default function AddLiquidity() {
   const router = useRouter()
   // const currencyIdA = '0x300f6B06211F490c2A5Fb5c7f634A3f6D636E355'
   // const currencyIdB = AIRLABEL_TOKEN_LIST[0].address
-  
+  const isLP0 = router.query.lp && router.query.lp === '0'
   const currencyIdA = router.query.address && router.query.address[0]
   const currencyIdB = router.query.address && router.query.address[1]
   const currencyA = useCurrency(currencyIdA)
@@ -158,10 +158,15 @@ export default function AddLiquidity() {
       ]
       value = BigNumber.from((tokenBIsETH ? parsedAmountB : parsedAmountA).raw.toString())
     } else {
-      // estimate = router.estimateGas.addLiquidity
-      // method = router.addLiquidity
-      estimate = router.estimateGas.addLiquidityInferer
-      method = router.addLiquidityInferer
+      console.log('LP0: ', isLP0)
+      if (isLP0) {
+        estimate = router.estimateGas.addLiquidityInferer
+        method = router.addLiquidityInferer
+      } else {  
+        estimate = router.estimateGas.addLiquidity
+        method = router.addLiquidity
+      }
+      
       args = [
         wrappedCurrency(currencyA, chainId)?.address ?? '',
         wrappedCurrency(currencyB, chainId)?.address ?? '',

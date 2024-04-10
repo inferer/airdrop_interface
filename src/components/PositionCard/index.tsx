@@ -46,24 +46,28 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
 
   const [showMore, setShowMore] = useState(false)
 
-  const userPoolBalance = usePairInfererBalance(account ?? undefined, pair.liquidityToken)
+  const userPoolInfererBalance = usePairInfererBalance(account ?? undefined, pair.liquidityToken)
+  const userPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
   const totalPoolTokens = useTotalSupply(pair.liquidityToken)
-
+  // // @ts-ignore
+  // console.log(pair?.tokenAmounts[0].toSignificant(4) , 111)
+  // // @ts-ignore
+  // console.log(pair?.tokenAmounts[1].toSignificant(4) , 111)
   const [token0Deposited, token1Deposited] =
     !!pair &&
     !!totalPoolTokens &&
-    !!userPoolBalance &&
+    !!userPoolInfererBalance &&
     // this condition is a short-circuit in the case where useTokenBalance updates sooner than useTotalSupply
-    JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolBalance.raw)
+    JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolInfererBalance.raw)
       ? [
-          pair.getLiquidityValue(pair.token0, totalPoolTokens, userPoolBalance, false),
-          pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolBalance, false)
+          pair.getLiquidityValue(pair.token0, totalPoolTokens, userPoolBalance ? userPoolInfererBalance.add(userPoolBalance) : userPoolInfererBalance, false),
+          pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolBalance ? userPoolInfererBalance.add(userPoolBalance) : userPoolInfererBalance, false)
         ]
       : [undefined, undefined]
 
   return (
     <>
-      {userPoolBalance && (
+      {userPoolInfererBalance && (
         <GreyCard border={border}>
           <AutoColumn gap="12px">
             <FixedHeightRow>
@@ -82,9 +86,19 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
               </RowFixed>
               <RowFixed>
                 <Text fontWeight={500} fontSize={20}>
-                  {userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}
+                  {userPoolInfererBalance ? userPoolInfererBalance.toSignificant(4) : '-'}
                 </Text>
               </RowFixed>
+              {
+                userPoolBalance && 
+                <RowFixed>
+                  <div className='px-2'>+</div>
+                  <Text fontWeight={500} fontSize={20}>
+                    {userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}
+                  </Text>
+                </RowFixed>
+              }
+              
             </FixedHeightRow>
             <AutoColumn gap="4px">
               <FixedHeightRow>
@@ -131,23 +145,23 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
 
   const [showMore, setShowMore] = useState(false)
 
-  const userPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
+  const userPoolInfererBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
   const totalPoolTokens = useTotalSupply(pair.liquidityToken)
 
   const poolTokenPercentage =
-    !!userPoolBalance && !!totalPoolTokens && JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolBalance.raw)
-      ? new Percent(userPoolBalance.raw, totalPoolTokens.raw)
+    !!userPoolInfererBalance && !!totalPoolTokens && JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolInfererBalance.raw)
+      ? new Percent(userPoolInfererBalance.raw, totalPoolTokens.raw)
       : undefined
 
   const [token0Deposited, token1Deposited] =
     !!pair &&
     !!totalPoolTokens &&
-    !!userPoolBalance &&
+    !!userPoolInfererBalance &&
     // this condition is a short-circuit in the case where useTokenBalance updates sooner than useTotalSupply
-    JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolBalance.raw)
+    JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolInfererBalance.raw)
       ? [
-          pair.getLiquidityValue(pair.token0, totalPoolTokens, userPoolBalance, false),
-          pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolBalance, false)
+          pair.getLiquidityValue(pair.token0, totalPoolTokens, userPoolInfererBalance, false),
+          pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolInfererBalance, false)
         ]
       : [undefined, undefined]
 
@@ -211,7 +225,7 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
                 Your pool tokens:
               </Text>
               <Text fontSize={16} fontWeight={500}>
-                {userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}
+                {userPoolInfererBalance ? userPoolInfererBalance.toSignificant(4) : '-'}
               </Text>
             </FixedHeightRow>
             <FixedHeightRow>

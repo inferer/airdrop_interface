@@ -17,8 +17,8 @@ import { transformTime, zeroPadByte32 } from '../utils'
 
 
 export const getAccountScoreProof = async (account: string, label: string, score:number) => {
-  const res = await fetcher(`/api/airdrop/getScoreProof`, { account, label })
-  // const res = await userPoolSrvcFetcher(`/api/userpool/getScoreProof`, { account, label, score });
+  // const res = await fetcher(`/api/airdrop/getScoreProof`, { account, label })
+  const res = await userPoolSrvcFetcher(`/api/userpool/getScoreProof`, { account, label, score });
   if (res.code === 0 && res.data) {
     return res.data.hexProof || []
   }
@@ -56,18 +56,16 @@ export function useAirdropReceiver(algToken?: string) {
       const algToken = getAlgTokenByLabel(label)
       // const airdropInfo = await handleGetAirdropOne2(Number(airdropId))
       // console.log(airdropInfo)
-      // let proof = {}
-      let proof2 = []
+      let proof = {}
       try {
         const pf = await getAccountScoreProof(account, label, accountScore)
-        proof2 = pf
-        // proof = {
-        //   index:pf.elementIndex,
-        //   value: zeroPadByte32(pf.elementHash),
-        //   proof:pf.siblingsHashes.map((v:string)=>zeroPadByte32(v)),
-        //   peaks:pf.peaksHashes.map((v:string)=>zeroPadByte32(v)),
-        //   elementsCount:pf.elementsCount
-        // }
+        proof = {
+          index:pf.elementIndex,
+          value: zeroPadByte32(pf.elementHash),
+          proof:pf.siblingsHashes.map((v:string)=>zeroPadByte32(v)),
+          peaks:pf.peaksHashes.map((v:string)=>zeroPadByte32(v)),
+          elementsCount:pf.elementsCount
+        }
       } catch (error) {
         console.log(error)
         handleShow({ type: 'error', content: `Fail to confirm.`, title: 'Error' })
@@ -77,8 +75,8 @@ export function useAirdropReceiver(algToken?: string) {
 
       let gasLimit = '5000000'
       try {
-        console.log(airdropId, algToken?.address, airToken, String(accountScore * 100), proof2)
-        const gasEstimate = await airdropReceiver.estimateGas['confirmTaskMulti'](airdropId, algToken?.address, airToken, String(accountScore * 100), proof2)
+        console.log(airdropId, algToken?.address, airToken, String(accountScore * 100), proof)
+        const gasEstimate = await airdropReceiver.estimateGas['confirmTaskMulti'](airdropId, algToken?.address, airToken, String(accountScore * 100), proof)
         gasLimit = gasEstimate.toString()
       } catch (error: any) {
         console.log(error)
@@ -89,7 +87,7 @@ export function useAirdropReceiver(algToken?: string) {
         return
       }
       try {
-        const tx = await airdropReceiver.confirmTaskMulti(airdropId, algToken?.address, airToken, String(accountScore * 100), proof2, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await airdropReceiver.confirmTaskMulti(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, { gasPrice: '1000000000', gasLimit: gasLimit })
         const receipt = await tx.wait()
         if (receipt.status) {
           router.push('/user/ongoing')
