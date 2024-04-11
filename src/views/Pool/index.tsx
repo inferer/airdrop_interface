@@ -7,7 +7,7 @@ import { SwapPoolTabs } from '../../components/NavigationTabs'
 import Question from '../../components/QuestionHelper'
 import FullPositionCard from '../../components/PositionCard'
 import { useUserHasLiquidityInAllTokens } from '../../data/V1'
-import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
+import { usePairInfererBalancesWithLoadingIndicator, useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
 import { StyledInternalLink, TYPE } from '../../theme'
 import { Text } from 'rebass'
 import { LightCard } from '../../components/Card'
@@ -34,17 +34,25 @@ export default function Pool() {
   const liquidityTokens = useMemo(() => tokenPairsWithLiquidityTokens.map(tpwlt => tpwlt.liquidityToken), [
     tokenPairsWithLiquidityTokens
   ])
-  const [v2PairsBalances, fetchingV2PairBalances] = useTokenBalancesWithLoadingIndicator(
-    account ?? undefined,
+  const [v2PairsBalances, fetchingV2PairBalances] = usePairInfererBalancesWithLoadingIndicator(
+    undefined,
     liquidityTokens
   )
 
+  // const [v2PairsBalancesOf, fetchingV2PairBalancesOf] = useTokenBalancesWithLoadingIndicator(
+  //   account ?? undefined,
+  //   liquidityTokens
+  // )
+
   // fetch the reserves for all V2 pools in which the user has a balance
   const liquidityTokensWithBalances = useMemo(
-    () =>
-      tokenPairsWithLiquidityTokens.filter(({ liquidityToken }) =>
+    () => {
+      // return tokenPairsWithLiquidityTokens
+      return tokenPairsWithLiquidityTokens.filter(({ liquidityToken }) =>
         v2PairsBalances[liquidityToken.address]?.greaterThan('0')
-      ),
+      )
+    }
+      ,
     [tokenPairsWithLiquidityTokens, v2PairsBalances]
   )
 
@@ -54,15 +62,12 @@ export default function Pool() {
 
   const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
 
-  console.log(trackedTokenPairs, 1111)
-  const hasV1Liquidity = useUserHasLiquidityInAllTokens()
-
   return (
     <>
       <AppBody>
-        <SwapPoolTabs active={'pool'} />
+        {/* <SwapPoolTabs active={'pool'} /> */}
         <AutoColumn gap="lg" justify="center">
-          <Link href={"/add/ETH"}>
+          <Link href={"/add"}>
             <ButtonPrimary id="join-pool-button" style={{ padding: 16 }}>
               <Text fontWeight={500} fontSize={20}>
                 Add Liquidity
@@ -105,26 +110,26 @@ export default function Pool() {
               </LightCard>
             )}
 
-            <div>
+            {/* <div>
               <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
                 {hasV1Liquidity ? 'Uniswap V1 liquidity found!' : "Don't see a pool you joined?"}{' '}
                 <StyledInternalLink id="import-pool-link" href={hasV1Liquidity ? '/migrate/v1' : '/find'}>
                   {hasV1Liquidity ? 'Migrate now.' : 'Import it.'}
                 </StyledInternalLink>
               </Text>
-            </div>
+            </div> */}
           </AutoColumn>
         </AutoColumn>
       </AppBody>
 
-      <div style={{ display: 'flex', alignItems: 'center', marginTop: '1.5rem' }}>
+      {/* <div style={{ display: 'flex', alignItems: 'center', marginTop: '1.5rem' }}>
         <Link href={"/migrate/v1"}>
           <ButtonSecondary style={{ width: 'initial' }}>
             Migrate V1 Liquidity
           </ButtonSecondary>
         </Link>
         
-      </div>
+      </div> */}
     </>
   )
 }

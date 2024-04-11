@@ -5,6 +5,12 @@ import { fortmatic, injected } from '../connectors'
 import { ethers } from 'ethers'
 import contractList from './contractsLocal'
 
+export const OWER_ADDRESS: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+  [ChainId.SEPOLIA]: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+  [ChainId.LOCAL]: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+}
+
 // export const ROUTER_ADDRESS = '0x2B5d8D53b951A48D59C3723c60F81e5A976ACCCc'
 export const ROUTER_ADDRESS = contractList.router02
 
@@ -23,6 +29,13 @@ export const AMPL = new Token(ChainId.MAINNET, '0xD46bA6D942050d489DBd938a2C909A
 export const DAI_SEPOLIA = new Token(ChainId.SEPOLIA, '0x2C8dF20048860e0a88564D8c72EF38b2E5486B4D', 18, 'DAI', 'Dai Stablecoin')
 export const USDC_SEPOLIA = new Token(ChainId.SEPOLIA, '0x355781B18969F69401e759EEe848EA4696d44321', 6, 'USDC', 'USD//C')
 export const USDT_SEPOLIA = new Token(ChainId.SEPOLIA, '0x521957098aC7a7AC7eAa3631d10E640310873c00', 6, 'USDT', 'Tether USD')
+
+export const Air_Social_LOCAL = new Token(ChainId.LOCAL, contractList['Air-Social'], 18, 'Air-Social', 'Air-Social')
+export const Air_Sports_LOCAL = new Token(ChainId.LOCAL, contractList['Air-Sports'], 18, 'Air-Sports', 'Air-Sports')
+export const Air_Game_LOCAL = new Token(ChainId.LOCAL, contractList['Air-Game'], 18, 'Air-Game', 'Air-Game')
+export const Air_Art_LOCAL = new Token(ChainId.LOCAL, contractList['Air-Art'], 18, 'Air-Art', 'Air-Art')
+export const Air_Finance_LOCAL = new Token(ChainId.LOCAL, contractList['Air-Finance'], 18, 'Air-Finance', 'Air-Finance')
+export const Air_Commerce_LOCAL = new Token(ChainId.LOCAL, contractList['Air-Commerce'], 18, 'Air-Commerce', 'Air-Commerce')
 
 const WETH_ONLY: ChainTokenList = {
   [ChainId.MAINNET]: [WETH[ChainId.MAINNET]],
@@ -59,6 +72,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ...WETH_ONLY,
   [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT],
   [ChainId.SEPOLIA]: [...WETH_ONLY[ChainId.SEPOLIA], DAI_SEPOLIA, USDC_SEPOLIA, USDT_SEPOLIA],
+  [ChainId.LOCAL]: [Air_Social_LOCAL, Air_Sports_LOCAL, Air_Game_LOCAL, Air_Art_LOCAL, Air_Finance_LOCAL, Air_Commerce_LOCAL]
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {

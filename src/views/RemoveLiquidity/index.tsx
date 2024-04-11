@@ -40,13 +40,15 @@ import { Field } from '../../state/burn/actions'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { useUserDeadline, useUserSlippageTolerance } from '../../state/user/hooks'
 import { BigNumber } from '@ethersproject/bignumber'
+import { useRouter } from 'next/router'
 
-export default function RemoveLiquidity({
-  history,
-  match: {
-    params: { currencyIdA, currencyIdB }
-  }
-}: any) {
+export default function RemoveLiquidity() {
+  const router = useRouter()
+  // const currencyIdA = '0x300f6B06211F490c2A5Fb5c7f634A3f6D636E355'
+  // const currencyIdB = AIRLABEL_TOKEN_LIST[0].address
+  const isLP0 = router.query.lp && router.query.lp === '0'
+  const currencyIdA = router.query.address && router.query.address[0]
+  const currencyIdB = router.query.address && router.query.address[1]
   const [currencyA, currencyB] = [useCurrency(currencyIdA) ?? undefined, useCurrency(currencyIdB) ?? undefined]
   const { account, chainId, library } = useActiveWeb3React()
   const [tokenA, tokenB] = useMemo(() => [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)], [
@@ -429,21 +431,21 @@ export default function RemoveLiquidity({
 
   const handleSelectCurrencyA = useCallback(
     (currency: Currency) => {
-      if (currencyIdB && currencyId(currency) === currencyIdB) {
-        history.push(`/remove/${currencyId(currency)}/${currencyIdA}`)
-      } else {
-        history.push(`/remove/${currencyId(currency)}/${currencyIdB}`)
-      }
+      // if (currencyIdB && currencyId(currency) === currencyIdB) {
+      //   history.push(`/remove/${currencyId(currency)}/${currencyIdA}`)
+      // } else {
+      //   history.push(`/remove/${currencyId(currency)}/${currencyIdB}`)
+      // }
     },
     [currencyIdA, currencyIdB, history]
   )
   const handleSelectCurrencyB = useCallback(
     (currency: Currency) => {
-      if (currencyIdA && currencyId(currency) === currencyIdA) {
-        history.push(`/remove/${currencyIdB}/${currencyId(currency)}`)
-      } else {
-        history.push(`/remove/${currencyIdA}/${currencyId(currency)}`)
-      }
+      // if (currencyIdA && currencyId(currency) === currencyIdA) {
+      //   history.push(`/remove/${currencyIdB}/${currencyId(currency)}`)
+      // } else {
+      //   history.push(`/remove/${currencyIdA}/${currencyId(currency)}`)
+      // }
     },
     [currencyIdA, currencyIdB, history]
   )

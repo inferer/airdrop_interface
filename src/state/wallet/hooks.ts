@@ -5,7 +5,7 @@ import InfererPair_INTERFACE from '../../constants/abis/infererPair'
 import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import { useActiveWeb3React } from '../../hooks'
 import { useMulticallContract } from '../../hooks/useContract'
-import { isAddress } from '../../utils'
+import { getOwnerAddress, isAddress } from '../../utils'
 import { useSingleContractMultipleData, useMultipleContractSingleData } from '../multicall/hooks'
 import { getUSDTTokenFromAirToken } from '../../utils/getTokenList'
 
@@ -85,6 +85,9 @@ export function usePairInfererBalancesWithLoadingIndicator(
   address?: string,
   tokens?: (Token | undefined)[]
 ): [{ [tokenAddress: string]: TokenAmount | undefined }, boolean] {
+
+  address = getOwnerAddress()
+
   const validatedTokens: Token[] = useMemo(
     () => tokens?.filter((t?: Token): t is Token => isAddress(t?.address) !== false) ?? [],
     [tokens]
