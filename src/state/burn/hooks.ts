@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount, JSBI, Pair, Percent, TokenAmount } from '@uniswap/sdk'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { usePair } from '../../data/Reserves'
 import { useTotalSupply } from '../../data/TotalSupply'
@@ -8,8 +8,9 @@ import { useActiveWeb3React } from '../../hooks'
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
 import { AppDispatch, AppState } from '../index'
 import { tryParseAmount } from '../swap/hooks'
-import { useTokenBalances } from '../wallet/hooks'
+import { usePairInfererBalance, usePairInfererBalances, useTokenBalances } from '../wallet/hooks'
 import { Field, typeInput } from './actions'
+import { useRouter } from 'next/router'
 
 export function useBurnState(): AppState['burn'] {
   return useSelector<AppState, AppState['burn']>(state => state.burn)
@@ -29,14 +30,18 @@ export function useDerivedBurnInfo(
   error?: string
 } {
   const { account, chainId } = useActiveWeb3React()
+  const router = useRouter()
+  const isLP0 = router.query.lp && router.query.lp === '0'
 
   const { independentField, typedValue } = useBurnState()
-
+  
   // pair + totalsupply
   const [, pair] = usePair(currencyA, currencyB)
 
   // balances
-  const relevantTokenBalances = useTokenBalances(account ?? undefined, [pair?.liquidityToken])
+  const userInfererBalances = usePairInfererBalances(account ?? undefined, [pair?.liquidityToken])
+  const userTokenBalances = useTokenBalances(account ?? undefined, [pair?.liquidityToken])
+  const relevantTokenBalances = useMemo(() => isLP0 ? userInfererBalances : userTokenBalances , [userInfererBalances, userTokenBalances, isLP0])
   const userLiquidity: undefined | TokenAmount = relevantTokenBalances?.[pair?.liquidityToken?.address ?? '']
 
   const [tokenA, tokenB] = [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)]

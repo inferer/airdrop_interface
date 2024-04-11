@@ -97,3 +97,7 @@ export function getAlgTokenByLabel(label: string) {
 export function getAirTokenBySymbol(symbol: string) {
   return filterTokenByChainId(AIRLABEL_TOKEN_LIST).find(token => token.symbol === symbol)
 }
+
+export function getUSDTTokenByAddress2(address: string, chainId: number) {
+  return filterTokenByChainId(AIR_TOKEN_LIST).find(token => token.address.toLowerCase() === address.toLowerCase() && token.chainId === chainId)
+}

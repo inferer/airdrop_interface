@@ -41,12 +41,14 @@ import { useWalletModalToggle } from '../../state/application/hooks'
 import { useUserDeadline, useUserSlippageTolerance } from '../../state/user/hooks'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useRouter } from 'next/router'
+import { getUSDTTokenByAddress2 } from '../../utils/getTokenList'
 
 export default function RemoveLiquidity() {
   const router = useRouter()
   // const currencyIdA = '0x300f6B06211F490c2A5Fb5c7f634A3f6D636E355'
   // const currencyIdB = AIRLABEL_TOKEN_LIST[0].address
   const isLP0 = router.query.lp && router.query.lp === '0'
+  console.log('LP0: ', isLP0)
   const currencyIdA = router.query.address && router.query.address[0]
   const currencyIdB = router.query.address && router.query.address[1]
   const [currencyA, currencyB] = [useCurrency(currencyIdA) ?? undefined, useCurrency(currencyIdB) ?? undefined]
@@ -100,6 +102,9 @@ export default function RemoveLiquidity() {
   // allowance handling
   const [signatureData, setSignatureData] = useState<{ v: number; r: string; s: string; deadline: number } | null>(null)
   const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], ROUTER_ADDRESS)
+  const [approvalA, approveCallbackA] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], pair?.liquidityToken?.address)
+  const [approvalB, approveCallbackB] = useApproveCallback(parsedAmounts[Field.CURRENCY_B], pair?.liquidityToken?.address)
+
   async function onAttemptToApprove() {
     if (!pairContract || !pair || !library) throw new Error('missing dependencies')
     const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
@@ -144,24 +149,24 @@ export default function RemoveLiquidity() {
       primaryType: 'Permit',
       message
     })
-
-    library
-      .send('eth_signTypedData_v4', [account, data])
-      .then(splitSignature)
-      .then(signature => {
-        setSignatureData({
-          v: signature.v,
-          r: signature.r,
-          s: signature.s,
-          deadline: deadlineForSignature
-        })
-      })
-      .catch(error => {
-        // for all errors other than 4001 (EIP-1193 user rejected request), fall back to manual approve
-        if (error?.code !== 4001) {
-          approveCallback()
-        }
-      })
+    approveCallback()
+    // library
+    //   .send('eth_signTypedData_v4', [account, data])
+    //   .then(splitSignature)
+    //   .then(signature => {
+    //     setSignatureData({
+    //       v: signature.v,
+    //       r: signature.r,
+    //       s: signature.s,
+    //       deadline: deadlineForSignature
+    //     })
+    //   })
+    //   .catch(error => {
+    //     // for all errors other than 4001 (EIP-1193 user rejected request), fall back to manual approve
+    //     if (error?.code !== 4001) {
+    //       approveCallback()
+    //     }
+    //   })
   }
 
   // wrapped onUserInput to clear signatures
@@ -225,16 +230,30 @@ export default function RemoveLiquidity() {
       }
       // removeLiquidity
       else {
-        methodNames = ['removeLiquidity']
-        args = [
-          tokenA?.address,
-          tokenB?.address,
-          liquidityAmount.raw.toString(),
-          amountsMin[Field.CURRENCY_A].toString(),
-          amountsMin[Field.CURRENCY_B].toString(),
-          account,
-          deadlineFromNow
-        ]
+        methodNames = isLP0 ? ['removeLiquidityInferer'] : ['removeLiquidity']
+        const findTokenA = getUSDTTokenByAddress2(tokenA?.address, tokenA?.chainId)
+        if (findTokenA) {
+          args = [
+            tokenA?.address,
+            tokenB?.address,
+            liquidityAmount.raw.toString(),
+            amountsMin[Field.CURRENCY_A].toString(),
+            amountsMin[Field.CURRENCY_B].toString(),
+            account,
+            deadlineFromNow
+          ]
+        } else {
+          args = [
+            tokenB?.address,
+            tokenA?.address,
+            liquidityAmount.raw.toString(),
+            amountsMin[Field.CURRENCY_B].toString(),
+            amountsMin[Field.CURRENCY_A].toString(),
+            account,
+            deadlineFromNow
+          ]
+        }
+        
       }
     }
     // we have a signataure, use permit versions of remove liquidity
@@ -275,7 +294,8 @@ export default function RemoveLiquidity() {
     } else {
       throw new Error('Attempting to confirm without approval or a signature. Please contact support.')
     }
-
+    console.log(methodNames, args)
+    // return
     const safeGasEstimates: (BigNumber | undefined)[] = await Promise.all(
       methodNames.map(methodName =>
         router.estimateGas[methodName](...args)
@@ -603,6 +623,7 @@ export default function RemoveLiquidity() {
                   onUserInput={onCurrencyAInput}
                   onMax={() => onUserInput(Field.LIQUIDITY_PERCENT, '100')}
                   showMaxButton={!atMaxAmount}
+                  disableCurrencySelect
                   currency={currencyA}
                   label={'Output'}
                   onCurrencySelect={handleSelectCurrencyA}
@@ -617,6 +638,7 @@ export default function RemoveLiquidity() {
                   onUserInput={onCurrencyBInput}
                   onMax={() => onUserInput(Field.LIQUIDITY_PERCENT, '100')}
                   showMaxButton={!atMaxAmount}
+                  disableCurrencySelect
                   currency={currencyB}
                   label={'Output'}
                   onCurrencySelect={handleSelectCurrencyB}
@@ -644,35 +666,76 @@ export default function RemoveLiquidity() {
               {!account ? (
                 <ButtonLight onClick={toggleWalletModal}>Connect Airdrop Network</ButtonLight>
               ) : (
-                <RowBetween>
-                  <ButtonConfirmed
-                    onClick={onAttemptToApprove}
-                    confirmed={approval === ApprovalState.APPROVED || signatureData !== null}
-                    disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
-                    mr="0.5rem"
-                    fontWeight={500}
-                    fontSize={16}
-                  >
-                    {approval === ApprovalState.PENDING ? (
-                      <Dots>Approving</Dots>
-                    ) : approval === ApprovalState.APPROVED || signatureData !== null ? (
-                      'Approved'
-                    ) : (
-                      'Approve'
-                    )}
-                  </ButtonConfirmed>
-                  <ButtonError
-                    onClick={() => {
-                      setShowConfirm(true)
-                    }}
-                    disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
-                    error={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
-                  >
-                    <Text fontSize={16} fontWeight={500}>
-                      {error || 'Remove'}
-                    </Text>
-                  </ButtonError>
-                </RowBetween>
+                <>
+                  {
+                    isLP0 &&
+                    <RowBetween style={{marginBottom: '20px'}}>
+                      <ButtonConfirmed
+                        onClick={approveCallbackA}
+                        confirmed={approvalA === ApprovalState.APPROVED || signatureData !== null}
+                        disabled={approvalA !== ApprovalState.NOT_APPROVED || signatureData !== null}
+                        mr="0.5rem"
+                        fontWeight={500}
+                        fontSize={16}
+                      >
+                        {approvalA === ApprovalState.PENDING ? (
+                          <Dots>Approving</Dots>
+                        ) : approvalA === ApprovalState.APPROVED || signatureData !== null ? (
+                          currencyA?.symbol + ' Approved'
+                        ) : (
+                          currencyA?.symbol + ' Approve'
+                        )}
+                      </ButtonConfirmed>
+                      <ButtonConfirmed
+                        onClick={approveCallbackB}
+                        confirmed={approvalB === ApprovalState.APPROVED || signatureData !== null}
+                        disabled={approvalB !== ApprovalState.NOT_APPROVED || signatureData !== null}
+                        mr="0.5rem"
+                        fontWeight={500}
+                        fontSize={16}
+                      >
+                        {approvalB === ApprovalState.PENDING ? (
+                          <Dots>Approving</Dots>
+                        ) : approvalB === ApprovalState.APPROVED || signatureData !== null ? (
+                          currencyB?.symbol + ' Approved'
+                        ) : (
+                          currencyB?.symbol + ' Approve'
+                        )}
+                      </ButtonConfirmed>
+                    </RowBetween>
+
+                  }
+                  <RowBetween>
+                    <ButtonConfirmed
+                      onClick={onAttemptToApprove}
+                      confirmed={approval === ApprovalState.APPROVED || signatureData !== null}
+                      disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
+                      mr="0.5rem"
+                      fontWeight={500}
+                      fontSize={16}
+                    >
+                      {approval === ApprovalState.PENDING ? (
+                        <Dots>Approving</Dots>
+                      ) : approval === ApprovalState.APPROVED || signatureData !== null ? (
+                        'Pair Approved'
+                      ) : (
+                        'Pair Approve'
+                      )}
+                    </ButtonConfirmed>
+                    <ButtonError
+                      onClick={() => {
+                        setShowConfirm(true)
+                      }}
+                      disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
+                      error={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
+                    >
+                      <Text fontSize={16} fontWeight={500}>
+                        {error || 'Remove'}
+                      </Text>
+                    </ButtonError>
+                  </RowBetween>
+                </>
+                
               )}
             </div>
           </AutoColumn>
