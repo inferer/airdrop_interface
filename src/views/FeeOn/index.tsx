@@ -163,7 +163,7 @@ function FeeOn() {
                 handleOnChange(e.target.value, 'DiscountPercentage')
               }}
             /> 
-            <span className='pl-2'>/ 1000</span>
+            <span className='pl-2'>/ 100</span>
             <div className=' ml-10'>
               {
                 isOwner && 
@@ -207,7 +207,7 @@ function FeeOn() {
                 handleOnChange(e.target.value, 'IncomePercentage')
               }}
             />
-            <span className='pl-2'>/ 1000</span>
+            <span className='pl-2'>/ 100</span>
             <div className=' ml-10'>
               {
                 isOwner && 
