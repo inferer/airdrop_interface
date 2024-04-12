@@ -371,25 +371,34 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
                 </FixedHeightRow>
               </div>
             }
-            
+            {
+                isOwner && 
+                <RowBetween marginTop="10px">
+                  <Link href={`/add/${currencyId(currency0)}/${currencyId(currency1)}?lp=0`}>
+                    <ButtonSecondary width="48%">
+                      Add
+                    </ButtonSecondary>
+                  </Link>
+                  <Link href={`/remove/${currencyId(currency0)}/${currencyId(currency1)}?lp=0`}>
+                    <ButtonSecondary width="48%">
+                      Remove LP0
+                    </ButtonSecondary>
+                  </Link>
+                </RowBetween>
+                
+              }
+
             <RowBetween marginTop="10px">
               <Link href={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
-                <ButtonSecondary width="30%">
+                <ButtonSecondary width="48%">
                   Add
                 </ButtonSecondary>
               </Link>
-              {
-                isOwner && 
-                <Link href={`/remove/${currencyId(currency0)}/${currencyId(currency1)}?lp=0`}>
-                  <ButtonSecondary width="30%">
-                    Remove LP0
-                  </ButtonSecondary>
-                </Link>
-              }
+              
               {
                 userPoolBalance?.greaterThan('0') && 
                 <Link href={`/remove/${currencyId(currency0)}/${currencyId(currency1)}`}>
-                  <ButtonSecondary width="30%">
+                  <ButtonSecondary width="48%">
                     Remove
                   </ButtonSecondary>
                 </Link>
