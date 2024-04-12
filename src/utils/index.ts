@@ -124,7 +124,7 @@ export function formatInput(inputValue: string, inputType: string) {
 
 const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
   1: '',
-  11155111: 'sepolia.',
+  [ChainId.SEPOLIA]: 'sepolia.',
   [ChainId.LOCAL]: 'Local'
 }
 
