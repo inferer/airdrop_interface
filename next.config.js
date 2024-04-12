@@ -3,7 +3,7 @@ const path = require('path')
 
 const envConfig = {
   development: {
-    NEXT_PUBLIC_CHAIN_ID: '1337',
+    NEXT_PUBLIC_CHAIN_ID: '421614',
     NEXT_PUBLIC_NETWORK_URL: 'http://125.88.184.105:8545',
     NEXT_PUBLIC_API_ROOT: 'http://36.26.92.165:13884',
     USER_POOL_SERVICE_ROOT: 'http://125.88.184.105:8123'

@@ -8,7 +8,8 @@ import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
 import { ChainId } from '@uniswap/sdk'
 
-export const NETWORK_URL = process.env.NEXT_PUBLIC_NETWORK_URL
+// export const NETWORK_URL = process.env.NEXT_PUBLIC_NETWORK_URL
+export const NETWORK_URL = 'https://public.stackup.sh/api/v1/node/arbitrum-sepolia'
 const FORMATIC_KEY = process.env.NEXT_PUBLIC_FORTMATIC_KEY
 const PORTIS_ID = process.env.NEXT_PUBLIC_PORTIS_ID
 
@@ -30,7 +31,7 @@ export function getNetworkLibrary(): Web3Provider {
 }
 
 export const injected = new InjectedConnector({
-  supportedChainIds: [1, 1337]
+  supportedChainIds: [1, 421614, 1337]
 })
 
 // mainnet only

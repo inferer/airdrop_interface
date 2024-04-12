@@ -4,6 +4,7 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 import { fortmatic, injected } from '../connectors'
 import { ethers } from 'ethers'
 import contractList from './contractsLocal'
+import contractsSepolia from './contractsSepolia'
 
 export const OWER_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
@@ -12,7 +13,8 @@ export const OWER_ADDRESS: { [chainId in ChainId]: string } = {
 }
 
 // export const ROUTER_ADDRESS = '0x2B5d8D53b951A48D59C3723c60F81e5A976ACCCc'
-export const ROUTER_ADDRESS = contractList.router02
+// export const ROUTER_ADDRESS = contractList.router02
+export const ROUTER_ADDRESS = contractsSepolia.router02
 
 // a list of tokens by chain
 type ChainTokenList = {

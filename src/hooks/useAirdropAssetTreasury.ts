@@ -102,10 +102,10 @@ export const getDepositBalance = async (multi: Contract, account: string, tokenL
     
   const res = await multicall(multi, AirdropAssetTreasury_ABI, calls)
   return (res || []).map((item: any, index: number) => {
-    const temp = new TokenAmount(tokenList[index], JSBI.BigInt(item.toString()))
+    const temp = item ? new TokenAmount(tokenList[index], JSBI.BigInt(item.toString())) : undefined
     return {
       ...tokenList[index],
-      lockedAmount: temp.toSignificant(6)
+      lockedAmount: temp?.toSignificant(6) || '0'
     }
   })
 }

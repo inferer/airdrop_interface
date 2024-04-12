@@ -9,7 +9,6 @@ import ERC20_ABI from '../constants/abis/erc20.json'
 import { OWER_ADDRESS, ROUTER_ADDRESS } from '../constants'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@uniswap/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
-import bscRpcProvider from './providers'
 import { NETWORK_CHAIN_ID } from '../connectors';
 
 // returns the checksummed address if the address is valid, otherwise returns false
@@ -207,14 +206,6 @@ export function getContract(address: string, ABI: any, library: Web3Provider, ac
   return new Contract(address, ABI, getProviderOrSigner(library, account) as any)
 }
 
-// // account is optional
-// export function getContract2(address: string, ABI: any, library?: Web3Provider, account?: string): Contract {
-//   if (!isAddress(address) || address === AddressZero) {
-//     throw Error(`Invalid 'address' parameter '${address}'.`)
-//   }
-
-//   return new ethers.Contract(address, ABI, bscRpcProvider)
-// }
 
 // account is optional
 export function getRouterContract(_: number, library: Web3Provider, account?: string): Contract {

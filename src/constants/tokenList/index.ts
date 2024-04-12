@@ -2,11 +2,12 @@ import { ChainId } from '@uniswap/sdk'
 import { NETWORK_CHAIN_ID } from '../../connectors'
 import { TokenInfo } from '@uniswap/token-lists'
 import contractList from '../contractsLocal'
+import contractsSepolia from '../contractsSepolia'
 
 export const ST_TOKEN_LIST: TokenInfo[] = [
   {
     "name": "Dai Stablecoin",
-    "address": "0x2C8dF20048860e0a88564D8c72EF38b2E5486B4D",
+    "address": contractsSepolia.Daitoken,
     "symbol": "DAI",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -14,7 +15,7 @@ export const ST_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "USD//C",
-    "address": "0x355781B18969F69401e759EEe848EA4696d44321",
+    "address": contractsSepolia.USDCtoken,
     "symbol": "USDC",
     "decimals": 6,
     "chainId": ChainId.SEPOLIA,
@@ -22,7 +23,7 @@ export const ST_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "Tether USD",
-    "address": "0x521957098aC7a7AC7eAa3631d10E640310873c00",
+    "address": contractsSepolia.USDTtoken,
     "symbol": "USDT",
     "decimals": 6,
     "chainId": ChainId.SEPOLIA,
@@ -58,7 +59,7 @@ export const ST_TOKEN_LIST: TokenInfo[] = [
 export const AIR_TOKEN_LIST: TokenInfo[] = [
   {
     "name": "Dai Stablecoin",
-    "address": "0x8C0D0E71b485DffC9df277AC09a0AD8d7758792A",
+    "address": contractsSepolia.AirDaitoken,
     "symbol": "Air-DAI",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -66,7 +67,7 @@ export const AIR_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "USD//C",
-    "address": "0x787562367E63A10bdC1323F5AF9BE59e2ebA490F",
+    "address": contractsSepolia.AirUSDCtoken,
     "symbol": "Air-USDC",
     "decimals": 6,
     "chainId": ChainId.SEPOLIA,
@@ -74,7 +75,7 @@ export const AIR_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "Tether USD",
-    "address": "0x300f6B06211F490c2A5Fb5c7f634A3f6D636E355",
+    "address": contractsSepolia.AirUSDTtoken,
     "symbol": "Air-USDT",
     "decimals": 6,
     "chainId": ChainId.SEPOLIA,
@@ -82,7 +83,7 @@ export const AIR_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "ETH",
-    "address": "0x05823a3ee699F9277134A111Ab801548524E6C6B",
+    "address": contractsSepolia.AirETHtoken,
     "symbol": "Air-ETH",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -127,7 +128,7 @@ export const AIR_TOKEN_LIST: TokenInfo[] = [
 export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   {
     "name": "Air-Social",
-    "address": "0xc021C5268aeE94ebBd318Ea8DB4e0b50ccE4AD16",
+    "address": contractsSepolia['Air-Social'],
     "symbol": "Air-Social",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -135,7 +136,7 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "Air-Sports",
-    "address": "0x4b4E8A920e396FBb89Ff393ff9F5A767daAb9987",
+    "address": contractsSepolia['Air-Sports'],
     "symbol": "Air-Sports",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -143,7 +144,7 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "Air-Game",
-    "address": "0xebc1A018185d3cD251F7c9D9C3D546ece1764AFD",
+    "address": contractsSepolia['Air-Game'],
     "symbol": "Air-Game",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -151,7 +152,7 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "Air-Art",
-    "address": "0x58C5b3582dbA2d16B8ba40e1b303EEeD73799faB",
+    "address": contractsSepolia['Air-Art'],
     "symbol": "Air-Art",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -159,7 +160,7 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "Air-Finance",
-    "address": "0x838B8AB3336c8d7944e0Ad47C501407c34910eD5",
+    "address": contractsSepolia['Air-Finance'],
     "symbol": "Air-Finance",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -167,7 +168,7 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "Air-Commerce",
-    "address": "0x718f9ca36D58E7a922B5959C6DdD7455b3A9E3a4",
+    "address": contractsSepolia['Air-Commerce'],
     "symbol": "Air-Commerce",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -226,7 +227,7 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
 export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   {
     "name": "Alg-Social",
-    "address": "0xdCbC46a80492A1db9533EBd4e3dCe7831B09F103",
+    "address": contractsSepolia['Alg-Social'],
     "symbol": "Alg-Social",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -234,7 +235,7 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "Alg-Sports",
-    "address": "0x201f8391F31143A7416AE8F4C7C31B85024c00Ba",
+    "address": contractsSepolia['Alg-Sports'],
     "symbol": "Alg-Sports",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -242,7 +243,7 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "Alg-Game",
-    "address": "0x4cF48D72aAB636BD2De2e8a141677d5538502fF2",
+    "address": contractsSepolia['Alg-Game'],
     "symbol": "Alg-Game",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -250,7 +251,7 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "Alg-Art",
-    "address": "0xA08a40a8CeF6011885BA9BD65D446226f9E796Be",
+    "address": contractsSepolia['Alg-Art'],
     "symbol": "Alg-Art",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -258,7 +259,7 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "Alg-Finance",
-    "address": "0xb8366e5Bc44cd4DC1DE4FcC36774324FE1d3C680",
+    "address": contractsSepolia['Alg-Finance'],
     "symbol": "Alg-Finance",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
@@ -266,7 +267,7 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   },
   {
     "name": "Alg-Commerce",
-    "address": "0xf88DDd9259B05bE8339Aea6aA94E90df7fE94881",
+    "address": contractsSepolia['Alg-Commerce'],
     "symbol": "Alg-Commerce",
     "decimals": 18,
     "chainId": ChainId.SEPOLIA,
