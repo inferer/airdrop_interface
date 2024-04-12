@@ -1,4 +1,4 @@
-import { fetcher, poster } from "../../utils/axios"
+import { fetcher, poster, userPoolSrvcFetcher } from "../../utils/axios"
 
 export const getUserNonce = async (account: string) => {
   const res = await fetcher(`/api/user/nonce/${account}`)
@@ -43,6 +43,14 @@ export const verify2join = async (
   code: string, 
 ) => {
   const res = await poster(`/api/user/verifyInviteCode`, { address: account, code })
+
+  return res && res.data || {}
+}
+
+export const addUser2Pool = async (
+  account: string,
+) => {
+  const res = await userPoolSrvcFetcher(`/api/userpool/addUser`, { account })
 
   return res && res.data || {}
 }

@@ -26,7 +26,7 @@ const contractList =
   "factory": "0xf3C8D517ba8462911Cc2b8cfedc5dDeC50DFCBd6",
   // "router02": "0x06816f66538CB5bf17243F6C404D841e0ac96B69",
   "router02": "0xdceD252d791De136FAf3252e0768AceF8de2141f",
-  "airdropTokenScoreLogic": "0xaF15B6Db0b6220391007701228883BA2f04D04F9",
+  "airdropTokenScoreLogic": "0x07b3419cA340DdB3D813C5e6eCeA5C1085EFC1f2",
   "airdropTokenScore": "0x8DcC7438Ccc3006165783e0fD1C6261CaFC0AA69",
   "airdropManagerLogic": "0xb20F65c1D442ebcebce7C377ea47e480c0aB453C",
   "airdropManager": "0x8F1dFbBD777c82aC30E587483d8a251f32f8a6E6",
