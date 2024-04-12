@@ -376,7 +376,7 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
                 <RowBetween marginTop="10px">
                   <Link href={`/add/${currencyId(currency0)}/${currencyId(currency1)}?lp=0`}>
                     <ButtonSecondary width="48%">
-                      Add
+                      Add LP0
                     </ButtonSecondary>
                   </Link>
                   <Link href={`/remove/${currencyId(currency0)}/${currencyId(currency1)}?lp=0`}>
