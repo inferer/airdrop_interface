@@ -22,7 +22,7 @@ import {
   updateRightMenu,
   updateLoginUserInfo
 } from './actions'
-import { airdropV2, airdropV2Swap, getUserInfo, getUserInviteCode, getUserNonce, verify2join } from './api'
+import { airdropV2, airdropV2Swap, getUserInfo, getUserInviteCode, getUserNonce, verify2join, addUser2Pool } from './api'
 import { useUserModeInputCurrency } from '../swap/hooks'
 import { useRouter } from 'next/router'
 import { useShowToast } from '../application/hooks'
@@ -450,6 +450,7 @@ export function useUserInfo() {
     setJoinStatus(1)
     const res = await verify2join(account, code)
     if (res && res.address) {
+      // addUser2Pool(account);
       setJoinStatus(0)
       setCodeStatus(0)
       dispatch(updateLoginUserInfo({ userInfo: res }))
