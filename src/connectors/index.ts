@@ -15,6 +15,8 @@ const PORTIS_ID = process.env.NEXT_PUBLIC_PORTIS_ID
 
 export const NETWORK_CHAIN_ID: number = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '1')
 
+console.log(NETWORK_CHAIN_ID)
+
 if (typeof NETWORK_URL === 'undefined') {
   throw new Error(`NEXT_PUBLIC_NETWORK_URL must be a defined environment variable`)
 }
