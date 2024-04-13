@@ -93,8 +93,6 @@ export function usePairInfererBalancesWithLoadingIndicator(
     [tokens]
   )
 
-  console.log(ownerAddress)
-
   const validatedTokenAddresses = useMemo(() => validatedTokens.map(vt => vt.address), [validatedTokens])
 
   const balances = useMultipleContractSingleData(validatedTokenAddresses, InfererPair_INTERFACE, 'infererBalanceOf', [ownerAddress])

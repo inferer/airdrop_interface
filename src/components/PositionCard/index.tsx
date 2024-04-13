@@ -55,8 +55,6 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
   // // @ts-ignore
   // console.log(pair?.tokenAmounts[1].toSignificant(4) , 111)
 
-  console.log(userPoolInfererBalance?.toSignificant(20))
-
   const [token0Deposited, token1Deposited] =
     !!pair &&
     !!totalPoolTokens &&
