@@ -1,8 +1,7 @@
-import { NETWORK_URL } from '../connectors'
 import { StaticJsonRpcProvider } from '@ethersproject/providers'
 
-
-export const bscRpcProvider = new StaticJsonRpcProvider(NETWORK_URL)
+const rpcUrl = 'https://public.stackup.sh/api/v1/node/arbitrum-sepolia'
+export const bscRpcProvider = new StaticJsonRpcProvider(rpcUrl)
 
 
 export default bscRpcProvider

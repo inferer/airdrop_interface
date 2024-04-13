@@ -8,23 +8,41 @@ import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
 import { ChainId } from '@uniswap/sdk'
 
-// export const NETWORK_URL = process.env.NEXT_PUBLIC_NETWORK_URL
-export const NETWORK_URL = 'https://public.stackup.sh/api/v1/node/arbitrum-sepolia'
 const FORMATIC_KEY = process.env.NEXT_PUBLIC_FORTMATIC_KEY
 const PORTIS_ID = process.env.NEXT_PUBLIC_PORTIS_ID
 
 export const NETWORK_CHAIN_ID: number = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '1')
 
-console.log(NETWORK_CHAIN_ID)
-
-if (typeof NETWORK_URL === 'undefined') {
-  throw new Error(`NEXT_PUBLIC_NETWORK_URL must be a defined environment variable`)
-}
-
 export const APP_INFERER_CONNECTOR = 'APP_INFERER_CONNECTOR'
 
+export const BASE_BSC_SCAN_URLS = {
+  [ChainId.MAINNET]: 'https://testnet.bscscan.com',
+  [ChainId.SEPOLIA]: 'https://sepolia-explorer.arbitrum.io',
+  [ChainId.LOCAL]: 'https://bscscan.com',
+}
+
+export const BSC_RPC_URLS = [
+  'https://bsc-dataseed1.ninicoin.io',
+  'https://bsc-dataseed1.defibit.io',
+  'https://bsc-dataseed.binance.org'
+]
+
+export const BSC_RPC_URLS_SEPOLIA = [
+  'https://public.stackup.sh/api/v1/node/arbitrum-sepolia',
+
+]
+
+export const BSC_RPC_URLS_LOCAL = [
+  'https://node.inferer.xyz',
+]
+
 export const network = new NetworkConnector({
-  urls: { [NETWORK_CHAIN_ID]: NETWORK_URL }
+  urls: { 
+    [ChainId.MAINNET]: BSC_RPC_URLS[0], 
+    [ChainId.SEPOLIA]: BSC_RPC_URLS_SEPOLIA[0], 
+    [ChainId.LOCAL]: BSC_RPC_URLS_LOCAL[0], 
+  },
+  defaultChainId: ChainId.MAINNET
 })
 
 let networkLibrary: Web3Provider | undefined
@@ -37,33 +55,11 @@ export const injected = new InjectedConnector({
 })
 
 // mainnet only
-// export const walletconnect = new WalletConnectConnector({
-//   rpc: { 1: NETWORK_URL },
-//   bridge: 'https://bridge.walletconnect.org',
-//   qrcode: true,
-//   pollingInterval: 15000
-// })
-
-// mainnet only
 export const fortmatic = new FortmaticConnector({
   apiKey: FORMATIC_KEY ?? '',
   chainId: 1
 })
 
-export const BASE_BSC_SCAN_URLS = {
-  [ChainId.MAINNET]: 'https://testnet.bscscan.com',
-  [ChainId.LOCAL]: 'https://bscscan.com'
-}
-
-export const BSC_RPC_URLS = [
-  'https://bsc-dataseed1.ninicoin.io',
-  'https://bsc-dataseed1.defibit.io',
-  'https://bsc-dataseed.binance.org'
-]
-
-export const BSC_RPC_URLS_LOCAL = [
-  'https://node.inferer.xyz',
-]
 
 
 const NETWORK_CONFIG: any = {
@@ -71,6 +67,11 @@ const NETWORK_CONFIG: any = {
     name: 'BNB Smart Chain Mainnet',
     scanURL: BASE_BSC_SCAN_URLS[ChainId.MAINNET],
     rpcUrls: BSC_RPC_URLS
+  },
+  [ChainId.SEPOLIA]: {
+    name: 'Airdrop Network',
+    scanURL: BASE_BSC_SCAN_URLS[ChainId.SEPOLIA],
+    rpcUrls: BSC_RPC_URLS_SEPOLIA
   },
   [ChainId.LOCAL]: {
     name: 'Airdrop Network',
