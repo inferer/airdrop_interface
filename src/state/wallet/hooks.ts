@@ -86,23 +86,25 @@ export function usePairInfererBalancesWithLoadingIndicator(
   tokens?: (Token | undefined)[]
 ): [{ [tokenAddress: string]: TokenAmount | undefined }, boolean] {
   const { chainId } = useActiveWeb3React()
-  address = getOwnerAddress(chainId)
+  const ownerAddress = useMemo(() => getOwnerAddress(chainId), [chainId])
 
   const validatedTokens: Token[] = useMemo(
     () => tokens?.filter((t?: Token): t is Token => isAddress(t?.address) !== false) ?? [],
     [tokens]
   )
 
+  console.log(ownerAddress)
+
   const validatedTokenAddresses = useMemo(() => validatedTokens.map(vt => vt.address), [validatedTokens])
 
-  const balances = useMultipleContractSingleData(validatedTokenAddresses, InfererPair_INTERFACE, 'infererBalanceOf', [address])
+  const balances = useMultipleContractSingleData(validatedTokenAddresses, InfererPair_INTERFACE, 'infererBalanceOf', [ownerAddress])
 
   const anyLoading: boolean = useMemo(() => balances.some(callState => callState.loading), [balances])
 
   return [
     useMemo(
       () =>
-        address && validatedTokens.length > 0
+      ownerAddress && validatedTokens.length > 0
           ? validatedTokens.reduce<{ [tokenAddress: string]: TokenAmount | undefined }>((memo, token, i) => {
               const value = balances?.[i]?.result?.[0]
               const amount = value ? JSBI.BigInt(value.toString()) : undefined
@@ -112,7 +114,7 @@ export function usePairInfererBalancesWithLoadingIndicator(
               return memo
             }, {})
           : {},
-      [address, validatedTokens, balances]
+      [ownerAddress, validatedTokens, balances]
     ),
     anyLoading
   ]

@@ -75,7 +75,6 @@ export default function AddLiquidity() {
     poolTokenPercentage,
     error
   } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
-
   const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
 
   const isValid = !error
@@ -137,7 +136,7 @@ export default function AddLiquidity() {
     }
 
     const deadlineFromNow = Math.ceil(Date.now() / 1000) + deadline
-
+    let methodName = ''
     let estimate,
       method: (...args: any) => Promise<TransactionResponse>,
       args: Array<string | string[] | number>,
@@ -160,9 +159,11 @@ export default function AddLiquidity() {
       if (isLP0) {
         estimate = router.estimateGas.addLiquidityInferer
         method = router.addLiquidityInferer
+        methodName = 'addLiquidityInferer'
       } else {  
         estimate = router.estimateGas.addLiquidity
         method = router.addLiquidity
+        methodName = 'addLiquidity'
       }
       
       args = [
@@ -178,7 +179,6 @@ export default function AddLiquidity() {
       value = null
     }
 
-    console.log(args)
     setAttemptingTxn(true)
     await estimate(...args, value ? { value } : {})
       .then(estimatedGasLimit => {

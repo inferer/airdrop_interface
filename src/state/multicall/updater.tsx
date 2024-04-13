@@ -143,13 +143,13 @@ export default function Updater(): null {
     // if (cancellations.current?.blockNumber !== latestBlockNumber) {
     //   cancellations.current?.cancellations?.forEach(c => c())
     // }
-    dispatch(
-      fetchingMulticallResults({
-        calls,
-        chainId,
-        fetchingBlockNumber: latestBlockNumber
-      })
-    )
+    // dispatch(
+    //   fetchingMulticallResults({
+    //     calls,
+    //     chainId,
+    //     fetchingBlockNumber: latestBlockNumber
+    //   })
+    // )
 
     cancellations.current = {
       blockNumber: latestBlockNumber,

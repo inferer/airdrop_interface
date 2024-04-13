@@ -8,7 +8,7 @@ import contractsSepolia from './contractsSepolia'
 
 export const OWER_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
-  [ChainId.SEPOLIA]: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+  [ChainId.SEPOLIA]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
   [ChainId.LOCAL]: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
 }
 
