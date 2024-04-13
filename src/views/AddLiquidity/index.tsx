@@ -36,8 +36,6 @@ import { Dots, Wrapper } from '../Pool/styleds'
 import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
 import { currencyId } from '../../utils/currencyId'
 import { PoolPriceBar } from './PoolPriceBar'
-import { NETWORK_CHAIN_ID } from '../../connectors'
-import { AIRLABEL_TOKEN_LIST } from '../../constants/tokenList'
 import { useRouter } from 'next/router'
 
 export default function AddLiquidity() {
@@ -179,13 +177,7 @@ export default function AddLiquidity() {
       ]
       value = null
     }
-    // if (NETWORK_CHAIN_ID !== 1) {
-    //   estimate = () => {
-    //     return new Promise(resolve => {
-    //       resolve(3000000)
-    //     })
-    //   }
-    // }
+
     console.log(args)
     setAttemptingTxn(true)
     await estimate(...args, value ? { value } : {})
@@ -195,7 +187,7 @@ export default function AddLiquidity() {
             ...(value ? { value } : {}),
             gasPrice: '1000000000',
             // @ts-ignore
-            gasLimit: NETWORK_CHAIN_ID !== 1 ? BigNumber.from(estimatedGasLimit) : calculateGasMargin(estimatedGasLimit)
+            gasLimit: chainId !== 1 ? BigNumber.from(estimatedGasLimit) : calculateGasMargin(estimatedGasLimit)
           }).then(response => {
             setAttemptingTxn(false)
 

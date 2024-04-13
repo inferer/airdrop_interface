@@ -85,8 +85,8 @@ export function usePairInfererBalancesWithLoadingIndicator(
   address?: string,
   tokens?: (Token | undefined)[]
 ): [{ [tokenAddress: string]: TokenAmount | undefined }, boolean] {
-
-  address = getOwnerAddress()
+  const { chainId } = useActiveWeb3React()
+  address = getOwnerAddress(chainId)
 
   const validatedTokens: Token[] = useMemo(
     () => tokens?.filter((t?: Token): t is Token => isAddress(t?.address) !== false) ?? [],
@@ -173,7 +173,8 @@ export function useCurrencyBalance(account?: string, currency?: Currency): Curre
 }
 
 export function useCurrencyBalanceUSDT(account?: string, currencyAirId?: string, payInputCreate?: boolean): CurrencyAmount | undefined {
-  const currencyId = currencyAirId && getUSDTTokenFromAirToken(currencyAirId)
+  const { chainId } = useActiveWeb3React()
+  const currencyId = currencyAirId && getUSDTTokenFromAirToken(currencyAirId, chainId)
   const currency = useCurrency(currencyId)
   // if (payInputCreate && (!currencyId || currency?.symbol === 'Air-ETH')) {
   //   return useCurrencyBalances(account, [ETHER])[0]

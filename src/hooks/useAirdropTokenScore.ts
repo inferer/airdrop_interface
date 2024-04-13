@@ -7,7 +7,6 @@ import { useActiveWeb3React } from ".";
 import { useAlgLabelAllTokens } from "./Tokens";
 import { BigNumber, Contract } from "ethers";
 import { AirdropTokenScore_ABI, AirdropTokenScore_NETWORKS } from "../constants/airdropTokenScore";
-import { NETWORK_CHAIN_ID } from "../connectors";
 import { ChainId, Token } from "@uniswap/sdk";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../state";
@@ -18,8 +17,8 @@ import { useUserLabelScore } from "../state/airdrop/hooks";
 import { useShowToast } from "../state/application/hooks";
 import {zeroPadByte32} from '../utils'
 
-export const getAirdropTokenScoreAddress = () => {
-  return AirdropTokenScore_NETWORKS[NETWORK_CHAIN_ID as ChainId]
+export const getAirdropTokenScoreAddress = (chaidId: ChainId) => {
+  return AirdropTokenScore_NETWORKS[chaidId]
 }
 
 export const getAccountProof = async (account: string, label: string) => {
@@ -42,10 +41,10 @@ export const getAccountScore = async (account: string, label: string) => {
   return { score: '0' }
 }
 
-export const getUserTokenClaim = async (multi: Contract, tokenList: Token[], account: string) => {
+export const getUserTokenClaim = async (multi: Contract, tokenList: Token[], account: string, chaidId: ChainId) => {
   const calls = tokenList.map(token => {
     return {
-      address: getAirdropTokenScoreAddress(),
+      address: getAirdropTokenScoreAddress(chaidId),
       name: 'getUserTokenClaim',
       params: [account, token.address]
     }
@@ -72,9 +71,9 @@ export const getUserTokenClaim = async (multi: Contract, tokenList: Token[], acc
   return tempList
 }
 
-export const getLockedAlgAssets = async (multi: Contract, tokenAddress: string, score: number) => {
+export const getLockedAlgAssets = async (multi: Contract, tokenAddress: string, score: number, chaidId: ChainId) => {
   const calls = [{
-      address: getAirdropTokenScoreAddress(),
+      address: getAirdropTokenScoreAddress(chaidId),
       name: 'getLockedAlgAssets',
       params: [tokenAddress, score]
     }]
@@ -99,16 +98,16 @@ export const getLockedAlgAssets = async (multi: Contract, tokenAddress: string, 
 
 export function useAirdropTokenScore() {
   const dispatch = useDispatch<AppDispatch>()
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const multi = useMulticallContract()
   const airdropTokenScore = useAirdropTokenScoreContract()
   const allAlgToken = useAlgLabelAllTokens()
 
   const handleGetAlgTokenList = useCallback(async () => {
-    if (account && multi) {
+    if (account && multi && chainId) {
       const algTokens = Object.values(allAlgToken)
       if (algTokens.length > 0) {
-        const algTokenList = await getUserTokenClaim(multi, algTokens, account)
+        const algTokenList = await getUserTokenClaim(multi, algTokens, account, chainId)
         dispatch(updateUserAlgAirdropList({ algAirdropList: algTokenList }))
 
       }
@@ -116,7 +115,8 @@ export function useAirdropTokenScore() {
   }, [
     account,
     multi,
-    allAlgToken
+    allAlgToken,
+    chainId
   ])
 
   const [claimStatus, setClaimStatus] = useState(0)
@@ -220,16 +220,16 @@ export function useAccountLabelScore(account: string, label?: string) {
 export function useAccountTokenSupply(tokenAddress: string, score: number, balance?: string) {
   const [supplyAmount, setSupplyAmount] = useState('0')
 
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const multi = useMulticallContract()
   const airdropTokenScore = useAirdropTokenScoreContract()
   useEffect(() => {
-    if (account && airdropTokenScore && tokenAddress && score >= 0) {
-      getLockedAlgAssets(airdropTokenScore, tokenAddress, score * 100).then((amount) => {
+    if (account && airdropTokenScore && tokenAddress && score >= 0 && chainId) {
+      getLockedAlgAssets(airdropTokenScore, tokenAddress, score * 100, chainId).then((amount) => {
         setSupplyAmount(amount)
       })
     }
-  }, [account, airdropTokenScore, tokenAddress, score, balance])
+  }, [account, airdropTokenScore, tokenAddress, score, balance, chainId])
 
   return supplyAmount
 }

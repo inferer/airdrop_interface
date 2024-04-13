@@ -196,7 +196,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
 }
 
 export default function FullPositionCard({ pair, border }: PositionCardProps) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const currency0 = unwrappedToken(pair.token0)
   const currency1 = unwrappedToken(pair.token1)
 
@@ -207,8 +207,8 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
   const totalPoolTokens = useTotalSupply(pair.liquidityToken)
 
   const isOwner = useMemo(() => {
-    return account && account === getOwnerAddress()
-  },  [account])
+    return account && chainId &&  account === getOwnerAddress(chainId)
+  },  [account, chainId])
 
   const poolTokenPercentage =
     !!userPoolInfererBalance && !!totalPoolTokens && JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolInfererBalance.raw)

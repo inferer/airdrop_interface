@@ -6,7 +6,6 @@ import { useAirdropAssetTreasuryContract, useMulticallContract } from "./useCont
 import { useCallback, useState } from "react"
 import { useAirLabelAllTokens, useAlgLabelAllTokens, useUSDTAllTokens } from "./Tokens"
 import { AirdropAssetTreasury_NETWORKS, AirdropAssetTreasury_ABI } from "../constants/airdropAssetTreasury"
-import { NETWORK_CHAIN_ID } from "../connectors"
 import { BigNumber, Contract, ethers } from "ethers"
 import multicall from "../utils/multicall"
 import { ChainId, Currency, ETHER, JSBI, Token, TokenAmount } from "@uniswap/sdk"
@@ -17,17 +16,17 @@ import { getERC20Contract, isAddress } from "../utils"
 import { useShowToast } from '../state/application/hooks'
 
 
-export const getAirdropAssetTreasuryAddress = () => {
+export const getAirdropAssetTreasuryAddress = (chainId: number) => {
   // @ts-ignore
-  return AirdropAssetTreasury_NETWORKS[NETWORK_CHAIN_ID as ChainId]
+  return AirdropAssetTreasury_NETWORKS[chainId as ChainId]
 }
 
-export const getProjectLabelLocked = async (multi: Contract, account: string, tokenList: Token[]) => {
+export const getProjectLabelLocked = async (multi: Contract, account: string, tokenList: Token[], chainId: number) => {
 
   const calls: any[] = []
   tokenList.map(token => {
     calls.push({
-      address: getAirdropAssetTreasuryAddress(),
+      address: getAirdropAssetTreasuryAddress(chainId),
       name: 'projectLabelLocked',
       params: [account, token.address]
     })
@@ -44,12 +43,12 @@ export const getProjectLabelLocked = async (multi: Contract, account: string, to
   })
 }
 
-export const getProjectUSDTLocked = async (multi: Contract, account: string, tokenList: Token[]) => {
+export const getProjectUSDTLocked = async (multi: Contract, account: string, tokenList: Token[], chainId: number) => {
 
   const calls: any[] = []
   tokenList.map(token => {
     calls.push({
-      address: getAirdropAssetTreasuryAddress(),
+      address: getAirdropAssetTreasuryAddress(chainId),
       name: 'projectUSDTLocked',
       params: [account, token.address]
     })
@@ -66,12 +65,12 @@ export const getProjectUSDTLocked = async (multi: Contract, account: string, tok
   })
 }
 
-export const getUserAlgTokenLocked = async (multi: Contract, account: string, tokenList: Token[]) => {
+export const getUserAlgTokenLocked = async (multi: Contract, account: string, tokenList: Token[], chainId: number) => {
 
   const calls: any[] = []
   tokenList.map(token => {
     calls.push({
-      address: getAirdropAssetTreasuryAddress(),
+      address: getAirdropAssetTreasuryAddress(chainId),
       name: 'userAlgTokenLocked',
       params: [account, token.address]
     })
@@ -87,12 +86,12 @@ export const getUserAlgTokenLocked = async (multi: Contract, account: string, to
 }
 
 
-export const getDepositBalance = async (multi: Contract, account: string, tokenList: Token[]) => {
+export const getDepositBalance = async (multi: Contract, account: string, tokenList: Token[], chainId: number) => {
 
   const calls: any[] = []
   tokenList.map(token => {
     calls.push({
-      address: getAirdropAssetTreasuryAddress(),
+      address: getAirdropAssetTreasuryAddress(chainId),
       // name: 'getDepositBalance',
       // params: [token.address]
       name: 'userDepositBalance',
@@ -124,37 +123,37 @@ export function useAirdropAssetTreasury() {
 
   const handleGetProjectLabelLocked = useCallback(async (account: string) => {
     const airTokenList = Object.values(airLabelAllTokens)
-    if (account && multi && airdropAssetTreasury && airTokenList.length > 0) {
-      const list = await getProjectLabelLocked(multi, account, airTokenList)
+    if (account && multi && airdropAssetTreasury && airTokenList.length > 0 && chainId) {
+      const list = await getProjectLabelLocked(multi, account, airTokenList, chainId)
 
       dispatch(updateProjectLabelLocked({ tokenLockedList: list }))
     }
 
-  }, [multi, airdropAssetTreasury, airLabelAllTokens])
+  }, [multi, airdropAssetTreasury, airLabelAllTokens, chainId])
 
   const handleGetProjectUSDTLocked = useCallback(async (account: string) => {
     const usdtTokenList = Object.values(usdtAllTokens)
-    if (account && multi && airdropAssetTreasury && usdtTokenList.length > 0) {
-      const list = await getProjectUSDTLocked(multi, account, [AddressZero_ETH[ChainId.MAINNET] ,...usdtTokenList])
+    if (account && multi && airdropAssetTreasury && usdtTokenList.length > 0 && chainId) {
+      const list = await getProjectUSDTLocked(multi, account, [AddressZero_ETH[ChainId.MAINNET] ,...usdtTokenList], chainId)
       dispatch(updateProjectUSDTLocked({ tokenLockedList: list }))
     }
 
-  }, [multi, airdropAssetTreasury, usdtAllTokens])
+  }, [multi, airdropAssetTreasury, usdtAllTokens, chainId])
 
   const handleGetUserAlgTokenLocked = useCallback(async (account: string) => {
     const algTokenList = Object.values(algLabelAllTokens)
-    if (account && multi && airdropAssetTreasury && algTokenList.length > 0) {
-      const list = await getUserAlgTokenLocked(multi, account, algTokenList)
+    if (account && multi && airdropAssetTreasury && algTokenList.length > 0 && chainId) {
+      const list = await getUserAlgTokenLocked(multi, account, algTokenList, chainId)
       dispatch(updateUserAlgTokenLocked({ tokenLockedList: list }))
     }
 
-  }, [multi, airdropAssetTreasury, algLabelAllTokens])
+  }, [multi, airdropAssetTreasury, algLabelAllTokens, chainId])
 
   const handleGetDepositBalance = useCallback(async (account: string) => {
     const usdtTokenList = Object.values(usdtAllTokens)
     if (account && multi && airdropAssetTreasury && usdtTokenList.length > 0 && chainId) {
       const ETHToken = AddressZero_ETH[chainId]
-      const list = await getDepositBalance(multi, account, [ETHToken, ...usdtTokenList])
+      const list = await getDepositBalance(multi, account, [ETHToken, ...usdtTokenList], chainId)
       dispatch(updateUserDepositBalance({ tokenLockedList: list }))
     }
 
@@ -172,7 +171,7 @@ export function useAirdropAssetTreasury() {
         const spender = AirdropAssetTreasury_NETWORKS[chainId]
         const allowance = await tokenContract.allowance(account, spender)
         
-        let usdtTokenAddress = getUSDTTokenFromAirToken(airTokenAddress)
+        let usdtTokenAddress = getUSDTTokenFromAirToken(airTokenAddress, chainId)
         usdtTokenAddress = usdtTokenAddress === 'ETH' ? ethers.constants.AddressZero : usdtTokenAddress
         const amount = BigNumber.from((Number(value) * (10 ** airToken.decimals)).toString(10)).toString()
         console.log(airToken, usdtTokenAddress, BigNumber.from((Number(value) * (10 ** airToken.decimals)).toString(10)).toString())
@@ -278,27 +277,27 @@ export function useAirdropAssetTreasury() {
 
 }
 
-export const getFeeOn = async (multi: Contract, source?: string) => {
+export const getFeeOn = async (multi: Contract, chainId: number, source?: string) => {
 
   const calls: any[] = []
   calls.push({
-    address: getAirdropAssetTreasuryAddress(),
+    address: getAirdropAssetTreasuryAddress(chainId),
     name: 'getFeeTo',
     params: []
   })
   calls.push({
-    address: getAirdropAssetTreasuryAddress(),
+    address: getAirdropAssetTreasuryAddress(chainId),
     name: 'getFeeOn',
     params: []
   })
   if (source) {
     calls.push({
-      address: getAirdropAssetTreasuryAddress(),
+      address: getAirdropAssetTreasuryAddress(chainId),
       name: 'getDiscountPercentage',
       params: [source]
     })
     calls.push({
-      address: getAirdropAssetTreasuryAddress(),
+      address: getAirdropAssetTreasuryAddress(chainId),
       name: 'getIncomePercentage',
       params: [source]
     })
@@ -330,14 +329,14 @@ export function useAirdropAssetTreasuryFeeOn() {
   const [feeStatus, setFeeStatus] = useState(0)
 
   const handleGetFeeOn = useCallback(async (source?: string) => {
-    if (multi) {
-      return await getFeeOn(multi, source)
+    if (multi && chainId) {
+      return await getFeeOn(multi, chainId, source)
     }
     return {
 
     }
 
-  }, [multi])
+  }, [multi, chainId])
   
   const handleSetFeeTo = useCallback(async (address: string) => {
     if (account && airdropAssetTreasury) {

@@ -9,9 +9,6 @@ import { NetworkConnector } from './NetworkConnector'
 import { ChainId } from '@uniswap/sdk'
 
 const FORMATIC_KEY = process.env.NEXT_PUBLIC_FORTMATIC_KEY
-const PORTIS_ID = process.env.NEXT_PUBLIC_PORTIS_ID
-
-export const NETWORK_CHAIN_ID: number = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '1')
 
 export const APP_INFERER_CONNECTOR = 'APP_INFERER_CONNECTOR'
 

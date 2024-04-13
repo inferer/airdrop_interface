@@ -13,7 +13,7 @@ import { SUPPORTED_WALLETS } from '../../constants'
 import { ExternalLink } from '../../theme'
 import MetamaskIcon from '../../assets/images/metamask.png'
 import Close from '../../assets/images/x.svg'
-import { injected, fortmatic, APP_INFERER_CONNECTOR, setupNetwork, NETWORK_CHAIN_ID } from '../../connectors'
+import { injected, fortmatic, APP_INFERER_CONNECTOR, setupNetwork } from '../../connectors'
 import { OVERLAY_READY } from '../../connectors/Fortmatic'
 // import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { AbstractConnector } from '@web3-react/abstract-connector'
@@ -125,7 +125,7 @@ export default function WalletModal({
   ENSName?: string
 }) {
   // important that these are destructed from the account-specific web3-react context
-  const { active, account, connector, activate, error } = useWeb3React()
+  const { chainId, active, account, connector, activate, error } = useWeb3React()
 
   const [walletView, setWalletView] = useState(WALLET_VIEWS.ACCOUNT)
 
@@ -186,7 +186,7 @@ export default function WalletModal({
         if (error instanceof UnsupportedChainIdError) {
           console.log(error)
           const provider = await connector.getProvider()
-          const hasSetup = await setupNetwork(NETWORK_CHAIN_ID, provider)
+          const hasSetup = await setupNetwork(chainId, provider)
           if (hasSetup) {
             activate(connector)
           }

@@ -18,7 +18,7 @@ import { FundToken } from "../Project/Ongoing";
 const AirdropList: React.FC<{
 
 }> = () => {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const router = useRouter()
   const [ isCopied, staticCopy ] = useCopyClipboard()
 
@@ -123,7 +123,7 @@ const AirdropList: React.FC<{
                   return (
                     <TableRow key={airdrop.airdropId} 
                       onClick={() => {
-                        const _algToken = getALgTokenFromAirToken(airdrop.labelToken.address)
+                        const _algToken = getALgTokenFromAirToken(airdrop.labelToken.address, chainId)
                         router.push(`/user/collect/${algToken || _algToken}/${airdrop.airdropId}`)
                       }}
                     >

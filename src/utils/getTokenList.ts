@@ -67,16 +67,16 @@ export async function getTokenListLocal(
   }
 }
 
-export function getUSDTTokenFromAirToken(address: string) {
-  return GET_AIRUSDT_2_USDT()[address]
+export function getUSDTTokenFromAirToken(address: string, chainId?: number) {
+  return GET_AIRUSDT_2_USDT(chainId)[address]
 }
 
-export function getAirTokenFromAlgToken(address?: string) {
-  return GET_ALGTOKEN_2_AIRTOKEN()[address || '']
+export function getAirTokenFromAlgToken(address?: string, chainId?: number) {
+  return GET_ALGTOKEN_2_AIRTOKEN(chainId)[address || '']
 }
 
-export function getALgTokenFromAirToken(address?: string) {
-  return GET_AIRTOKEN_2_ALGTOKEN()[address || '']
+export function getALgTokenFromAirToken(address?: string, chainId?: number) {
+  return GET_AIRTOKEN_2_ALGTOKEN(chainId)[address || '']
 }
 
 export function getUSDTTokenByAddress(address: string) {

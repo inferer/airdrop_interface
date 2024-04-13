@@ -9,7 +9,6 @@ import ERC20_ABI from '../constants/abis/erc20.json'
 import { OWER_ADDRESS, ROUTER_ADDRESS } from '../constants'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@uniswap/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
-import { NETWORK_CHAIN_ID } from '../connectors';
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -263,6 +262,6 @@ export function zeroPadByte32(numberAsString:string){
   return "0x" + ("0".repeat(64 - numberAsString.length)) + numberAsString;
 }
 
-export const getOwnerAddress = () => {
-  return OWER_ADDRESS[NETWORK_CHAIN_ID as ChainId]
+export const getOwnerAddress = (chaidId?: ChainId) => {
+  return chaidId && OWER_ADDRESS[chaidId]
 }

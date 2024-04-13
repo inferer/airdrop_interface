@@ -49,7 +49,7 @@ export function useCreateCallback(
     args = swapCalls[0]?.parameters?.args
     lockedTokenAir = args[2][0]
     lockedLabel = args[2][1]
-    lockedToken = getUSDTTokenFromAirToken(lockedTokenAir)
+    lockedToken = getUSDTTokenFromAirToken(lockedTokenAir, chainId)
   }
   const lockedCurrency = useCurrency(lockedToken)
   const lockedCurrencyAmount = useCurrencyBalance(account ?? undefined, lockedCurrency ?? undefined)

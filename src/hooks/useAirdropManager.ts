@@ -3,7 +3,6 @@ import { useAirdropManagerContract, useAirdropUserTaskContract, useMulticallCont
 import { BigNumber, Contract } from "ethers";
 import { AirdropManager_ABI, AirdropManager_NETWORKS } from "../constants/airdropManager";
 import { AirdropUserTask_ABI, AirdropUserTask_NETWORKS } from "../constants/airdropUserTask";
-import { NETWORK_CHAIN_ID } from "../connectors";
 import { ChainId } from "@uniswap/sdk";
 import multicall from "../utils/multicall";
 import { getAirTokenFromAlgToken, getLabelTokenByAddress, getUSDTTokenByAddress } from "../utils/getTokenList";
@@ -15,19 +14,19 @@ import { updateAirdropList, updateAirdropListOne, updateProjectAirdropList, upda
 import { useActiveWeb3React } from ".";
 import { useMaxUnits, useUserAirdropConfirmedList } from "../state/airdrop/hooks";
 
-export const getAirdropManagerAddress = () => {
-  return AirdropManager_NETWORKS[NETWORK_CHAIN_ID as ChainId]
+export const getAirdropManagerAddress = (chainId: ChainId) => {
+  return AirdropManager_NETWORKS[chainId]
 }
 
-export const getAirdropUserTaskAddress = () => {
-  return AirdropUserTask_NETWORKS[NETWORK_CHAIN_ID as ChainId]
+export const getAirdropUserTaskAddress = (chainId: ChainId) => {
+  return AirdropUserTask_NETWORKS[chainId]
 }
 
-export const getAirdropLength = async (multi: Contract) => {
+export const getAirdropLength = async (multi: Contract, chaidId: ChainId) => {
 
   const calls = []
     calls.push({
-      address: getAirdropManagerAddress(),
+      address: getAirdropManagerAddress(chaidId),
       name: 'currentAirdropId',
       params: []
     })
@@ -37,11 +36,11 @@ export const getAirdropLength = async (multi: Contract) => {
   return currentAirdropId ? currentAirdropId[0]?.toString() : 0
 }
 
-export const getLabelAirdropIds = async (multi: Contract, airToken: string) => {
+export const getLabelAirdropIds = async (multi: Contract, airToken: string, chaidId: ChainId) => {
 
   const calls = []
     calls.push({
-      address: getAirdropManagerAddress(),
+      address: getAirdropManagerAddress(chaidId),
       name: 'getLabelAirdropIds',
       params: [airToken]
     })
@@ -51,10 +50,10 @@ export const getLabelAirdropIds = async (multi: Contract, airToken: string) => {
   return (ids && ids[0] || []).map((id: any) => id && id.toString()).filter((id: any) => !!id)
 }
 
-export const getUserAirdropIds = async (multi: Contract, account: string) => {
+export const getUserAirdropIds = async (multi: Contract, account: string, chaidId: ChainId) => {
   const calls = []
     calls.push({
-      address: getAirdropManagerAddress(),
+      address: getAirdropManagerAddress(chaidId),
       name: 'getUserAirdropIds',
       params: [account]
     })
@@ -64,14 +63,14 @@ export const getUserAirdropIds = async (multi: Contract, account: string) => {
   return (ids && ids[0] || []).map((id: any) => id && id.toString()).filter((id: any) => !!id)
 }
 
-export const getAirdropList = async (multi: Contract, airdropLength: number | number[]) => {
+export const getAirdropList = async (multi: Contract, airdropLength: number | number[], chaidId: ChainId) => {
 
   
   const calls = []
   if (typeof airdropLength === 'number') {
     for(let i = 1; i <= airdropLength; i++) {
       calls.push({
-        address: getAirdropManagerAddress(),
+        address: getAirdropManagerAddress(chaidId),
         name: 'getAirdrop',
         params: [i]
       })
@@ -80,7 +79,7 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
     for(let i = 0, len = airdropLength.length; i < len; i++) {
 
       calls.push({
-        address: getAirdropManagerAddress(),
+        address: getAirdropManagerAddress(chaidId),
         name: 'getAirdrop',
         params: [airdropLength[i]]
       })
@@ -154,10 +153,10 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
 
 }
 
-export const getAirdropUserConfirmed = async (multi: Contract, airdropId: number) => {
+export const getAirdropUserConfirmed = async (multi: Contract, airdropId: number, chaidId: ChainId) => {
   const calls = []
     calls.push({
-      address: getAirdropUserTaskAddress(),
+      address: getAirdropUserTaskAddress(chaidId),
       name: 'getAirdropTaskList',
       params: [airdropId]
     })
@@ -177,10 +176,10 @@ export const getAirdropUserConfirmed = async (multi: Contract, airdropId: number
   }) : []
 }
 
-export const getUserAirdropConfirmed = async (multi: Contract, account: string) => {
+export const getUserAirdropConfirmed = async (multi: Contract, account: string, chaidId: ChainId) => {
   const calls = []
     calls.push({
-      address: getAirdropManagerAddress(),
+      address: getAirdropManagerAddress(chaidId),
       name: 'getUserAirdropConfirmed',
       params: [account]
     })
@@ -231,7 +230,7 @@ export const getUserTaskConfirmed = async (airdropManager: Contract, airdropId: 
 
 export function useAirdropManager() {
   const dispatch = useDispatch<AppDispatch>()
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const airdropList = useUserAirdropConfirmedList()
   const multi = useMulticallContract()
   const airdropManager = useAirdropManagerContract()
@@ -242,65 +241,65 @@ export function useAirdropManager() {
   }, [dispatch])
 
   const handleGetAirdropList = useCallback(async (algToken?: string) => {
-    if (multi) {
+    if (multi && chainId) {
       if (algToken) {
-        const airToken = getAirTokenFromAlgToken(algToken)
-        let airdropIds = await getLabelAirdropIds(multi, airToken)
+        const airToken = getAirTokenFromAlgToken(algToken, chainId)
+        let airdropIds = await getLabelAirdropIds(multi, airToken, chainId)
 
-        const list = await getAirdropList(multi, airdropIds)
+        const list = await getAirdropList(multi, airdropIds, chainId)
         dispatch(updateAirdropList({ airdropList: list as any }))
       } else {
-        let airdropLength = await getAirdropLength(multi) 
-        const list = await getAirdropList(multi, Number(airdropLength))
+        let airdropLength = await getAirdropLength(multi, chainId) 
+        const list = await getAirdropList(multi, Number(airdropLength), chainId)
         dispatch(updateAirdropList({ airdropList: list as any }))
       }
       
     }
-  }, [multi, dispatch])
+  }, [multi, dispatch, chainId])
 
   const handleGetUserAirdropList = useCallback(async (account?: string) => {
-    if (multi) {
+    if (multi && chainId) {
       if (account) {
-        let airdropIds = await getUserAirdropIds(multi, account)
-        const list = await getAirdropList(multi, airdropIds)
+        let airdropIds = await getUserAirdropIds(multi, account, chainId)
+        const list = await getAirdropList(multi, airdropIds, chainId)
         dispatch(updateProjectAirdropList({ airdropList: list as any }))
       }
       
     }
-  }, [multi, dispatch])
+  }, [multi, dispatch, chainId])
 
   const handleGetAirdropOne = useCallback(async (airdropId: number) => {
-    if (multi) {
-      const list = await getAirdropList(multi, [airdropId])
+    if (multi && chainId) {
+      const list = await getAirdropList(multi, [airdropId], chainId)
       dispatch(updateAirdropListOne({ airdropList: list as any }))
     }
-  }, [multi, dispatch])
+  }, [multi, dispatch, chainId])
 
   const handleGetAirdropOne2 = useCallback(async (airdropId: number) => {
-    if (multi) {
-      const list = await getAirdropList(multi, [airdropId])
+    if (multi && chainId) {
+      const list = await getAirdropList(multi, [airdropId], chainId)
       return list[0]
     }
-  }, [multi, dispatch])
+  }, [multi, dispatch, chainId])
 
   const handleGetUserAirdropConfirmed = useCallback(async (refresh?: boolean) => {
-    if (multi && airdropUserTask && account && (refresh || airdropList.length <= 0) ) {
+    if (multi && airdropUserTask && account && (refresh || airdropList.length <= 0) && chainId ) {
       let userAirdropConfirmed = await getUserAirdropConfirmed2(airdropUserTask, account) 
       const userConfirmedIds = userAirdropConfirmed.map((item: { airdropId: any; }) => item.airdropId).filter((airdropId: string) => parseInt(airdropId) > 0)
-      const list = await getAirdropList(multi, userConfirmedIds)
+      const list = await getAirdropList(multi, userConfirmedIds, chainId)
       const tempConfirmed = userAirdropConfirmed.reverse()
       const newList = list.map((item, index) => ({ ...item, ...tempConfirmed[index]}))
       dispatch(updateUserAirdropConfirmed({ airdropList: newList as any }))
     }
-  }, [multi, airdropUserTask, airdropUserTask, account, airdropList, dispatch])
+  }, [multi, airdropUserTask, airdropUserTask, account, airdropList, dispatch, chainId])
 
   const [airdropUserConfirmed, setAirdropUserComfirmed] = useState<any[]>([])
   const handleGetAirdropUserConfirmed = useCallback(async (airdropId: number) => {
-    if (multi && airdropManager && account) {
-      let list = await getAirdropUserConfirmed(multi, airdropId) 
+    if (multi && airdropManager && account && chainId) {
+      let list = await getAirdropUserConfirmed(multi, airdropId, chainId) 
       setAirdropUserComfirmed(list)
     }
-  }, [multi, airdropManager, account, dispatch])
+  }, [multi, airdropManager, account, dispatch, chainId])
 
   const handleGetUserTaskConfirmed = useCallback(async (airdropId: string) => {
     if (airdropManager && account) {
@@ -312,24 +311,6 @@ export function useAirdropManager() {
   const handleUpdateUserAirdropConfirmedByTaskId = useCallback(async (taskIds: string[]) => {
     dispatch(updateUserAirdropConfirmedByTaskId({ taskIds }))
   }, [dispatch])
-
-  useEffect(() => {
-    const fetch = async () => {
-      if (multi) {
-        let airdropLength: number | number[] = 0
-        if (router.query.id && router.query.id[0]) {
-          airdropLength = [Number(router.query.id[0])]
-        } else {
-          airdropLength = await getAirdropLength(multi) 
-        }
-        const list = await getAirdropList(multi, Number(airdropLength))
-        dispatch(updateAirdropList({ airdropList: list as any }))
-      }
-    }
-
-    // fetch()
-
-  }, [multi, router.query])
 
   return {
     handleGetAirdropList,

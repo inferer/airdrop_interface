@@ -1,5 +1,4 @@
 import { ChainId } from '@uniswap/sdk'
-import { NETWORK_CHAIN_ID } from '../../connectors'
 import { TokenInfo } from '@uniswap/token-lists'
 import contractList from '../contractsLocal'
 import contractsSepolia from '../contractsSepolia'
@@ -323,16 +322,16 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   }
 ]
 
-export const GET_AIRUSDT_2_USDT = () => {
+export const GET_AIRUSDT_2_USDT = (chainId?: number) => {
   let pair: {[key: string]: string} = {}
-  AIR_TOKEN_LIST.filter(token => token.chainId === NETWORK_CHAIN_ID).map(token1 => {
+  AIR_TOKEN_LIST.filter(token => token.chainId === chainId).map(token1 => {
     const symbol = token1.symbol.slice(4)
     if (symbol === 'ETH') {
       const key = (token1?.address || '') as string
       // @ts-ignore
       pair[key] = 'ETH'
     }
-    const toUSDT = ST_TOKEN_LIST.filter(token => token.chainId === NETWORK_CHAIN_ID).find(token2 => token2.symbol === symbol)
+    const toUSDT = ST_TOKEN_LIST.filter(token => token.chainId === chainId).find(token2 => token2.symbol === symbol)
     if (token1.address && toUSDT) {
       const key = (token1?.address || '') as string
       // @ts-ignore
@@ -344,11 +343,11 @@ export const GET_AIRUSDT_2_USDT = () => {
   return pair
 } 
 
-export const GET_ALGTOKEN_2_AIRTOKEN = () => {
+export const GET_ALGTOKEN_2_AIRTOKEN = (chainId?: number) => {
   let pair: {[key: string]: string} = {}
-  ALGLABEL_TOKEN_LIST.filter(token => token.chainId === NETWORK_CHAIN_ID).map(token1 => {
+  ALGLABEL_TOKEN_LIST.filter(token => token.chainId === chainId).map(token1 => {
     const symbol = token1.symbol.slice(4)
-    const toUSDT = AIRLABEL_TOKEN_LIST.filter(token => token.chainId === NETWORK_CHAIN_ID).find(token2 => token2.symbol.slice(4) === symbol)
+    const toUSDT = AIRLABEL_TOKEN_LIST.filter(token => token.chainId === chainId).find(token2 => token2.symbol.slice(4) === symbol)
     if (token1.address) {
       const key = (token1?.address || '') as string
       // @ts-ignore
@@ -360,11 +359,11 @@ export const GET_ALGTOKEN_2_AIRTOKEN = () => {
   return pair
 } 
 
-export const GET_AIRTOKEN_2_ALGTOKEN = () => {
+export const GET_AIRTOKEN_2_ALGTOKEN = (chainId?: number) => {
   let pair: {[key: string]: string} = {}
-  AIRLABEL_TOKEN_LIST.filter(token => token.chainId === NETWORK_CHAIN_ID).map(token1 => {
+  AIRLABEL_TOKEN_LIST.filter(token => token.chainId === chainId).map(token1 => {
     const symbol = token1.symbol.slice(4)
-    const toUSDT = ALGLABEL_TOKEN_LIST.filter(token => token.chainId === NETWORK_CHAIN_ID).find(token2 => token2.symbol.slice(4) === symbol)
+    const toUSDT = ALGLABEL_TOKEN_LIST.filter(token => token.chainId === chainId).find(token2 => token2.symbol.slice(4) === symbol)
     if (token1.address) {
       const key = (token1?.address || '') as string
       // @ts-ignore

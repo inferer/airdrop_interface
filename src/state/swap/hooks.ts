@@ -233,7 +233,7 @@ export function useCollectSwapInfo(): {
   parsedAmountOUTPUTDerived: CurrencyAmount | undefined
   inputError?: string
 } {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const score = 1.25
   const {
     independentField,
@@ -245,7 +245,7 @@ export function useCollectSwapInfo(): {
 
   const inputCurrency = useCurrency(inputCurrencyId)
 
-  const outputCurrency = useCurrency(getAirTokenFromAlgToken(inputCurrencyId))
+  const outputCurrency = useCurrency(getAirTokenFromAlgToken(inputCurrencyId, chainId))
   const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
     inputCurrency ?? undefined,
     outputCurrency ?? undefined
