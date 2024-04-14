@@ -39,6 +39,13 @@ export const Air_Art_LOCAL = new Token(ChainId.LOCAL, contractList['Air-Art'], 1
 export const Air_Finance_LOCAL = new Token(ChainId.LOCAL, contractList['Air-Finance'], 18, 'Air-Finance', 'Air-Finance')
 export const Air_Commerce_LOCAL = new Token(ChainId.LOCAL, contractList['Air-Commerce'], 18, 'Air-Commerce', 'Air-Commerce')
 
+export const Air_Social_SEPOLIA = new Token(ChainId.SEPOLIA, contractsSepolia['Air-Social'], 18, 'Air-Social', 'Air-Social')
+export const Air_Sports_SEPOLIA = new Token(ChainId.SEPOLIA, contractsSepolia['Air-Sports'], 18, 'Air-Sports', 'Air-Sports')
+export const Air_Game_SEPOLIA= new Token(ChainId.SEPOLIA, contractsSepolia['Air-Game'], 18, 'Air-Game', 'Air-Game')
+export const Air_Art_SEPOLIA = new Token(ChainId.SEPOLIA, contractsSepolia['Air-Art'], 18, 'Air-Art', 'Air-Art')
+export const Air_Finance_SEPOLIA = new Token(ChainId.SEPOLIA, contractsSepolia['Air-Finance'], 18, 'Air-Finance', 'Air-Finance')
+export const Air_Commerce_SEPOLIA = new Token(ChainId.SEPOLIA, contractsSepolia['Air-Commerce'], 18, 'Air-Commerce', 'Air-Commerce')
+
 const WETH_ONLY: ChainTokenList = {
   [ChainId.MAINNET]: [WETH[ChainId.MAINNET]],
   [ChainId.SEPOLIA]: [WETH[ChainId.SEPOLIA]],
@@ -73,7 +80,7 @@ export const SUGGESTED_BASES: ChainTokenList = {
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ...WETH_ONLY,
   [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT],
-  [ChainId.SEPOLIA]: [...WETH_ONLY[ChainId.SEPOLIA], DAI_SEPOLIA, USDC_SEPOLIA, USDT_SEPOLIA],
+  [ChainId.SEPOLIA]: [Air_Social_SEPOLIA, Air_Sports_SEPOLIA, Air_Game_SEPOLIA, Air_Art_SEPOLIA, Air_Finance_SEPOLIA, Air_Commerce_SEPOLIA],
   [ChainId.LOCAL]: [Air_Social_LOCAL, Air_Sports_LOCAL, Air_Game_LOCAL, Air_Art_LOCAL, Air_Finance_LOCAL, Air_Commerce_LOCAL]
 }
 

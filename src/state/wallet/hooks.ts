@@ -86,8 +86,9 @@ export function usePairInfererBalancesWithLoadingIndicator(
   tokens?: (Token | undefined)[]
 ): [{ [tokenAddress: string]: TokenAmount | undefined }, boolean] {
   const { chainId } = useActiveWeb3React()
-  const ownerAddress = useMemo(() => getOwnerAddress(chainId), [chainId])
-
+  // const ownerAddress = useMemo(() => getOwnerAddress(chainId), [chainId])
+  const ownerAddress = getOwnerAddress(chainId)
+  
   const validatedTokens: Token[] = useMemo(
     () => tokens?.filter((t?: Token): t is Token => isAddress(t?.address) !== false) ?? [],
     [tokens]
