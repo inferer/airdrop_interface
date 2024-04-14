@@ -6,7 +6,7 @@ import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { BigNumber } from '@ethersproject/bignumber'
 import InfererRouter02ABI from '../constants/abis/InfererRouter02.json'
 import ERC20_ABI from '../constants/abis/erc20.json'
-import { OWER_ADDRESS, ROUTER_ADDRESS } from '../constants'
+import { OWER_ADDRESS, ROUTER_ADDRESS2 } from '../constants'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@uniswap/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
 
@@ -126,6 +126,10 @@ const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
   [ChainId.LOCAL]: 'Local'
 }
 
+export function getRouterAddress(chaidId: ChainId) {
+  return ROUTER_ADDRESS2[chaidId]
+}
+
 export function openBrowser(url: string, target = '_blank') {
   let newUrl = url
   if (url.indexOf('http') === 0) {
@@ -208,7 +212,8 @@ export function getContract(address: string, ABI: any, library: Web3Provider, ac
 
 // account is optional
 export function getRouterContract(_: number, library: Web3Provider, account?: string): Contract {
-  return getContract(ROUTER_ADDRESS, InfererRouter02ABI, library, account)
+  const router02 = getRouterAddress(_)
+  return getContract(router02, InfererRouter02ABI, library, account)
 }
 export function getERC20Contract(address: string, library: Web3Provider, account?: string): Contract {
   return getContract(address, ERC20_ABI, library, account)

@@ -21,6 +21,7 @@ import DoubleCurrencyLogo from '../DoubleLogo'
 import { AutoRow, RowBetween, RowFixed } from '../Row'
 import { Dots } from '../swap/styleds'
 import { getOwnerAddress } from '../../utils'
+import { getUSDTTokenByAddress2 } from '../../utils/getTokenList'
 
 export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
@@ -199,6 +200,8 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
   const currency0 = unwrappedToken(pair.token0)
   const currency1 = unwrappedToken(pair.token1)
 
+  const findTokenA = getUSDTTokenByAddress2(pair.token0?.address, pair.token1?.chainId)
+
   const [showMore, setShowMore] = useState(false)
   const userPoolInfererBalance = usePairInfererBalance(account ?? undefined, pair.liquidityToken)
   const userPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
@@ -240,6 +243,8 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
             pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolBalance, false)
           ]
         : [undefined, undefined]
+  const addPath = findTokenA ? `/add/${currencyId(currency0)}/${currencyId(currency1)}` : `/add/${currencyId(currency1)}/${currencyId(currency0)}`
+  const removePath = findTokenA ? `/remove/${currencyId(currency0)}/${currencyId(currency1)}` : `/add/${currencyId(currency1)}/${currencyId(currency0)}`
 
   return (
     <HoverCard border={border}>
@@ -373,12 +378,12 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
             {
                 isOwner && 
                 <RowBetween marginTop="10px">
-                  <Link href={`/add/${currencyId(currency0)}/${currencyId(currency1)}?lp=0`}>
+                  <Link href={`${addPath}?lp=0`}>
                     <ButtonSecondary width="48%">
                       Add LP0
                     </ButtonSecondary>
                   </Link>
-                  <Link href={`/remove/${currencyId(currency0)}/${currencyId(currency1)}?lp=0`}>
+                  <Link href={`${removePath}?lp=0`}>
                     <ButtonSecondary width="48%">
                       Remove LP0
                     </ButtonSecondary>
@@ -388,7 +393,7 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
               }
 
             <RowBetween marginTop="10px">
-              <Link href={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
+              <Link href={addPath}>
                 <ButtonSecondary width="48%">
                   Add
                 </ButtonSecondary>
@@ -396,7 +401,7 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
               
               {
                 userPoolBalance?.greaterThan('0') && 
-                <Link href={`/remove/${currencyId(currency0)}/${currencyId(currency1)}`}>
+                <Link href={removePath}>
                   <ButtonSecondary width="48%">
                     Remove
                   </ButtonSecondary>
