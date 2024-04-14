@@ -170,7 +170,7 @@ const AirdropInfo = ({
               <LabelText>Chain</LabelText>
               <div className="flex items-center mt-3 ">
                 <LazyImage src="/images/airdrop/chain_airdrop.svg" />
-                <div className="text-[14px] font-fmedium ml-2">{contentJson.chain === 'localtest' ? 'Airdrop' : contentJson.chain}</div>
+                <div className="text-[14px] font-fmedium ml-2">{contentJson.chain === 'Airdrop' ? 'Airdrop' : contentJson.chain}</div>
               </div>
             </div>
             <div className="pl-5 flex items-center">

@@ -1,5 +1,5 @@
 import { ChainId } from '@uniswap/sdk'
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { isMobile } from 'react-device-detect'
 import { Text } from 'rebass'
 
@@ -23,6 +23,8 @@ import { AirdropTokensTabs } from '../NavigationTabs'
 import router, { useRouter } from 'next/router'
 import WalletModal from '../WalletModal'
 import useENSName from '../../hooks/useENSName'
+import { SelectChain2 } from '../../views/Create/Select4'
+import { CHAIN_LIST } from '../../constants'
 
 const HeaderFrame = styled.div`
   display: flex;
@@ -181,6 +183,21 @@ export default function Header() {
 
   const { ENSName } = useENSName(account ?? undefined)
 
+  const handleOnChainChange = useCallback((data: any) => {
+    const chainName = data.value
+    const url = isProjectMode ? `/project/create?chain=${chainName}` : `/user/collect?chain=${chainName}`
+    window.location.replace(url)
+
+  }, [isProjectMode])
+
+  const defaultChain = useMemo(() => {
+    if (router.query.chain) {
+      return CHAIN_LIST.find(chain => chain.value === router.query.chain)
+    }
+    return CHAIN_LIST[0]
+  }, [router.query])
+
+
   return (
     <HeaderFrame>
       <div className='h-[84px] flex items-center justify-between w-full'>
@@ -205,9 +222,14 @@ export default function Header() {
           }
           
         </HeaderElement>
+        <div className='flex'>
+          <SelectChain2 defaultValue={defaultChain} options={CHAIN_LIST} 
+            onChange={handleOnChainChange}
+          />
+
         {
           account && loginUserInfo.address && 
-          <div className='flex items-center h-[48px] px-3 connect-bg cursor-pointer'
+          <div className='flex items-center h-[48px] px-3 connect-bg cursor-pointer ml-[10px]'
 
             onClick={e => {
               e.stopPropagation()
@@ -223,6 +245,7 @@ export default function Header() {
             </HeaderElementWrap>
           </div>
         }
+        </div>
         <WalletModal ENSName={ENSName ?? undefined} pendingTransactions={[]} confirmedTransactions={[]} />
       </div>
     </HeaderFrame>

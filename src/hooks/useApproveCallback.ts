@@ -126,6 +126,5 @@ export function useApproveCallbackFromTrade(trade?: Trade, allowedSlippage = 0) 
   )
   const tradeIsV1 = getTradeVersion(trade) === Version.v1
   const v1ExchangeAddress = useV1TradeExchangeAddress(trade)
-  if (!chainId) return null
-  return useApproveCallback(amountToApprove, tradeIsV1 ? v1ExchangeAddress : getRouterAddress(chainId))
+  return useApproveCallback(amountToApprove, tradeIsV1 ? v1ExchangeAddress : chainId && getRouterAddress(chainId))
 }
