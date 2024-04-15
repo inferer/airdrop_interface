@@ -18,6 +18,7 @@ import { OVERLAY_READY } from '../../connectors/Fortmatic'
 // import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { InjectedConnector } from '@web3-react/injected-connector'
+import { useRouter } from 'next/router'
 
 const CloseIcon = styled.div`
   position: absolute;
@@ -124,6 +125,7 @@ export default function WalletModal({
   confirmedTransactions: string[] // hashes of confirmed
   ENSName?: string
 }) {
+  const router = useRouter()
   // important that these are destructed from the account-specific web3-react context
   const { chainId, active, account, connector, activate, error } = useWeb3React()
 
@@ -181,7 +183,11 @@ export default function WalletModal({
     if (connector instanceof InjectedConnector) {
       localStorage.setItem(APP_INFERER_CONNECTOR, 'true')
     }
-    connector &&
+    console.log(chainId, 1111)
+    if (connector) {
+      // if (router.query.chain && !chainId) {
+
+      // }
       activate(connector, undefined, true).catch(async (error) => {
         if (error instanceof UnsupportedChainIdError) {
           console.log(error)
@@ -196,6 +202,8 @@ export default function WalletModal({
           localStorage.removeItem(APP_INFERER_CONNECTOR)
         }
       })
+    }
+      
   }
 
   // close wallet modal if fortmatic modal is active

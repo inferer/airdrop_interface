@@ -185,18 +185,30 @@ export default function Header() {
 
   const handleOnChainChange = useCallback((data: any) => {
     const chainName = data.value
+    if (router.query.chain && router.query.chain === chainName) {
+      return
+    }
     const url = isProjectMode ? `/project/create?chain=${chainName}` : `/user/collect?chain=${chainName}`
     window.location.replace(url)
 
-  }, [isProjectMode])
+  }, [isProjectMode, router.query])
 
   const defaultChain = useMemo(() => {
-    if (router.query.chain) {
+    if (chainId) {
+      let chain = CHAIN_LIST.find(chain => chain.chainId === chainId)
+      if (!chain) {
+        if (router.query.chain) {
+          chain = CHAIN_LIST.find(chain => chain.value === router.query.chain)
+        } else {
+          chain = CHAIN_LIST[0]
+        }
+      }
+      return chain
+    } else if (router.query.chain) {
       return CHAIN_LIST.find(chain => chain.value === router.query.chain)
-    }
+    } 
     return CHAIN_LIST[0]
-  }, [router.query])
-
+  }, [router.query, chainId])
 
   return (
     <HeaderFrame>

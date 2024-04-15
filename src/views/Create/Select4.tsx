@@ -38,7 +38,7 @@ const Select4: React.FC<{
       <div className="flex justify-between items-center w-full py-3 px-4 "
         onClick={handleClick}
       >
-        <span className="mr-5">{current.label || defaultValue.label}</span>
+        <span className="mr-5">{current.label || defaultValue?.label}</span>
         <LazyImage src="/images/airdrop/arrow-down.svg" className={` ${showOptions ? 'rotate-180' : 'rotate-0' }  `} />
       </div>
       {
@@ -114,7 +114,7 @@ export const SelectChain2: React.FC<{
   }, [options])
   useOnClickOutside(node, showOptions ? () => setShowOptions(false) : undefined)
   const label = useMemo(() => {
-    return current.label || defaultValue.label || 'Select'
+    return current.label || defaultValue?.label || 'Select'
   }, [defaultValue, current])
 
   return (

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 
-import { network } from '../../connectors'
+import { network, setupNetwork } from '../../connectors'
 import { useEagerConnect, useInactiveListener } from '../../hooks'
-import { NetworkContextName } from '../../constants'
+import { CHAIN_LIST, NetworkContextName } from '../../constants'
 import Loader from '../Loader'
 import { useUserInfo, useUserRoleMode } from '../../state/user/hooks'
 import { useRouter } from 'next/router'
@@ -21,7 +21,7 @@ const Message = styled.h2`
 `
 
 export default function Web3ReactManager({ children }: { children: JSX.Element }) {
-  const { active, account, deactivate } = useWeb3React()
+  const { active, account, chainId, deactivate } = useWeb3React()
   const router = useRouter()
   const [ isProjectMode ] = useUserRoleMode()
   const { handleGetUserInfo } = useUserInfo()
@@ -73,6 +73,15 @@ export default function Web3ReactManager({ children }: { children: JSX.Element }
       clearTimeout(timeout)
     }
   }, [])
+
+  useEffect(() => {
+    if (router.query.chain && chainId) {
+      const chainData = CHAIN_LIST.find(chain => chain.value === router.query.chain)
+      if (chainId !== chainData?.chainId) {
+        setupNetwork(chainData?.chainId)
+      }
+    }
+  }, [router.query, chainId])
 
   // on page load, do nothing until we've tried to connect to the injected connector
   if (!triedEager) {

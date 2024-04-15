@@ -231,7 +231,11 @@ export default function RightMenu() {
 
           </div>
         </div>
-        
+        <div className=' absolute w-full flex justify-center left-0 right-0 bottom-[16px]'>
+          <LazyImage src='/images/airdrop/beta_icon.svg' />
+          <span className=' text-[12px] text-[rgba(63,60,255,0.5)] font-fsemibold mx-[2px]'>beta 1712365129</span>
+          <LazyImage src='/images/airdrop/beta_icon.svg' />
+        </div>
       </RightContent>
     </RightWrap>
   )

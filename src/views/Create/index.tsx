@@ -33,7 +33,7 @@ const contractContent = othersContracts.projectContract.toLowerCase() + '.commen
 
 export default function Create() {
   const router = useRouter()
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const [open, setOpen] = useState(false)
 
   const [name, setName] = useState('')
@@ -90,7 +90,14 @@ export default function Create() {
     setDutation(data.value)
   }
 
-  const [chain, setChain] = useState('')
+  const currentChain = useMemo(() => {
+    if(chainId) {
+      return CHAIN_LIST.find(chain => chain.chainId === chainId)
+    }
+    return CHAIN_LIST[0]
+  }, [chainId])
+
+  const [chain, setChain] = useState(currentChain?.value || '')
   const handleChangeChain = (data: any) => {
     setChain(data.value)
   }
@@ -455,7 +462,17 @@ export default function Create() {
                   <div className=' shrink-0'>
                     <ItemTitle>Chain</ItemTitle>
                     <div className='mt-2 font-fmedium'>
-                      <SelectChain defaultValue={{}} options={CHAIN_LIST} onChange={handleChangeChain} />
+                      {/* <SelectChain defaultValue={{}} options={CHAIN_LIST} onChange={handleChangeChain} /> */}
+                      {
+                        currentChain && 
+                        <div className='flex items-center bg-[rgba(85,123,241,0.02)] h-[44px] rounded-lg px-4'>
+                          <div>
+                            <LazyImage src={currentChain?.icon} className='w-5 h-5' />
+                          </div>
+                          <div className='text-[14px] font-medium ml-2'>{currentChain?.label}</div>
+                        </div>
+                      }
+                      
                     </div>
                   </div>
                   {

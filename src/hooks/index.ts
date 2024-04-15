@@ -5,7 +5,8 @@ import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
 import { useEffect, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { APP_INFERER_CONNECTOR, injected } from '../connectors'
-import { NetworkContextName } from '../constants'
+import { CHAIN_LIST, NetworkContextName } from '../constants'
+import { useRouter } from 'next/router'
 
 export function useActiveWeb3React(): Web3ReactContextInterface<Web3Provider> & { chainId?: ChainId } {
   const context = useWeb3ReactCore<Web3Provider>()
@@ -56,26 +57,46 @@ export function useEagerConnect() {
  * and out after checking what network theyre on
  */
 export function useInactiveListener(suppress = false) {
+  const router = useRouter()
   const { active, error, activate } = useWeb3ReactCore() // specifically using useWeb3React because of what this hook does
-
+  
   useEffect(() => {
     const { ethereum } = window
 
-    if (ethereum && ethereum.on && !active && !error && !suppress) {
-      const handleChainChanged = () => {
-        // eat errors
-        activate(injected, undefined, true).catch(error => {
-          console.error('Failed to activate after chain changed', error)
-        })
+    if (ethereum && ethereum.on && !error && !suppress) {
+      const handleChainChanged = (chainId: string) => {
+        if (!active) {
+          // eat errors
+          activate(injected, undefined, true).catch(error => {
+            console.error('Failed to activate after chain changed', error)
+          })
+        } else {
+          console.log(window.location.href)
+          if (router.query.chain) {
+            const id = parseInt(chainId, 16)
+            const chainInfo = CHAIN_LIST.find(chain => chain.chainId === id)
+            if (chainInfo?.value !== router.query.chain) {
+              const reg = new RegExp(`chain=${router.query.chain}`)
+              const newUrl = window.location.href.replace(reg, `chain=${chainInfo?.value}`)
+              window.location.replace(newUrl)
+            }
+          }
+        }
+        
+        // window.location.reload()
       }
 
       const handleAccountsChanged = (accounts: string[]) => {
-        if (accounts.length > 0) {
-          // eat errors
-          activate(injected, undefined, true).catch(error => {
-            console.error('Failed to activate after accounts changed', error)
-          })
+        if (!active) {
+          if (accounts.length > 0) {
+            // eat errors
+            activate(injected, undefined, true).catch(error => {
+              console.error('Failed to activate after accounts changed', error)
+            })
+            // window.location.reload()
+          }
         }
+        
       }
 
       ethereum.on('chainChanged', handleChainChanged)

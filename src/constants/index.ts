@@ -226,8 +226,8 @@ export const CHANNEL_LIST = [
 ]
 
 export const CHAIN_LIST = [
-  { value: 'Airdrop', label: 'Airdrop', icon: '/images/airdrop/chain_airdrop.svg' },
-  { value: 'Arbitrum', label: 'Arbitrum', icon: '/images/channel/arb.svg' },
+  { value: 'Airdrop', label: 'Airdrop', icon: '/images/airdrop/chain_airdrop.svg', chainId: ChainId.LOCAL },
+  { value: 'Arbitrum', label: 'Arbitrum', icon: '/images/channel/arb.svg', chainId: ChainId.SEPOLIA },
 ]
 
 export const TWITTER_ACTION = [
