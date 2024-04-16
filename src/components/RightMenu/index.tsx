@@ -232,9 +232,20 @@ export default function RightMenu() {
           </div>
         </div>
         <div className=' absolute w-full flex justify-center left-0 right-0 bottom-[16px]'>
-          <LazyImage src='/images/airdrop/beta_icon.svg' />
-          <span className=' text-[12px] text-[rgba(63,60,255,0.5)] font-fsemibold mx-[2px]'>beta 1712365129</span>
-          <LazyImage src='/images/airdrop/beta_icon.svg' />
+          {
+            isProjectMode ? 
+            <>
+              <LazyImage src='/images/airdrop/beta_icon.svg' />
+              <span className=' text-[12px] text-[rgba(63,60,255,0.5)] font-fsemibold mx-[2px]'>beta 1712365129</span>
+              <LazyImage src='/images/airdrop/beta_icon.svg' />
+            </> :
+            <>
+              <LazyImage src='/images/airdrop/beta_icon_user.svg' />
+              <span className=' text-[12px] text-[rgba(127,200,139,0.8)] font-fsemibold mx-[2px]'>beta 1712365129</span>
+              <LazyImage src='/images/airdrop/beta_icon_user.svg' />            
+            </>
+          }
+          
         </div>
       </RightContent>
     </RightWrap>
