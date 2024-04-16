@@ -120,8 +120,7 @@ export const SelectChain2: React.FC<{
   return (
     <div ref={wrapRef} className="flex items-center justify-end min-w-[120px] relative"
     >
-      <div className="flex justify-between items-center py-3 px-4  h-[44px] text-[14px] rounded-[8px] cursor-pointer "
-        style={{background: 'linear-gradient(96deg, rgba(63, 60, 255, 0.06) 0%, rgba(107, 190, 225, 0.06) 101.71%)'}}
+      <div className="flex justify-between items-center py-3 px-4  h-[48px] text-[14px] rounded-[8px] cursor-pointer change-chain "
         onClick={handleClick}
       >
         <div className="flex items-center mr-1">

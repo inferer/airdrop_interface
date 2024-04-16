@@ -194,3 +194,6 @@ body {
   opacity: 0.3;
   /* cursor:not-allowed; */
 }
+.change-chain:hover {
+  background: linear-gradient(96deg, rgba(63, 60, 255, 0.06) 0%, rgba(107, 190, 225, 0.06) 101.71%);
+}
