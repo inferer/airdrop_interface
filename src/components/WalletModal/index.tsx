@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { isMobile } from 'react-device-detect'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
 import usePrevious from '../../hooks/usePrevious'
-import { useWalletModalOpen, useWalletModalToggle } from '../../state/application/hooks'
+import { useShowToast, useWalletModalOpen, useWalletModalToggle } from '../../state/application/hooks'
 
 import Modal from '../Modal'
 import AccountDetails from '../AccountDetails'
@@ -139,6 +139,7 @@ export default function WalletModal({
   const toggleWalletModal = useWalletModalToggle()
 
   const previousAccount = usePrevious(account)
+  const { handleShow } = useShowToast()
 
   // close on connection, when logged out before
   useEffect(() => {
@@ -183,7 +184,7 @@ export default function WalletModal({
     if (connector instanceof InjectedConnector) {
       localStorage.setItem(APP_INFERER_CONNECTOR, 'true')
     }
-    console.log(chainId, 1111)
+    
     if (connector) {
       // if (router.query.chain && !chainId) {
 
@@ -195,6 +196,10 @@ export default function WalletModal({
           const hasSetup = await setupNetwork(chainId, provider)
           if (hasSetup) {
             activate(connector)
+          } else {
+            toggleWalletModal()
+            handleShow({ type: 'error', content: `Invalid chain id`, title: 'Error' })
+            
           }
           // activate(connector) // a little janky...can't use setError because the connector isn't set
         } else {

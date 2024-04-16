@@ -71,13 +71,12 @@ export function useInactiveListener(suppress = false) {
             console.error('Failed to activate after chain changed', error)
           })
         } else {
-          console.log(window.location.href)
           if (router.query.chain) {
             const id = parseInt(chainId, 16)
             const chainInfo = CHAIN_LIST.find(chain => chain.chainId === id)
             if (chainInfo?.value !== router.query.chain) {
               const reg = new RegExp(`chain=${router.query.chain}`)
-              const newUrl = window.location.href.replace(reg, `chain=${chainInfo?.value}`)
+              const newUrl = window.location.href.replace(reg, chainInfo?.value ? `chain=${chainInfo?.value}` : '')
               window.location.replace(newUrl)
             }
           }

@@ -122,9 +122,12 @@ export const SelectChain2: React.FC<{
     >
       <div className="flex justify-between items-center py-3 px-4  h-[48px] text-[14px] rounded-[8px] cursor-pointer change-chain "
         onClick={handleClick}
+        style={{background: showOptions ? 'linear-gradient(96deg, rgba(63, 60, 255, 0.06) 0%, rgba(107, 190, 225, 0.06) 101.71%)' : ''}}
       >
         <div className="flex items-center mr-1">
-          <LazyImage2 src={current.icon || (defaultValue && defaultValue.icon) || '/images/airdrop/chain_local.svg'} />
+          <div className="p-[1px] rounded-[4px] hover:bg-white ">
+            <LazyImage2 src={current.icon || (defaultValue && defaultValue.icon) || '/images/airdrop/chain_local.svg'} className="w-[19px] h-[19px]" />
+          </div>
           {/* <span className={`mr-5 ml-2 ${label === 'Select' ? 'text-[rgba(0,0,0,0.40)]' : ''}`}>{label}</span> */}
         </div>
         
@@ -144,7 +147,7 @@ export const SelectChain2: React.FC<{
         ref={node}
         style={{ height: showOptions ? 'auto' : 0, padding: showOptions ? '0' : 0 }}
         className={`options fixed z-50 bg-white rounded-lg transition-all w-[120px]`}>
-          <div className="overflow-auto scrollbar-container h-full "
+          <div className="overflow-auto scrollbar-container h-full group"
             style={{ height: showOptions ? 'auto' : 0 }}
           >
             {
@@ -156,7 +159,10 @@ export const SelectChain2: React.FC<{
                     handleClickItem(item)
                   }}
                   className="flex items-center text-[14px] font-fmedium h-[44px] px-4 cursor-pointer bg-[rgba(85,123,241,0.02)] hover:bg-[rgba(85,123,241,0.08)]">
-                    <LazyImage2 className="mr-2" src={item.icon || '/images/airdrop/chain_local.svg'} />
+                    <div className="p-[1px] rounded-[4px] group-hover:bg-white mr-2 ">
+                      <LazyImage2 className="w-[19px] h-[19px]" src={item.icon || '/images/airdrop/chain_local.svg'}/>
+                    </div>
+                    
                     {item.label}
                   </div>
               })

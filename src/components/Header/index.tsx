@@ -200,14 +200,15 @@ export default function Header() {
         if (router.query.chain) {
           chain = CHAIN_LIST.find(chain => chain.value === router.query.chain)
         } else {
-          chain = CHAIN_LIST[0]
+          // @ts-ignore
+          chain = {value: ''}
         }
       }
       return chain
     } else if (router.query.chain) {
       return CHAIN_LIST.find(chain => chain.value === router.query.chain)
     } 
-    return CHAIN_LIST[0]
+    return { value: ''}
   }, [router.query, chainId])
 
   return (
@@ -235,9 +236,13 @@ export default function Header() {
           
         </HeaderElement>
         <div className='flex'>
-          <SelectChain2 defaultValue={defaultChain} options={CHAIN_LIST} 
-            onChange={handleOnChainChange}
-          />
+          {
+            defaultChain && defaultChain.value && 
+            <SelectChain2 defaultValue={defaultChain} options={CHAIN_LIST} 
+              onChange={handleOnChainChange}
+            />
+          }
+          
 
         {
           account && loginUserInfo.address && 
