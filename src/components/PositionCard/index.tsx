@@ -60,6 +60,8 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
     !!pair &&
     !!totalPoolTokens &&
     !!userPoolInfererBalance &&
+    pair.reserveOf(pair.token0).greaterThan('0') &&
+    pair.reserveOf(pair.token1).greaterThan('0') &&
     // this condition is a short-circuit in the case where useTokenBalance updates sooner than useTotalSupply
     JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolInfererBalance.raw)
       ? [
@@ -72,6 +74,8 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
     !!pair &&
     !!totalPoolTokens &&
     !!userPoolBalance &&
+    pair.reserveOf(pair.token0).greaterThan('0') &&
+    pair.reserveOf(pair.token1).greaterThan('0') &&
     // this condition is a short-circuit in the case where useTokenBalance updates sooner than useTotalSupply
     JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolBalance.raw)
       ? [

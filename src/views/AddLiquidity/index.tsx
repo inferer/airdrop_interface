@@ -75,7 +75,7 @@ export default function AddLiquidity() {
     error
   } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
   const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
-
+  console.log(pair)
   const isValid = !error
 
   // modal and loading
@@ -172,6 +172,8 @@ export default function AddLiquidity() {
         parsedAmountB.raw.toString(),
         amountsMin[Field.CURRENCY_A].toString(),
         amountsMin[Field.CURRENCY_B].toString(),
+        // '0',
+        // '0',
         account,
         deadlineFromNow
       ]

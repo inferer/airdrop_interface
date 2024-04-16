@@ -25,7 +25,7 @@ const contractList =
   "airdropAssetTreasury": "0x64A11d414D66819e17e8Cbe6A37E7Fd90021C890",
   "factory": "0x3AD4869afcC42f5Ad199914d398b3172c576f413",
   // "router02": "0x06816f66538CB5bf17243F6C404D841e0ac96B69",
-  "router02": "0x97df52b63a4E506fB5d7E2bb231aF552c02b5fa1",
+  "router02": "0x7811A1648e43F1bC207d7DF21B039AE9D2870b91",
   "airdropTokenScoreLogic": "0x07b3419cA340DdB3D813C5e6eCeA5C1085EFC1f2",
   "airdropTokenScore": "0x8DcC7438Ccc3006165783e0fD1C6261CaFC0AA69",
   "airdropManagerLogic": "0xb20F65c1D442ebcebce7C377ea47e480c0aB453C",

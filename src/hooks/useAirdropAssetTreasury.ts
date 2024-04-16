@@ -173,8 +173,9 @@ export function useAirdropAssetTreasury() {
         
         let usdtTokenAddress = getUSDTTokenFromAirToken(airTokenAddress, chainId)
         usdtTokenAddress = usdtTokenAddress === 'ETH' ? ethers.constants.AddressZero : usdtTokenAddress
-        const amount = BigNumber.from((Number(value) * (10 ** airToken.decimals)).toString(10)).toString()
-        console.log(airToken, usdtTokenAddress, BigNumber.from((Number(value) * (10 ** airToken.decimals)).toString(10)).toString())
+        // const amount = BigNumber.from((Number(value) * (10 ** airToken.decimals)).toString(10)).toString()
+        const amount = JSBI.multiply(JSBI.BigInt(parseInt(String(Number(value) * 1000000))), JSBI.BigInt(10 ** (airToken.decimals - 6))).toString()
+        console.log(airToken, usdtTokenAddress, amount)
         console.log(allowance.toString())
         let approved = false
         if (Number(allowance) < Number(amount)) {
@@ -231,7 +232,7 @@ export function useAirdropAssetTreasury() {
           allowance = await tokenContract.allowance(account, spender)
         }
         
-        const amount = JSBI.multiply(JSBI.BigInt(value), JSBI.BigInt(10 ** airToken.decimals)).toString()
+        const amount = JSBI.multiply(JSBI.BigInt(parseInt(String(Number(value) * 1000000))), JSBI.BigInt(10 ** (airToken.decimals - 6))).toString()
         console.log(airToken, amount)
         console.log(allowance.toString())
         let approved = false

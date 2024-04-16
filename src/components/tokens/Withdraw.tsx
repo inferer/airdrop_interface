@@ -72,7 +72,7 @@ const Withdraw = ({
   }, [inputValue, token, currentTokenAddress])
 
   const isActionDisable = useMemo(()=>{
-    let value = parseInt(inputValue);
+    let value = parseFloat(inputValue);
     return !value
   },[inputValue])
 
