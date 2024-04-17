@@ -38,7 +38,7 @@ function ProjectPage () {
       return <CreatePage />
     }
   }
-  if (action === 'AirUSDT') {
+  if (action === 'airAsset') {
     return <AirAssetPage />
   }
   return (
