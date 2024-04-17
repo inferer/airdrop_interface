@@ -250,7 +250,7 @@
   },
   {
     "inputs": [],
-    "name": "getInfererBalance",
+    "name": "getFixedAssetBalance",
     "outputs": [
       {
         "internalType": "uint256",
@@ -269,6 +269,19 @@
         "internalType": "address[]",
         "name": "_pairs",
         "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getPoolAssetBalance",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

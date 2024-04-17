@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import ERC20_INTERFACE from '../../constants/abis/erc20'
+import ERC20_INTERFACE, { InfererAirUSDT_INTERFACE } from '../../constants/abis/erc20'
 import InfererPair_INTERFACE from '../../constants/abis/infererPair'
 import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import { useActiveWeb3React } from '../../hooks'
@@ -81,6 +81,39 @@ export function useTokenBalancesWithLoadingIndicator(
     anyLoading
   ]
 }
+export function useTokenInfererBalancesWithLoadingIndicator(
+  address?: string,
+  tokens?: (Token | undefined)[]
+): [{ [tokenAddress: string]: TokenAmount | undefined }, boolean] {
+  const validatedTokens: Token[] = useMemo(
+    () => tokens?.filter((t?: Token): t is Token => isAddress(t?.address) !== false) ?? [],
+    [tokens]
+  )
+
+  const validatedTokenAddresses = useMemo(() => validatedTokens.map(vt => vt.address), [validatedTokens])
+
+  const balances = useMultipleContractSingleData(validatedTokenAddresses, InfererAirUSDT_INTERFACE, 'getFixedAssetBalance', [])
+
+  const anyLoading: boolean = useMemo(() => balances.some(callState => callState.loading), [balances])
+
+  return [
+    useMemo(
+      () =>
+        address && validatedTokens.length > 0
+          ? validatedTokens.reduce<{ [tokenAddress: string]: TokenAmount | undefined }>((memo, token, i) => {
+              const value = balances?.[i]?.result?.[0]
+              const amount = value ? JSBI.BigInt(value.toString()) : undefined
+              if (amount) {
+                memo[token.address] = new TokenAmount(token, amount)
+              }
+              return memo
+            }, {})
+          : {},
+      [address, validatedTokens, balances]
+    ),
+    anyLoading
+  ]
+}
 export function usePairInfererBalancesWithLoadingIndicator(
   address?: string,
   tokens?: (Token | undefined)[]
@@ -124,6 +157,13 @@ export function useTokenBalances(
   tokens?: (Token | undefined)[]
 ): { [tokenAddress: string]: TokenAmount | undefined } {
   return useTokenBalancesWithLoadingIndicator(address, tokens)[0]
+}
+
+export function useTokenInfererBalances(
+  address?: string,
+  tokens?: (Token | undefined)[]
+): { [tokenAddress: string]: TokenAmount | undefined } {
+  return useTokenInfererBalancesWithLoadingIndicator(address, tokens)[0]
 }
 
 export function usePairInfererBalances(
@@ -173,6 +213,33 @@ export function useCurrencyBalance(account?: string, currency?: Currency): Curre
   return useCurrencyBalances(account, [currency])[0]
 }
 
+export function useCurrencyInfererBalances(
+  account?: string,
+  currencies?: (Currency | undefined)[]
+): (CurrencyAmount | undefined)[] {
+  const tokens = useMemo(() => currencies?.filter((currency): currency is Token => currency instanceof Token) ?? [], [
+    currencies
+  ])
+
+  const tokenBalances = useTokenInfererBalances(account, tokens)
+  const containsETH: boolean = useMemo(() => currencies?.some(currency => currency === ETHER) ?? false, [currencies])
+  const ethBalance = useETHBalances(containsETH ? [account] : [])
+  return useMemo(
+    () =>
+      currencies?.map(currency => {
+        if (!account || !currency) return undefined
+        // if (currency.symbol === 'Air-ETH') return ethBalance[account]
+        if (currency instanceof Token) return tokenBalances[currency.address]
+        if (currency === ETHER) return ethBalance[account]
+        return undefined
+      }) ?? [],
+    [account, currencies, ethBalance, tokenBalances]
+  )
+}
+
+export function useCurrencyInfererBalance(account?: string, currency?: Currency): CurrencyAmount | undefined {
+  return useCurrencyInfererBalances(account, [currency])[0]
+}
 export function useCurrencyBalanceUSDT(account?: string, currencyAirId?: string, payInputCreate?: boolean): CurrencyAmount | undefined {
   const { chainId } = useActiveWeb3React()
   const currencyId = currencyAirId && getUSDTTokenFromAirToken(currencyAirId, chainId)

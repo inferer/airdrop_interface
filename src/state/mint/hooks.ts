@@ -8,7 +8,7 @@ import { useActiveWeb3React } from '../../hooks'
 import { wrappedCurrency, wrappedCurrencyAmount } from '../../utils/wrappedCurrency'
 import { AppDispatch, AppState } from '../index'
 import { tryParseAmount } from '../swap/hooks'
-import { useCurrencyBalances } from '../wallet/hooks'
+import { useCurrencyBalance, useCurrencyBalances, useCurrencyInfererBalance } from '../wallet/hooks'
 import { Field, typeInput } from './actions'
 
 const ZERO = JSBI.BigInt(0)
@@ -19,7 +19,8 @@ export function useMintState(): AppState['mint'] {
 
 export function useDerivedMintInfo(
   currencyA: Currency | undefined,
-  currencyB: Currency | undefined
+  currencyB: Currency | undefined,
+  isLP0?: boolean
 ): {
   dependentField: Field
   currencies: { [field in Field]?: Currency }
@@ -59,9 +60,13 @@ export function useDerivedMintInfo(
     currencies[Field.CURRENCY_A],
     currencies[Field.CURRENCY_B]
   ])
+
+  const balanceA = isLP0 ? useCurrencyInfererBalance(account ?? undefined, currencies[Field.CURRENCY_A]) : useCurrencyBalance(account ?? undefined, currencies[Field.CURRENCY_A])
+  const balanceB = useCurrencyBalance(account ?? undefined, currencies[Field.CURRENCY_B])
+
   const currencyBalances: { [field in Field]?: CurrencyAmount } = {
-    [Field.CURRENCY_A]: balances[0],
-    [Field.CURRENCY_B]: balances[1]
+    [Field.CURRENCY_A]: balanceA,
+    [Field.CURRENCY_B]: balanceB
   }
 
   // amounts

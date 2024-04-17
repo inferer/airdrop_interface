@@ -36,6 +36,7 @@ import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
 import { currencyId } from '../../utils/currencyId'
 import { PoolPriceBar } from './PoolPriceBar'
 import { useRouter } from 'next/router'
+import LP0CurrencyInputPanel from '../../components/CurrencyInputPanel/AddLP0'
 
 export default function AddLiquidity() {
   const { account, chainId, library } = useActiveWeb3React()
@@ -43,7 +44,7 @@ export default function AddLiquidity() {
   const router = useRouter()
   // const currencyIdA = '0x300f6B06211F490c2A5Fb5c7f634A3f6D636E355'
   // const currencyIdB = AIRLABEL_TOKEN_LIST[0].address
-  const isLP0 = router.query.lp && router.query.lp === '0'
+  const isLP0 = router.query.lp ? router.query.lp === '0' : undefined
   const currencyIdA = router.query.address && router.query.address[0]
   const currencyIdB = router.query.address && router.query.address[1]
   const currencyA = useCurrency(currencyIdA)
@@ -73,7 +74,7 @@ export default function AddLiquidity() {
     liquidityMinted,
     poolTokenPercentage,
     error
-  } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
+  } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined, isLP0 ?? undefined)
   const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
   const isValid = !error
   // modal and loading
@@ -286,31 +287,51 @@ export default function AddLiquidity() {
       const newCurrencyIdA = currencyId(currencyA)
       if (newCurrencyIdA === currencyIdB) {
         // history.push(`/add/${currencyIdB}/${currencyIdA}`)
-        router.push(`/add/${currencyIdB}/${currencyIdA}`)
+        if (isLP0) {
+          router.push(`/add/${currencyIdB}/${currencyIdA}?lp=0`)
+        } else {
+          router.push(`/add/${currencyIdB}/${currencyIdA}`)
+        }
+        
       } else {
         // history.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
-        router.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
+        if (isLP0) {
+          router.push(`/add/${newCurrencyIdA}/${currencyIdB}?lp=0`)
+        } else {
+          router.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
+        }
+        
       }
     },
-    [currencyIdB, history, currencyIdA]
+    [currencyIdB, history, currencyIdA, isLP0]
   )
   const handleCurrencyBSelect = useCallback(
     (currencyB: Currency) => {
       const newCurrencyIdB = currencyId(currencyB)
-      if (currencyIdA === newCurrencyIdB) {
-        if (currencyIdB) {
-          // history.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
-          router.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
+      if (isLP0) {
+        if (currencyIdA === newCurrencyIdB) {
+          if (currencyIdB) {
+            router.push(`/add/${currencyIdB}/${newCurrencyIdB}?lp=0`)
+          } else {
+            router.push(`/add/${newCurrencyIdB}?lp=0`)
+          }
         } else {
-          // history.push(`/add/${newCurrencyIdB}`)
-          router.push(`/add/${newCurrencyIdB}`)
+          router.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}?lp=0`)
         }
       } else {
-        // history.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
-        router.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
+        if (currencyIdA === newCurrencyIdB) {
+          if (currencyIdB) {
+            router.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
+          } else {
+            router.push(`/add/${newCurrencyIdB}`)
+          }
+        } else {
+          router.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
+        }
       }
+      
     },
-    [currencyIdA, history, currencyIdB]
+    [currencyIdA, history, currencyIdB, isLP0]
   )
 
   const handleDismissConfirmation = useCallback(() => {
@@ -360,18 +381,34 @@ export default function AddLiquidity() {
                 </BlueCard>
               </ColumnCenter>
             )}
-            <CurrencyInputPanel
-              value={formattedAmounts[Field.CURRENCY_A]}
-              onUserInput={onFieldAInput}
-              onMax={() => {
-                onFieldAInput(maxAmounts[Field.CURRENCY_A]?.toExact() ?? '')
-              }}
-              onCurrencySelect={handleCurrencyASelect}
-              showMaxButton={!atMaxAmounts[Field.CURRENCY_A]}
-              currency={currencies[Field.CURRENCY_A]}
-              id="add-liquidity-input-tokena"
-              showCommonBases={false}
-            />
+            {
+              isLP0 ?
+                <LP0CurrencyInputPanel 
+                  value={formattedAmounts[Field.CURRENCY_A]}
+                  onUserInput={onFieldAInput}
+                  onMax={(maxAmount) => {
+                    onFieldAInput(maxAmount ?? maxAmounts[Field.CURRENCY_A]?.toExact() ?? '')
+                  }}
+                  onCurrencySelect={handleCurrencyASelect}
+                  showMaxButton={!atMaxAmounts[Field.CURRENCY_A]}
+                  currency={currencies[Field.CURRENCY_A]}
+                  id="add-liquidity-input-tokena"
+                  showCommonBases={false}
+                /> : 
+                <CurrencyInputPanel
+                  value={formattedAmounts[Field.CURRENCY_A]}
+                  onUserInput={onFieldAInput}
+                  onMax={() => {
+                    onFieldAInput(maxAmounts[Field.CURRENCY_A]?.toExact() ?? '')
+                  }}
+                  onCurrencySelect={handleCurrencyASelect}
+                  showMaxButton={!atMaxAmounts[Field.CURRENCY_A]}
+                  currency={currencies[Field.CURRENCY_A]}
+                  id="add-liquidity-input-tokena"
+                  showCommonBases={false}
+                />
+            }
+            
             <ColumnCenter>
               <Plus size="16" color={theme.text2} />
             </ColumnCenter>

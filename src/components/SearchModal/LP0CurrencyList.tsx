@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
 import { useSelectedTokenList, WrappedTokenInfo } from '../../state/lists/hooks'
 import { useAddUserToken, useIsUserAction, useRemoveUserAddedToken } from '../../state/user/hooks'
-import { useCurrencyBalance, useCurrencyBalanceUSDT } from '../../state/wallet/hooks'
+import { useCurrencyBalance, useCurrencyBalanceUSDT, useCurrencyInfererBalance, useCurrencyInfererBalances } from '../../state/wallet/hooks'
 import { LinkStyledButton, TYPE } from '../../theme'
 import { useIsUserAddedToken } from '../../hooks/Tokens'
 import Column from '../Column'
@@ -104,9 +104,7 @@ function CurrencyRow({
 
   const { account, chainId } = useActiveWeb3React()
   const key = currencyKey(currency)
-  const balance = useCurrencyBalance(account ?? undefined, currency)
-  // @ts-ignore
-  const balanceUSDT = useCurrencyBalanceUSDT(account ?? undefined, currency.address, payInputCreate)
+  const balance = useCurrencyInfererBalance(account ?? undefined, currency)
 
   // only show add or remove buttons if not on selected list
   return (
@@ -157,9 +155,7 @@ function CurrencyRow({
       <TokenTags currency={currency} />
       <RowFixed style={{ justifySelf: 'flex-end' }}>
         {
-          payInputCreate 
-            ? (balanceUSDT ? <Balance balance={balanceUSDT} /> : account ? (isAssetToken ? <LoadingProjectBalance /> : <LoadingUserBalance /> ) : null)
-            : (balance ? <Balance balance={balance} /> : account ? (isAssetToken ? <LoadingProjectBalance /> : <LoadingUserBalance /> ) : null)
+          (balance ? <Balance balance={balance} /> : account ? (isAssetToken ? <LoadingProjectBalance /> : <LoadingUserBalance /> ) : null)
         }
         {/* {balance ? <Balance balance={balance} /> : account ? <Loader /> : null} */}
       </RowFixed>
@@ -167,7 +163,7 @@ function CurrencyRow({
   )
 }
 
-export default function CurrencyList({
+export default function LP0CurrencyList({
   height,
   currencies,
   selectedCurrency,

@@ -48,10 +48,15 @@ const AirUSDTTokenItem = ({
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">InfererBalance</div>
+          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">FixedAssetBalance</div>
           <div className="text-[18px] font-fmedium flex items-center">
-            {formatStringNumber(token.infererBalance) }
-            {/* <LazyImage src="/images/airdrop/lock.svg" className="ml-[3px]" /> */}
+            {formatStringNumber(token.fixedAssetBalance) }
+          </div>
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">PoolAssetBalance</div>
+          <div className="text-[18px] font-fmedium flex items-center">
+            {formatStringNumber(token.poolAssetBalance) }
           </div>
         </div>
         

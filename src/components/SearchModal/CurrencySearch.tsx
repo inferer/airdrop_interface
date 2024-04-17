@@ -18,6 +18,7 @@ import { useIsRoleProjectMode, useIsUserAction } from '../../state/user/hooks'
 import { useLocation } from '../../hooks/useLocation'
 import { LazyImage4 } from '../LazyImage'
 import { TEL_URL } from '../../constants'
+import LP0CurrencyList from './LP0CurrencyList'
 
 interface CurrencySearchProps {
   isOpen: boolean
@@ -46,7 +47,7 @@ export function CurrencySearch({
   const isProjectMode  = useIsRoleProjectMode()
   const location = useLocation()
   const isSwap = location.query && location.query.action && (location.query.action[0] === 'swap' || location.query.action[0] === 'collect')
-
+  const isAddLP0 = location.pathname === "/add/[[...address]]" && location.query.lp === '0'
   const fixedList = useRef<FixedSizeList>()
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [invertSearchOrder, setInvertSearchOrder] = useState<boolean>(false)
@@ -210,17 +211,32 @@ export function CurrencySearch({
       <div style={{ flex: '1' }} className='px-[30px]' >
         {/* <AutoSizer disableWidth defaultHeight={346}>
           {({ height }) => ( */}
-            <CurrencyList
-              isAssetToken={isAssetToken}
-              payInput={payInput}
-              height={346}
-              showETH={showETH}
-              currencies={filteredSortedTokens}
-              onCurrencySelect={handleCurrencySelect}
-              otherCurrency={otherSelectedCurrency}
-              selectedCurrency={selectedCurrency}
-              fixedListRef={fixedList}
-            />
+            {
+              isAddLP0 && payInput ? 
+              <LP0CurrencyList
+                isAssetToken={isAssetToken}
+                payInput={payInput}
+                height={346}
+                showETH={showETH}
+                currencies={filteredSortedTokens}
+                onCurrencySelect={handleCurrencySelect}
+                otherCurrency={otherSelectedCurrency}
+                selectedCurrency={selectedCurrency}
+                fixedListRef={fixedList}
+              /> :
+                <CurrencyList
+                  isAssetToken={isAssetToken}
+                  payInput={payInput}
+                  height={346}
+                  showETH={showETH}
+                  currencies={filteredSortedTokens}
+                  onCurrencySelect={handleCurrencySelect}
+                  otherCurrency={otherSelectedCurrency}
+                  selectedCurrency={selectedCurrency}
+                  fixedListRef={fixedList}
+                />
+            }
+            
           {/* )}
         </AutoSizer> */}
       </div>

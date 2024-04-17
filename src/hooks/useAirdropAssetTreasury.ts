@@ -86,7 +86,14 @@ export const getAirUSDTInfo = async (multi: Contract, account: string, tokenList
   tokenList.map(token => {
     calls.push({
       address: token.address,
-      name: 'getInfererBalance',
+      name: 'getFixedAssetBalance',
+      params: []
+    })
+  })
+  tokenList.map(token => {
+    calls.push({
+      address: token.address,
+      name: 'getPoolAssetBalance',
       params: []
     })
   })
@@ -97,11 +104,13 @@ export const getAirUSDTInfo = async (multi: Contract, account: string, tokenList
     const temp = new TokenAmount(tokenList[index], JSBI.BigInt(item.toString()))
     const temp2 = new TokenAmount(tokenList[index], JSBI.BigInt(res[index + tokenListLen].toString()))
     const temp3 = new TokenAmount(tokenList[index], JSBI.BigInt(res[index + tokenListLen * 2].toString()))
+    const temp4 = new TokenAmount(tokenList[index], JSBI.BigInt(res[index + tokenListLen * 3].toString()))
     return {
       ...tokenList[index],
       totalSupply: temp.toSignificant(6),
       balanceOf: temp2.toSignificant(6),
-      infererBalance: temp3.toSignificant(6),
+      fixedAssetBalance: temp3.toSignificant(6),
+      poolAssetBalance: temp4.toSignificant(6),
     }
   })
 }
