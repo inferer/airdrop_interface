@@ -60,8 +60,9 @@ export function useDerivedMintInfo(
     currencies[Field.CURRENCY_A],
     currencies[Field.CURRENCY_B]
   ])
-
-  const balanceA = isLP0 ? useCurrencyInfererBalance(account ?? undefined, currencies[Field.CURRENCY_A]) : useCurrencyBalance(account ?? undefined, currencies[Field.CURRENCY_A])
+  const balanceA_LP0 = useCurrencyInfererBalance(account ?? undefined, currencies[Field.CURRENCY_A])
+  const balanceA_LP1 = useCurrencyBalance(account ?? undefined, currencies[Field.CURRENCY_A])
+  const balanceA = isLP0 ? balanceA_LP0 : balanceA_LP1 
   const balanceB = useCurrencyBalance(account ?? undefined, currencies[Field.CURRENCY_B])
 
   const currencyBalances: { [field in Field]?: CurrencyAmount } = {
