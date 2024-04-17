@@ -36,13 +36,13 @@ async function fetchChunk(
     ;[resultsBlockNumber, returnData] = await multicallContract.aggregate(chunk.map(obj => [obj.address, obj.callData]))
   } catch (error) {
     console.debug('Failed to fetch chunk inside retry', error)
-    throw error
+    // throw error
   }
   // if (resultsBlockNumber.toNumber() < minBlockNumber) {
   //   // console.debug(`Fetched results for old block number: ${resultsBlockNumber.toString()} vs. ${minBlockNumber}`)
   //   throw new RetryableError('Fetched for old block number')
   // }
-  return { results: returnData, blockNumber: resultsBlockNumber.toNumber() }
+  return { results: returnData, blockNumber: resultsBlockNumber?.toNumber() || 0 }
 }
 
 /**
@@ -116,7 +116,7 @@ export default function Updater(): null {
   // wait for listeners to settle before triggering updates
   const debouncedListeners = useDebounce(state.callListeners, 100)
   const latestBlockNumber = useBlockNumber()
-  const { chainId } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
   const multicallContract = useMulticallContract()
   const cancellations = useRef<{ blockNumber: number; cancellations: any[] }>()
 
@@ -133,7 +133,7 @@ export default function Updater(): null {
   ])
 
   useEffect(() => {
-    if (!latestBlockNumber || !chainId || !multicallContract) return
+    if (!account || !latestBlockNumber || !chainId || !multicallContract) return
 
     const outdatedCallKeys: string[] = JSON.parse(serializedOutdatedCallKeys)
     if (outdatedCallKeys.length === 0) return
@@ -154,13 +154,13 @@ export default function Updater(): null {
     cancellations.current = {
       blockNumber: latestBlockNumber,
       cancellations: chunkedCalls.map((chunk, index) => {
-        fetchChunk(multicallContract, chunk, latestBlockNumber)
+        chainId && fetchChunk(multicallContract, chunk, latestBlockNumber)
           .then(({ results: returnData, blockNumber: fetchBlockNumber }) => {
             cancellations.current = { cancellations: [], blockNumber: latestBlockNumber }
 
             // accumulates the length of all previous indices
             const firstCallKeyIndex = chunkedCalls.slice(0, index).reduce<number>((memo, curr) => memo + curr.length, 0)
-            const lastCallKeyIndex = firstCallKeyIndex + returnData.length
+            const lastCallKeyIndex = firstCallKeyIndex + returnData?.length
 
             dispatch(
               updateMulticallResults({

@@ -6,6 +6,7 @@ import CompletedPage from "../../views/Project/Completed";
 import InviteCodePage from "../../views/InviteCode";
 import AirdropDetails from "../../views/Collect/AirdropDetails";
 import CreatePage from "../../views/Create";
+import AirAssetPage from "../../views/AirAsset";
 
 function ProjectPage () {
   const router = useRouter()
@@ -36,6 +37,9 @@ function ProjectPage () {
     if (action1) {
       return <CreatePage />
     }
+  }
+  if (action === 'AirUSDT') {
+    return <AirAssetPage />
   }
   return (
     <IndexPage />

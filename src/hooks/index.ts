@@ -64,10 +64,10 @@ export function useInactiveListener(suppress = false) {
     const { ethereum } = window
 
     if (ethereum && ethereum.on && !error && !suppress) {
-      const handleChainChanged = (chainId: string) => {
+      const handleChainChanged = async (chainId: string) => {
         if (!active) {
           // eat errors
-          activate(injected, undefined, true).catch(error => {
+          activate(await injected.getProvider(), undefined, true).catch(error => {
             console.error('Failed to activate after chain changed', error)
           })
         } else {

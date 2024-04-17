@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux"
 import { useActiveWeb3React } from "."
 import { useAirdropAssetTreasuryContract, useMulticallContract } from "./useContract"
 import { useCallback, useState } from "react"
-import { useAirLabelAllTokens, useAlgLabelAllTokens, useUSDTAllTokens } from "./Tokens"
+import { useAirLabelAllTokens, useAlgLabelAllTokens, useAllTokens, useUSDTAllTokens } from "./Tokens"
 import { AirdropAssetTreasury_NETWORKS, AirdropAssetTreasury_ABI } from "../constants/airdropAssetTreasury"
 import { BigNumber, Contract, ethers } from "ethers"
 import multicall from "../utils/multicall"
@@ -14,6 +14,7 @@ import { AddressZero_ETH } from "../constants"
 import { getUSDTTokenFromAirToken } from "../utils/getTokenList"
 import { getERC20Contract, isAddress } from "../utils"
 import { useShowToast } from '../state/application/hooks'
+import { InfererAirUSDT_ABI } from '../constants/abis/erc20'
 
 
 export const getAirdropAssetTreasuryAddress = (chainId: number) => {
@@ -65,6 +66,45 @@ export const getProjectUSDTLocked = async (multi: Contract, account: string, tok
   })
 }
 
+export const getAirUSDTInfo = async (multi: Contract, account: string, tokenList: Token[], chainId: number) => {
+
+  const calls: any[] = []
+  tokenList.map(token => {
+    calls.push({
+      address: token.address,
+      name: 'totalSupply',
+      params: []
+    })
+  })
+  tokenList.map(token => {
+    calls.push({
+      address: token.address,
+      name: 'balanceOf',
+      params: [account]
+    })
+  })
+  tokenList.map(token => {
+    calls.push({
+      address: token.address,
+      name: 'getInfererBalance',
+      params: []
+    })
+  })
+
+  const res = await multicall(multi, InfererAirUSDT_ABI, calls)
+  const tokenListLen = tokenList.length
+  return (res || []).slice(0, tokenListLen).map((item: any, index: number) => {
+    const temp = new TokenAmount(tokenList[index], JSBI.BigInt(item.toString()))
+    const temp2 = new TokenAmount(tokenList[index], JSBI.BigInt(res[index + tokenListLen].toString()))
+    const temp3 = new TokenAmount(tokenList[index], JSBI.BigInt(res[index + tokenListLen * 2].toString()))
+    return {
+      ...tokenList[index],
+      totalSupply: temp.toSignificant(6),
+      balanceOf: temp2.toSignificant(6),
+      infererBalance: temp3.toSignificant(6),
+    }
+  })
+}
 export const getUserAlgTokenLocked = async (multi: Contract, account: string, tokenList: Token[], chainId: number) => {
 
   const calls: any[] = []
@@ -118,8 +158,20 @@ export function useAirdropAssetTreasury() {
   const airLabelAllTokens = useAirLabelAllTokens()
   const algLabelAllTokens = useAlgLabelAllTokens()
   const usdtAllTokens = useUSDTAllTokens()
+  const airUSDTAllTokens = useAllTokens()
 
   const airdropAssetTreasury = useAirdropAssetTreasuryContract()
+
+  const handleGetAirUSDTInfo = useCallback(async (account: string) => {
+    const usdtTokenList = Object.values(airUSDTAllTokens)
+    if (account && multi && usdtTokenList.length > 0 && chainId) {
+      const list = await getAirUSDTInfo(multi, account, [...usdtTokenList], chainId)
+      console.log(list)
+      return list
+      // dispatch(updateProjectUSDTLocked({ tokenLockedList: list }))
+    }
+    return []
+  }, [multi, airUSDTAllTokens, chainId])
 
   const handleGetProjectLabelLocked = useCallback(async (account: string) => {
     const airTokenList = Object.values(airLabelAllTokens)
@@ -273,7 +325,8 @@ export function useAirdropAssetTreasury() {
     handleGetDepositBalance,
     handleUserWithdraw,
     handleUserDeposit,
-    withdrawStatus
+    withdrawStatus,
+    handleGetAirUSDTInfo
   }
 
 }
