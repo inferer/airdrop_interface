@@ -126,8 +126,8 @@ export const SelectChain2: React.FC<{
       >
         <div className="flex items-center mr-1">
           <div className={`
-            rounded-[4px] group-hover:bg-white 
-            ${showOptions ? 'bg-white' : ''}
+            rounded-[4px] 
+            ${showOptions ? '' : ''}
           `}>
             <LazyImage2 src={current.icon || (defaultValue && defaultValue.icon) || '/images/airdrop/chain_local.svg'} className="w-[20px] h-[20px]" />
           </div>
@@ -162,7 +162,7 @@ export const SelectChain2: React.FC<{
                     handleClickItem(item)
                   }}
                   className="flex items-center text-[14px] font-fmedium h-[44px] px-4 cursor-pointer bg-[rgba(85,123,241,0.02)] hover:bg-[rgba(85,123,241,0.08)]">
-                    <div className="rounded-[4px] group-hover:bg-white mr-2 ">
+                    <div className="rounded-[4px] mr-2 ">
                       <LazyImage2 className="w-[20px] h-[20px]" src={item.icon || '/images/airdrop/chain_local.svg'}/>
                     </div>
                     
