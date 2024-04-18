@@ -105,12 +105,13 @@ export const getAirUSDTInfo = async (multi: Contract, account: string, tokenList
     const temp2 = new TokenAmount(tokenList[index], JSBI.BigInt(res[index + tokenListLen].toString()))
     const temp3 = new TokenAmount(tokenList[index], JSBI.BigInt(res[index + tokenListLen * 2].toString()))
     const temp4 = new TokenAmount(tokenList[index], JSBI.BigInt(res[index + tokenListLen * 3].toString()))
+    console.log(item.toString())
     return {
       ...tokenList[index],
-      totalSupply: temp.toSignificant(6),
-      balanceOf: temp2.toSignificant(6),
-      fixedAssetBalance: temp3.toSignificant(6),
-      poolAssetBalance: temp4.toSignificant(6),
+      totalSupply: temp.toSignificant(18),
+      balanceOf: temp2.toSignificant(18),
+      fixedAssetBalance: temp3.toSignificant(18),
+      poolAssetBalance: temp4.toSignificant(18),
     }
   })
 }
@@ -236,7 +237,6 @@ export function useAirdropAssetTreasury() {
         usdtTokenAddress = usdtTokenAddress === 'ETH' ? ethers.constants.AddressZero : usdtTokenAddress
         // const amount = BigNumber.from((Number(value) * (10 ** airToken.decimals)).toString(10)).toString()
         const amount = JSBI.multiply(JSBI.BigInt(parseInt(String(Number(value) * 1000000))), JSBI.BigInt(10 ** (airToken.decimals - 6))).toString()
-        console.log(airToken, usdtTokenAddress, amount)
         console.log(allowance.toString())
         let approved = false
         if (Number(allowance) < Number(amount)) {
@@ -294,7 +294,6 @@ export function useAirdropAssetTreasury() {
         }
         
         const amount = JSBI.multiply(JSBI.BigInt(parseInt(String(Number(value) * 1000000))), JSBI.BigInt(10 ** (airToken.decimals - 6))).toString()
-        console.log(airToken, amount)
         console.log(allowance.toString())
         let approved = false
         if (Number(allowance) < Number(amount) && tokenContract) {
