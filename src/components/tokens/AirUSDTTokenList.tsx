@@ -54,7 +54,7 @@ const AirUSDTTokenItem = ({
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">PoolAssetBalance</div>
+          <div className="text-[rgba(0,0,0,0.4)] text-[12px] font-fmedium">PoolFixedAssetBalance</div>
           <div className="text-[18px] font-fmedium flex items-center">
             {formatStringNumber(token.poolAssetBalance) }
           </div>
