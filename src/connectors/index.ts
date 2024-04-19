@@ -14,6 +14,7 @@ export const APP_INFERER_CONNECTOR = 'APP_INFERER_CONNECTOR'
 
 export const BASE_BSC_SCAN_URLS = {
   [ChainId.MAINNET]: 'https://testnet.bscscan.com',
+  [ChainId.ARBITRUM]: 'https://arbiscan.io',
   [ChainId.SEPOLIA]: 'https://sepolia-explorer.arbitrum.io',
   [ChainId.LOCAL]: 'https://bscscan.com',
 }
@@ -24,9 +25,13 @@ export const BSC_RPC_URLS = [
   'https://bsc-dataseed.binance.org'
 ]
 
+export const BSC_RPC_URLS_ABITRUM = [
+  'https://arbitrum.llamarpc.com',
+  'https://arb1.arbitrum.io/rpc',
+]
+
 export const BSC_RPC_URLS_SEPOLIA = [
   'https://public.stackup.sh/api/v1/node/arbitrum-sepolia',
-
 ]
 
 export const BSC_RPC_URLS_LOCAL = [
@@ -48,7 +53,7 @@ export function getNetworkLibrary(): Web3Provider {
 }
 
 export const injected = new InjectedConnector({
-  supportedChainIds: [421614, 1337]
+  supportedChainIds: [42161, 421614, 1337]
 })
 
 // mainnet only
@@ -64,6 +69,11 @@ const NETWORK_CONFIG: any = {
     name: 'BNB Smart Chain Mainnet',
     scanURL: BASE_BSC_SCAN_URLS[ChainId.MAINNET],
     rpcUrls: BSC_RPC_URLS
+  },
+  [ChainId.ARBITRUM]: {
+    name: 'Arbitrum One',
+    scanURL: BASE_BSC_SCAN_URLS[ChainId.ARBITRUM],
+    rpcUrls: BSC_RPC_URLS_ABITRUM
   },
   [ChainId.SEPOLIA]: {
     name: 'Airdrop Network',

@@ -33,6 +33,7 @@ export type TokenAddressMap = Readonly<{ [chainId in ChainId]: Readonly<{ [token
  */
 const EMPTY_LIST: TokenAddressMap = {
   [ChainId.LOCAL]: {},
+  [ChainId.ARBITRUM]: {},
   [ChainId.SEPOLIA]: {},
   [ChainId.MAINNET]: {}
 }
