@@ -40,7 +40,7 @@ export const BSC_RPC_URLS_LOCAL = [
 
 export const network = new NetworkConnector({
   urls: { 
-    [ChainId.MAINNET]: BSC_RPC_URLS[0], 
+    [ChainId.ARBITRUM]: BSC_RPC_URLS_ABITRUM[0], 
     [ChainId.SEPOLIA]: BSC_RPC_URLS_SEPOLIA[0], 
     [ChainId.LOCAL]: BSC_RPC_URLS_LOCAL[0], 
   },
