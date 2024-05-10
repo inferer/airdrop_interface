@@ -211,7 +211,7 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
   const router = useRouter()
   const [ isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
   const { userAction, setUserAction }  = useUserAction()
-  const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect } = useIsUserAction()
+  const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect, isProjectCampaign } = useIsUserAction()
 
   const handleTab = useCallback((action: string) => {
     router.push(action)
@@ -231,7 +231,7 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
       {
         isProjectMode ? (
           <>
-            <StyledNavLink2 id={`create-btn-click`} className={isProjectCreate ?  'airdrop' : ''}
+            <StyledNavLink2 id={`create-btn-click`} className={isProjectCreate && !isProjectCampaign ?  'airdrop' : ''}
               onClick={() => handleTab('/project/create')}
             >
               {'Create'}
@@ -240,6 +240,11 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
               onClick={() => handleTab('/project/swap')}
             >
               {'Swap'}
+            </StyledNavLink2>
+            <StyledNavLink2 id={`swap-btn-click`} className={isProjectCampaign ? 'airdrop' : ''}
+              onClick={() => handleTab('/project/campaign')}
+            >
+              {'Campaign'}
             </StyledNavLink2>
             
           </>

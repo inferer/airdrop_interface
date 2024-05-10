@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const path = require('path')
+const removeImports = require('next-remove-imports')();
 
 const envConfig = {
   development: {
@@ -62,4 +63,4 @@ const nextConfig = {
 
 // http://49.234.51.249:8792
 
-module.exports = nextConfig
+module.exports = removeImports(nextConfig)

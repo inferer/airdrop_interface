@@ -6,6 +6,7 @@ import CompletedPage from "../../views/Project/Completed";
 import InviteCodePage from "../../views/InviteCode";
 import AirdropDetails from "../../views/Collect/AirdropDetails";
 import CreatePage from "../../views/Create";
+import CampaignPage from "../../views/Campaign";
 import AirAssetPage from "../../views/AirAsset";
 
 function ProjectPage () {
@@ -40,6 +41,11 @@ function ProjectPage () {
   }
   if (action === 'airAsset') {
     return <AirAssetPage />
+  }
+  if (action === 'campaign') {
+    if (action1) {
+      return <CampaignPage />
+    }
   }
   return (
     <IndexPage />

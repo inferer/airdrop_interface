@@ -285,7 +285,7 @@ export default function Swap() {
   ])
 
   const inputTokens = useInputTokens()
-  const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect } = useIsUserAction()
+  const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect, isProjectCampaign } = useIsUserAction()
   useEffect(() => {
     if (inputTokens[0]) {
       onCurrencySelection(Field.INPUT, inputTokens[0])
@@ -293,13 +293,16 @@ export default function Swap() {
   }, [inputTokens, onCurrencySelection])
 
   const handleAction = useCallback(() => {
-    if (isProjectCreate) {
+    if (isProjectCreate && !isProjectCampaign) {
       router.push('/project/create/' + currencies[Field.OUTPUT]?.symbol?.slice(4).toLowerCase())
+    }
+    if (isProjectCampaign) {
+      router.push('/project/campaign/' + currencies[Field.OUTPUT]?.symbol?.slice(4).toLowerCase())
     }
     if (isUserCollect) {
       router.push('/user/collect')
     }
-  }, [isProjectCreate, isUserCollect, currencies])
+  }, [isProjectCreate, isUserCollect, currencies, isProjectCampaign])
 
   useEffect(() => {
     onUserInput(Field.INPUT, '')
@@ -480,7 +483,7 @@ export default function Swap() {
               <ButtonSwap
                 onClick={() => {
                   if (disabled) return
-                  if (isProjectCreate) {
+                  if (isProjectCreate || isProjectCampaign) {
                     handleAction()
                     return
                   }

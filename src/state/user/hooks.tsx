@@ -86,6 +86,9 @@ export function useGetUserAction() {
       if (action === 'create') {
         return UserAction.CREATE
       }
+      if (action === 'campaign') {
+        return UserAction.PROJECT_CAMPAIGN
+      }
     } else {
       if (action === 'swap') {
         return UserAction.USER_SWAP
@@ -107,7 +110,7 @@ export function useIsUserAction() {
   }, [userAction])
 
   const isProjectCreate = useMemo(() => {
-    return userAction === UserAction.CREATE
+    return userAction === UserAction.CREATE || userAction === UserAction.PROJECT_CAMPAIGN
   }, [userAction])
 
   const isUserSwap = useMemo(() => {
@@ -118,11 +121,16 @@ export function useIsUserAction() {
     return userAction === UserAction.USER_COLLECT
   }, [userAction])
 
+  const isProjectCampaign = useMemo(() => {
+    return userAction === UserAction.PROJECT_CAMPAIGN
+  }, [userAction])
+
   return {
     isProjectSwap,
     isProjectCreate,
     isUserSwap,
-    isUserCollect
+    isUserCollect,
+    isProjectCampaign
   }
 }
 
