@@ -7,6 +7,7 @@ import InviteCodePage from "../../views/InviteCode";
 import AirdropDetails from "../../views/Collect/AirdropDetails";
 import CreatePage from "../../views/Create";
 import CampaignPage from "../../views/Campaign";
+import CampaignListPage from "../../views/CampaignList/Ongoing";
 import AirAssetPage from "../../views/AirAsset";
 
 function ProjectPage () {
@@ -46,6 +47,11 @@ function ProjectPage () {
     if (action1) {
       return <CampaignPage />
     }
+    return <CampaignListPage />
+  }
+  if (action === 'campaigns') {
+    
+    return <CampaignListPage />
   }
   return (
     <IndexPage />

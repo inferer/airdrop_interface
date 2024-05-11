@@ -5,7 +5,7 @@ import { Currency, ETHER, Token, Trade } from '@uniswap/sdk'
 import { useCallback, useMemo, useState } from 'react'
 import { DEFAULT_DEADLINE_FROM_NOW, INFERER_AIRDROP_SOURCE, INITIAL_ALLOWED_SLIPPAGE } from '../constants'
 import { useActiveWeb3React } from './index'
-import { useAirdropSenderContract } from './useContract'
+import { useAirdropSenderContract, useCampaignSenderContract } from './useContract'
 import { useDerivedSwapInfo, useSwapState } from '../state/swap/hooks'
 import { useCurrency } from './Tokens'
 import { getUSDTTokenFromAirToken } from '../utils/getTokenList'
@@ -117,7 +117,7 @@ export function useCreateCallback(
 
 export function useCampaignSender(args: any[], lockedToken?: Token, ) {
   const { account, chainId, library } = useActiveWeb3React()
-  const airdropSender: Contract | null = useAirdropSenderContract()
+  const campaignSender: Contract | null = useCampaignSenderContract()
   const [createStatus, setCreateStatus] = useState(0)
   const { independentField } = useSwapState()
   const handleCreateCampaign = useCallback(async (
@@ -134,7 +134,7 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
     parameter: any[],
     ladningPage: string
   ) => {
-    if (airdropSender && account && lockedToken) {
+    if (campaignSender && account && lockedToken) {
       setCreateStatus(1)
       console.log(content, lockedAmountA, lockedAmountB, chain, parameter, ladningPage)
       
@@ -152,36 +152,34 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
       // const duration = 1 * 10 * 60
       console.log(baseInfo, offer_label_token, offer_label_locked, duration)
       let gasLimit = '5000000'
-      
-
-      // try {
-      //   const gasEstimate = await airdropSender.estimateGas['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, 
-      //     {value: isETH ? lockedAmountA : '0'})
-      //   gasLimit = gasEstimate.toString()
-      // } catch (error) {
-
-      // }
-      // try {
-      //   const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit, value: isETH ? lockedAmountA : '0' })
-      //   const receipt = await tx.wait()
-      //   if (receipt.status) {
-      //     localStorage.removeItem(INFERER_AIRDROP_SOURCE)
-      //     router.push('/project/ongoing')
-      //   }
-      // } catch(error) {
-      //   console.log(error)
-      // }
+      try {
+        const gasEstimate = await campaignSender.estimateGas['createCampaign'](baseInfo, offer_label_token, offer_label_locked, duration, 
+          {value: isETH ? lockedAmountA : '0'})
+        gasLimit = gasEstimate.toString()
+      } catch (error) {
+        console.log(error)
+      }
+      try {
+        const tx = await campaignSender['createCampaign'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit, value: isETH ? lockedAmountA : '0' })
+        const receipt = await tx.wait()
+        if (receipt.status) {
+          localStorage.removeItem(INFERER_AIRDROP_SOURCE)
+          router.push('/project/ongoing')
+        }
+      } catch(error) {
+        console.log(error)
+      }
       setCreateStatus(2)
 
       
-      // const airdropManager = await airdropSender.airdropManager()
-      // const airdropAssetTreasury = await airdropSender.airdropAssetTreasury()
+      // const airdropManager = await campaignSender.airdropManager()
+      // const airdropAssetTreasury = await campaignSender.airdropAssetTreasury()
 
-      // await airdropSender.setAirdropManager('0xF127f051d9E06a4Af12e7EB2741319ded8D803db')
-      // await airdropSender.setAirdropAssetTreasury('0x59E56cDc025083c8D2cd6E01FAD0c56174c735E9')
+      // await campaignSender.setAirdropManager('0xF127f051d9E06a4Af12e7EB2741319ded8D803db')
+      // await campaignSender.setAirdropAssetTreasury('0x59E56cDc025083c8D2cd6E01FAD0c56174c735E9')
       // console.log(airdropManager, airdropAssetTreasury)
     }
-  }, [airdropSender, account, args, lockedToken, independentField])
+  }, [campaignSender, account, args, lockedToken, independentField])
 
   return {
     createStatus,

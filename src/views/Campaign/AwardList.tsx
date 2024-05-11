@@ -1,10 +1,14 @@
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ItemBox, ItemTitle } from "./styleds";
 import LazyImage from "../../components/LazyImage";
 import Input from "../../components/NumericalInput";
 
-const AwardList = () => {
+const AwardList = ({
+  onChange
+}: {
+  onChange?: (dataList: any[]) => void
+}) => {
 
   const [dataList, setDataList] = useState<any[]>([{amount: '', size: ''}])
 
@@ -28,6 +32,10 @@ const AwardList = () => {
   const handleDelDataItem = useCallback((index) => {
     dataList.splice(index, 1)
     setDataList([...dataList])
+  }, [dataList])
+
+  useEffect(() => {
+    onChange && onChange(dataList)
   }, [dataList])
 
   return (

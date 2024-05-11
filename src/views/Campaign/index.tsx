@@ -24,13 +24,13 @@ let globalApproveList: string[] = ['usdt', 'label']
 export default function Create() {
   const router = useRouter()
   const { account, chainId } = useActiveWeb3React()
-  const [open, setOpen] = useState(false)
 
   const [name, setName] = useState('')
   const [ladningPage, setLandingPage] = useState('')
   const [nameError, setNameError] = useState(false)
   const [errorCode, setErrorCode] = useState(1)
   const [approvedTokenA, setApprovedTokenA] = useState(false)
+  const [awardData, setAwardData] = useState<any[]>([])
 
   const {
     args,
@@ -195,7 +195,7 @@ export default function Create() {
           </div>
         </ItemBox>
       </div>
-      <AwardList />
+      <AwardList onChange={setAwardData} />
       <Content />
       <ItemBox style={{height: '135px', width: '100%', marginTop: 24}}>
         <div className='shrink-0 '>
@@ -304,7 +304,8 @@ export default function Create() {
                 e.stopPropagation()
                 if (createStatus === 1) return
                 // return
-                const content = ''
+                const content = JSON.stringify(awardData)
+                console.log('content: ', content)
                 handleCreateCampaign(name, label, duration, channel, action, '1', content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, currentChain?.value || '', [], ladningPage)
               }}
             >

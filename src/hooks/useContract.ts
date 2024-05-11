@@ -21,6 +21,7 @@ import { AirdropTokenScore_ABI, AirdropTokenScore_NETWORKS } from '../constants/
 import { AirdropAssetTreasury_ABI, AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury'
 import { PROJECTDEMO_ABI, PROJECTDEMO_NETWORKS } from '../constants/projectDemo'
 import { AirdropUserTask_ABI, AirdropUserTask_NETWORKS } from '../constants/airdropUserTask'
+import { CampaignSender_ABI, CampaignSender_NETWORKS } from '../constants/campaignSender'
 
 // returns null on errors
 function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
@@ -126,6 +127,11 @@ export function useAirdropAssetTreasuryContract(): Contract | null {
 export function useContractDemoContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && PROJECTDEMO_NETWORKS[chainId], PROJECTDEMO_ABI, true)
+}
+
+export function useCampaignSenderContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && CampaignSender_NETWORKS[chainId], CampaignSender_ABI, true)
 }
 
 export function useSocksController(): Contract | null {

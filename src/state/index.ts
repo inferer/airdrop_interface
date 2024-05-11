@@ -10,6 +10,7 @@ import lists from './lists/reducer'
 import burn from './burn/reducer'
 import multicall from './multicall/reducer'
 import airdrop from './airdrop/reducer'
+import campaign from './campaign/reducer'
 
 const PERSISTED_KEYS: string[] = ['transactions']
 
@@ -23,7 +24,8 @@ const store = configureStore({
     burn,
     multicall,
     lists,
-    airdrop
+    airdrop,
+    campaign
   },
   // middleware: [...getDefaultMiddleware({ thunk: false }), save({ states: PERSISTED_KEYS })],
   middleware: [...getDefaultMiddleware({ thunk: false })],
