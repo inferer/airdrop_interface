@@ -36,6 +36,7 @@ export const BSC_RPC_URLS_SEPOLIA = [
 
 export const BSC_RPC_URLS_LOCAL = [
   'https://node.inferer.xyz',
+  // 'https://rpc.inferer.xyz',
 ]
 
 export const network = new NetworkConnector({

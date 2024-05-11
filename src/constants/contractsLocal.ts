@@ -23,7 +23,7 @@ const contractList =
   "infererProxyAdmin": "0x7dAa10F02933960de968Cdd884dBc20487672128",
   "airdropAssetTreasuryLogic": "0x302fa13977843Ee12F7Bde13E8b2F13023d0994C",
   "airdropAssetTreasury": "0x64A11d414D66819e17e8Cbe6A37E7Fd90021C890",
-  "factory": "0x3AD4869afcC42f5Ad199914d398b3172c576f413",
+  "factory": "0x1867d16692cFEA9A01EEA2CD41937D03861f55d9",
   // "router02": "0x06816f66538CB5bf17243F6C404D841e0ac96B69",
   "router02": "0x7811A1648e43F1bC207d7DF21B039AE9D2870b91",
   "airdropTokenScoreLogic": "0x07b3419cA340DdB3D813C5e6eCeA5C1085EFC1f2",
@@ -43,6 +43,17 @@ export const othersContracts = {
   "projectContract": "0x6C3c8F75da59F5880D9e60b8f8ae639c2bC2E1DA",
   "infererTrackManagerLogic": "0x8642500aC47424De5FA9756e16407f8bbfc1E039",
   "infererTrackManager": "0x32C1f353b042902CF959879D56DCA3e87bB42dD1",
+}
+
+export const campaignContracts = 
+{
+  "Air-Campaign": "0xE6D42d7B673852fDd755E870A3bDD85a4852AE9C",
+  "campaignManagerLogic": "0x1b7754689d5bDf4618aA52dDD319D809a00B0843",
+  "campaignManager": "0xaa38b98b510781C6c726317FEb12610BEe90aE20",
+  "campaignSenderLogic": "0x3BB798Ecf5dF703A5F00C6987c42e6Da1Cea3730",
+  "campaignSender": "0x05060D66d43897Bf93922e8bF8819126dfcc96AF",
+  "campaignApplyLogic": "0xF631eb60D0A403499A8Df8CBd22935e0c0406D72",
+  "campaignApply": "0x7Ca1D5e356f83E355aA40274b376ed322A9e1379"
 }
 
 export default contractList

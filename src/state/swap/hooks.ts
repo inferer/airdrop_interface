@@ -18,7 +18,7 @@ import { SwapState } from './reducer'
 import useToggledVersion from '../../hooks/useToggledVersion'
 import { useIsUserAction, useUserSlippageTolerance } from '../user/hooks'
 import { computeSlippageAdjustedAmounts } from '../../utils/prices'
-import { getAirTokenFromAlgToken } from '../../utils/getTokenList'
+import { getAirCampaignToken, getAirTokenBySymbol, getAirTokenFromAlgToken } from '../../utils/getTokenList'
 import { useAirTokenPercent, useAirTokenPercentBalance } from '../airdrop/hooks'
 
 export function useSwapState(): AppState['swap'] {
@@ -117,10 +117,11 @@ export function useDerivedSwapInfo(): {
   inputError?: string
   v1Trade: Trade | undefined
 } {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const toggledVersion = useToggledVersion()
-  const { isProjectCreate } = useIsUserAction()
+  const { isProjectCreate, isProjectCampaign } = useIsUserAction()
+
   const {
     independentField,
     typedValue,
@@ -128,9 +129,9 @@ export function useDerivedSwapInfo(): {
     [Field.OUTPUT]: { currencyId: outputCurrencyId },
     recipient
   } = useSwapState()
-
+  const airCampaignToken = getAirCampaignToken(chainId)
   const inputCurrency = useCurrency(inputCurrencyId)
-  const outputCurrency = useCurrency(outputCurrencyId)
+  const outputCurrency = useCurrency(isProjectCampaign ? airCampaignToken?.address : outputCurrencyId)
   const recipientLookup = useENS(recipient ?? undefined)
   const to: string | null = (recipient === null ? account : recipientLookup.address) ?? null
 

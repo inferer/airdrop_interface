@@ -4,7 +4,7 @@ import { useActiveWeb3React } from '../../hooks'
 import { CreateBody, ItemBox, ItemBox2, ItemCenter, ItemTitle, ItemWrap, TitleWrap, TokenInfo } from './styleds'
 import LazyImage, { LazyImage2, LazyImage4 } from '../../components/LazyImage'
 import Input from '../../components/TextInput/Input'
-import { useCreateAirdrop, useCreateCallback, useCreateContractAirdrop } from '../../hooks/useAirdropSender'
+import { useCreateCallback } from '../../hooks/useAirdropSender'
 import { ApprovalState } from '../../hooks/useApproveCallback'
 import { Loading, LoadingContract, LoadingUint, LoadingX } from '../../components/Loader'
 import { ETHER, Token } from '@uniswap/sdk'
@@ -14,6 +14,9 @@ import { formatInput, formatStringNumber, isAddress, verifyInput } from '../../u
 import AwardList from './AwardList'
 import TextInput from '../../components/TextInput'
 import Content from './Content'
+import { useCampaignSender } from '../../hooks/useCampaignSender'
+import Select from '../Create/Select'
+import { CAMPAIGN_DURATION, CHAIN_LIST } from '../../constants'
 
 
 let globalApproveList: string[] = ['usdt', 'label']
@@ -45,7 +48,7 @@ export default function Create() {
     approveAir
   } = useCreateCallback(undefined, undefined, undefined, null)
 
-  const { createStatus, handleCreateAirdrop, handleEstimateGas } = useCreateAirdrop(args, lockedCurrency as Token ?? undefined)
+  const { createStatus, handleCreateCampaign } = useCampaignSender(args, lockedCurrency as Token ?? undefined)
 
   const [approveLoading, setApproveLoading] = useState(true)
   const [unApproveList, setUnApproveList] = useState<string[]>(globalApproveList)
@@ -82,13 +85,28 @@ export default function Create() {
   }, [outputAmount, approvalStateLabel])
 
 
-  const [gasUnit, setGasUnit] = useState(0)
-
   const landingPageVerify = useMemo(() => {
     const ipUrlRegex = /^(https?:\/\/)?(\d{1,3}\.){3}\d{1,3}(\:\d+)?(\/\S*)?(\?\S*)?$/;
     const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9\-\_]+\.)+[a-zA-Z]{2,}(\/.*)?$/
     return urlRegex.test(ladningPage) || ipUrlRegex.test(ladningPage)
   }, [ladningPage])
+
+  const [duration, setDutation] = useState('1')
+  const handleDurationChange = (data: any) => {
+    setDutation(data.value)
+  }
+  const label = useMemo(() => {
+    return outputAmount?.currency?.symbol?.slice(4) || ''
+  }, [outputAmount])
+
+  const currentChain = useMemo(() => {
+    if(chainId) {
+      return CHAIN_LIST.find(chain => chain.chainId === chainId)
+    }
+    return CHAIN_LIST[0]
+  }, [chainId])
+  const channel = 'campaign'
+  const action = 'competition'
 
   return (
     <CreateBody>
@@ -124,7 +142,7 @@ export default function Create() {
         </ItemBox>
       </div>
       <div className=' flex'>
-        <ItemBox style={{ marginTop: 25, height: '101px', width: 353 }}>
+        <ItemBox style={{ marginTop: 25, height: '101px', width: 400 }}>
           <ItemTitle>offer</ItemTitle>
           <div className='flex justify-between items-center mt-2'>
             <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>{formatStringNumber(lockedAmount)}</div>
@@ -154,7 +172,7 @@ export default function Create() {
 
 
         </ItemBox>
-        <ItemBox style={{ marginTop: 25, height: '101px', width: 353, marginLeft: 20 }}>
+        <ItemBox style={{ marginTop: 25, height: '101px', width: 400, marginLeft: 20 }}>
           <ItemTitle>receive</ItemTitle>
           <div className='flex justify-between items-center mt-2'>
             <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>{formatStringNumber(outputAmount?.toSignificant(18))}</div>
@@ -164,12 +182,16 @@ export default function Create() {
             </TokenInfo>
           </div>
         </ItemBox>
-        <ItemBox style={{ marginTop: 25, height: '101px', width: 353, marginLeft: 20 }}>
-          <ItemTitle>Expire on (UTC)</ItemTitle>
+        <ItemBox style={{ marginTop: 25, height: '101px', width: 200, marginLeft: 20 }}>
+          {/* <ItemTitle>Expire on (UTC)</ItemTitle>
           <div className=' text-[14px] font-fsemibold mt-2 text-[rgba(0,0,0,1)]'>
             <div className="flex items-center justify-between bg-[rgba(85,123,241,0.02)] rounded-[8px] cursor-pointer min-w-[120px] relative py-3 px-4 ">
               2024-04-16 00:00:00 (UTC)
             </div>
+          </div> */}
+          <ItemTitle>duration</ItemTitle>
+          <div className='mt-2 font-fmedium'>
+            <Select defaultValue={CAMPAIGN_DURATION[0]} options={CAMPAIGN_DURATION} onChange={handleDurationChange} />
           </div>
         </ItemBox>
       </div>
@@ -282,7 +304,8 @@ export default function Create() {
                 e.stopPropagation()
                 if (createStatus === 1) return
                 // return
-                // handleCreateAirdrop(name, label, duration, channel, action, String(gasUnit), _content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, chain, parameter, ladningPage)
+                const content = ''
+                handleCreateCampaign(name, label, duration, channel, action, '1', content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, currentChain?.value || '', [], ladningPage)
               }}
             >
               <div className='btn-text'>

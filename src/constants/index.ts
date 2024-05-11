@@ -260,6 +260,15 @@ export const AIRDROP_DURATION = [
   { value: '7', label: '7day' },
 ]
 
+export const CAMPAIGN_DURATION = [
+  { value: '1', label: '1day' },
+  { value: '7', label: '7day' },
+  { value: '14', label: '14day' },
+  { value: '30', label: '30day' },
+  { value: '60', label: '60day' },
+  { value: '90', label: '90day' },
+]
+
 export const TWITTER_UNIT: {[key: string]: string} = {
   like: '1',
   follow: '2',

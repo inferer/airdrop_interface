@@ -1,6 +1,6 @@
 import { ChainId } from '@uniswap/sdk'
 import { TokenInfo } from '@uniswap/token-lists'
-import contractList from '../contractsLocal'
+import contractList, { campaignContracts} from '../contractsLocal'
 import contractsSepolia from '../contractsSepolia'
 import { AIRLABEL_TOKEN_LIST_ARBITRUM, AIR_TOKEN_LIST_ARBITRUM, ALGLABEL_TOKEN_LIST_ARBITRUM, ST_TOKEN_LIST_ARBITRUM } from './arbitrum'
 
@@ -218,6 +218,14 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
     "name": "Air-Commerce",
     "address": contractList['Air-Commerce'],
     "symbol": "Air-Commerce",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "Air-Campaign",
+    "address": campaignContracts['Air-Campaign'],
+    "symbol": "Air-Campaign",
     "decimals": 18,
     "chainId": ChainId.LOCAL,
     "logoURI": "/images/tokens/usdt.png"

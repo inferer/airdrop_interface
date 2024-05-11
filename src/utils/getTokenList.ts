@@ -95,10 +95,14 @@ export function getAlgTokenByLabel(label: string) {
   return filterTokenByChainId(ALGLABEL_TOKEN_LIST).find(token => token.symbol.slice(4) === label)
 }
 
-export function getAirTokenBySymbol(symbol: string) {
-  return filterTokenByChainId(AIRLABEL_TOKEN_LIST).find(token => token.symbol === symbol)
+export function getAirTokenBySymbol(symbol: string, chainId?: number) {
+  return filterTokenByChainId(AIRLABEL_TOKEN_LIST, chainId).find(token => token.symbol === symbol)
 }
 
 export function getUSDTTokenByAddress2(address: string, chainId: number) {
   return filterTokenByChainId(AIR_TOKEN_LIST).find(token => token.address.toLowerCase() === address.toLowerCase() && token.chainId === chainId)
+}
+
+export function getAirCampaignToken(chainId?: number) {
+  return getAirTokenBySymbol('Air-Campaign', chainId)
 }
