@@ -10,7 +10,9 @@ import VoteContent from "./VoteContent";
 import WorkContent from "./WorkContent";
 import { useCampaignApply } from "../../hooks/useCapmaignApply";
 import { LoadingXUser } from "../../components/Loader";
-const bundleId = 'L1y1pS5W-RC2aLjsojpIOA2CUflJPzyeCt3DxRb649Y'
+
+const bundleId = 'M1y1pS5W-RC2aLjsojpIOA2CUflJPzyeCt3DxRb649Y'
+
 const CampaignVote: React.FC<{
   isVote?: boolean
 }> = ({
@@ -19,34 +21,35 @@ const CampaignVote: React.FC<{
   const isProjectMode = useIsRoleProjectMode()
   const router = useRouter()
   const { handleGetCampaignOne } = useCampaignManager()
-  const { applyStatus, handleCampaignApply, handleCampaignVote } = useCampaignApply()
+  const { applyStatus, handleCampaignApply, handleCampaignVote, handleGetCampaignApplyVotes, campaignApplyVoteList } = useCampaignApply()
 
   const campaignId = router.query.action && router.query.action[2]
 
   useEffect(() => {
     if (campaignId) {
       handleGetCampaignOne(Number(campaignId))
+      handleGetCampaignApplyVotes(campaignId)
     }
   }, [campaignId])
 
   const campaign = useCampaignList0(router.query?.action ? router.query?.action[2] as string : undefined)
-
+  const [currentIndex, setCurrentIndex] = useState(-1)
   const handleApplyVote = useCallback(async () => {
     if (campaignId) {
       if (isVote) {
-        handleCampaignVote(campaignId, 0)
+        handleCampaignVote(campaignId, currentIndex)
       } else {
         handleCampaignApply(campaignId, bundleId)
       }
     }
-  }, [isVote, campaignId])
+  }, [isVote, campaignId, currentIndex])
   
   return (
     <div className="py-5 pt-0">
       <CampaignInfo campaign={campaign} from={isProjectMode ? 'project' : 'user'} />
       <div>
         {
-          isVote ? <VoteContent /> : <WorkContent />
+          isVote ? <VoteContent applyVoteList={campaignApplyVoteList} onSelect={setCurrentIndex} /> : <WorkContent />
         }
       </div>
       <div className=" flex justify-between mt-5">

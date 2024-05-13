@@ -33,6 +33,14 @@ export interface ICampaign {
   completedClaimed?: string
 }
 
+export interface ICampaignApplyVote {
+  campaignId: string,
+  applyUser: string,
+  arwId: string,
+  voteCount: string,
+  voteUser: string[]
+}
+
 
 export const updateCampaignList = createAction<{ campaignList: ICampaign[] }>('airdrop/updateCampaignList')
 export const updateCampaignListOne = createAction<{ campaignList: ICampaign[] }>('airdrop/updateCampaignListOne')

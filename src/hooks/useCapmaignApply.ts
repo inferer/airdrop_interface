@@ -9,6 +9,7 @@ import { AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury
 import { useAirdropManager } from './useAirdropManager'
 import { useShowToast } from '../state/application/hooks'
 import { othersContracts } from '../constants/contractsLocal'
+import { ICampaign, ICampaignApplyVote } from '../state/campaign/actions'
 
 export function useCampaignApply(algToken?: string) {
   const { account, chainId, library } = useActiveWeb3React()
@@ -22,6 +23,27 @@ export function useCampaignApply(algToken?: string) {
   const [completeStatus, setCompleteStatus] = useState(0)
   const [completeErrorMessage, setCompleteErrorMessage] = useState('')
   const { handleShow } = useShowToast()
+
+  const [campaignApplyVoteList, setCampaignApplyVoteList] = useState<ICampaignApplyVote[]>([])
+  const handleGetCampaignApplyVotes = useCallback(async (campaignId: string) => {
+    try {
+      if (campaignApply) {
+        const res = await campaignApply.getCampaignApplyVotes(campaignId)
+        const tempList: ICampaignApplyVote[] = res.map((item: any) => {
+          return {
+            campaignId: item.id?.toString(),
+            applyUser: item.applyUser,
+            arwId: item.arwId,
+            voteCount: item.voteCount?.toString(),
+            voteUser: item.voteUser ?? []
+          }
+        })
+        setCampaignApplyVoteList(tempList)
+      }
+    } catch(error: any) {
+
+    }
+  }, [campaignApply])
 
 
   const handleCampaignApply = useCallback(async (
@@ -50,7 +72,10 @@ export function useCampaignApply(algToken?: string) {
         const receipt = await tx.wait()
         if (receipt.status) {
           // handleGetUserAirdropConfirmed()
-          alert('Success')
+          // alert('Success')
+          handleShow({ type: 'success', content: `Apply success.`, title: 'Success' })
+          handleGetCampaignApplyVotes(campaignId)
+          
         }
 
       } catch (error) {
@@ -87,7 +112,8 @@ export function useCampaignApply(algToken?: string) {
         const receipt = await tx.wait()
         if (receipt.status) {
           // handleGetUserAirdropConfirmed()
-          alert('Success')
+          handleShow({ type: 'success', content: `Vote success.`, title: 'Success' })
+          handleGetCampaignApplyVotes(campaignId)
         }
 
       } catch (error) {
@@ -97,6 +123,8 @@ export function useCampaignApply(algToken?: string) {
       setApplyStatus(2)
     }
   }, [campaignApply, account])
+
+
   return {
     applyStatus,
     setCompleteStatus,
@@ -104,6 +132,8 @@ export function useCampaignApply(algToken?: string) {
     completeStatus,
     handleCampaignApply,
     handleCampaignVote,
+    handleGetCampaignApplyVotes,
+    campaignApplyVoteList,
     algTokenCurrency,
     approvalState,
     approve

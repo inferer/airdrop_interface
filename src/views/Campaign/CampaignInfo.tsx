@@ -64,7 +64,7 @@ const AirdropInfo = ({
 
   const landingPage = useMemo(() => {
     if (from === 'project' || confirm) return contentJson.landingPage + '?campaignId=' + campaign.campaignId
-    return contentJson.landingPage + '?taskId=' + router.query.taskId
+    return contentJson.landingPage + '?campaignId=' + campaign.campaignId
   }, [from, confirm, campaign, contentJson])
 
   const action = router.query.action && router.query.action[0]
