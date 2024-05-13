@@ -44,6 +44,7 @@ export const Input = React.memo(function InnerInput({
   value,
   onUserInput,
   placeholder,
+  type,
   ...rest
 }: {
   value: string | number
@@ -73,7 +74,7 @@ export const Input = React.memo(function InnerInput({
       autoCorrect="off"
       autoFocus={Boolean(focus)}
       // text-specific options
-      type="text"
+      type={type || "text"}
       placeholder={placeholder || 'X'}
       spellCheck="false"
     />

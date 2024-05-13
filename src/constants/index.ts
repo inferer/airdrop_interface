@@ -218,6 +218,8 @@ export const API_ROOT = process.env.NEXT_PUBLIC_API_ROOT
 
 export const USER_POOL_SERVICE_ROOT = process.env.NEXT_PUBLIC_USER_POOL_SERVICE_ROOT
 
+export const LABEL_API_ROOT = process.env.NEXT_PUBLIC_LABEL_API_ROOT;
+
 export enum UserRoleMode {
   PROJECT,
   USER

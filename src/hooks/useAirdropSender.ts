@@ -5,7 +5,7 @@ import { Currency, ETHER, Token, Trade } from '@uniswap/sdk'
 import { useCallback, useMemo, useState } from 'react'
 import { DEFAULT_DEADLINE_FROM_NOW, INFERER_AIRDROP_SOURCE, INITIAL_ALLOWED_SLIPPAGE } from '../constants'
 import { useActiveWeb3React } from './index'
-import { useAirdropSenderContract } from './useContract'
+import { useAirdropSenderContract,useAirdropManagerContract,useMulticallContract } from './useContract'
 import { useDerivedSwapInfo, useSwapState } from '../state/swap/hooks'
 import { useCurrency } from './Tokens'
 import { getUSDTTokenFromAirToken } from '../utils/getTokenList'
@@ -20,6 +20,8 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../state'
 import { IABIItem, updateCreateContractABI } from '../state/airdrop/actions'
 import { formatInput, getContract } from '../utils'
+import {labelPoster} from '../utils/axios'
+import {getUserAirdropIds} from '../hooks/useAirdropManager'
 
 
 export function useCreateCallback(
@@ -118,6 +120,8 @@ export function useCreateCallback(
 export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
   const { account, chainId, library } = useActiveWeb3React()
   const airdropSender: Contract | null = useAirdropSenderContract()
+  const airdropManager: Contract | null = useAirdropManagerContract()
+  const multi: Contract | null = useMulticallContract()
   const [createStatus, setCreateStatus] = useState(0)
   const { independentField } = useSwapState()
   const handleCreateAirdrop = useCallback(async (
@@ -132,9 +136,11 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
     lockedAmountB: string,
     chain: string,
     parameter: any[],
-    ladningPage: string
+    ladningPage: string,
+    advParam?:any
   ) => {
-    if (airdropSender && account && lockedToken) {
+    if (airdropSender && account && lockedToken && airdropManager && chainId && multi) {
+      
       setCreateStatus(1)
       console.log(content, lockedAmountA, lockedAmountB, chain, parameter, ladningPage)
       try {
@@ -151,6 +157,12 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       const isETH = lockedToken === ETHER
       const source = localStorage.getItem(INFERER_AIRDROP_SOURCE) || ethers.constants.AddressZero
       const baseInfo = [name, label, channel, action, content, _content, parameterValue, 'inferer']
+      if(advParam){
+        let pkeys = ['limitNumber','snapshotTimestamp'];
+        pkeys.forEach((key, index) => {
+          baseInfo.push(advParam[key] || '');
+        })
+      }
       const route = args[2]
       console.log(lockedAmountA, lockedAmountB, args[1], unint)
       const offer_label_token = [isETH ? ethers.constants.AddressZero : lockedToken.address, route[0], route[route.length - 1], source]
@@ -171,8 +183,70 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
       try {
         const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit, value: isETH ? lockedAmountA : '0' })
         const receipt = await tx.wait()
+        /**
+         * https://api5.inferer.xyz/api/inferer/createLabel
+         * labelName: logtest121
+         * category: Brands
+         * chain: 1
+         * labelInfo: giantliu
+         * labelTbName: logtest121
+         * labelTbSrcName: logtest121
+         * labelProcessType: 11
+         * contractAddress: 0x9c65f85425c619A6cB6D29fF8d57ef696323d188
+         * execNow: 1
+         * cronExpr: 
+         * extInfo: {"rankInfo":{"rankingP90":false,"rankingP80":false,"rankingP50":false}}
+         * categoryId: 46
+         * categoryName: /app/finance/currency
+         * labelDescription: Users who minted use NFTs.
+         * labelShowName: logtest121
+         * rpcUrl: 
+         * airdropId: 5
+         * functionName: 0x9c65f85425c619a6cb6d29ff8d57ef696323d188.share
+         * limitNum: 5
+         * snapshotTimestamp: 1715015879824
+         */
         if (receipt.status) {
           localStorage.removeItem(INFERER_AIRDROP_SOURCE)
+          const airdropIds = await getUserAirdropIds(multi,account,chainId);
+          
+          const airdropId = airdropIds[airdropIds.length - 1] //receipt.events?.find((item:any) => item.event === 'CreateAirdrop')?.args?.airdropId || 55;
+          
+          //0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f3a7000000000000000000000000000000000000000000000000044a50c7f10ade3950000000000000000000000000000000000000000000000000000000000000000
+          if (airdropId) {
+            let ltname = `${name}_${Math.floor(Date.now()/1000/60)}`
+            const labelInfo = {
+              labelName: ltname,
+              category: label,
+              chain: chainId,
+              labelInfo: 'airdrop_interface_'+account,
+              labelTbName: ltname,
+              labelTbSrcName: ltname,
+              labelProcessType: 11,
+              contractAddress: content.split('.')[0],
+              execNow: 1,
+              cronExpr: '',
+              extInfo: JSON.stringify( {
+                rankInfo: {
+                  rankingP90: false,
+                  rankingP80: false,
+                  rankingP50: false
+                }
+              }),
+              categoryId: 46,
+              categoryName: '/app/finance',
+              labelDescription: 'Users who adopted finance service',
+              labelShowName: name,
+              rpcUrl: '',
+              airdropId: airdropId*1,
+              functionName: content,
+              limitNum: advParam.limitNumber,
+              snapshotTimestamp: advParam.snapshotTimestamp
+            }
+
+            labelPoster('/api/inferer/createLabel', labelInfo)
+
+          }
           router.push('/project/ongoing')
         }
       } catch(error) {

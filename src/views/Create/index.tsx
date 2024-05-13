@@ -18,6 +18,7 @@ import { othersContracts } from '../../constants/contractsLocal'
 import ContractABI from './ContractABI'
 import { formatInput, formatStringNumber, isAddress, verifyInput } from '../../utils'
 import { useCreateContractABI } from '../../state/airdrop/hooks'
+import Toggle from '../../components/Toggle'
 
 // ["airdrop 01","Social"]
 // ["0x8797847c9d63D8Ed9C30B058F408d4257A33B76C","0x8797847c9d63D8Ed9C30B058F408d4257A33B76C"]
@@ -40,6 +41,11 @@ export default function Create() {
   const [nameError, setNameError] = useState(false)
   const [errorCode, setErrorCode] = useState(1)
   const [approvedTokenA, setApprovedTokenA] = useState(false)
+  const [isAdvance, setIsAdvance] = useState<boolean>(false)
+  const [advParam, setAdvParam] = useState<any>({
+    limitNumber:'',
+    snapshotTimestamp:''
+  })
 
   const [content, setContent] = useState(twitterContent)
 
@@ -605,7 +611,66 @@ export default function Create() {
                         </div>
                     </div>
                     }
-
+                    {
+                      paremeterVerify && <div className='shrink-0 mt-6'>
+                        <ItemTitle>
+                          Advanced
+                          <Toggle isActive={isAdvance} toggle={() => {
+                            setIsAdvance(!isAdvance)
+                          }} />
+                        </ItemTitle>
+                        
+                        {
+                          isAdvance &&<>
+                            <div  className='flex justify-between items-center mb-3'>
+                              <div className=' w-full flex items-center'>
+                                <LazyImage src='/images/airdrop/param.svg' />
+                                <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>Limit Number</div>
+                              </div>
+                              <div className='w-[348px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 mx-3 flex items-center h-[32px]'>
+                                <TextInput
+                                  color='rgba(0,0,0,0, 1)'
+                                  fontSize='13px'
+                                  value={advParam.limitNumber}
+                                  onUserInput={value => {
+                                    setAdvParam({
+                                      ...advParam,
+                                      limitNumber: value
+                                    })
+                                  }}
+                                />
+                              </div>
+                              <div className=' shrink-0'>
+                                <LazyImage2 src={advParam.limitNumber ? '/images/airdrop/status_1.svg' : '/images/airdrop/status_0.svg'} />
+                              </div>
+                            </div>
+                            <div  className='flex justify-between items-center mb-3'>
+                              <div className=' w-full flex items-center'>
+                                <LazyImage src='/images/airdrop/param.svg' />
+                                <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>Snapshot Timestamp</div>
+                              </div>
+                              <div className='w-[348px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 mx-3 flex items-center h-[32px]'>
+                                <Input
+                                  color='rgba(0,0,0,0, 1)'
+                                  fontSize='13px'
+                                  value={advParam.snapshotTimestamp}
+                                  onUserInput={value => {
+                                    setAdvParam({
+                                      ...advParam,
+                                      snapshotTimestamp: value
+                                    })
+                                  }}
+                                  type='datetime-local'
+                                />
+                              </div>
+                              <div className=' shrink-0'>
+                                <LazyImage2 src={advParam.snapshotTimestamp ? '/images/airdrop/status_1.svg' : '/images/airdrop/status_0.svg'} />
+                              </div>
+                            </div>
+                          </>
+                        }
+                      </div>
+                    }
                     {
                       paremeterVerify &&
                         <div className='shrink-0 mt-6'>
@@ -793,7 +858,7 @@ export default function Create() {
                 const _content = contractAddress.toLowerCase() + '.' + (funName ? funName : contractABI[0].value)
                 console.log(chain, contractAddress, funName, gasUnit, _content)
                 // return
-                handleCreateAirdrop(name, label, duration, channel, action, String(gasUnit), _content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, chain, parameter, ladningPage)
+                handleCreateAirdrop(name, label, duration, channel, action, String(gasUnit), _content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, chain, parameter, ladningPage, advParam)
               }}
             >
               <div className='btn-text'>

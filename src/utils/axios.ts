@@ -1,6 +1,6 @@
 // @ts-ignore
 import axios from 'axios'
-import { API_ROOT,USER_POOL_SERVICE_ROOT } from '../constants'
+import { API_ROOT, USER_POOL_SERVICE_ROOT, LABEL_API_ROOT } from '../constants'
 
 const instance = axios.create({
   baseURL: API_ROOT,
@@ -9,6 +9,11 @@ const instance = axios.create({
 
 const userPoolService = axios.create({
   baseURL: USER_POOL_SERVICE_ROOT,
+  timeout: 60000
+})
+
+const labelService = axios.create({
+  baseURL: LABEL_API_ROOT,
   timeout: 60000
 })
 
@@ -41,6 +46,13 @@ export function userPoolSrvcFetcher(url: string, data: any = {})
   return userPoolService.get(url, { params: formatData }).then((res: { data: any; }) => processResult(res.data, url))
 }
 
+export function labelSrvcFetcher(url: string, data: any = {})
+{
+  let formatData = { ...data }
+  getHeaders()
+  return labelService.get(url, { params: formatData }).then((res: { data: any; }) => processResult(res.data, url))
+}
+
 export function fetcherServerSide(url: string, data: any) {
   let formatData = { ...data }
 
@@ -52,6 +64,14 @@ export function poster(url: string, data: any, options = {}) {
 
   getHeaders()
   return instance.post(url, formatData, { ...options }).then((res: { data: any; }) => processResult(res.data))
+}
+
+export function labelPoster(url: string, data: any, options = {}) {
+  let formatData = { ...data }
+
+  getHeaders()
+
+  return labelService.post(url, formatData, { ...options,headers:{"content-type": "application/x-www-form-urlencoded"} }).then((res: { data: any; }) => processResult(res.data))
 }
 
 export function deleter(url: string, data: any, options = {}) {
