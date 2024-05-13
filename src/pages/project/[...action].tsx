@@ -8,6 +8,7 @@ import AirdropDetails from "../../views/Collect/AirdropDetails";
 import CreatePage from "../../views/Create";
 import CampaignPage from "../../views/Campaign";
 import CampaignListPage from "../../views/CampaignList/Ongoing";
+import CAmpaignDetails from '../../views/Campaign/CampaignDetails'
 import AirAssetPage from "../../views/AirAsset";
 
 function ProjectPage () {
@@ -50,7 +51,9 @@ function ProjectPage () {
     return <CampaignListPage />
   }
   if (action === 'campaigns') {
-    
+    if (action1) {
+      return <CAmpaignDetails />
+    }
     return <CampaignListPage />
   }
   return (

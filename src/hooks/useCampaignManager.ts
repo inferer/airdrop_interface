@@ -13,7 +13,7 @@ import { updateAirdropList, updateAirdropListOne, updateProjectAirdropList, upda
 import { useActiveWeb3React } from ".";
 import { useMaxUnits, useUserAirdropConfirmedList } from "../state/airdrop/hooks";
 import { CampaignManager_ABI, CampaignManager_NETWORKS } from "../constants/campaignManager";
-import { updateCampaignList } from "../state/campaign/actions";
+import { updateCampaignList, updateCampaignListOne } from "../state/campaign/actions";
 
 export const getCampaignManagerAddress = (chainId: ChainId) => {
   return CampaignManager_NETWORKS[chainId]
@@ -37,12 +37,12 @@ export const getAirdropLength = async (multi: Contract, chaidId: ChainId) => {
   return currentAirdropId ? currentAirdropId[0]?.toString() : 0
 }
 
-export const getLabelAirdropIds = async (multi: Contract, airToken: string, chaidId: ChainId) => {
+export const getLabelCampaignIds = async (multi: Contract, airToken: string, chaidId: ChainId) => {
 
   const calls = []
     calls.push({
       address: getCampaignManagerAddress(chaidId),
-      name: 'getLabelAirdropIds',
+      name: 'getLabelCampaignIds',
       params: [airToken]
     })
     
@@ -86,16 +86,12 @@ export const getCampaignList = async (multi: Contract, airdropLength: number | n
   }
   
 
-  let airdropList: {[key: string]: string}[] = []
-  // string[] calldata _baseInfo, // 0: name, 1: label, 2: channel, 3: action, 4: content
-	// 	address[] calldata _offer_label_token, // 0: offerToken, 1: offerAirToken 2: labelToken 3: sender
-	// 	uint[] calldata _offer_label_locked, // 0: offerLocked, 1: labelLocked
-	// 	uint64 _duration
+  let campaignList: {[key: string]: string}[] = []
+
   try {
     const res = await multicall(multi, CampaignManager_ABI, calls.reverse());
     (res || []).forEach((data: any) => {
       const airdrop = data[0]
-      console.log(airdrop)
       const offerTokenData = getUSDTTokenByAddress(airdrop[2][0])
       const labelTokenData = getLabelTokenByAddress(airdrop[2][2])
       const subDecimals = String((10 ** (offerTokenData?.decimals ?? 18))).length - (airdrop[3][0].toString()).length
@@ -107,7 +103,7 @@ export const getCampaignList = async (multi: Contract, airdropLength: number | n
 
       const _otherContent = airdrop[1][5] ? airdrop[1][5].split('|') : []
       const tempData: any = {
-        airdropId: airdrop[0].toString(),
+        campaignId: airdrop[0].toString(),
         name: airdrop[1][0],
         label: airdrop[1][1],
         channel: airdrop[1][2],
@@ -133,12 +129,12 @@ export const getCampaignList = async (multi: Contract, airdropLength: number | n
         realCompleted: airdrop[7],
 
       }
-      airdropList.push(tempData)
+      campaignList.push(tempData)
     });
   } catch (err) {
     console.log(err)
   }
-  return airdropList
+  return campaignList
 
 }
 
@@ -229,18 +225,17 @@ export function useCampaignManager() {
     dispatch(updateAirdropList({ airdropList: [] }))
   }, [dispatch])
 
-  const handleGetAirdropList = useCallback(async (algToken?: string) => {
+  const handleGetCampaignList = useCallback(async (algToken?: string) => {
     if (multi && chainId) {
       if (algToken) {
         const airToken = getAirTokenFromAlgToken(algToken, chainId)
-        let airdropIds = await getLabelAirdropIds(multi, airToken, chainId)
-
-        const list = await getCampaignList(multi, airdropIds, chainId)
-        dispatch(updateAirdropList({ airdropList: list as any }))
+        let campaignIds = await getLabelCampaignIds(multi, airToken, chainId)
+        const list = await getCampaignList(multi, campaignIds, chainId)
+        dispatch(updateCampaignList({ campaignList: list as any }))
       } else {
-        let airdropLength = await getAirdropLength(multi, chainId) 
-        const list = await getCampaignList(multi, Number(airdropLength), chainId)
-        dispatch(updateAirdropList({ airdropList: list as any }))
+        // let airdropLength = await getAirdropLength(multi, chainId) 
+        // const list = await getCampaignList(multi, Number(airdropLength), chainId)
+        // dispatch(updateAirdropList({ airdropList: list as any }))
       }
       
     }
@@ -257,10 +252,10 @@ export function useCampaignManager() {
     }
   }, [multi, dispatch, chainId])
 
-  const handleGetAirdropOne = useCallback(async (airdropId: number) => {
+  const handleGetCampaignOne = useCallback(async (airdropId: number) => {
     if (multi && chainId) {
       const list = await getCampaignList(multi, [airdropId], chainId)
-      dispatch(updateAirdropListOne({ airdropList: list as any }))
+      dispatch(updateCampaignListOne({ campaignList: list as any }))
     }
   }, [multi, dispatch, chainId])
 
@@ -302,8 +297,8 @@ export function useCampaignManager() {
   }, [dispatch])
 
   return {
-    handleGetAirdropList,
-    handleGetAirdropOne,
+    handleGetCampaignList,
+    handleGetCampaignOne,
     handleGetUserAirdropConfirmed,
     handleGetUserTaskConfirmed,
     handleUpdateUserAirdropConfirmedByTaskId,

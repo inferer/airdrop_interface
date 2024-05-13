@@ -329,6 +329,14 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
     "decimals": 18,
     "chainId": ChainId.LOCAL,
     "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "Alg-Campaign",
+    "address": campaignContracts['Alg-Campaign'],
+    "symbol": "Alg-Campaign",
+    "decimals": 18,
+    "chainId": ChainId.LOCAL,
+    "logoURI": "/images/tokens/usdt.png"
   }
 ]
 

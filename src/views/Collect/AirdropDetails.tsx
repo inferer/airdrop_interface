@@ -1,8 +1,4 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react'
-import { ThemeContext } from 'styled-components'
-import {  TYPE } from '../../theme'
-
-import { useActiveWeb3React } from '../../hooks'
 import { CollectBody, TitleWrap } from './styleds'
 import LazyImage, { LazyImage2 } from '../../components/LazyImage'
 import AirdropConfirmDetails from './AirdropConfirmDetails'

@@ -3,7 +3,7 @@ import { Token } from '@uniswap/sdk'
 
 export interface ICampaign {
   id: string,
-  airdropId: string,
+  campaignId: string,
   name: string,
   label: string,
   channel: string,
@@ -35,4 +35,5 @@ export interface ICampaign {
 
 
 export const updateCampaignList = createAction<{ campaignList: ICampaign[] }>('airdrop/updateCampaignList')
+export const updateCampaignListOne = createAction<{ campaignList: ICampaign[] }>('airdrop/updateCampaignListOne')
 

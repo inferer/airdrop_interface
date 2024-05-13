@@ -10,3 +10,11 @@ import { ethers } from 'ethers'
 export function useCampaignList() {
   return useSelector<AppState, AppState['campaign']['campaignList']>(state => state.campaign.campaignList)
 }
+
+
+export function useCampaignList0(campaignId: string | undefined) {
+  const campaignListOne = useSelector<AppState, AppState['campaign']['campaignListOne']>(state => state.campaign.campaignListOne)
+  return useMemo(() => {
+    return  campaignListOne.find(campaign => campaign.campaignId === campaignId ) ?? {} as ICampaign
+  }, [campaignListOne, campaignId])
+}

@@ -179,6 +179,20 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.green-text {
+  background: linear-gradient(135deg, #0BB4FA 0%, #84F696 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.green-bg1 {
+  border-radius: 5.143px;
+  background: linear-gradient(135deg, #6BBEE1 0%, #8AE899 100%);
+}
+.green-bg2 {
+  border-radius: 5.143px;
+  background: linear-gradient(135deg, rgba(107, 190, 225, 0.30) 0%, rgba(138, 232, 153, 0.30) 100%);
+}
 .bg0006 {
   background-color: rgba(0, 0, 0, 0);
 }
