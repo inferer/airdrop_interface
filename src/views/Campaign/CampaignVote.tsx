@@ -9,7 +9,7 @@ import { useCampaignList0 } from "../../state/campaign/hooks";
 import VoteContent from "./VoteContent";
 import WorkContent from "./WorkContent";
 import { useCampaignApply } from "../../hooks/useCapmaignApply";
-import { LoadingXUser } from "../../components/Loader";
+import { LoadingX, LoadingXUser } from "../../components/Loader";
 import { randomStr } from "../../utils";
 
 const bundleId = 'M1y1pS5W-RC2aLjsojpIOA2CUflJPzyeCt3DxRb649Y'
@@ -44,6 +44,10 @@ const CampaignVote: React.FC<{
       }
     }
   }, [isVote, campaignId, currentIndex])
+
+  const disabled = useMemo(() => {
+    return currentIndex < 0
+  }, [currentIndex])
   
   return (
     <div className="py-5 pt-0">
@@ -53,7 +57,7 @@ const CampaignVote: React.FC<{
           isVote ? <VoteContent applyVoteList={campaignApplyVoteList} onSelect={setCurrentIndex} /> : <WorkContent />
         }
       </div>
-      <div className=" flex justify-between mt-5">
+      <div className=" flex justify-center mt-5">
         <div className='w-[260px] mr-[180px]'>
           <ButtonCancel
             onClick={e => {
@@ -76,17 +80,19 @@ const CampaignVote: React.FC<{
                 Return
               </div>
             </ButtonSwap> :
-            <ButtonSwapUser
+            <ButtonSwap
+              disabled={disabled}
               onClick={() => {
+                if (disabled) return
                 handleApplyVote()
               }}
             >
               <div className="btn-text">
                 {
-                  applyStatus === 1 ? <LoadingXUser /> : isVote ? 'Vote' : 'Apply' 
+                  applyStatus === 1 ? <LoadingX /> : isVote ? 'Vote' : 'Apply' 
                 }
               </div>
-            </ButtonSwapUser>
+            </ButtonSwap>
           }
           
         </div>

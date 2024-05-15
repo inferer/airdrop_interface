@@ -10,7 +10,7 @@ function CampaignDetails() {
     <div className='w-[1217px] mx-auto'>
       <CampaignBody>
         <div className='flex items-center mb-10'>
-          <LazyImage src={'/images/tokens/swap/air-campaign.svg'} className=' w-[32px] h-[32px] mr-3' />
+          <LazyImage src={'/images/tokens/swap/alg-campaign.svg'} className=' w-[32px] h-[32px] mr-3' />
           
           <div className=' font-fsemibold text-[32px]'>
             {'Campaign'} 

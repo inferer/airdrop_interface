@@ -141,6 +141,12 @@ export default function RightMenu() {
         router.push('/user/invite')
       }
     }
+    if (action === 'campaigns') {
+      if (isProjectMode) {
+        router.push('/project/campaigns')
+      } else {
+      }
+    }
    }, [router, isProjectMode, showRightMenu])
 
   return (
@@ -215,10 +221,20 @@ export default function RightMenu() {
             <MenuItem icon='/images/airdrop/completed.svg' text='Completed Airdrops' isProjectMode={isProjectMode} 
               onClick={() => handleClick('completed')}
             />
+            {
+              isProjectMode &&
+              <>
+                <MenuLine />
+                <MenuItem icon='/images/tokens/swap/alg-campaign.svg' text='Campaigns' isProjectMode={isProjectMode}
+                  onClick={() => handleClick('campaigns')}
+                />
+              </>
+            }
             <MenuLine />
             <MenuItem icon='/images/airdrop/airdrop2.svg' text='Airdrops Tokens' isProjectMode={isProjectMode}
               onClick={() => handleClick('tokens')}
             />
+            
             <MenuLine />
             <MenuItem icon='/images/airdrop/switch2.svg' text='Switch Airdrop Role' isProjectMode={isProjectMode}
               onClick={() => handleClick('switch')}
