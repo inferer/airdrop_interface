@@ -44,6 +44,7 @@ function UserPage() {
     if (action1) {
       return <UserCampaign />
     }
+    return <SearchPage />
   }
 
   return (

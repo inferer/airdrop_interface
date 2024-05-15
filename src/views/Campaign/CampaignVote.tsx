@@ -10,6 +10,7 @@ import VoteContent from "./VoteContent";
 import WorkContent from "./WorkContent";
 import { useCampaignApply } from "../../hooks/useCapmaignApply";
 import { LoadingXUser } from "../../components/Loader";
+import { randomStr } from "../../utils";
 
 const bundleId = 'M1y1pS5W-RC2aLjsojpIOA2CUflJPzyeCt3DxRb649Y'
 
@@ -39,7 +40,7 @@ const CampaignVote: React.FC<{
       if (isVote) {
         handleCampaignVote(campaignId, currentIndex)
       } else {
-        handleCampaignApply(campaignId, bundleId)
+        handleCampaignApply(campaignId, bundleId + randomStr(4))
       }
     }
   }, [isVote, campaignId, currentIndex])

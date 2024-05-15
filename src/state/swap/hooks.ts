@@ -18,7 +18,7 @@ import { SwapState } from './reducer'
 import useToggledVersion from '../../hooks/useToggledVersion'
 import { useIsUserAction, useUserSlippageTolerance } from '../user/hooks'
 import { computeSlippageAdjustedAmounts } from '../../utils/prices'
-import { getAirCampaignToken, getAirTokenBySymbol, getAirTokenFromAlgToken } from '../../utils/getTokenList'
+import { getAirCampaignToken, getAirTokenBySymbol, getAirTokenFromAlgToken, getAlgCampaignToken } from '../../utils/getTokenList'
 import { useAirTokenPercent, useAirTokenPercentBalance } from '../airdrop/hooks'
 
 export function useSwapState(): AppState['swap'] {
@@ -244,9 +244,11 @@ export function useCollectSwapInfo(): {
     recipient
   } = useSwapState()
 
-  const inputCurrency = useCurrency(inputCurrencyId)
+  const algCampaignToken = getAlgCampaignToken(chainId)
+  const { isUserCollect, isUserCampaign } = useIsUserAction()
+  const inputCurrency = useCurrency(isUserCampaign ? algCampaignToken?.address : inputCurrencyId )
 
-  const outputCurrency = useCurrency(getAirTokenFromAlgToken(inputCurrencyId, chainId))
+  const outputCurrency = useCurrency(getAirTokenFromAlgToken(isUserCampaign ? algCampaignToken?.address : inputCurrencyId, chainId))
   const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
     inputCurrency ?? undefined,
     outputCurrency ?? undefined

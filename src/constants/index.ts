@@ -229,7 +229,8 @@ export enum UserAction {
   CREATE,
   USER_SWAP,
   USER_COLLECT,
-  PROJECT_CAMPAIGN
+  PROJECT_CAMPAIGN,
+  USER_CAMPAIGN
 }
 
 export const CHANNEL_LIST = [

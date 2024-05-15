@@ -1,4 +1,4 @@
-import router from 'next/router'
+import router, { useRouter } from 'next/router'
 import { CurrencyAmount, JSBI, Token, Trade } from '@uniswap/sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import {  ButtonLight, ButtonSwap } from '../../components/Button'
@@ -26,18 +26,26 @@ import { useAccountLabelScore } from '../../hooks/useAirdropTokenScore'
 
 
 export default function Search() {
+  const router = useRouter()
   const { account } = useActiveWeb3React()
   const userLoginInfo = useLoginUserInfo()
   // toggle wallet when disconnected
   const toggleWalletModal = useWalletModalToggle()
   const { userAction, setUserAction }  = useUserAction()
   const [isProjectMode, toggleSetUserRoleMode] = useUserRoleMode()
+
+  const action = router.query.action ? router.query.action[0] : 'create'
   useEffect(() => {
     if (isProjectMode) {
       toggleSetUserRoleMode()
     }
-    setUserAction(UserAction.USER_COLLECT)
-  }, [isProjectMode])
+    if (action === 'collect') {
+      setUserAction(UserAction.USER_COLLECT)
+    } else {
+      setUserAction(UserAction.USER_CAMPAIGN)
+    }
+    
+  }, [isProjectMode, action])
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
   const {
@@ -97,7 +105,7 @@ export default function Search() {
   }, [maxAmountInput, onUserInput])
 
   const inputTokens = useInputTokens()
-  const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect } = useIsUserAction()
+  const { isUserSwap, isUserCollect, isUserCampaign } = useIsUserAction()
   useEffect(() => {
     if (inputTokens[0]) {
       onCurrencySelection(Field.INPUT, inputTokens[0])
@@ -105,23 +113,27 @@ export default function Search() {
   }, [inputTokens, onCurrencySelection])
 
   const handleAction = useCallback(() => {
+    const inputCurrency = currencies[Field.INPUT]
     if (isUserCollect) {
-      const inputCurrency = currencies[Field.INPUT]
       // localStorage.setItem('collectAlgAmount', parsedAmountOUTPUT?.toSignificant() || '')
       // @ts-ignore
       router.push(`/user/collect/${inputCurrency?.address}?airAmount=${parsedAmountOUTPUT?.toSignificant()}`)
     }
-  }, [isUserCollect, currencies])
+    if (isUserCampaign) {
+      // @ts-ignore
+      router.push(`/user/campaign/${inputCurrency?.address}`)
+    }
+  }, [isUserCollect, isUserCampaign, currencies])
 
   const accountScore = useAccountLabelScore(account || '', currencies[Field.INPUT]?.symbol?.slice(4) || '' )
   useEffect(() => {
     onUserInput(Field.INPUT, '')
     onUserInput(Field.OUTPUT, '')
   }, [router])
-
+  
   const disabled = useMemo(() => {
-    return !account || !!collectInputError || accountScore <= 0 || Number(formattedAmounts[Field.INPUT]) <= 0
-  }, [account, collectInputError, accountScore, formattedAmounts])
+    return !account || !!collectInputError || (accountScore <= 0 && !isUserCampaign) || Number(formattedAmounts[Field.INPUT]) <= 0
+  }, [account, collectInputError, accountScore, formattedAmounts, isUserCampaign])
   
   return (
     <>
@@ -140,7 +152,10 @@ export default function Search() {
               otherCurrency={currencies[Field.OUTPUT]}
               id="collect-currency-input"
             />
-            <Score score={accountScore} />
+            {
+              isUserCollect && <Score score={accountScore} />
+            }
+            
             <CurrencyInputPanel
               value={formattedAmounts[Field.OUTPUT]}
               onUserInput={handleTypeOutput}
@@ -151,7 +166,10 @@ export default function Search() {
               disableCurrencySelect={true}
               id="collect-currency-output"
             />
-            <Units />
+            {
+              isUserCollect && <Units />
+            }
+            
           </AutoColumn>
           <BottomGrouping>
             {
@@ -159,7 +177,7 @@ export default function Search() {
               <ButtonSwap onClick={toggleWalletModal}>
                 <div className='btn-text'>Connect Airdrop Network</div>
               </ButtonSwap>
-            ) : isUserCollect ?
+            ) : (isUserCollect || isUserCampaign) ?
             <ButtonSwap 
               disabled={disabled}
               onClick={e => {
@@ -170,7 +188,7 @@ export default function Search() {
               }} >
               <div className='btn-text'>
                 {
-                  (isProjectSwap || isUserSwap) ? 'Swap' : isProjectCreate ? 'Create' : 'Collect'
+                  isUserSwap ? 'Swap' : isUserCampaign ? 'Join' : 'Collect'
                 }
               </div>
                 

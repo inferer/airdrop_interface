@@ -96,6 +96,9 @@ export function useGetUserAction() {
       if (action === 'collect') {
         return UserAction.USER_COLLECT
       }
+      if (action === 'campaign') {
+        return UserAction.USER_CAMPAIGN
+      }
     }
     return UserAction.PROJECT_SWAP
   }, [router])
@@ -125,12 +128,17 @@ export function useIsUserAction() {
     return userAction === UserAction.PROJECT_CAMPAIGN
   }, [userAction])
 
+  const isUserCampaign = useMemo(() => {
+    return userAction === UserAction.USER_CAMPAIGN
+  }, [userAction])
+
   return {
     isProjectSwap,
     isProjectCreate,
     isUserSwap,
     isUserCollect,
-    isProjectCampaign
+    isProjectCampaign,
+    isUserCampaign
   }
 }
 

@@ -276,17 +276,20 @@ export function SwapCollectTabs({ onClick }: { onClick?: (type: UserAction) => v
   const handleTab = useCallback((action: UserAction) => {
     setUserAction(action)
     if (action === UserAction.USER_COLLECT) {
-      router.push('/search')
+      router.push('/user/collect')
     } 
     if (action === UserAction.USER_SWAP) {
       router.push('/user/swap')
+    } 
+    if (action === UserAction.USER_CAMPAIGN) {
+      router.push('/user/campaign')
     } 
   }, [setUserAction, onClick])
 
   return (
     <Tabs style={{ justifyContent: 'flex-start', marginBottom: 22 }}>
       <>
-        <StyledNavLink2 id={`collect-btn-click`} className={'airdrop'}
+        <StyledNavLink2 id={`collect-btn-click`} className={userAction === UserAction.USER_COLLECT ? 'airdrop' : ''}
           onClick={() => handleTab(UserAction.USER_COLLECT)}
         >
           {'Collect'}
@@ -295,6 +298,11 @@ export function SwapCollectTabs({ onClick }: { onClick?: (type: UserAction) => v
           onClick={() => handleTab(UserAction.USER_SWAP)}
         >
           {'Swap'}
+        </StyledNavLink2>
+        <StyledNavLink2 id={`usercampaign-btn-click`} className={userAction === UserAction.USER_CAMPAIGN ? 'airdrop' : ''}
+          onClick={() => handleTab(UserAction.USER_CAMPAIGN)}
+        >
+          {'Campaign'}
         </StyledNavLink2>
       </>
     </Tabs>

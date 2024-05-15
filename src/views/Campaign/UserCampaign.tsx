@@ -26,7 +26,10 @@ function UserCampaign() {
               {isCampaignVote ? 'Join the Campaign' : 'Campaigns'} 
             </div>
           </div>
-          <ApplyVoteSwitch onChange={setIsVote} />
+          {
+            isCampaignVote && <ApplyVoteSwitch onChange={setIsVote} />
+          }
+          
         </div>
         
         {isCampaignVote ? <CampaignVote isVote={isVote} /> : <CampaignList /> } 
