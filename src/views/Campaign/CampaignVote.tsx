@@ -46,8 +46,8 @@ const CampaignVote: React.FC<{
   }, [isVote, campaignId, currentIndex])
 
   const disabled = useMemo(() => {
-    return currentIndex < 0
-  }, [currentIndex])
+    return currentIndex < 0 && isVote
+  }, [currentIndex, isVote])
   
   return (
     <div className="py-5 pt-0">
