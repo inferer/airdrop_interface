@@ -26,6 +26,7 @@ const isProduction = process.env.NODE_ENV === 'production';
  
 // const isDev = true
 const nextConfig = {
+  distDir:isDev ? '.next' : 'build',
   reactStrictMode: false,
   experimental: {
     scrollRestoration: true,

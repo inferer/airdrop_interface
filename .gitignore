@@ -37,3 +37,4 @@ cypress/fixtures/example.json
 .next/
 next-env.d.ts
 cos.config.json
+build/
