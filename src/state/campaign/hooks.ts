@@ -18,3 +18,10 @@ export function useCampaignList0(campaignId: string | undefined) {
     return  campaignListOne.find(campaign => campaign.campaignId === campaignId ) ?? {} as ICampaign
   }, [campaignListOne, campaignId])
 }
+
+export function useCampaignApplyVoteList(campaignId: string | undefined) {
+  const campaignApplyVoteList = useSelector<AppState, AppState['campaign']['campaignApplyVoteList']>(state => state.campaign.campaignApplyVoteList)
+  return useMemo(() => {
+    return campaignId ? campaignApplyVoteList[campaignId] : []
+  }, [campaignId, campaignApplyVoteList])
+}

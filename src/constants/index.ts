@@ -223,7 +223,6 @@ export enum UserRoleMode {
   USER
 }
 
-
 export enum UserAction {
   PROJECT_SWAP,
   CREATE,
@@ -287,3 +286,5 @@ export const AddressZero_ETH = {
 export const TEL_URL = 'https://t.me/+zTwxF2bS6a85NzI1'
 
 export const INFERER_AIRDROP_SOURCE = 'INFERER_AIRDROP_SOURCE'
+
+export const IRY_GATEWAY = 'https://gateway.irys.xyz'

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { ThemeContext } from 'styled-components'
 import {  TYPE } from '../../theme'
 
@@ -9,11 +9,31 @@ import CampaignList from './CampaignListAlg'
 import { useRouter } from 'next/router'
 import CampaignVote from './CampaignVote'
 import ApplyVoteSwitch from './ApplyVoteSwitch'
+import { useCampaignApply } from '../../hooks/useCapmaignApply'
+import { useCampaignApplyVoteList } from '../../state/campaign/hooks'
 
 function UserCampaign() {
   const router = useRouter()
   const isCampaignVote = router.query.action ? router.query.action[2] : ''
+  const campaignId = isCampaignVote
   const [isVote, setIsVote] = useState(true)
+  const { handleGetCampaignApplyVotes } = useCampaignApply()
+  const campaignApplyVoteList = useCampaignApplyVoteList(campaignId)
+
+  useEffect(() => {
+    handleGetCampaignApplyVotes(campaignId)
+  }, [campaignId, handleGetCampaignApplyVotes])
+
+  useEffect(() => {
+    if (campaignApplyVoteList?.length < 1) {
+      setIsVote(false)
+    } else {
+      setIsVote(true)
+    }
+  }, [campaignApplyVoteList])
+
+  console.log(campaignApplyVoteList)
+
   return (
     <div className='w-[1217px] mx-auto'>
       <CampaignBody>
@@ -27,12 +47,12 @@ function UserCampaign() {
             </div>
           </div>
           {
-            isCampaignVote && <ApplyVoteSwitch onChange={setIsVote} />
+            (isCampaignVote && campaignApplyVoteList?.length > 0) && <ApplyVoteSwitch onChange={setIsVote} />
           }
           
         </div>
         
-        {isCampaignVote ? <CampaignVote isVote={isVote} /> : <CampaignList /> } 
+        {isCampaignVote ? <CampaignVote isVote={isVote} campaignApplyVoteList={campaignApplyVoteList} /> : <CampaignList /> } 
         
       </CampaignBody>
     </div>

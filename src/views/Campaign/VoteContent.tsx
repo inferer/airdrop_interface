@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { LabelText } from "./styleds";
 import { ICampaignApplyVote } from "../../state/campaign/actions";
 import LazyImage, { LazyImage2 } from "../../components/LazyImage";
+import { getIryPath } from "../../utils/iry";
 
 const VoteItem = ({
   voteData,
@@ -17,7 +18,7 @@ const VoteItem = ({
 }) => {
   return (
     <div className="">
-      <LazyImage src="/images/campaign/demo.png" className="w-[147px] h-[197px]" />
+      <LazyImage src={voteData.arwId ? getIryPath(voteData.arwId) : "/images/campaign/demo.png" } className="w-[147px] h-[197px] rounded-lg " />
       <div className="flex justify-center mt-[10px]">
         {
           from === 'project' ? 

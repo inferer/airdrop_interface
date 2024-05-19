@@ -10,28 +10,30 @@ import VoteContent from "./VoteContent";
 import WorkContent from "./WorkContent";
 import { useCampaignApply } from "../../hooks/useCapmaignApply";
 import { LoadingX, LoadingXUser } from "../../components/Loader";
-import { randomStr } from "../../utils";
+import { ICampaignApplyVote } from "../../state/campaign/actions";
 
 const bundleId = 'M1y1pS5W-RC2aLjsojpIOA2CUflJPzyeCt3DxRb649Y'
 
 const CampaignVote: React.FC<{
-  isVote?: boolean
+  isVote?: boolean,
+  campaignApplyVoteList: ICampaignApplyVote[]
 }> = ({
-  isVote
+  isVote,
+  campaignApplyVoteList
 }) => {
   const isProjectMode = useIsRoleProjectMode()
   const router = useRouter()
   const { handleGetCampaignOne } = useCampaignManager()
-  const { applyStatus, handleCampaignApply, handleCampaignVote, handleGetCampaignApplyVotes, campaignApplyVoteList } = useCampaignApply()
+  const { applyStatus, handleCampaignApply, handleCampaignVote } = useCampaignApply()
 
   const campaignId = router.query.action && router.query.action[2]
+  const [arwId, setArwId] = useState('')
 
   useEffect(() => {
     if (campaignId) {
       handleGetCampaignOne(Number(campaignId))
-      handleGetCampaignApplyVotes(campaignId)
     }
-  }, [campaignId])
+  }, [campaignId, handleGetCampaignOne])
 
   const campaign = useCampaignList0(router.query?.action ? router.query?.action[2] as string : undefined)
   const [currentIndex, setCurrentIndex] = useState(-1)
@@ -40,21 +42,35 @@ const CampaignVote: React.FC<{
       if (isVote) {
         handleCampaignVote(campaignId, currentIndex)
       } else {
-        handleCampaignApply(campaignId, bundleId + randomStr(4))
+        handleCampaignApply(campaignId, arwId)
       }
     }
-  }, [isVote, campaignId, currentIndex])
+  }, [isVote, campaignId, currentIndex, arwId])
 
   const disabled = useMemo(() => {
-    return currentIndex < 0 && isVote
-  }, [currentIndex, isVote])
-  
+    if (isVote) {
+      return currentIndex < 0 
+    }
+    if (!isVote) {
+      return !arwId
+    }
+    return false
+  }, [currentIndex, isVote, arwId])
+
+  const handleOnUpload = useCallback(async (arwId) => {
+    setArwId(arwId)
+  }, [])
+
   return (
     <div className="py-5 pt-0">
       <CampaignInfo campaign={campaign} from={isProjectMode ? 'project' : 'user'} />
       <div>
         {
-          isVote ? <VoteContent applyVoteList={campaignApplyVoteList} onSelect={setCurrentIndex} /> : <WorkContent />
+          (isVote && campaignApplyVoteList?.length > 0) ? 
+            <VoteContent applyVoteList={campaignApplyVoteList} onSelect={setCurrentIndex} /> : 
+            <WorkContent campaign={campaign} applyId={campaignApplyVoteList?.length}
+              onUpload={handleOnUpload}
+            />
         }
       </div>
       <div className=" flex justify-center mt-5">

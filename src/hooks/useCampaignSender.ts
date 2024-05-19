@@ -164,7 +164,7 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
         const receipt = await tx.wait()
         if (receipt.status) {
           localStorage.removeItem(INFERER_AIRDROP_SOURCE)
-          router.push('/project/ongoing')
+          router.push('/project/campaigns')
         }
       } catch(error) {
         console.log(error)

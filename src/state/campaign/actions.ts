@@ -42,6 +42,7 @@ export interface ICampaignApplyVote {
 }
 
 
-export const updateCampaignList = createAction<{ campaignList: ICampaign[] }>('airdrop/updateCampaignList')
-export const updateCampaignListOne = createAction<{ campaignList: ICampaign[] }>('airdrop/updateCampaignListOne')
+export const updateCampaignList = createAction<{ campaignList: ICampaign[] }>('campaign/updateCampaignList')
+export const updateCampaignListOne = createAction<{ campaignList: ICampaign[] }>('campaign/updateCampaignListOne')
+export const updateCampaignApplyVoteList = createAction<{campaignId: string, campaignApplyVoteList: ICampaignApplyVote[] }>('campaign/updateCampaignApplyVoteList')
 

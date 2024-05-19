@@ -48,7 +48,7 @@ function ProjectPage () {
     if (action1) {
       return <CampaignPage />
     }
-    return <CampaignListPage />
+    // return <CampaignListPage />
   }
   if (action === 'campaigns') {
     if (action1) {

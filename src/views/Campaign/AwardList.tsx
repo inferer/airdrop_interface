@@ -1,5 +1,5 @@
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ItemBox, ItemTitle } from "./styleds";
 import LazyImage from "../../components/LazyImage";
 import Input from "../../components/NumericalInput";
@@ -36,6 +36,10 @@ const AwardList = ({
 
   useEffect(() => {
     onChange && onChange(dataList)
+  }, [dataList])
+
+  const totalAmount = useMemo(() => {
+    return dataList.reduce((total, item) => total + (item.amount * item.size), 0)
   }, [dataList])
 
   return (
@@ -154,15 +158,25 @@ const AwardList = ({
             <ItemTitle>Summary</ItemTitle>
             <div className=''>
               <div className='text-[14px] text-[rgba(0,0,0,0.6)] font-fnormal'>
-                <span className='text'>1.5</span>
+                {
+                  dataList.map((item, index) => {
+                    return (
+                      <div key={index}>
+                        <span className='text'>1.5</span>
+                        <span className='text-[16px] mx-2'>+</span>
+                      </div>
+                    )
+                  })
+                }
+                {/* <span className='text'>1.5</span>
                 <span className='text-[16px] mx-2'>+</span>
                 <span className='text'>1.5</span>
                 <span className='text-[16px] mx-2'>+</span>
                 <span className='text'>1.5</span>
-                <span className='text-[18px] ml-4'>=</span>
+                <span className='text-[18px] ml-4'>=</span> */}
               </div>
               <div className='text-[45px] font-fsemibold mt-5'>
-                4.5
+                {totalAmount}
               </div>
             </div>
           </div>

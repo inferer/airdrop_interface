@@ -9,9 +9,12 @@ import { AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury
 import { useAirdropManager } from './useAirdropManager'
 import { useShowToast } from '../state/application/hooks'
 import { othersContracts } from '../constants/contractsLocal'
-import { ICampaign, ICampaignApplyVote } from '../state/campaign/actions'
+import { ICampaign, ICampaignApplyVote, updateCampaignApplyVoteList } from '../state/campaign/actions'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../state'
 
 export function useCampaignApply(algToken?: string) {
+  const dispatch = useDispatch<AppDispatch>()
   const { account, chainId, library } = useActiveWeb3React()
   const campaignApply: Contract | null = useCampaignApplyContract()
 
@@ -24,7 +27,6 @@ export function useCampaignApply(algToken?: string) {
   const [completeErrorMessage, setCompleteErrorMessage] = useState('')
   const { handleShow } = useShowToast()
 
-  const [campaignApplyVoteList, setCampaignApplyVoteList] = useState<ICampaignApplyVote[]>([])
   const handleGetCampaignApplyVotes = useCallback(async (campaignId: string) => {
     try {
       if (campaignApply) {
@@ -38,12 +40,12 @@ export function useCampaignApply(algToken?: string) {
             voteUser: item.voteUser ?? []
           }
         })
-        setCampaignApplyVoteList(tempList)
+        dispatch(updateCampaignApplyVoteList({ campaignId: campaignId, campaignApplyVoteList: tempList }))
       }
     } catch(error: any) {
 
     }
-  }, [campaignApply])
+  }, [campaignApply, dispatch])
 
 
   const handleCampaignApply = useCallback(async (
@@ -51,7 +53,6 @@ export function useCampaignApply(algToken?: string) {
     arwId: string
   ) => {
     if (campaignApply && account) {
-      
       setApplyStatus(1)
       let gasLimit = '5000000'
       try {
@@ -71,11 +72,8 @@ export function useCampaignApply(algToken?: string) {
         console.log(tx)
         const receipt = await tx.wait()
         if (receipt.status) {
-          // handleGetUserAirdropConfirmed()
-          // alert('Success')
-          handleShow({ type: 'success', content: `Apply success.`, title: 'Success' })
           handleGetCampaignApplyVotes(campaignId)
-          
+          handleShow({ type: 'success', content: `Apply success.`, title: 'Success' })
         }
 
       } catch (error) {
@@ -133,7 +131,6 @@ export function useCampaignApply(algToken?: string) {
     handleCampaignApply,
     handleCampaignVote,
     handleGetCampaignApplyVotes,
-    campaignApplyVoteList,
     algTokenCurrency,
     approvalState,
     approve
