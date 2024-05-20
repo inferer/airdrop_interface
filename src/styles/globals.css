@@ -211,3 +211,17 @@ body {
 .change-chain:hover {
   background: linear-gradient(96deg, rgba(63, 60, 255, 0.06) 0%, rgba(107, 190, 225, 0.06) 101.71%);
 }
+
+.md-editor-toolbar-warp:not(.md-editor-toolbar-bottom) {
+  display: none!important;
+}
+.cm-theme md-editor-inner {
+  background-color: #FFF !important;
+}
+.md-editor-content {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.60);
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

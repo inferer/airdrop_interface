@@ -9,6 +9,7 @@ export interface ICampaign {
   channel: string,
   action: string,
   content: string,
+  arwId: string,
   offerToken: Token,
   offerAirToken: string,
   labelToken: Token,
@@ -30,7 +31,8 @@ export interface ICampaign {
   realCompleted?: boolean,
   userCompleted?: boolean,
   isExpired?: boolean,
-  completedClaimed?: string
+  completedClaimed?: string,
+  
 }
 
 export interface ICampaignApplyVote {

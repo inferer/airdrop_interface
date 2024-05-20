@@ -1,5 +1,6 @@
+'use client';
 import { ICampaign } from "../../state/campaign/actions";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { FlexCenter, LabelText } from "./styleds";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import LazyImage from "../../components/LazyImage";
@@ -7,6 +8,10 @@ import { formatStringNumber, openBrowser, shortenAddress } from "../../utils";
 import { Currency } from "@uniswap/sdk";
 import { useRouter } from "next/router";
 import { FundToken, FundToken2 } from "../CampaignList/Ongoing";
+import { useIrysQuery } from "../../hooks/useIry";
+
+import { MdPreview } from 'md-editor-rt';
+import 'md-editor-rt/lib/preview.css';
 
 const ProgressItem = ({
   amount,
@@ -69,20 +74,7 @@ const AirdropInfo = ({
 
   const action = router.query.action && router.query.action[0]
 
-  const label3 = useMemo(() => {
-    if (campaign.isExpired) return 'Outdated Value'
-    if (action === 'completed') return 'Returned Value'
-    if (action === 'ongoing') return 'Remaining Value'
-
-  }, [action, campaign])
-
-  const filterTaskList = useMemo(() => {
-    return taskList?.filter(task => task.completed)
-  }, [taskList])
-  
-  const ongoing = useMemo(() => {
-    return !campaign.completed
-  }, [campaign])
+  const content = useIrysQuery(campaign.arwId)
 
   return (
     <div className="">
@@ -165,7 +157,9 @@ const AirdropInfo = ({
       <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
         <LabelText>Content</LabelText>
         <div className="mt-4">
-          
+          <div id="arwContent" style={{overflow: 'auto'}}>
+            <MdPreview editorId={'preview-only'} modelValue={content} />
+          </div>
           
         </div>
       </div>

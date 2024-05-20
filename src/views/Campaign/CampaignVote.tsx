@@ -19,7 +19,7 @@ const CampaignVote: React.FC<{
   campaignApplyVoteList: ICampaignApplyVote[]
 }> = ({
   isVote,
-  campaignApplyVoteList
+  campaignApplyVoteList,
 }) => {
   const isProjectMode = useIsRoleProjectMode()
   const router = useRouter()
@@ -43,6 +43,9 @@ const CampaignVote: React.FC<{
         handleCampaignVote(campaignId, currentIndex)
       } else {
         handleCampaignApply(campaignId, arwId)
+          .then(() => {
+
+          })
       }
     }
   }, [isVote, campaignId, currentIndex, arwId])

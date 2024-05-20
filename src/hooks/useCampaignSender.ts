@@ -132,7 +132,8 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
     lockedAmountB: string,
     chain: string,
     parameter: any[],
-    ladningPage: string
+    ladningPage: string,
+    arwId: string
   ) => {
     if (campaignSender && account && lockedToken) {
       setCreateStatus(1)
@@ -142,7 +143,7 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
       const _content = chain + '|' + parameterType + '|' + ladningPage
       const isETH = lockedToken === ETHER
       const source = localStorage.getItem(INFERER_AIRDROP_SOURCE) || ethers.constants.AddressZero
-      const bundleId = 'L1y1pS5W-RC2aLjsojpIOA2CUflJPzyeCt3DxRb649Y'
+      const bundleId = arwId
       const baseInfo = [name, label, channel, action, content, _content, bundleId, 'inferer']
       const route = args[2]
       console.log(lockedAmountA, lockedAmountB, args[1], unint)

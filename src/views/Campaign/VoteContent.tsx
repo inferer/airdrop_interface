@@ -66,7 +66,7 @@ const VoteContent = ({
       <div className="mt-4">
         <div className=" grid grid-cols-5 gap-x-[88px] gap-y-[20px]">
           {
-            applyVoteList.map((item, index) => {
+            applyVoteList?.map((item, index) => {
               return (
                 <VoteItem 
                   from={from}

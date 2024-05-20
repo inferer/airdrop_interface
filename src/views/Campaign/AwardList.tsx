@@ -157,13 +157,16 @@ const AwardList = ({
           >
             <ItemTitle>Summary</ItemTitle>
             <div className=''>
-              <div className='text-[14px] text-[rgba(0,0,0,0.6)] font-fnormal'>
+              <div className='text-[14px] text-[rgba(0,0,0,0.6)] font-fnormal flex items-center flex-wrap'>
                 {
                   dataList.map((item, index) => {
                     return (
                       <div key={index}>
                         <span className='text'>1.5</span>
-                        <span className='text-[16px] mx-2'>+</span>
+                        {
+                          index === dataList.length - 1 ? <span className='text-[18px] ml-4'>=</span> : <span className='text-[16px] mx-2'>+</span>
+                        }
+                        
                       </div>
                     )
                   })

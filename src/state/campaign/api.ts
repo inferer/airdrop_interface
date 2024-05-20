@@ -7,3 +7,11 @@ export const uploadFileToIry = async (
 
   return res && res.data || {}
 }
+
+export const uploadContentToIry = async (
+  formData: FormData
+) => {
+  const res = await uploader(`/api/campaign/iry`, formData )
+
+  return res && res.data || {}
+}

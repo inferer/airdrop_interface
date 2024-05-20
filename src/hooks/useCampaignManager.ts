@@ -111,6 +111,7 @@ export const getCampaignList = async (multi: Contract, airdropLength: number | n
         content: airdrop[1][4],
         chain: _otherContent[0],
         landingPage: _otherContent[2],
+        arwId: airdrop[1][6],
         offerToken: {
           ...offerTokenData,
         },

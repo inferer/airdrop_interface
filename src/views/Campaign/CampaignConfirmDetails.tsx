@@ -5,7 +5,7 @@ import CampaignInfo from "./CampaignInfo";
 import { ButtonSwap, ButtonSwapUser } from "../../components/Button";
 import { useIsRoleProjectMode } from "../../state/user/hooks";
 import { useCampaignManager } from "../../hooks/useCampaignManager";
-import { useCampaignList0 } from "../../state/campaign/hooks";
+import { useCampaignApplyVoteList, useCampaignList0 } from "../../state/campaign/hooks";
 import { useCampaignApply } from "../../hooks/useCapmaignApply";
 import VoteContent from "./VoteContent";
 
@@ -15,8 +15,8 @@ const CampaignConfirmDetails: React.FC<{
   const isProjectMode = useIsRoleProjectMode()
   const router = useRouter()
   const { handleGetCampaignOne } = useCampaignManager()
-  const { handleGetCampaignApplyVotes, campaignApplyVoteList } = useCampaignApply()
-
+  const { handleGetCampaignApplyVotes } = useCampaignApply()
+  const campaignApplyVoteList = useCampaignApplyVoteList(router.query.action && router.query.action[1])
   useEffect(() => {
     if (router.query.action) {
       const id = router.query.action[1]

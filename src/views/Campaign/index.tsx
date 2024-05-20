@@ -17,6 +17,7 @@ import Content from './Content'
 import { useCampaignSender } from '../../hooks/useCampaignSender'
 import Select from '../Create/Select'
 import { CAMPAIGN_DURATION, CHAIN_LIST } from '../../constants'
+import { useIry } from '../../hooks/useIry'
 
 
 let globalApproveList: string[] = ['usdt', 'label']
@@ -48,6 +49,7 @@ export default function Create() {
     approveAir
   } = useCreateCallback(undefined, undefined, undefined, null)
 
+  const { uploadStatus, handleUploadStr } = useIry()
   const { createStatus, handleCreateCampaign } = useCampaignSender(args, lockedCurrency as Token ?? undefined)
 
   const [approveLoading, setApproveLoading] = useState(true)
@@ -107,6 +109,12 @@ export default function Create() {
   }, [chainId])
   const channel = 'campaign'
   const action = 'competition'
+  const [createContent, setCreateContent] = useState('') 
+  const [arwId, setArwId] = useState('')
+
+  const disabled = useMemo(() => {
+    return !name || !createContent || !landingPageVerify
+  }, [name, createContent, landingPageVerify])
 
   return (
     <CreateBody>
@@ -196,7 +204,7 @@ export default function Create() {
         </ItemBox>
       </div>
       <AwardList onChange={setAwardData} />
-      <Content />
+      <Content onChange={setCreateContent} />
       <ItemBox style={{height: '135px', width: '100%', marginTop: 24}}>
         <div className='shrink-0 '>
           <ItemTitle style={{color: '#000'}}>Landing Page</ItemTitle>
@@ -299,19 +307,20 @@ export default function Create() {
         {
           !approveLoading && approvalState === ApprovalState.APPROVED && approvalStateLabel === ApprovalState.APPROVED &&
             <ButtonSwap
-              disabled={false}
-              onClick={e => {
+              disabled={disabled}
+              onClick={async e => {
                 e.stopPropagation()
-                if (createStatus === 1) return
-                // return
+                if (createStatus === 1 || uploadStatus === 1) return
+                const iryRes = await handleUploadStr(createContent)
+                
                 const content = JSON.stringify(awardData)
                 console.log('content: ', content)
-                handleCreateCampaign(name, label, duration, channel, action, '1', content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, currentChain?.value || '', [], ladningPage)
+                handleCreateCampaign(name, label, duration, channel, action, '1', content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, currentChain?.value || '', [], ladningPage, iryRes.id)
               }}
             >
               <div className='btn-text'>
                 {
-                  createStatus === 1 ? <LoadingX /> : 'Create'
+                  (createStatus === 1 || uploadStatus === 1) ? <LoadingX /> : 'Create'
                 }
               </div>
             </ButtonSwap>

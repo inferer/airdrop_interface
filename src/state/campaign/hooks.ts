@@ -22,6 +22,6 @@ export function useCampaignList0(campaignId: string | undefined) {
 export function useCampaignApplyVoteList(campaignId: string | undefined) {
   const campaignApplyVoteList = useSelector<AppState, AppState['campaign']['campaignApplyVoteList']>(state => state.campaign.campaignApplyVoteList)
   return useMemo(() => {
-    return campaignId ? campaignApplyVoteList[campaignId] : []
+    return campaignId ? (campaignApplyVoteList[campaignId] || []) : []
   }, [campaignId, campaignApplyVoteList])
 }
