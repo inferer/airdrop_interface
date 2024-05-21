@@ -43,6 +43,7 @@ const Content = ({
         /> */}
         <MdEditor 
           modelValue={value} 
+          style={{height: 210}}
           onChange={setValue} 
           preview={false}
           footers={[]}

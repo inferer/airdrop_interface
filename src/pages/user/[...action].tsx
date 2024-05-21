@@ -8,6 +8,7 @@ import InviteCodePage from "../../views/InviteCode";
 import AirdropDetails from "../../views/Collect/AirdropDetails";
 import CollectPage from "../../views/Collect";
 import UserCampaign from "../../views/Campaign/UserCampaign";
+import CampaignListPage from "../../views/CampaignList/Ongoing";
 
 function UserPage() {
   const router = useRouter()
@@ -39,6 +40,9 @@ function UserPage() {
   }
   if (action === 'invite') {
     return <InviteCodePage />
+  }
+  if (action === 'campaigns') {
+    return <UserCampaign />
   }
   if (action === 'campaign') {
     if (action1) {

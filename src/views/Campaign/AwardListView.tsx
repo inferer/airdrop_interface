@@ -1,0 +1,105 @@
+
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { ItemBox, ItemTitle } from "./styleds";
+import LazyImage from "../../components/LazyImage";
+import Input from "../../components/NumericalInput";
+
+const AwardListView = ({
+  dataList = []
+}: {
+  dataList?: any[]
+}) => {
+
+  const totalAmount = useMemo(() => {
+    if (!dataList) return 0
+    return (dataList || []).reduce((total, item) => total + (Number(item.a || item.amount) * Number(item.s || item.size)), 0)
+  }, [dataList])
+
+  return (
+    <ItemBox style={{height: 'auto', width: 1128, marginTop: 25}}>
+      <div className='text-[16px] font-fsemibold text-[rgba(0,0,0,1)]'>Award</div>
+      <div className=' flex mt-6'>
+        <div className='w-full pr-6'>
+          <div className="award-table">
+            <div className="h-[37px] bg-[rgba(85,123,241,0.03)] text-[14px] flex items-center text-[rgba(0,0,0,0.4)] font-fsemibold">
+              <div className="w-[101px] pl-5">Tier</div>
+              <div className="w-[142px]">Amount</div>
+              <div className="w-[100px] pl-[45px]"></div>
+              <div className="w-[142px]">Count</div>
+              <div className="w-[110px] pl-[50px]"></div>
+              <div className="w-[142px] shrink-0">Total fee</div>
+              <div className="w-[104px] pl-[50px]"></div>
+            </div>
+            {
+              dataList.map((item, index) => {
+                return (
+                  <div key={index} className="h-[60px] text-[14px] flex items-center text-[rgba(0,0,0,1)] font-fsemibold award-table-item">
+                    <div className="w-[101px] pl-5">
+                      <div className="w-[22px] h-[22px] text-[14px] rounded-[4px] border border-[rgba(121,142,206,0.10)] flex items-center justify-center font-fmedium text-[rgba(121,142,206,0.40)]">
+                        {index + 1}
+                      </div>
+                    </div>
+                    <div className="w-[142px] flex items-center">
+                      <div className="pt-[5px] pb-[6px] px-2 h-[28px] rounded-[4px] bg-[rgba(37,150,232,0.10)] flex items-center text-[#245AFF] text-[14px] font-fsemibold min-w-[50px] ">
+                        {item.a || item.amount}
+                      </div>
+                    </div>
+                    <div className="w-[100px] pl-[45px]">
+                      <div className="text-[20px] font-fbold text-[#8BA5FF]">x</div>
+                    </div>
+                    <div className="w-[142px] flex items-center">
+                      <div className="pt-[5px] pb-[6px] px-2 h-[24px] min-w-[27px] rounded-[4px] bg-[rgba(85,123,241,0.04)] flex items-center justify-center text-[#245AFF] text-[14px] font-fsemibold ">
+                        {item.s || item.size}
+                      </div>
+                      
+                    </div>
+                    <div className="w-[110px] pl-[50px]">
+                      <div className="text-[20px] font-fbold text-[#8BA5FF]">=</div>
+                    </div>
+                    <div className="w-[142px] shrink-0 flex">
+                      <div className="pt-[5px] pb-[6px] px-2 h-[28px] rounded-[4px] bg-[rgba(37,150,232,0.10)] flex items-center text-[#245AFF] text-[14px] font-fsemibold min-w-[50px] ">
+                        {(Number(item.a || item.amount) * Number(item.s || item.size))}
+                      </div>
+                    </div>
+                    
+                  </div>
+                )
+              })
+            }
+            
+          </div>
+        </div>
+        <div className='p-5 rounded-xl bg-[rgba(85,123,241,0.06)] w-[225px] min-h-[277px] shrink-0 relative'>
+          <LazyImage src='/images/campaign/bg2.png' className='w-[148px] h-[163px] absolute top-0 right-0' />
+          <div className=' relative z-10 flex flex-col justify-between h-full'
+          >
+            <ItemTitle>Summary</ItemTitle>
+            <div className=' text-[rgba(36,90,255,0.6)]'>
+              <div className='text-[14px] font-fnormal flex items-center flex-wrap'>
+                {
+                  dataList.map((item, index) => {
+                    return (
+                      <div key={index} className="flex items-center">
+                        <span className='text'>{(Number(item.a || item.amount) * Number(item.s || item.size))}</span>
+                        {
+                          index === dataList.length - 1 ? <span className='text-[18px] ml-4'>=</span> : <span className='text-[16px] mx-2'>+</span>
+                        }
+                        
+                      </div>
+                    )
+                  })
+                }
+
+              </div>
+              <div className='text-[45px] font-fsemibold mt-5 text-[#245AFF]'>
+                {totalAmount}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ItemBox>
+  )
+}
+
+export default AwardListView

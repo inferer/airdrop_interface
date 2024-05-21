@@ -221,7 +221,7 @@ export default function RightMenu() {
             <MenuItem icon='/images/airdrop/completed.svg' text='Completed Airdrops' isProjectMode={isProjectMode} 
               onClick={() => handleClick('completed')}
             />
-            {
+            {/* {
               isProjectMode &&
               <>
                 <MenuLine />
@@ -229,7 +229,7 @@ export default function RightMenu() {
                   onClick={() => handleClick('campaigns')}
                 />
               </>
-            }
+            } */}
             <MenuLine />
             <MenuItem icon='/images/airdrop/airdrop2.svg' text='Airdrops Tokens' isProjectMode={isProjectMode}
               onClick={() => handleClick('tokens')}

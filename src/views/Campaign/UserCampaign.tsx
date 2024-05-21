@@ -32,8 +32,6 @@ function UserCampaign() {
     }
   }, [campaignApplyVoteList])
 
-  console.log(campaignApplyVoteList)
-
   return (
     <div className='w-[1217px] mx-auto'>
       <CampaignBody>

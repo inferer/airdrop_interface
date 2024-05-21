@@ -5,20 +5,38 @@ import LazyImage from "../../components/LazyImage";
 import { uploadFileToIry } from "../../state/campaign/api";
 import { ICampaign } from "../../state/campaign/actions";
 import { openId } from "../../utils/iry";
+import { LoadingUpload } from "../../components/Loader";
 
 const UploadCom0 = ({
-  onChange
+  onChange,
+  loading
 }: {
-  onChange?: (file: File) => void
+  onChange?: (file: File) => void,
+  loading?: boolean
 },
 ref: React.Ref<unknown> | undefined
 ) => {
   const filePickerRef = useRef<null | HTMLInputElement>(null)
   const [uploadFile, setUploadFile] = useState<null | File>(null)
+  const [imgPreview, setImgPreview] = useState('')
 
   const addImageToPost = (e: any) => {
-    setUploadFile(e.target.files[0])
-    onChange && onChange(e.target.files[0])
+    const file = e.target.files[0]
+    var allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/zip', 'application/x-zip-compressed'];
+    var fileSize = file.size;
+    var fileType = file.type;    
+    if (allowedTypes.includes(fileType)) {
+      var reader = new FileReader();
+      reader.onload = function(e: any) {
+        setImgPreview(e.target.result)
+      };
+      reader.readAsDataURL(file);
+      setUploadFile(file)
+      onChange && onChange(file)
+    } else {
+        // 文件不符合要求
+        alert('请上传JPEG、PNG、WEBP、GIF或ZIP文件。');
+    }
   }
 
   useImperativeHandle(ref, () => ({
@@ -32,15 +50,47 @@ ref: React.Ref<unknown> | undefined
   }))
 
   return (
-    <div className=" cursor-pointer"
-      onClick={() => {
-        filePickerRef.current?.click()
-      }}
+    <div className="w-[147px] h-[230px]"
+      
     >
-      <LazyImage src="/images/campaign/upload.svg" />
+      {
+        !uploadFile && !imgPreview && 
+          <div className="flex items-center flex-col h-[197px] justify-center cursor-pointer "
+            onClick={() => {
+              filePickerRef.current?.click()
+            }}
+          >
+            <LazyImage src="/images/campaign/upload.svg" />
+        
+            <div className="text-[rgba(139,165,255,1)] mt-[14px] text-center">Upload</div>
+          </div>
+      }
+      {
+        imgPreview && 
+        <div className="w-full h-full relative rounded group ">
+          <div className="w-full h-[197px] flex justify-center items-center">
+            <img src={imgPreview} alt="" className=" max-w-[100%] max-h-[100%]" />
+          </div>
+          {
+            !loading && 
+              <div className=" absolute w-full h-full left-0 top-0 bg-[rgba(255,255,255,0.5)] items-center justify-center cursor-pointer hidden group-hover:flex"
+                onClick={() => {
+                  filePickerRef.current?.click()
+                }}
+              >
+                <div className="bg-[rgba(255,255,255,0.5)] w-[76px] h-[29px] flex justify-center items-center text-[rgba(123,156,242,0.80)]"
+
+                >Change</div>
+              </div>
+            }
+          
+          <div className="text-[rgba(0,0,0,0.8)] mt-[14px] text-center">Preview</div>
+        </div>
+        
+      }
       <input
         type="file"
-        accept="image/jpeg,image/png,image/webp,image/gif"
+        accept="image/jpeg,image/png,image/webp,image/gif,application/zip,application/x-zip-compressed"
         ref={filePickerRef}
         hidden
         onChange={addImageToPost}
@@ -61,15 +111,18 @@ const WorkContent = ({
   onUpload?: (arwId: string) => void
 }) => {
   const [arwId, setArwId] = useState('')
+  const [uploading, setUploading] = useState(false)
 
   const uploadRef = useRef<any>(null)
   const handleFileChange = useCallback(async (file) => {
+    setUploading(true)
     const formData = new FormData();
     formData.append('file', file);
     formData.append('campaignId', campaign.campaignId)
     formData.append('applyId', String(applyId))
     const res = await uploadFileToIry(formData)
-    
+    setUploading(false)
+    setUploading
     if (uploadRef.current) {
       uploadRef.current.removeFile()
     }
@@ -82,40 +135,69 @@ const WorkContent = ({
   return (
     <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
       <div className="flex justify-between min-h-[319px] ">
-        <div>
+        <div className="w-full">
           <LabelText>Work</LabelText>
-          <div className="mt-[42px] ml-[53px]">
-            <UploadCom ref={uploadRef} onChange={handleFileChange} />
+          <div className="flex justify-center w-full mt-5">
+            <UploadCom ref={uploadRef} onChange={handleFileChange} loading={uploading} />
           </div>
         </div>
-        {
-          arwId && 
-          <div className="w-[528px] h-[277px] bg-[rgba(85,123,241,0.06)] rounded-xl p-5 relative">
-            <LazyImage src="/images/campaign/work_bg.png" className="w-[148px] h-[163px] absolute top-0 right-0" />
-            <div className=" relative z-10 text-[rgba(0,0,0,0.6)]">
-              <div className="text-[rgba(0,0,0,0.5)] font-semibold">Summary</div>
-              <div className="flex items-center text-[12px] mt-7"
-                onClick={e => {
-                  e.stopPropagation()
-                  openId(arwId)
-                }}
-              >
-                ARWEAVE TRANSACTION
-                <LazyImage src="/images/airdrop/open.svg" className="ml-[5px]" />
+        
+        <div className="w-[528px] h-[277px] bg-[rgba(85,123,241,0.06)] rounded-xl p-5 relative shrink-0">
+          {
+           arwId && <LazyImage src="/images/campaign/bg2.svg" className="w-[263px] h-[111px] absolute top-[87px] left-[121px]" />
+          }
+          
+          <div className=" relative z-10 text-[rgba(0,0,0,0.6)]">
+            <div className="text-[rgba(0,0,0,0.5)] font-semibold">Summary</div>
+            {
+              uploading && 
+              <div className="flex justify-center mt-[62px]">
+                <LoadingUpload />
               </div>
-              <div className="flex items-center text-[12px] mt-2">
-                { arwId }
+            }
+            {
+              !arwId && !uploading &&
+              <div className=" flex items-center flex-col">
+                <LazyImage src="/images/campaign/empty.svg" className="mt-[21px]" />
+                <div className=" font-dnormal mt-4 text-[rgba(65,65,65,0.8)]">
+                  Empty
+                </div>
               </div>
-              <div className="flex items-center text-[12px] mt-[25px]">
-                PROTOCOL PROOF
-                <LazyImage src="/images/airdrop/open.svg" className="ml-[5px]" />
+            }
+            {
+              arwId && !uploading &&
+              <div>
+                <div className="flex items-center text-[12px] mt-7 cursor-pointer"
+                  onClick={e => {
+                    e.stopPropagation()
+                    openId(arwId)
+                  }}
+                >
+                  ARWEAVE TRANSACTION
+                  <LazyImage src="/images/airdrop/open.svg" className="ml-[5px]" />
+                </div>
+                <div className="flex items-center text-[12px] mt-2">
+                  { arwId }
+                </div>
+                <div className="flex items-center text-[12px] mt-[25px] cursor-pointer"
+                  onClick={e => {
+                    e.stopPropagation()
+                    openId(campaign.arwId)
+                  }}
+                >
+                  PROTOCOL PROOF
+                  <LazyImage src="/images/airdrop/open.svg" className="ml-[5px]" />
+                </div>
+                <div className="flex items-center text-[12px] mt-2"
+                  
+                >
+                  {campaign.arwId}
+                </div>
               </div>
-              <div className="flex items-center text-[12px] mt-2">
-                bAxelsk3nal-lsiTRfWS-Lo6PhmGim6Her5IGLE9zBU
-              </div>
-            </div>
+            }
+            
           </div>
-        }
+        </div>
         
       </div>
     </div>

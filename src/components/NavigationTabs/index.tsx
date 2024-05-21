@@ -166,13 +166,13 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
   const router = useRouter()
   const { account } = useActiveWeb3React()
   const [ isProjectMode ] = useUserRoleMode()
-  const [active, setActive] = useState<'collect' | 'rewards' | ''>('')
+  const [active, setActive] = useState<'collect' | 'campaigns' | ''>('')
 
   const handleTab = useCallback((type) => {
-    if (!account && type === 'rewards') return
+    if (!account && type === 'campaigns') return
     setActive(type)
-    if (type === 'rewards') {
-      router.push(isProjectMode ? '/project/rewards' :  '/user/rewards')
+    if (type === 'campaigns') {
+      router.push(isProjectMode ? '/project/campaigns' :  '/user/campaigns')
     } else {
       router.push(isProjectMode ? '/project/create' :  '/user/collect')
     }
@@ -181,8 +181,8 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
   }, [active, isProjectMode, account])
   const action = router.query.action ? router.query.action[0] : 'create'
   useEffect(() => {
-    if (action === 'rewards' || action === 'consumption') {
-      setActive('rewards')
+    if (action === 'campaigns' || action === 'consumption') {
+      setActive('campaigns')
     } else if (action === 'swap' || action === 'create' || action === 'collect') {
       setActive('collect')
     } else {
@@ -197,10 +197,10 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
       >
         {'Airdrop'}
       </StyledNavLink2>
-      <StyledNavLink2 id={`tokens-btn-click`} className={active === 'rewards' ?  'airdrop' : ''}
-        onClick={() => handleTab('rewards')}
+      <StyledNavLink2 id={`tokens-btn-click`} className={active === 'campaigns' ?  'airdrop' : ''}
+        onClick={() => handleTab('campaigns')}
       >
-        {'Tokens'}
+        {'Campaigns'}
       </StyledNavLink2>
     </Tabs>
   )
@@ -299,11 +299,11 @@ export function SwapCollectTabs({ onClick }: { onClick?: (type: UserAction) => v
         >
           {'Swap'}
         </StyledNavLink2>
-        <StyledNavLink2 id={`usercampaign-btn-click`} className={userAction === UserAction.USER_CAMPAIGN ? 'airdrop' : ''}
+        {/* <StyledNavLink2 id={`usercampaign-btn-click`} className={userAction === UserAction.USER_CAMPAIGN ? 'airdrop' : ''}
           onClick={() => handleTab(UserAction.USER_CAMPAIGN)}
         >
           {'Campaign'}
-        </StyledNavLink2>
+        </StyledNavLink2> */}
       </>
     </Tabs>
   )

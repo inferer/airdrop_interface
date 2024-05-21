@@ -66,6 +66,21 @@ export function Loading({ size = '30px', stroke = '#6BBEE1', ...rest }: { size?:
   )
 }
 
+export function LoadingUpload({ size = '80px', stroke = '#6BBEE1', ...rest }: { size?: string; stroke?: string }) {
+  return (
+    <StyledSVG2 viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" size={size}>
+        <path fillRule="evenodd" clipRule="evenodd" d="M41.9807 66.8521C44.9259 66.6474 47.8376 65.9617 50.5963 64.8031C56.1131 62.4864 60.7082 58.4094 63.6652 53.2078C66.6223 48.0061 67.775 41.9722 66.9438 36.0468C66.1126 30.1214 63.3441 24.6376 59.0699 20.4503C54.7958 16.2631 49.2563 13.6078 43.3151 12.8984C37.3738 12.1891 31.3649 13.4655 26.225 16.5288C21.0852 19.592 17.1034 24.2699 14.9005 29.833C12.6976 35.3961 12.3973 41.5318 14.0466 47.2834C14.3511 48.3452 13.7371 49.4528 12.6753 49.7572C11.6136 50.0617 10.506 49.4478 10.2015 48.386C8.30891 41.7856 8.65346 34.7444 11.1815 28.3603C13.7095 21.9762 18.2789 16.608 24.1772 13.0927C30.0756 9.57741 36.9713 8.11259 43.7893 8.92664C50.6073 9.74069 56.9643 12.7879 61.8692 17.593C66.7741 22.3982 69.9511 28.6913 70.905 35.4911C71.8589 42.291 70.536 49.2153 67.1426 55.1846C63.7492 61.1539 58.4759 65.8326 52.1451 68.4911C48.9792 69.8206 45.6378 70.6076 42.258 70.8425C41.1561 70.919 40.2007 70.0878 40.1242 68.9859C40.0476 67.884 40.8788 66.9287 41.9807 66.8521Z" fill="url(#paint0_linear_924_1079)" fillOpacity="0.4"/>
+      <defs>
+        <linearGradient id="paint0_linear_924_1079" x1="78.5754" y1="61.1387" x2="1.71493" y2="18.3296" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#0038F5"/>
+        <stop offset="1" stopColor="#7BA7F9"/>
+        </linearGradient>
+      </defs>
+
+    </StyledSVG2>
+  )
+}
+
 export function Loading2({ size = '15px', stroke = '#6BBEE1', ...rest }: { size?: string; stroke?: string }) {
   return (
     <StyledSVG2 viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" size={size}>

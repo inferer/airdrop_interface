@@ -5,7 +5,7 @@ import LazyImage from "../../components/LazyImage";
 import { useAirdropList, useMaxUnits } from "../../state/airdrop/hooks";
 import { useRouter } from "next/router";
 import { useAirdropManager } from "../../hooks/useAirdropManager";
-import { getALgTokenFromAirToken, getAlgLabelTokenByAddress } from "../../utils/getTokenList";
+import { getALgTokenFromAirToken, getAlgCampaignToken, getAlgLabelTokenByAddress } from "../../utils/getTokenList";
 import { useActiveWeb3React } from "../../hooks";
 import { useAccountLabelScore } from "../../hooks/useAirdropTokenScore";
 import { useCollectSwapInfo } from "../../state/swap/hooks";
@@ -23,11 +23,7 @@ const CampaignListAlg: React.FC<{
 }> = () => {
   const { account, chainId } = useActiveWeb3React()
   const router = useRouter()
-  const [ isCopied, staticCopy ] = useCopyClipboard()
 
-  const [algToken, setAlgToken] = useState('')
-
-  const { handleGetAirdropList, handleUpdateAirdropList } = useAirdropManager()
   const { handleGetCampaignList } = useCampaignManager()
   const airdropList = useAirdropList()
   const campaignList = useCampaignList()
@@ -77,17 +73,13 @@ const CampaignListAlg: React.FC<{
   }, [maxUnits, airdropList, parsedAmountOUTPUT])
 
   useEffect(() => {
-    let _algToken = ''
+    let _algToken
     if (router.query.action) {
-      _algToken = router.query.action[1]
-      setAlgToken(_algToken)
-      handleGetAirdropList(_algToken)
-      handleGetCampaignList(_algToken)
+      _algToken = getAlgCampaignToken(chainId)
+
+      _algToken && handleGetCampaignList(_algToken.address)
     }
-    return () => {
-      handleUpdateAirdropList()
-    }
-  }, [router])
+  }, [router, chainId])
 
   return (
     <div>

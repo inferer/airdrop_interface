@@ -12,6 +12,7 @@ import { useIrysQuery } from "../../hooks/useIry";
 
 import { MdPreview } from 'md-editor-rt';
 import 'md-editor-rt/lib/preview.css';
+import AwardListView from "./AwardListView";
 
 const ProgressItem = ({
   amount,
@@ -64,6 +65,14 @@ const AirdropInfo = ({
 
     return obj
   }, [campaign])
+
+  const contentAward = useMemo(() => {
+    try {
+      return JSON.parse(campaign.content)
+    } catch(error) {
+      return []
+    }
+  }, [campaign])
   
   const router = useRouter()
 
@@ -75,7 +84,6 @@ const AirdropInfo = ({
   const action = router.query.action && router.query.action[0]
 
   const content = useIrysQuery(campaign.arwId)
-
   return (
     <div className="">
       <div className="h-[171px] rounded-xl border border-[rgba(85, 123, 241, 0.1)] overflow-hidden">
@@ -154,6 +162,7 @@ const AirdropInfo = ({
           </div>
         </div>
       </div>
+      <AwardListView dataList={contentAward} />
       <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
         <LabelText>Content</LabelText>
         <div className="mt-4">

@@ -10,22 +10,22 @@ const AwardList = ({
   onChange?: (dataList: any[]) => void
 }) => {
 
-  const [dataList, setDataList] = useState<any[]>([{amount: '', size: ''}])
+  const [dataList, setDataList] = useState<any[]>([{a: '', s: ''}])
 
   const handleAmountInput = useCallback((value, index) => {
-    const dataItem = { ...dataList[index], amount: value}
+    const dataItem = { ...dataList[index], a: value}
     dataList[index] = dataItem
     setDataList([...dataList])
   }, [dataList])
 
   const handleSizeInput = useCallback((value, index) => {
-    const dataItem = { ...dataList[index], size: value}
+    const dataItem = { ...dataList[index], s: value}
     dataList[index] = dataItem
     setDataList([...dataList])
   }, [dataList])
 
   const handleAddDataItem = useCallback(() => {
-    const dataItem = {amount: '', size: ''}
+    const dataItem = {a: '', s: ''}
     setDataList([...dataList, dataItem])
   }, [dataList])
 
@@ -39,7 +39,7 @@ const AwardList = ({
   }, [dataList])
 
   const totalAmount = useMemo(() => {
-    return dataList.reduce((total, item) => total + (item.amount * item.size), 0)
+    return dataList.reduce((total, item) => total + (item.a * item.s), 0)
   }, [dataList])
 
   return (
@@ -94,7 +94,7 @@ const AwardList = ({
                         width: 142, height: 40, border: '1px solid rgba(85,123,241,0.1)', padding: '0 16px', fontSize: 14, textAlign: 'right'
                       }} 
                         className=" rounded-lg" 
-                        value={item.amount} 
+                        value={item.a} 
                         onUserInput={ value => {
                           handleAmountInput(value, index)
                         }} />
@@ -107,7 +107,7 @@ const AwardList = ({
                         width: 142, height: 40, border: '1px solid rgba(85,123,241,0.1)', padding: '0 16px', fontSize: 14, textAlign: 'right'
                       }} 
                         className=" rounded-lg" 
-                        value={item.size} 
+                        value={item.s} 
                         onUserInput={ value => {
                           handleSizeInput(value, index)
                         }} />
@@ -117,7 +117,7 @@ const AwardList = ({
                     </div>
                     <div className="w-[142px] shrink-0">
                       <div className="text-[16px] font-fsemibold text-right">
-                        {item.amount * item.size}
+                        {item.a * item.s}
                       </div>
                     </div>
                     <div className="w-[104px] pl-[50px]">
@@ -161,7 +161,7 @@ const AwardList = ({
                 {
                   dataList.map((item, index) => {
                     return (
-                      <div key={index}>
+                      <div key={index} className="flex items-center">
                         <span className='text'>1.5</span>
                         {
                           index === dataList.length - 1 ? <span className='text-[18px] ml-4'>=</span> : <span className='text-[16px] mx-2'>+</span>
