@@ -29,9 +29,12 @@ const processResult = (res: any, url?: string) => {
 }
 
 export function fetcher(url: string, data: any = {}) {
+  
   let formatData = { ...data }
   getHeaders()
-  return instance.get(url, { params: formatData }).then((res: { data: any; }) => processResult(res.data, url))
+  return instance.get(url, { params: formatData }).then((res: { data: any; }) => processResult(res.data, url)).catch(() => {
+    
+  })
 }
 
 export function userPoolSrvcFetcher(url: string, data: any = {})

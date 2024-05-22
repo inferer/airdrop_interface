@@ -28,6 +28,7 @@ const CampaignVote: React.FC<{
 
   const campaignId = router.query.action && router.query.action[2]
   const [arwId, setArwId] = useState('')
+  const [fileType, setFileType] = useState('')
 
   useEffect(() => {
     if (campaignId) {
@@ -42,13 +43,13 @@ const CampaignVote: React.FC<{
       if (isVote) {
         handleCampaignVote(campaignId, currentIndex)
       } else {
-        handleCampaignApply(campaignId, arwId)
+        handleCampaignApply(campaignId, fileType + '-' + arwId)
           .then(() => {
 
           })
       }
     }
-  }, [isVote, campaignId, currentIndex, arwId])
+  }, [isVote, campaignId, currentIndex, arwId, fileType])
 
   const disabled = useMemo(() => {
     if (isVote) {
@@ -60,8 +61,9 @@ const CampaignVote: React.FC<{
     return false
   }, [currentIndex, isVote, arwId])
 
-  const handleOnUpload = useCallback(async (arwId) => {
+  const handleOnUpload = useCallback(async (arwId, fileType) => {
     setArwId(arwId)
+    setFileType(fileType)
   }, [])
 
   return (

@@ -55,6 +55,7 @@ export function useCampaignApply(algToken?: string) {
     if (campaignApply && account) {
       setApplyStatus(1)
       let gasLimit = '5000000'
+      console.log(arwId)
       try {
         const gasEstimate = await campaignApply.estimateGas['applyCampaign'](campaignId, arwId)
         gasLimit = gasEstimate.toString()

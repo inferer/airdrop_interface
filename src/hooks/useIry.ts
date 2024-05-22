@@ -42,11 +42,16 @@ export function useIrysQuery(id: string) {
   
   useEffect(() => {
     if (id) {
-      const url = getIryPath(id)
-      fetcher(url)
-        .then((res: string) => {
-          setContent(res)
-        })
+      try {
+        const url = getIryPath(id)
+        fetcher(url)
+          .then((res: string) => {
+            setContent(res)
+          })
+      } catch (error) {
+        
+      }
+      
     }
     
   }, [id])
