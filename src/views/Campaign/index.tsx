@@ -211,7 +211,6 @@ export default function Create() {
           <div className='mt-3 flex items-center'>
             <div className='w-[524px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[44px]'>
               <LazyImage src='/images/airdrop/landing.svg' className='mr-2' />
-
               <TextInput
                 color='rgba(0,0,0,0.80)'
                 fontSize='14px'
