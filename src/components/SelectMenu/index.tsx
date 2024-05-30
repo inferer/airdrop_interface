@@ -32,7 +32,7 @@ export const SelectMenu: React.FC<{
       }
       setShowOptions(!showOptions)
     } else {
-      router.push('/user/campaign/campaigns')
+      router.push('/user/campaign')
     }
     
   }, [showOptions, isProjectMode])
