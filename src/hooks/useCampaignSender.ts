@@ -49,9 +49,12 @@ export function useCreateCallback(
     args = swapCalls[0]?.parameters?.args
     lockedTokenAir = args[2][0]
     lockedLabel = args[2][1]
-    lockedToken = getUSDTTokenFromAirToken(lockedTokenAir, chainId)
+    
   }
+    // @ts-ignore
+  lockedToken = getUSDTTokenFromAirToken(currencies[Field.INPUT] && currencies[Field.INPUT].address, chainId)
   const lockedCurrency = useCurrency(lockedToken)
+
   const lockedCurrencyAmount = useCurrencyBalance(account ?? undefined, lockedCurrency ?? undefined)
   const lockedAmount = useMemo(() => {
     if (args[0] && lockedCurrency) {
@@ -94,16 +97,18 @@ export function useCreateCallback(
       lockedAmountBShow
     }
   }, [args, lockedCurrency, airPercent, v2Trade, percentBalance, independentField])
-
   const [approvalState, approve] = useApproveCallback(lockedCurrencyAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
   const [approvalStateAir, approveAir] = useApproveCallback(v2Trade?.inputAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
   const [approvalStateLabel, approveLabel] = useApproveCallback(v2Trade?.outputAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
+
   return {
+    currencies,
     args,
     lockedAmount,
     lockedAmountAB,
     lockedCurrency,
     lockedCurrencyAir: currencies[Field.INPUT],
+    lockedCurrencyAirCampaign: currencies[Field.OUTPUT],
     lockedCurrencyAmount,
     outputAmount: v2Trade?.outputAmount,
     approvalState,
@@ -123,45 +128,42 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
   const handleCreateCampaign = useCallback(async (
     name: string,
     label: string,
-    _duration: string,
     channel: string,
     action: string,
-    unint: string,
-    content: string,
-    lockedAmountA: string,
-    lockedAmountB: string,
-    chain: string,
-    parameter: any[],
-    ladningPage: string,
-    arwId: string
+    landingPage: string,
+    arwId: string,
+    offerToken: Currency,
+    airCampaign: Currency,
+    offerAmount: string,
+    applyDuration: number,
+    voteDuration: number,
+    awardList: any[]
   ) => {
     if (campaignSender && account && lockedToken) {
       setCreateStatus(1)
-      console.log(content, lockedAmountA, lockedAmountB, chain, parameter, ladningPage)
-      
-      const parameterType = JSON.stringify(parameter.map(item => ({name: item.name, type: item.type})))
-      const _content = chain + '|' + parameterType + '|' + ladningPage
+
       const isETH = lockedToken === ETHER
-      const source = localStorage.getItem(INFERER_AIRDROP_SOURCE) || ethers.constants.AddressZero
-      const bundleId = arwId
-      const baseInfo = [name, label, channel, action, content, _content, bundleId, 'inferer']
-      const route = args[2]
-      console.log(lockedAmountA, lockedAmountB, args[1], unint)
-      const offer_label_token = [isETH ? ethers.constants.AddressZero : lockedToken.address, route[0], route[route.length - 1], source]
-      const offer_label_locked = independentField === Field.INPUT ? [lockedAmountA, lockedAmountB, args[1], unint] : [args[1], lockedAmountB, lockedAmountA, unint]
-      const duration = parseInt(_duration) * 24 * 60 * 60
-      // const duration = 1 * 10 * 60
-      console.log(baseInfo, offer_label_token, offer_label_locked, duration)
+      const baseInfo = [name, label, channel, action, landingPage, arwId, 'inferer']
+      // @ts-ignore
+      const offer_label_token = [isETH ? ethers.constants.AddressZero : offerToken.address, airCampaign.address]
+      const _offerAmount = Number(offerAmount) * (10 ** offerToken.decimals)
+      const offer_label_locked = [_offerAmount, applyDuration, voteDuration]
+
+      console.log(baseInfo)
+      console.log(offer_label_token)
+      console.log(offer_label_locked)
+      console.log(awardList)
+
       let gasLimit = '5000000'
       try {
-        const gasEstimate = await campaignSender.estimateGas['createCampaign'](baseInfo, offer_label_token, offer_label_locked, duration, 
-          {value: isETH ? lockedAmountA : '0'})
+        const gasEstimate = await campaignSender.estimateGas['createCampaign'](baseInfo, offer_label_token, offer_label_locked, awardList, 
+          {value: isETH ? _offerAmount : '0'})
         gasLimit = gasEstimate.toString()
       } catch (error) {
         console.log(error)
       }
       try {
-        const tx = await campaignSender['createCampaign'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit, value: isETH ? lockedAmountA : '0' })
+        const tx = await campaignSender['createCampaign'](baseInfo, offer_label_token, offer_label_locked, awardList, { gasPrice: '1000000000', gasLimit: gasLimit, value: isETH ? _offerAmount : '0' })
         const receipt = await tx.wait()
         if (receipt.status) {
           localStorage.removeItem(INFERER_AIRDROP_SOURCE)

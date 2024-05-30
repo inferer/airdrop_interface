@@ -162,7 +162,7 @@ const AwardList = ({
                   dataList.map((item, index) => {
                     return (
                       <div key={index} className="flex items-center">
-                        <span className='text'>1.5</span>
+                        <span className='text'>{(Number(item.a) * Number(item.s))}</span>
                         {
                           index === dataList.length - 1 ? <span className='text-[18px] ml-4'>=</span> : <span className='text-[16px] mx-2'>+</span>
                         }

@@ -1,6 +1,6 @@
 'use client';
 import { ICampaign } from "../../state/campaign/actions";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FlexCenter, LabelText } from "./styleds";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import LazyImage from "../../components/LazyImage";
@@ -9,6 +9,7 @@ import { Currency } from "@uniswap/sdk";
 import { useRouter } from "next/router";
 import { FundToken, FundToken2 } from "../CampaignList/Ongoing";
 import { useIrysQuery } from "../../hooks/useIry";
+import InputNumber from "../../components/NumericalInput";
 
 import { MdPreview } from 'md-editor-rt';
 import 'md-editor-rt/lib/preview.css';
@@ -39,12 +40,14 @@ const AirdropInfo = ({
   campaign,
   from = 'project',
   confirm = false,
-  taskList
+  isVote,
+  onBonusChange
 }: {
   campaign: ICampaign,
   from?: string,
   confirm?: boolean,
-  taskList?: any[]
+  isVote?: boolean,
+  onBonusChange?: (value: string) => void
 }) => {
   const contentJson = useMemo(() => {
     let obj: any = {
@@ -84,6 +87,9 @@ const AirdropInfo = ({
   const action = router.query.action && router.query.action[0]
 
   const content = useIrysQuery(campaign.arwId)
+
+  const [bonus, setBonus] = useState('')
+
   return (
     <div className="">
       <div className="h-[171px] rounded-xl border border-[rgba(85, 123, 241, 0.1)] overflow-hidden">
@@ -105,7 +111,7 @@ const AirdropInfo = ({
               <div className="mt-3 flex">
                 <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px]">
                   <div className=" text-[16px] font-semibold">
-                    {campaign.unit}  x
+                    { from === 'project' ? formatStringNumber(campaign.labelLocked) : 1}
                   </div>
                   {
                     from === 'project' ?
@@ -134,8 +140,8 @@ const AirdropInfo = ({
             <div>
               <LabelText>Fund</LabelText>
               <div className="mt-3 flex">
-                <FundToken2 campaign={campaign} from={from} />
-                {/* <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px]">
+                {/* <FundToken2 campaign={campaign} from={from} /> */}
+                <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px]">
                   <div className=" text-[16px] font-fsemibold mr-1">
                     {formatStringNumber(campaign.offerLocked)}
                   </div>
@@ -143,7 +149,7 @@ const AirdropInfo = ({
                     campaign.offerToken && <CurrencyLogo currency={campaign.offerToken} size={'20px'} />
                   }
                   
-                </div> */}
+                </div>
               </div>
             </div>
           </div>
@@ -162,7 +168,34 @@ const AirdropInfo = ({
           </div>
         </div>
       </div>
-      <AwardListView dataList={contentAward} />
+      <AwardListView dataList={campaign.awardList} />
+      {
+        from !== 'project' && !isVote &&
+        <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
+          <LabelText>Bonus Settings</LabelText>
+          <div className="mt-4 flex items-center">
+            <div className=" font-fnormal">Bonus Percentage :</div>
+            <div className="ml-5 rounded-lg border border-[rgba(85,123,241,0.10)]">
+              <InputNumber style={{
+                width: 48, height: 36, marginTop: 0, padding: '0 8px', fontSize: 14
+              }} 
+                className=" rounded-lg" 
+                placeholder='0'
+                value={bonus} 
+                onUserInput={ value => {
+                  setBonus(value)
+                  onBonusChange && onBonusChange(value)
+                }} />
+            </div>
+            <span className="ml-[6px]">%</span>
+          </div>
+          <div className="mt-5 text-[rgba(0,0,0,0.60)]">
+            <div>Note:</div>
+            Bonus percentage refers to the percentage of awards, which applier would like to distribute awards to their voters, once they won the campaign.
+          </div>
+        </div>
+      }
+      
       <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
         <LabelText>Content</LabelText>
         <div className="mt-4">

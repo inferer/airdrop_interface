@@ -4,7 +4,8 @@ import { useActiveWeb3React } from '../../hooks'
 import { CreateBody, ItemBox, ItemBox2, ItemCenter, ItemTitle, ItemWrap, TitleWrap, TokenInfo } from './styleds'
 import LazyImage, { LazyImage2, LazyImage4 } from '../../components/LazyImage'
 import Input from '../../components/TextInput/Input'
-import { useCreateCallback } from '../../hooks/useAirdropSender'
+import InputNumber from "../../components/NumericalInput";
+import { useCreateCallback } from '../../hooks/useCampaignSender'
 import { ApprovalState } from '../../hooks/useApproveCallback'
 import { Loading, LoadingContract, LoadingUint, LoadingX } from '../../components/Loader'
 import { ETHER, Token } from '@uniswap/sdk'
@@ -18,6 +19,11 @@ import { useCampaignSender } from '../../hooks/useCampaignSender'
 import Select from '../Create/Select'
 import { CAMPAIGN_DURATION, CHAIN_LIST } from '../../constants'
 import { useIry } from '../../hooks/useIry'
+import CurrencySearchModal from '../../components/SearchModal/CurrencySearchModal'
+import { useDerivedSwapInfo, useSwapActionHandlers } from '../../state/swap/hooks'
+import { Field } from '../../state/swap/actions'
+import { useCurrencyBalanceUSDT } from '../../state/wallet/hooks'
+import { useInputTokens } from '../../hooks/Tokens'
 
 
 let globalApproveList: string[] = ['usdt', 'label']
@@ -27,18 +33,24 @@ export default function Create() {
   const { account, chainId } = useActiveWeb3React()
 
   const [name, setName] = useState('')
-  const [ladningPage, setLandingPage] = useState('')
+  const [landingPage, setLandingPage] = useState('')
   const [nameError, setNameError] = useState(false)
   const [errorCode, setErrorCode] = useState(1)
   const [approvedTokenA, setApprovedTokenA] = useState(false)
   const [awardData, setAwardData] = useState<any[]>([])
+  const [modalOpen, setModalOpen] = useState(false)
+  const handleDismissSearch = useCallback(() => {
+    setModalOpen(false)
+  }, [setModalOpen])
 
   const {
+    currencies,
     args,
     lockedAmount,
     lockedAmountAB,
     lockedCurrency,
     lockedCurrencyAir,
+    lockedCurrencyAirCampaign,
     lockedCurrencyAmount,
     outputAmount,
     approvalState,
@@ -48,15 +60,24 @@ export default function Create() {
     approvalStateAir,
     approveAir
   } = useCreateCallback(undefined, undefined, undefined, null)
-
+  const { onCurrencySelection } = useSwapActionHandlers()
+  // @ts-ignore
+  const selectedCurrencyBalanceUSDT = useCurrencyBalanceUSDT(account ?? undefined, currencies[Field.INPUT] && currencies[Field.INPUT].address, true)
+  
   const { uploadStatus, handleUploadStr } = useIry()
   const { createStatus, handleCreateCampaign } = useCampaignSender(args, lockedCurrency as Token ?? undefined)
 
   const [approveLoading, setApproveLoading] = useState(true)
   const [unApproveList, setUnApproveList] = useState<string[]>(globalApproveList)
+  const inputTokens = useInputTokens()
+  useEffect(() => {
+    if (inputTokens[0]) {
+      onCurrencySelection(Field.INPUT, inputTokens[0])
+    }
+  }, [inputTokens, onCurrencySelection])
 
   useEffect(() => {
-    if (approvalState !== ApprovalState.UNKNOWN && approvalStateLabel !== ApprovalState.UNKNOWN) {
+    if (approvalState !== ApprovalState.UNKNOWN) {
       setApproveLoading(false)
     }
     if (approvalState === ApprovalState.APPROVED) {
@@ -67,16 +88,15 @@ export default function Create() {
         setUnApproveList(newList)
       }
     }
-    if (approvalStateLabel === ApprovalState.APPROVED) {
-      const _index = unApproveList.findIndex(label => label === 'label')
-      if (_index > -1) {
-        const newList = [...unApproveList]
-        newList.splice(_index, 1)
-        setUnApproveList(newList)
-      }
-    }
-  }, [approvalState, approvalStateLabel, unApproveList])
-
+    // if (approvalStateLabel === ApprovalState.APPROVED) {
+    //   const _index = unApproveList.findIndex(label => label === 'label')
+    //   if (_index > -1) {
+    //     const newList = [...unApproveList]
+    //     newList.splice(_index, 1)
+    //     setUnApproveList(newList)
+    //   }
+    // }
+  }, [approvalState, unApproveList])
 
   const approveA = useMemo(() => {
     return approvalState === ApprovalState.NOT_APPROVED && (lockedCurrency && lockedCurrency !== ETHER )
@@ -90,8 +110,8 @@ export default function Create() {
   const landingPageVerify = useMemo(() => {
     const ipUrlRegex = /^(https?:\/\/)?(\d{1,3}\.){3}\d{1,3}(\:\d+)?(\/\S*)?(\?\S*)?$/;
     const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9\-\_]+\.)+[a-zA-Z]{2,}(\/.*)?$/
-    return urlRegex.test(ladningPage) || ipUrlRegex.test(ladningPage)
-  }, [ladningPage])
+    return urlRegex.test(landingPage) || ipUrlRegex.test(landingPage)
+  }, [landingPage])
 
   const [duration, setDutation] = useState('1')
   const handleDurationChange = (data: any) => {
@@ -112,9 +132,52 @@ export default function Create() {
   const [createContent, setCreateContent] = useState('') 
   const [arwId, setArwId] = useState('')
 
+
+  const handleInputSelect = useCallback(
+    inputCurrency => {
+      onCurrencySelection(Field.INPUT, inputCurrency)
+      // 
+    },
+    [onCurrencySelection, currencies]
+  )
+  
+  const [offerAmount, setOfferAmount] = useState('')
+  const [ariCampaignAmount, setAirCampaignAmount] = useState('')
+
+  const [applyDeadline, setApplyDeadline] = useState(['', '', '', ''])
+  const [voteDeadline, setVoteDeadline] = useState(['', '', '', ''])
+  const handleDeadlineInput = useCallback((value, index, type) => {
+    if (type === 'apply') {
+      const tempList = [...applyDeadline]
+      tempList[index] = value
+      setApplyDeadline([...tempList])
+    }
+    if (type === 'vote') {
+      const tempList = [...voteDeadline]
+      tempList[index] = value
+      setVoteDeadline([...tempList])
+    }
+  }, [applyDeadline, voteDeadline])
+
+  const applyDuration = useMemo(() => {
+    return Number(applyDeadline[0]) * 30 * 24 * 60 * 60 + 
+            Number(applyDeadline[1]) * 24 * 60 * 60 + 
+            Number(applyDeadline[2]) * 60 * 60 + 
+            Number(applyDeadline[3]) * 60 
+  }, [applyDeadline])
+
+  const voteDuration = useMemo(() => {
+    return Number(voteDeadline[0]) * 30 * 24 * 60 * 60 + 
+            Number(voteDeadline[1]) * 24 * 60 * 60 + 
+            Number(voteDeadline[2]) * 60 * 60 + 
+            Number(voteDeadline[3]) * 60 
+  }, [voteDeadline])
+
   const disabled = useMemo(() => {
-    return !name || !createContent || !landingPageVerify
-  }, [name, createContent, landingPageVerify])
+    const applyVerify = applyDeadline[0] !== '' && applyDeadline[1] !== '' && applyDeadline[2] !== '' && applyDeadline[3] !== ''
+    const voteVerify = voteDeadline[0] !== '' && voteDeadline[1] !== '' && voteDeadline[2] !== '' && voteDeadline[3] !== ''
+    return !name || !createContent || !landingPageVerify || !applyVerify || !voteVerify
+  }, [name, createContent, landingPageVerify, offerAmount, ariCampaignAmount, applyDeadline, voteDeadline])
 
   return (
     <CreateBody>
@@ -123,7 +186,7 @@ export default function Create() {
       </TitleWrap>
       <div className=' flex mt-6'>
         <ItemBox2
-          style={{width: 653}}
+          style={{width: 553}}
           error={nameError && name.length <= 0}
           errorCode={errorCode}
         >
@@ -144,64 +207,201 @@ export default function Create() {
           </div>
 
         </ItemBox2>
-        <ItemBox style={{height: '100px', width: 240, marginLeft: 20}}>
+        <ItemBox style={{height: '100px', width: 240, marginLeft: 15}}>
           <ItemTitle>Type</ItemTitle>
           <div className=' text-[20px] font-fsemibold mt-2 leading-10'>Competition</div>
         </ItemBox>
+        <ItemBox style={{ height: '101px', width: 300, marginLeft: 15 }}>
+          <ItemTitle>offer</ItemTitle>
+          <div className='flex justify-between items-center mt-2'
+            
+          >
+            <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>
+              <InputNumber style={{
+                width: 110, height: 40, marginTop: 0, padding: '0', fontSize: 32
+              }} 
+                className=" rounded-lg" 
+                placeholder='0'
+                value={offerAmount} 
+                onUserInput={ value => {
+                  setOfferAmount(value)
+                }} />
+            </div>
+            {
+              lockedCurrency ? 
+                <TokenInfo className='flex items-center justify-between shrink-0 min-w-[146px] cursor-pointer'
+                onClick={() => {
+                  setModalOpen(true)
+                }}
+              >
+                <div className='flex items-center '>
+                  <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'24px'} />
+                  <div className='text-[20px] font-fsemibold ml-2'>{lockedCurrency?.symbol}</div>
+                </div>
+                
+                <LazyImage src='/images/campaign/down.svg' className='ml-2' />
+              </TokenInfo> :
+              <div
+                className=' cursor-pointer'
+                onClick={() => {
+                  setModalOpen(true)
+                }}
+              >SelectToken</div>
+            }
+            
+          </div>
+          
+        </ItemBox>
       </div>
       <div className=' flex'>
-        <ItemBox style={{ marginTop: 25, height: '101px', width: 400 }}>
-          <ItemTitle>offer</ItemTitle>
-          <div className='flex justify-between items-center mt-2'>
-            <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>{formatStringNumber(lockedAmount)}</div>
-            <TokenInfo className='flex items-center shrink-0'>
-              <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'24px'} />
-              <div className='text-[20px] font-fsemibold ml-1'>{lockedCurrency?.symbol}</div>
-            </TokenInfo>
-          </div>
-          {
-            Number(lockedAmountAB.lockedAmountBShow) > 0 ?
-            <div className='flex justify-end mt-2'>
-              <div className='bg-[rgba(200,206,255,0.20)] rounded-[100px] h-[26px] px-[6px] flex items-center text-[rgba(0,0,0,0.40)] text-[14px]'>
-                <div className=' flex items-center'>
-                  <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'14px'} />
-                  <span className='mx-1'>{lockedAmountAB.lockedAmountAShow}</span>
-                  {lockedCurrency?.symbol}
-                </div>
-                <LazyImage src='/images/airdrop/add2.svg' className='mx-1' />
-                <div className=' flex items-center'>
-                  <CurrencyLogo currency={outputAmount?.currency} size={'14px'} />
-                  <span className='mx-1'>{lockedAmountAB.lockedAmountBShow}</span>
-                  {outputAmount?.currency?.symbol}
-                </div>
-              </div>
-            </div> : null
-          }
-
-
-        </ItemBox>
-        <ItemBox style={{ marginTop: 25, height: '101px', width: 400, marginLeft: 20 }}>
+        <ItemBox style={{ marginTop: 25, height: '101px', width: 310 }}>
           <ItemTitle>receive</ItemTitle>
           <div className='flex justify-between items-center mt-2'>
-            <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>{formatStringNumber(outputAmount?.toSignificant(18))}</div>
+            <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>
+              <InputNumber style={{
+                width: 80, height: 40, marginTop: 0, padding: '0', fontSize: 32
+              }} 
+                className=" rounded-lg" 
+                placeholder='0'
+                value={ariCampaignAmount} 
+                onUserInput={ value => {
+                  setAirCampaignAmount(value)
+                }} />
+            </div>
             <TokenInfo className='flex items-center shrink-0'>
-              <CurrencyLogo type='swap' currency={outputAmount?.currency || undefined} size={'24px'} />
-              <div className='text-[20px] font-fsemibold ml-1'>{outputAmount?.currency?.symbol}</div>
+              <CurrencyLogo type='create' currency={lockedCurrencyAirCampaign} size={'24px'} />
+              <div className='text-[20px] font-fsemibold ml-1'>{lockedCurrencyAirCampaign?.symbol}</div>
             </TokenInfo>
           </div>
         </ItemBox>
-        <ItemBox style={{ marginTop: 25, height: '101px', width: 200, marginLeft: 20 }}>
-          {/* <ItemTitle>Expire on (UTC)</ItemTitle>
-          <div className=' text-[14px] font-fsemibold mt-2 text-[rgba(0,0,0,1)]'>
-            <div className="flex items-center justify-between bg-[rgba(85,123,241,0.02)] rounded-[8px] cursor-pointer min-w-[120px] relative py-3 px-4 ">
-              2024-04-16 00:00:00 (UTC)
+        <ItemBox style={{ marginTop: 25, height: '101px', width: 390, marginLeft: 15 }}>
+          <ItemTitle>apply deadline (utc)</ItemTitle>
+          <div className='flex items-center mt-1'>
+            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
+              <InputNumber style={{
+                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
+              }} 
+                className=" rounded-lg" 
+                placeholder='0'
+                value={applyDeadline[0]} 
+                onUserInput={ value => {
+                  handleDeadlineInput(value, 0, 'apply')
+                }} />
             </div>
-          </div> */}
+            <div className='px-2 text-[14px] font-fsemibold'>
+              M
+            </div>
+            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
+              <InputNumber style={{
+                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
+              }} 
+                className=" rounded-lg" 
+                placeholder='0'
+                value={applyDeadline[1]} 
+                onUserInput={ value => {
+                  handleDeadlineInput(value, 1, 'apply')
+                }} />
+            </div>
+            <div className='px-2 text-[14px] font-fsemibold'>
+              D
+            </div>
+            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
+              <InputNumber style={{
+                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
+              }} 
+                className=" rounded-lg" 
+                placeholder='0'
+                value={applyDeadline[2]} 
+                onUserInput={ value => {
+                  handleDeadlineInput(value, 2, 'apply')
+                }} />
+            </div>
+            <div className='px-2 text-[14px] font-fsemibold'>
+              h
+            </div>
+            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
+              <InputNumber style={{
+                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
+              }} 
+                className=" rounded-lg" 
+                placeholder='0'
+                value={applyDeadline[3]} 
+                onUserInput={ value => {
+                  handleDeadlineInput(value, 3, 'apply')
+                }} />
+            </div>
+            <div className='px-2 text-[14px] font-fsemibold'>
+              m
+            </div>
+          </div>
+        </ItemBox>
+        <ItemBox style={{ marginTop: 25, height: '101px', width: 390, marginLeft: 15 }}>
+          <ItemTitle>vote deadline (utc)</ItemTitle>
+          <div className='flex items-center mt-1'>
+            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
+              <InputNumber style={{
+                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
+              }} 
+                className=" rounded-lg" 
+                placeholder='0'
+                value={voteDeadline[0]} 
+                onUserInput={ value => {
+                  handleDeadlineInput(value, 0, 'vote')
+                }} />
+            </div>
+            <div className='px-2 text-[14px] font-fsemibold'>
+              M
+            </div>
+            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
+              <InputNumber style={{
+                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
+              }} 
+                className=" rounded-lg" 
+                placeholder='0'
+                value={voteDeadline[1]} 
+                onUserInput={ value => {
+                  handleDeadlineInput(value, 1, 'vote')
+                }} />
+            </div>
+            <div className='px-2 text-[14px] font-fsemibold'>
+              D
+            </div>
+            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
+              <InputNumber style={{
+                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
+              }} 
+                className=" rounded-lg" 
+                placeholder='0'
+                value={voteDeadline[2]} 
+                onUserInput={ value => {
+                  handleDeadlineInput(value, 2, 'vote')
+                }} />
+            </div>
+            <div className='px-2 text-[14px] font-fsemibold'>
+              h
+            </div>
+            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
+              <InputNumber style={{
+                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
+              }} 
+                className=" rounded-lg" 
+                placeholder='0'
+                value={voteDeadline[3]} 
+                onUserInput={ value => {
+                  handleDeadlineInput(value, 3, 'vote')
+                }} />
+            </div>
+            <div className='px-2 text-[14px] font-fsemibold'>
+              m
+            </div>
+          </div>
+        </ItemBox>
+        {/* <ItemBox style={{ marginTop: 25, height: '101px', width: 200, marginLeft: 15 }}>
           <ItemTitle>duration</ItemTitle>
           <div className='mt-2 font-fmedium'>
             <Select defaultValue={CAMPAIGN_DURATION[0]} options={CAMPAIGN_DURATION} onChange={handleDurationChange} />
           </div>
-        </ItemBox>
+        </ItemBox> */}
       </div>
       <AwardList onChange={setAwardData} />
       <Content onChange={setCreateContent} />
@@ -214,7 +414,7 @@ export default function Create() {
               <TextInput
                 color='rgba(0,0,0,0.80)'
                 fontSize='14px'
-                value={ladningPage}
+                value={landingPage}
                 onUserInput={value => {
                   setLandingPage(value)
                 }}
@@ -241,7 +441,7 @@ export default function Create() {
         </div>
         <div className='min-w-[260px] ml-[50px]'>
         {
-          approveLoading ?
+          approveLoading && lockedCurrency ?
           <ButtonSwap
             bgColor='rgba(123,120,255,0.1)'
             onClick={e => {
@@ -273,25 +473,7 @@ export default function Create() {
 
           }
           {
-            approveB && unApproveList.length === 1 ?
-            <ButtonSwap
-              onClick={async e => {
-                e.stopPropagation()
-                if (name.length <= 0) {
-                  setErrorCode(-1)
-                  return
-                }
-                await approveLabel()
-              }}
-            >
-              <div className='btn-text'>
-                Approve {outputAmount?.currency?.symbol} ({approvedTokenA ? 2 : 1}/{approveA || approvedTokenA ? 2 : 1})
-              </div>
-
-            </ButtonSwap> : null
-          }
-          {
-            (approvalState === ApprovalState.PENDING || approvalStateLabel === ApprovalState.PENDING ) ?
+            (approvalState === ApprovalState.PENDING) ?
             <ButtonSwap
               bgColor='rgba(123,120,255,0.1)'
               onClick={e => {
@@ -304,17 +486,23 @@ export default function Create() {
           </>
         }
         {
-          !approveLoading && approvalState === ApprovalState.APPROVED && approvalStateLabel === ApprovalState.APPROVED &&
+          (!approveLoading && approvalState === ApprovalState.APPROVED || !lockedCurrency) &&
             <ButtonSwap
               disabled={disabled}
               onClick={async e => {
                 e.stopPropagation()
                 if (createStatus === 1 || uploadStatus === 1) return
-                const iryRes = await handleUploadStr(createContent)
-                
-                const content = JSON.stringify(awardData)
-                console.log('content: ', content)
-                handleCreateCampaign(name, label, duration, channel, action, '1', content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, currentChain?.value || '', [], ladningPage, iryRes.id)
+                const arwRes = await handleUploadStr(createContent)
+                const awardList = awardData.map(item => ([Number(item.a) * (10 ** (lockedCurrency?.decimals ?? 18)), item.s]))
+                handleCreateCampaign(
+                  name, label, channel, action, landingPage, arwRes.id, 
+                  // @ts-ignore
+                  lockedCurrency, lockedCurrencyAirCampaign, 
+                  offerAmount, 
+                  applyDuration,
+                  voteDuration,
+                  awardList
+                )
               }}
             >
               <div className='btn-text'>
@@ -326,6 +514,15 @@ export default function Create() {
         }
         </div>
       </div>
+      <CurrencySearchModal
+        isOpen={modalOpen}
+        onDismiss={handleDismissSearch}
+        onCurrencySelect={handleInputSelect}
+        selectedCurrency={currencies[Field.INPUT]}
+        otherSelectedCurrency={currencies[Field.OUTPUT]}
+        showCommonBases={false}
+        payInput={true}
+      />
     </CreateBody>
   )
 }

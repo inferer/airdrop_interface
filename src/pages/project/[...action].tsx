@@ -46,9 +46,13 @@ function ProjectPage () {
   }
   if (action === 'campaign') {
     if (action1) {
-      return <CampaignPage />
+      if (action1 === 'create') {
+        return <CampaignPage />
+      }
+      return <CAmpaignDetails />
     }
-    // return <CampaignListPage />
+    
+    return <CampaignListPage />
   }
   if (action === 'campaigns') {
     if (action1) {

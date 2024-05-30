@@ -86,7 +86,6 @@ export default function Swap() {
     currencies,
     inputError: swapInputError
   } = useDerivedSwapInfo()
-  console.log(swapInputError)
   const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
     currencies[Field.INPUT],
     currencies[Field.OUTPUT],
@@ -283,7 +282,6 @@ export default function Swap() {
     currencies,
     airPercent
   ])
-
   const inputTokens = useInputTokens()
   const { isProjectSwap, isProjectCreate, isUserSwap, isUserCollect, isProjectCampaign } = useIsUserAction()
   useEffect(() => {
@@ -312,7 +310,6 @@ export default function Swap() {
   const disabled = useMemo(() => {
     return !account || swaping || !!swapInputError || !isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError || (noRoute && userHasSpecifiedInputOutput)
   }, [swaping, swapInputError, isValid, priceImpactSeverity, isExpertMode, swapCallbackError, noRoute, userHasSpecifiedInputOutput, account])
-
   return (
     <>
       <TokenWarningModal

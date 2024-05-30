@@ -145,7 +145,7 @@ export const CampaignList: React.FC<{
                     <TableRow key={campaign.campaignId} 
                       onClick={() => {
                         const _algToken = getALgTokenFromAirToken(campaign.labelToken.address, chainId)
-                        router.push( isProjectMode ? `/project/campaigns/${campaign.campaignId}` : `/user/campaign/${_algToken}/${campaign.campaignId}`)
+                        router.push( isProjectMode ? `/project/campaign/${campaign.campaignId}` : `/user/campaign/${_algToken}/${campaign.campaignId}`)
                       }}
                     >
                       <>
@@ -161,16 +161,22 @@ export const CampaignList: React.FC<{
                           </div>
                         </TableCell>
                         <TableCell className="w-[126px]">
-                          <FundToken campaign={campaign} from='project' />
+                          {/* <FundToken campaign={campaign} from='project' /> */}
+                          <div className=' text-[16px] font-fnormal flex items-center'>
+                            <div className='mr-2'>{formatStringNumber(campaign.offerLocked)}</div>
+                            {/* <div className='mx-2'>{campaign.offerToken?.symbol}</div> */}
+                            {
+                              campaign.offerToken && <CurrencyLogo currency={campaign.offerToken} />
+                            }
+                          </div>
                         </TableCell>
                         <TableCell className="w-[220px] ">
                           <div className=' text-[16px] font-fnormal flex items-center'>
                             <div>{formatStringNumber(campaign.labelLocked)}</div>
                             <div className='mx-2'>{campaign.labelToken?.symbol}</div>
                             {
-                              campaign.labelToken && <CurrencyLogo type='campaign' currency={campaign.labelToken} />
+                              campaign.labelToken && <CurrencyLogo type='create' currency={campaign.labelToken} />
                             }
-                            
                           </div>
                           {/* <span className="text-[#79D0C4] font-fmedium">{campaign.unit}x</span>  */}
                         </TableCell>

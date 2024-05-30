@@ -32,7 +32,7 @@ export interface ICampaign {
   userCompleted?: boolean,
   isExpired?: boolean,
   completedClaimed?: string,
-  
+  awardList: any[]
 }
 
 export interface ICampaignApplyVote {
@@ -40,7 +40,8 @@ export interface ICampaignApplyVote {
   applyUser: string,
   arwId: string,
   voteCount: string,
-  voteUser: string[]
+  voteUser: string[],
+  bonus: string
 }
 
 

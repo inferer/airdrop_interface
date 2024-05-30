@@ -31,6 +31,7 @@ export function useApproveCallback(
   const pendingApproval = useHasPendingApproval(token?.address, spender)
   // check the current approval status
   const approvalState: ApprovalState = useMemo(() => {
+
     if (!amountToApprove || !spender) return ApprovalState.UNKNOWN
     if (amountToApprove.currency === ETHER) return ApprovalState.APPROVED
     // we might not have enough data to know whether or not we need to approve
@@ -47,6 +48,7 @@ export function useApproveCallback(
 
   const tokenContract = useTokenContract(token?.address)
   const addTransaction = useTransactionAdder()
+
 
   const approve = useCallback(async (): Promise<void> => {
     if (approvalState !== ApprovalState.NOT_APPROVED) {

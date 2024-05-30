@@ -29,6 +29,7 @@ const CampaignVote: React.FC<{
   const campaignId = router.query.action && router.query.action[2]
   const [arwId, setArwId] = useState('')
   const [fileType, setFileType] = useState('')
+  const [bonus, setBonus] = useState('')
 
   useEffect(() => {
     if (campaignId) {
@@ -43,23 +44,23 @@ const CampaignVote: React.FC<{
       if (isVote) {
         handleCampaignVote(campaignId, currentIndex)
       } else {
-        handleCampaignApply(campaignId, fileType + '-' + arwId)
+        handleCampaignApply(campaignId, fileType + '-' + arwId, bonus)
           .then(() => {
 
           })
       }
     }
-  }, [isVote, campaignId, currentIndex, arwId, fileType])
+  }, [isVote, campaignId, currentIndex, arwId, fileType, bonus])
 
   const disabled = useMemo(() => {
     if (isVote) {
       return currentIndex < 0 
     }
     if (!isVote) {
-      return !arwId
+      return !arwId || !bonus
     }
     return false
-  }, [currentIndex, isVote, arwId])
+  }, [currentIndex, isVote, arwId, bonus])
 
   const handleOnUpload = useCallback(async (arwId, fileType) => {
     setArwId(arwId)
@@ -68,7 +69,7 @@ const CampaignVote: React.FC<{
 
   return (
     <div className="py-5 pt-0">
-      <CampaignInfo campaign={campaign} from={isProjectMode ? 'project' : 'user'} />
+      <CampaignInfo campaign={campaign} from={isProjectMode ? 'project' : 'user'} isVote={isVote} onBonusChange={setBonus} />
       <div>
         {
           (isVote && campaignApplyVoteList?.length > 0) ? 

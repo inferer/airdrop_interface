@@ -10,6 +10,7 @@ import QuestionHelper from '../QuestionHelper'
 import { useIsUserAction, useUserAction, useUserRoleMode } from '../../state/user/hooks'
 import { UserAction } from '../../constants'
 import { useActiveWeb3React } from '../../hooks'
+import SelectMenu from '../SelectMenu'
 
 const Tabs = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -172,7 +173,7 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
     if (!account && type === 'campaigns') return
     setActive(type)
     if (type === 'campaigns') {
-      router.push(isProjectMode ? '/project/campaigns' :  '/user/campaigns')
+      router.push(isProjectMode ? '/project/campaign' :  '/user/campaign')
     } else {
       router.push(isProjectMode ? '/project/create' :  '/user/collect')
     }
@@ -197,11 +198,12 @@ export function AirdropTokensTabs({ onClick }: { onClick?: (type: string) => voi
       >
         {'Airdrop'}
       </StyledNavLink2>
-      <StyledNavLink2 id={`tokens-btn-click`} className={active === 'campaigns' ?  'airdrop' : ''}
+      {/* <StyledNavLink2 id={`tokens-btn-click`} className={active === 'campaigns' ?  'airdrop' : ''}
         onClick={() => handleTab('campaigns')}
       >
         {'Campaigns'}
-      </StyledNavLink2>
+      </StyledNavLink2> */}
+      <SelectMenu />
     </Tabs>
   )
 }
@@ -241,11 +243,11 @@ export function SwapCreateTabs({ onClick }: { onClick?: (type: UserAction) => vo
             >
               {'Swap'}
             </StyledNavLink2>
-            <StyledNavLink2 id={`swap-btn-click`} className={isProjectCampaign ? 'airdrop' : ''}
+            {/* <StyledNavLink2 id={`swap-btn-click`} className={isProjectCampaign ? 'airdrop' : ''}
               onClick={() => handleTab('/project/campaign')}
             >
               {'Campaign'}
-            </StyledNavLink2>
+            </StyledNavLink2> */}
             
           </>
         ) : (

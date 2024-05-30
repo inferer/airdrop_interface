@@ -121,7 +121,6 @@ export function useDerivedSwapInfo(): {
 
   const toggledVersion = useToggledVersion()
   const { isProjectCreate, isProjectCampaign } = useIsUserAction()
-
   const {
     independentField,
     typedValue,

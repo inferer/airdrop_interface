@@ -41,14 +41,11 @@ function UserPage() {
   if (action === 'invite') {
     return <InviteCodePage />
   }
-  if (action === 'campaigns') {
-    return <UserCampaign />
-  }
   if (action === 'campaign') {
     if (action1) {
       return <UserCampaign />
     }
-    return <SearchPage />
+    return <UserCampaign />
   }
 
   return (

@@ -57,11 +57,7 @@ const VoteItem = ({
         {
           from === 'project' ? 
           <>
-            <div
-              className="flex items-center"
-            >
-              ({voteData.voteCount})
-            </div>
+            
           </> :
           <div
             className=" cursor-pointer flex items-center"

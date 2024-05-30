@@ -120,7 +120,7 @@
   },
   {
     "inputs": [],
-    "name": "airdropManager",
+    "name": "airdropAssetTreasury",
     "outputs": [
       {
         "internalType": "address",
@@ -142,6 +142,11 @@
         "internalType": "string",
         "name": "_arwId",
         "type": "string"
+      },
+      {
+        "internalType": "uint16",
+        "name": "_bonus",
+        "type": "uint16"
       }
     ],
     "name": "applyCampaign",
@@ -180,9 +185,27 @@
         "type": "string"
       },
       {
+        "internalType": "uint16",
+        "name": "bonus",
+        "type": "uint16"
+      },
+      {
         "internalType": "uint256",
         "name": "voteCount",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "campaignManager",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -219,6 +242,11 @@
             "internalType": "string",
             "name": "arwId",
             "type": "string"
+          },
+          {
+            "internalType": "uint16",
+            "name": "bonus",
+            "type": "uint16"
           },
           {
             "internalType": "uint256",
@@ -265,6 +293,11 @@
             "internalType": "string",
             "name": "arwId",
             "type": "string"
+          },
+          {
+            "internalType": "uint16",
+            "name": "bonus",
+            "type": "uint16"
           },
           {
             "internalType": "uint256",
@@ -335,11 +368,24 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_airdropManager",
+        "name": "_airdropAssetTreasury",
         "type": "address"
       }
     ],
-    "name": "setAirdropManager",
+    "name": "setAirdropAssetTreasury",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_campaignManager",
+        "type": "address"
+      }
+    ],
+    "name": "setCampaignManager",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -25,12 +25,6 @@
         "internalType": "uint256[]",
         "name": "offer_label_locked",
         "type": "uint256[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint64",
-        "name": "duration",
-        "type": "uint64"
       }
     ],
     "name": "CreateCampaign",
@@ -116,28 +110,13 @@
       },
       {
         "internalType": "uint64",
-        "name": "duration",
-        "type": "uint64"
-      },
-      {
-        "internalType": "uint64",
         "name": "startTimestamp",
         "type": "uint64"
-      },
-      {
-        "internalType": "uint256",
-        "name": "claimed",
-        "type": "uint256"
       },
       {
         "internalType": "bool",
         "name": "completed",
         "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "completedClaimed",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -149,6 +128,11 @@
         "internalType": "uint256",
         "name": "_campaignId",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_sender",
+        "type": "address"
       }
     ],
     "name": "completeCampaign",
@@ -174,14 +158,9 @@
         "type": "uint256[]"
       },
       {
-        "internalType": "uint64",
-        "name": "_duration",
-        "type": "uint64"
-      },
-      {
-        "internalType": "uint256",
-        "name": "units",
-        "type": "uint256"
+        "internalType": "uint256[2][]",
+        "name": "_awardList",
+        "type": "uint256[2][]"
       }
     ],
     "name": "createCampaign",
@@ -242,18 +221,8 @@
           },
           {
             "internalType": "uint64",
-            "name": "duration",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint64",
             "name": "startTimestamp",
             "type": "uint64"
-          },
-          {
-            "internalType": "uint256",
-            "name": "claimed",
-            "type": "uint256"
           },
           {
             "internalType": "bool",
@@ -261,9 +230,9 @@
             "type": "bool"
           },
           {
-            "internalType": "uint256",
-            "name": "completedClaimed",
-            "type": "uint256"
+            "internalType": "uint256[2][]",
+            "name": "awardList",
+            "type": "uint256[2][]"
           }
         ],
         "internalType": "struct ICampaignManager.Campaign",
@@ -547,29 +516,6 @@
       }
     ],
     "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_campaignId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "_confirm",
-        "type": "bool"
-      }
-    ],
-    "name": "updateCampaign",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

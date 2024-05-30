@@ -37,7 +37,8 @@ export function useCampaignApply(algToken?: string) {
             applyUser: item.applyUser,
             arwId: item.arwId,
             voteCount: item.voteCount?.toString(),
-            voteUser: item.voteUser ?? []
+            voteUser: item.voteUser ?? [],
+            bonus: item.bonus
           }
         })
         dispatch(updateCampaignApplyVoteList({ campaignId: campaignId, campaignApplyVoteList: tempList }))
@@ -50,14 +51,15 @@ export function useCampaignApply(algToken?: string) {
 
   const handleCampaignApply = useCallback(async (
     campaignId: string,
-    arwId: string
+    arwId: string,
+    bonus: string
   ) => {
     if (campaignApply && account) {
       setApplyStatus(1)
       let gasLimit = '5000000'
       console.log(arwId)
       try {
-        const gasEstimate = await campaignApply.estimateGas['applyCampaign'](campaignId, arwId)
+        const gasEstimate = await campaignApply.estimateGas['applyCampaign'](campaignId, arwId, bonus)
         gasLimit = gasEstimate.toString()
       } catch (error: any) {
         console.log(error)
@@ -69,7 +71,7 @@ export function useCampaignApply(algToken?: string) {
       }
       console.log('gasLimit: ', gasLimit)
       try {
-        const tx = await campaignApply.applyCampaign(campaignId, arwId, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await campaignApply.applyCampaign(campaignId, arwId, bonus, { gasPrice: '1000000000', gasLimit: gasLimit })
         console.log(tx)
         const receipt = await tx.wait()
         if (receipt.status) {
