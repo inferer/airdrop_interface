@@ -51,14 +51,14 @@ export const SelectMenu: React.FC<{
       <div className="flex justify-between items-center py-3 px-4 h-[48px] text-[16px] rounded-[8px] cursor-pointer group font-fsemibold text-[rgba(50,49,48,0.40)] hover:text-[#323130]"
         onClick={handleClick}
         
-        style={{color: showOptions ? '#323130' : ''}}
+        style={{color: showOptions || (router.query?.action && router.query?.action[0] === 'campaign' ) ? '#323130' : ''}}
       >
         <div className="flex items-center mr-1">
           <div className={`
             rounded-[4px] 
             ${showOptions ? '' : ''}
           `}>
-            Campaigns
+            Campaign
           </div>
         </div>
         

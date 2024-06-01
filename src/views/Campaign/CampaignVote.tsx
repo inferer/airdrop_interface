@@ -54,19 +54,19 @@ const CampaignVote: React.FC<{
 
   const disabled = useMemo(() => {
     if (isVote) {
-      return currentIndex < 0 
+      return currentIndex < 0 || campaign.isExpired
     }
     if (!isVote) {
-      return !arwId || !bonus
+      return !arwId || !bonus || campaign.isApplyExpired
     }
     return false
-  }, [currentIndex, isVote, arwId, bonus])
+  }, [currentIndex, isVote, arwId, bonus, campaign])
 
   const handleOnUpload = useCallback(async (arwId, fileType) => {
     setArwId(arwId)
     setFileType(fileType)
   }, [])
-
+  console.log(campaign)
   return (
     <div className="py-5 pt-0">
       <CampaignInfo campaign={campaign} from={isProjectMode ? 'project' : 'user'} isVote={isVote} onBonusChange={setBonus} />

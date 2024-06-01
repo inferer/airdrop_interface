@@ -3,11 +3,15 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ItemBox, ItemTitle } from "./styleds";
 import LazyImage from "../../components/LazyImage";
 import Input from "../../components/NumericalInput";
+import { Currency } from "@uniswap/sdk";
+import CurrencyLogo from "../../components/CurrencyLogo";
 
 const AwardList = ({
-  onChange
+  onChange,
+  lockedCurrency
 }: {
-  onChange?: (dataList: any[]) => void
+  onChange?: (dataList: any[]) => void,
+  lockedCurrency?: Currency
 }) => {
 
   const [dataList, setDataList] = useState<any[]>([{a: '', s: ''}])
@@ -50,11 +54,11 @@ const AwardList = ({
           <div className="award-table">
             <div className="h-[37px] bg-[rgba(85,123,241,0.03)] text-[14px] flex items-center text-[rgba(0,0,0,0.4)] font-fsemibold">
               <div className="w-[101px] pl-5">Tier</div>
-              <div className="w-[142px]">Amount (ETH)</div>
+              <div className="w-[142px]">Amount</div>
               <div className="w-[100px] pl-[45px]"></div>
               <div className="w-[142px]">Size</div>
               <div className="w-[110px] pl-[50px]"></div>
-              <div className="w-[142px] shrink-0">Calculated fee(ETH)</div>
+              <div className="w-[142px] shrink-0">Calculated fee</div>
               <div className="w-[104px] pl-[50px]"></div>
             </div>
             {/* <div className="h-[60px] text-[14px] flex items-center text-[rgba(0,0,0,1)] font-fsemibold award-table-item">
@@ -89,15 +93,16 @@ const AwardList = ({
                 return (
                   <div key={index} className="h-[60px] text-[14px] flex items-center text-[rgba(0,0,0,1)] font-fsemibold award-table-item">
                     <div className="w-[101px] pl-5">{index + 1}</div>
-                    <div className="w-[142px] flex items-center">
+                    <div className="w-[142px] flex items-center border border-[rgba(85,123,241,0.1)] px-4">
                       <Input style={{
-                        width: 142, height: 40, border: '1px solid rgba(85,123,241,0.1)', padding: '0 16px', fontSize: 14, textAlign: 'right'
+                        width: 142, height: 40, fontSize: 14, textAlign: 'right'
                       }} 
                         className=" rounded-lg" 
                         value={item.a} 
                         onUserInput={ value => {
                           handleAmountInput(value, index)
                         }} />
+                        { lockedCurrency && <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'16px'} style={{marginLeft: 20}} />}
                     </div>
                     <div className="w-[100px] pl-[45px]">
                       <div className="text-[16px] font-fsemibold">x</div>
@@ -115,9 +120,10 @@ const AwardList = ({
                     <div className="w-[110px] pl-[50px]">
                       <div className="text-[16px] font-fsemibold">=</div>
                     </div>
-                    <div className="w-[142px] shrink-0">
-                      <div className="text-[16px] font-fsemibold text-right">
+                    <div className="w-[100px] shrink-0">
+                      <div className="text-[16px] font-fsemibold justify-end flex items-center">
                         {item.a * item.s}
+                        { lockedCurrency && <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'16px'} style={{marginLeft: 20}} />}
                       </div>
                     </div>
                     <div className="w-[104px] pl-[50px]">

@@ -64,7 +64,6 @@ const AirdropInfo = ({
     }
     obj.chain = campaign.chain ?? ''
     obj.landingPage = campaign.landingPage ?? ''
-    obj.parameter = campaign.parameterInfo ?? []
 
     return obj
   }, [campaign])
@@ -168,7 +167,7 @@ const AirdropInfo = ({
           </div>
         </div>
       </div>
-      <AwardListView dataList={campaign.awardList} />
+      <AwardListView dataList={campaign.awardList} offerToken={campaign.offerToken} />
       {
         from !== 'project' && !isVote &&
         <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">

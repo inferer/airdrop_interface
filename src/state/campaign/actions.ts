@@ -21,17 +21,16 @@ export interface ICampaign {
   duration: string,
   startTimestamp: string,
   expireOn: string,
+  applyExpireOn: string,
   claimed: string,
   completed?: boolean,
   accountScore?: number
   airAmount?: number,
   chain?: string,
   landingPage?: string,
-  parameterInfo?: any[]
   realCompleted?: boolean,
-  userCompleted?: boolean,
   isExpired?: boolean,
-  completedClaimed?: string,
+  isApplyExpired?: boolean,
   awardList: any[]
 }
 

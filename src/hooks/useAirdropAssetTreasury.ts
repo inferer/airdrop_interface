@@ -3,7 +3,7 @@ import { AppDispatch } from "../state"
 import { useDispatch } from "react-redux"
 import { useActiveWeb3React } from "."
 import { useAirdropAssetTreasuryContract, useMulticallContract } from "./useContract"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useAirLabelAllTokens, useAlgLabelAllTokens, useAllTokens, useUSDTAllTokens } from "./Tokens"
 import { AirdropAssetTreasury_NETWORKS, AirdropAssetTreasury_ABI } from "../constants/airdropAssetTreasury"
 import { BigNumber, Contract, ethers } from "ethers"
@@ -523,4 +523,24 @@ export function useAirdropAssetTreasuryFeeOn() {
     handleSetsIncomePercentage,
     handleSetsIncomeAddress
   }
+}
+
+export function useAirCampaignAmount() {
+  const airdropAssetTreasury = useAirdropAssetTreasuryContract()
+  const [amount, setAmount] = useState('')
+
+  useEffect(() => {
+    if (airdropAssetTreasury) {
+      airdropAssetTreasury
+        .airCampaignAmount()
+        .then((amount: any) => {
+          setAmount((Number(amount.toString()) / (10 ** 18)).toString())
+        })
+
+    }
+    
+  }, [airdropAssetTreasury])
+
+  return amount
+
 }

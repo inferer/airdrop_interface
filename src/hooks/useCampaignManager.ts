@@ -92,7 +92,6 @@ export const getCampaignList = async (multi: Contract, airdropLength: number | n
     const res = await multicall(multi, CampaignManager_ABI, calls.reverse());
     (res || []).forEach((data: any) => {
       const airdrop = data[0]
-      
       const offerTokenData = getUSDTTokenByAddress(airdrop[2][0])
       const labelTokenData = getLabelTokenByAddress(airdrop[2][1])
       const subDecimals = String((10 ** (offerTokenData?.decimals ?? 18))).length - (airdrop[3][0].toString()).length
@@ -100,7 +99,8 @@ export const getCampaignList = async (multi: Contract, airdropLength: number | n
       const _offerLocked = (Number(airdrop[3][0].toString()) / (10 ** (offerTokenData?.decimals ?? 18))).toString()
       
       const _offerLabelLocked = (Number(airdrop[3][3].toString()) / (10 ** (labelTokenData?.decimals ?? 18))).toString()
-      const expireOnTimestamp = Number(airdrop[4].toString()) * 1000 + Number(airdrop[3][2].toString()) * 1000
+      const _applyExpireOn = Number(airdrop[4].toString()) * 1000 + Number(airdrop[3][1].toString()) * 1000
+      const _expireOn = Number(airdrop[4].toString()) * 1000 + Number(airdrop[3][2].toString()) * 1000
       const _labelLocked = (Number(airdrop[3][3]) / (10 ** (labelTokenData?.decimals ?? 18))).toFixed(4)
       const _awardList = airdrop[6].map((item: any[]) => {
         return {
@@ -133,10 +133,12 @@ export const getCampaignList = async (multi: Contract, airdropLength: number | n
         unit: BigNumber.from(airdrop[3][3]).toString(),
         duration: airdrop[4].toString(),
         startTimestamp: airdrop[5].toString(),
-        expireOn: transformTime(expireOnTimestamp),
+        applyExpireOn: transformTime(_applyExpireOn),
+        expireOn: transformTime(_expireOn),
         realCompleted: airdrop[7],
-        awardList: _awardList
-
+        awardList: _awardList,
+        isApplyExpired: _applyExpireOn < Date.now(),
+        isExpired: _expireOn < Date.now()
       }
       campaignList.push(tempData)
     });

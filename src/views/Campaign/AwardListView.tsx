@@ -2,12 +2,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ItemBox, ItemTitle } from "./styleds";
 import LazyImage from "../../components/LazyImage";
-import Input from "../../components/NumericalInput";
+import { Token } from "@uniswap/sdk";
+import CurrencyLogo from "../../components/CurrencyLogo";
 
 const AwardListView = ({
-  dataList = []
+  dataList = [],
+  offerToken
 }: {
-  dataList?: any[]
+  dataList?: any[],
+  offerToken?: Token
 }) => {
 
   const totalAmount = useMemo(() => {
@@ -42,6 +45,9 @@ const AwardListView = ({
                     <div className="w-[142px] flex items-center">
                       <div className="pt-[5px] pb-[6px] px-2 h-[28px] rounded-[4px] bg-[rgba(37,150,232,0.10)] flex items-center text-[#245AFF] text-[14px] font-fsemibold min-w-[50px] ">
                         {item.a || item.amount}
+                        {
+                          offerToken && <CurrencyLogo currency={offerToken} size={'16px'} style={{marginLeft: 12}} />
+                        }
                       </div>
                     </div>
                     <div className="w-[100px] pl-[45px]">
@@ -59,6 +65,9 @@ const AwardListView = ({
                     <div className="w-[142px] shrink-0 flex">
                       <div className="pt-[5px] pb-[6px] px-2 h-[28px] rounded-[4px] bg-[rgba(37,150,232,0.10)] flex items-center text-[#245AFF] text-[14px] font-fsemibold min-w-[50px] ">
                         {(Number(item.a || item.amount) * Number(item.s || item.size))}
+                        {
+                          offerToken && <CurrencyLogo currency={offerToken} size={'16px'} style={{marginLeft: 12}} />
+                        }
                       </div>
                     </div>
                     
@@ -91,8 +100,11 @@ const AwardListView = ({
                 }
 
               </div>
-              <div className='text-[45px] font-fsemibold mt-5 text-[#245AFF]'>
+              <div className='text-[45px] font-fsemibold mt-5 text-[#245AFF] flex items-baseline leading-normal'>
                 {totalAmount}
+                {
+                  offerToken && <CurrencyLogo currency={offerToken} size={'16px'} style={{marginLeft: 12}} />
+                }
               </div>
             </div>
           </div>

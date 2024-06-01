@@ -24,6 +24,7 @@ import { useDerivedSwapInfo, useSwapActionHandlers } from '../../state/swap/hook
 import { Field } from '../../state/swap/actions'
 import { useCurrencyBalanceUSDT } from '../../state/wallet/hooks'
 import { useInputTokens } from '../../hooks/Tokens'
+import { useAirCampaignAmount } from '../../hooks/useAirdropAssetTreasury'
 
 
 let globalApproveList: string[] = ['usdt', 'label']
@@ -63,7 +64,7 @@ export default function Create() {
   const { onCurrencySelection } = useSwapActionHandlers()
   // @ts-ignore
   const selectedCurrencyBalanceUSDT = useCurrencyBalanceUSDT(account ?? undefined, currencies[Field.INPUT] && currencies[Field.INPUT].address, true)
-  
+  const airCampaignAmount = useAirCampaignAmount()
   const { uploadStatus, handleUploadStr } = useIry()
   const { createStatus, handleCreateCampaign } = useCampaignSender(args, lockedCurrency as Token ?? undefined)
 
@@ -258,7 +259,7 @@ export default function Create() {
           <ItemTitle>receive</ItemTitle>
           <div className='flex justify-between items-center mt-2'>
             <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>
-              <InputNumber style={{
+              {/* <InputNumber style={{
                 width: 80, height: 40, marginTop: 0, padding: '0', fontSize: 32
               }} 
                 className=" rounded-lg" 
@@ -266,7 +267,8 @@ export default function Create() {
                 value={ariCampaignAmount} 
                 onUserInput={ value => {
                   setAirCampaignAmount(value)
-                }} />
+                }} /> */}
+                {airCampaignAmount}
             </div>
             <TokenInfo className='flex items-center shrink-0'>
               <CurrencyLogo type='create' currency={lockedCurrencyAirCampaign} size={'24px'} />
@@ -285,7 +287,10 @@ export default function Create() {
                 placeholder='0'
                 value={applyDeadline[0]} 
                 onUserInput={ value => {
-                  handleDeadlineInput(value, 0, 'apply')
+                  if ((value.length <= 1 && Number(value) === 0) || /^([1-9]|1[0-2])$/.test(value)) {
+                    handleDeadlineInput(value, 0, 'apply')
+                  }
+                  
                 }} />
             </div>
             <div className='px-2 text-[14px] font-fsemibold'>
@@ -299,7 +304,10 @@ export default function Create() {
                 placeholder='0'
                 value={applyDeadline[1]} 
                 onUserInput={ value => {
-                  handleDeadlineInput(value, 1, 'apply')
+                  if ((value.length <= 1 && Number(value) === 0) || /^(?:0?[1-9]|[12]\d|3[01])$/.test(value)) {
+                    handleDeadlineInput(value, 1, 'apply')
+                  }
+                  
                 }} />
             </div>
             <div className='px-2 text-[14px] font-fsemibold'>
@@ -313,7 +321,10 @@ export default function Create() {
                 placeholder='0'
                 value={applyDeadline[2]} 
                 onUserInput={ value => {
-                  handleDeadlineInput(value, 2, 'apply')
+                  if ((value.length <= 1 && Number(value) === 0) || /^([01]?[0-9]|2[0-3])$/.test(value)) {
+                    handleDeadlineInput(value, 2, 'apply')
+                  }
+                  
                 }} />
             </div>
             <div className='px-2 text-[14px] font-fsemibold'>
@@ -327,7 +338,9 @@ export default function Create() {
                 placeholder='0'
                 value={applyDeadline[3]} 
                 onUserInput={ value => {
-                  handleDeadlineInput(value, 3, 'apply')
+                  if ((value.length <= 1 && Number(value) === 0) || /^([0-5]\d|[0-9])$/.test(value)) {
+                    handleDeadlineInput(value, 3, 'apply')
+                  }
                 }} />
             </div>
             <div className='px-2 text-[14px] font-fsemibold'>
@@ -346,7 +359,10 @@ export default function Create() {
                 placeholder='0'
                 value={voteDeadline[0]} 
                 onUserInput={ value => {
-                  handleDeadlineInput(value, 0, 'vote')
+                  if ((value.length <= 1 && Number(value) === 0) || /^([1-9]|1[0-2])$/.test(value)) {
+                    handleDeadlineInput(value, 0, 'vote')
+                  }
+                  
                 }} />
             </div>
             <div className='px-2 text-[14px] font-fsemibold'>
@@ -360,7 +376,9 @@ export default function Create() {
                 placeholder='0'
                 value={voteDeadline[1]} 
                 onUserInput={ value => {
-                  handleDeadlineInput(value, 1, 'vote')
+                  if ((value.length <= 1 && Number(value) === 0) || /^(?:0?[1-9]|[12]\d|3[01])$/.test(value)) {
+                    handleDeadlineInput(value, 1, 'vote')
+                  }
                 }} />
             </div>
             <div className='px-2 text-[14px] font-fsemibold'>
@@ -374,7 +392,10 @@ export default function Create() {
                 placeholder='0'
                 value={voteDeadline[2]} 
                 onUserInput={ value => {
-                  handleDeadlineInput(value, 2, 'vote')
+                  if ((value.length <= 1 && Number(value) === 0) || /^([01]?[0-9]|2[0-3])$/.test(value)) {
+                    handleDeadlineInput(value, 2, 'vote')
+                  }
+                  
                 }} />
             </div>
             <div className='px-2 text-[14px] font-fsemibold'>
@@ -388,7 +409,9 @@ export default function Create() {
                 placeholder='0'
                 value={voteDeadline[3]} 
                 onUserInput={ value => {
-                  handleDeadlineInput(value, 3, 'vote')
+                  if ((value.length <= 1 && Number(value) === 0) || /^([0-5]\d|[0-9])$/.test(value)) {
+                    handleDeadlineInput(value, 3, 'vote')
+                  }
                 }} />
             </div>
             <div className='px-2 text-[14px] font-fsemibold'>
@@ -403,7 +426,7 @@ export default function Create() {
           </div>
         </ItemBox> */}
       </div>
-      <AwardList onChange={setAwardData} />
+      <AwardList onChange={setAwardData} lockedCurrency={lockedCurrency ?? undefined} />
       <Content onChange={setCreateContent} />
       <ItemBox style={{height: '135px', width: '100%', marginTop: 24}}>
         <div className='shrink-0 '>
