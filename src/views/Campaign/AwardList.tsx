@@ -5,6 +5,7 @@ import LazyImage from "../../components/LazyImage";
 import Input from "../../components/NumericalInput";
 import { Currency } from "@uniswap/sdk";
 import CurrencyLogo from "../../components/CurrencyLogo";
+import BigNumber from 'bignumber.js'
 
 const AwardList = ({
   onChange,
@@ -43,7 +44,7 @@ const AwardList = ({
   }, [dataList])
 
   const totalAmount = useMemo(() => {
-    return dataList.reduce((total, item) => total + (item.a * item.s), 0)
+    return dataList.reduce((total, item) => total + (new BigNumber(item.a).multipliedBy(new BigNumber(item.s)).toNumber()), 0)
   }, [dataList])
 
   return (
@@ -122,7 +123,7 @@ const AwardList = ({
                     </div>
                     <div className="w-[100px] shrink-0">
                       <div className="text-[16px] font-fsemibold justify-end flex items-center">
-                        {item.a * item.s}
+                        { new BigNumber(item.a).multipliedBy(new BigNumber(item.s)).toString()}
                         { lockedCurrency && <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'16px'} style={{marginLeft: 20}} />}
                       </div>
                     </div>
@@ -168,7 +169,7 @@ const AwardList = ({
                   dataList.map((item, index) => {
                     return (
                       <div key={index} className="flex items-center">
-                        <span className='text'>{(Number(item.a) * Number(item.s))}</span>
+                        <span className='text'>{new BigNumber(item.a).multipliedBy(new BigNumber(item.s)).toString()}</span>
                         {
                           index === dataList.length - 1 ? <span className='text-[18px] ml-4'>=</span> : <span className='text-[16px] mx-2'>+</span>
                         }

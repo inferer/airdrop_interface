@@ -76,8 +76,8 @@ export const SelectMenu: React.FC<{
       
       <div 
         ref={node}
-        style={{ height: showOptions ? 'auto' : 0, padding: showOptions ? '16px' : 0, background: 'linear-gradient(135deg, rgba(63, 60, 255, 0.04) 0%, rgba(107, 190, 225, 0.04) 100%)'}}
-        className={`options fixed z-50 bg-white rounded-lg transition-all w-[250px]`}>
+        style={{ height: showOptions ? 'auto' : 0, padding: showOptions ? '16px' : 0, background: 'linear-gradient(135deg, rgba(63, 60, 255, 0.04) 0%, rgba(107, 190, 225, 0.04) 100%)', transition: 'height ease 0.3s'}}
+        className={`options fixed z-50 bg-white rounded-lg w-[250px]`}>
           <div className="overflow-auto scrollbar-container h-full group"
             style={{ height: showOptions ? 'auto' : 0 }}
           >

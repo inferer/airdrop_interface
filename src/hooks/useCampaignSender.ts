@@ -20,6 +20,7 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../state'
 import { IABIItem, updateCreateContractABI } from '../state/airdrop/actions'
 import { formatInput, getContract } from '../utils'
+import BN from 'bignumber.js'
 
 
 export function useCreateCallback(
@@ -146,7 +147,7 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
       const baseInfo = [name, label, channel, action, landingPage, arwId, 'inferer']
       // @ts-ignore
       const offer_label_token = [isETH ? ethers.constants.AddressZero : offerToken.address, airCampaign.address]
-      const _offerAmount = Number(offerAmount) * (10 ** offerToken.decimals)
+      const _offerAmount = new BN(offerAmount).multipliedBy(10 ** offerToken.decimals).toString()
       const offer_label_locked = [_offerAmount, applyDuration, voteDuration]
 
       console.log(baseInfo)

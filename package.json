@@ -100,6 +100,7 @@
     "@uiw/react-markdown-editor": "^6.1.1",
     "autoprefixer": "^10.4.16",
     "axios": "^1.6.2",
+    "bignumber.js": "^9.1.2",
     "cherry-markdown": "^0.8.41",
     "cos-nodejs-sdk-v5": "^2.12.5",
     "eslint-config-next": "13.4.6",
