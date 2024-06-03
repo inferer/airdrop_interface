@@ -25,7 +25,7 @@ import { Field } from '../../state/swap/actions'
 import { useCurrencyBalanceUSDT } from '../../state/wallet/hooks'
 import { useInputTokens } from '../../hooks/Tokens'
 import { useAirCampaignAmount } from '../../hooks/useAirdropAssetTreasury'
-
+import BN from 'bignumber.js'
 
 let globalApproveList: string[] = ['usdt', 'label']
 
@@ -516,7 +516,7 @@ export default function Create() {
                 e.stopPropagation()
                 if (createStatus === 1 || uploadStatus === 1) return
                 const arwRes = await handleUploadStr(createContent)
-                const awardList = awardData.map(item => ([Number(item.a) * (10 ** (lockedCurrency?.decimals ?? 18)), item.s]))
+                const awardList = awardData.map(item => ([new BN(item.a).multipliedBy(10 ** (lockedCurrency?.decimals ?? 18)).toString(), item.s]))
                 handleCreateCampaign(
                   name, label, channel, action, landingPage, arwRes.id, 
                   // @ts-ignore
