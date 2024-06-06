@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ItemBox, ItemTitle } from "./styleds";
 import LazyImage from "../../components/LazyImage";
 import Input from "../../components/NumericalInput";
-import { Currency } from "@uniswap/sdk";
+import { Currency, CurrencyAmount } from "@uniswap/sdk";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import BigNumber from 'bignumber.js'
 
@@ -12,10 +12,10 @@ const AwardList = ({
   lockedCurrency
 }: {
   onChange?: (dataList: any[]) => void,
-  lockedCurrency?: Currency
+  lockedCurrency?: CurrencyAmount
 }) => {
 
-  const [dataList, setDataList] = useState<any[]>([{a: '', s: ''}])
+  const [dataList, setDataList] = useState<any[]>([{a: '', s: '1'}])
 
   const handleAmountInput = useCallback((value, index) => {
     const dataItem = { ...dataList[index], a: value}
@@ -30,7 +30,7 @@ const AwardList = ({
   }, [dataList])
 
   const handleAddDataItem = useCallback(() => {
-    const dataItem = {a: '', s: ''}
+    const dataItem = {a: '', s: '1'}
     setDataList([...dataList, dataItem])
   }, [dataList])
 
@@ -44,7 +44,11 @@ const AwardList = ({
   }, [dataList])
 
   const totalAmount = useMemo(() => {
-    return dataList.reduce((total, item) => total + (new BigNumber(item.a || 0).multipliedBy(new BigNumber(item.s || 0)).toNumber()), 0)
+    let total = new BigNumber(0)
+    dataList.forEach(item => {
+      total = total.plus(new BigNumber(item.a || 0).multipliedBy(new BigNumber(item.s || 0)))
+    })
+    return total.toString()
   }, [dataList])
 
   return (
@@ -103,7 +107,7 @@ const AwardList = ({
                         onUserInput={ value => {
                           handleAmountInput(value, index)
                         }} />
-                        { lockedCurrency && <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'16px'} style={{marginLeft: 20}} />}
+                        { lockedCurrency && <CurrencyLogo type='payInputCreate' currency={lockedCurrency?.currency || undefined} size={'16px'} style={{marginLeft: 20}} />}
                     </div>
                     <div className="w-[100px] pl-[45px]">
                       <div className="text-[16px] font-fsemibold">x</div>
@@ -114,6 +118,7 @@ const AwardList = ({
                       }} 
                         className=" rounded-lg" 
                         value={item.s} 
+                        placeholder="1"
                         onUserInput={ value => {
                           handleSizeInput(value, index)
                         }} />
@@ -124,7 +129,7 @@ const AwardList = ({
                     <div className="w-[100px] shrink-0">
                       <div className="text-[16px] font-fsemibold justify-end flex items-center">
                         { new BigNumber(item.a || 0).multipliedBy(new BigNumber(item.s || 0)).toString()}
-                        { lockedCurrency && <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'16px'} style={{marginLeft: 20}} />}
+                        { lockedCurrency && <CurrencyLogo type='payInputCreate' currency={lockedCurrency?.currency  || undefined} size={'16px'} style={{marginLeft: 20}} />}
                       </div>
                     </div>
                     <div className="w-[104px] pl-[50px]">

@@ -221,9 +221,9 @@
         "type": "address"
       },
       {
-        "internalType": "address",
+        "internalType": "uint256",
         "name": "",
-        "type": "address"
+        "type": "uint256"
       }
     ],
     "name": "campaignUSDTLocked",
@@ -728,19 +728,19 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint16",
-        "name": "_bonus",
-        "type": "uint16"
-      },
-      {
-        "internalType": "address",
-        "name": "_applyUser",
-        "type": "address"
-      },
-      {
         "internalType": "address[]",
         "name": "_voteUsers",
         "type": "address[]"
+      },
+      {
+        "internalType": "address",
+        "name": "_from",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_campaignId",
+        "type": "uint256"
       }
     ],
     "name": "sendCampaignAir",
@@ -779,6 +779,11 @@
         "internalType": "address",
         "name": "_sender",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_campaignId",
+        "type": "uint256"
       }
     ],
     "name": "sendCampaignUSDT",

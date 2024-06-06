@@ -4,9 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/router";
 import { useIsRoleProjectMode } from "../../state/user/hooks";
 
-
 export const SelectMenu: React.FC<{
-  
   onChange?: (data: any) => void
 }> = ({
   onChange
@@ -61,8 +59,10 @@ export const SelectMenu: React.FC<{
             Campaign
           </div>
         </div>
+        {
+          isProjectMode && <LazyImage src="/images/campaign/arrow-down2.svg" className={` ${showOptions ? 'rotate-0' : 'rotate-180' }  `} />
+        }
         
-        {/* <LazyImage src="/images/airdrop/arrow-down2.svg" className={` ${showOptions ? 'rotate-180' : 'rotate-0' }  `} /> */}
       </div>
       {
         showOptions && 
@@ -76,9 +76,9 @@ export const SelectMenu: React.FC<{
       
       <div 
         ref={node}
-        style={{ height: showOptions ? 'auto' : 0, padding: showOptions ? '16px' : 0, background: 'linear-gradient(135deg, rgba(63, 60, 255, 0.04) 0%, rgba(107, 190, 225, 0.04) 100%)', transition: 'height ease 0.3s'}}
-        className={`options fixed z-50 bg-white rounded-lg w-[250px]`}>
-          <div className="overflow-auto scrollbar-container h-full group"
+        style={{ height: showOptions ? 'auto' : 0, padding: showOptions ? '0' : 0, background: 'linear-gradient(0deg, rgba(85, 123, 241, 0.02) 0%, rgba(85, 123, 241, 0.02) 100%), #FFF', transition: 'height ease 0.3s'}}
+        className={`options fixed z-50 bg-white rounded-lg w-[164px] overflow-hidden`}>
+          <div className="overflow-auto scrollbar-container h-full group hover:bg-[rgba(85,123,241,0.08)]"
             style={{ height: showOptions ? 'auto' : 0 }}
           >
             <div
@@ -88,15 +88,15 @@ export const SelectMenu: React.FC<{
                 setShowOptions(false)
                 router.push('/project/campaign/create')
               }}
-              className="flex items-center text-[16px] font-fbold h-[36px] cursor-pointer">
-                <div className="rounded-[4px] mr-4 w-[36px] h-[36px] shrink-0 ">
-                  <LazyImage2 className="w-[36px] h-[36px]" src={'/images/campaign/create.svg'}/>
+              className="flex items-center text-[14px] font-medium h-[44px] cursor-pointer px-4">
+                <div className="rounded-[4px] mr-3 shrink-0 ">
+                  <LazyImage2 className="w-[20px] h-[20px]" src={'/images/campaign/create.svg'}/>
                 </div>
                 
-                Create the Campaign
+                Create
               </div>
           </div>
-          {
+          {/* {
             showOptions &&
             <div className="my-2">
               <div
@@ -111,9 +111,9 @@ export const SelectMenu: React.FC<{
                   </div>
                 </div>
             </div>
-          }
+          } */}
           
-          <div className="overflow-auto scrollbar-container h-full group"
+          <div className="overflow-auto scrollbar-container h-full group hover:bg-[rgba(85,123,241,0.08)]"
             style={{ height: showOptions ? 'auto' : 0 }}
           >
             <div
@@ -122,9 +122,9 @@ export const SelectMenu: React.FC<{
                 setShowOptions(false)
                 router.push('/project/campaign')
               }}
-              className="flex items-center text-[16px] font-fbold h-[36px] cursor-pointer">
-                <div className="rounded-[4px] mr-4 w-[36px] h-[36px] shrink-0 ">
-                  <LazyImage2 className="w-[36px] h-[36px]" src={'/images/campaign/view.svg'}/>
+              className="flex items-center text-[14px] font-medium h-[44px] cursor-pointer px-4">
+                <div className="rounded-[4px] mr-3 shrink-0 ">
+                  <LazyImage2 className="w-[20px] h-[20px]" src={'/images/campaign/view.svg'}/>
                 </div>
                 
                 Campaigns

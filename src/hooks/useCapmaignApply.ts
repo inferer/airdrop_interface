@@ -102,7 +102,11 @@ export function useCampaignApply(algToken?: string) {
         console.log(error)
         const message = error.data?.data?.message || error.data?.message || error.message
         console.log(message)
-        handleShow({ type: 'error', content: `Fail to vote.`, title: 'Error' })
+        if (message.indexOf('CampaignApply: You have voted') > -1) {
+          handleShow({ type: 'error', content: `You have already voted. Thanks.`, title: 'Error' })
+        } else {
+          handleShow({ type: 'error', content: `Fail to vote.`, title: 'Error' })
+        }
         setApplyStatus(2)
         return
       }

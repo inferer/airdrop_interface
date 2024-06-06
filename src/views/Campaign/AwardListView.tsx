@@ -19,7 +19,7 @@ const AwardListView = ({
   }, [dataList])
 
   return (
-    <ItemBox style={{height: 'auto', width: 1128, marginTop: 25}}>
+    <ItemBox style={{height: 'auto', width: 1157, marginTop: 25}}>
       <div className='text-[16px] font-fsemibold text-[rgba(0,0,0,1)]'>Award</div>
       <div className=' flex mt-6'>
         <div className='w-full pr-6'>
@@ -43,7 +43,7 @@ const AwardListView = ({
                       </div>
                     </div>
                     <div className="w-[142px] flex items-center">
-                      <div className="pt-[5px] pb-[6px] px-2 h-[28px] rounded-[4px] bg-[rgba(37,150,232,0.10)] flex items-center text-[#245AFF] text-[14px] font-fsemibold min-w-[50px] ">
+                      <div className="pt-[5px] pb-[6px] px-2 h-[28px] rounded-[4px] bg-[rgba(85,123,241,0.04)] flex items-center text-[#245AFF] text-[14px] font-fsemibold min-w-[50px] ">
                         {item.a || item.amount}
                         {
                           offerToken && <CurrencyLogo currency={offerToken} size={'16px'} style={{marginLeft: 12}} />
@@ -63,7 +63,7 @@ const AwardListView = ({
                       <div className="text-[20px] font-fbold text-[#8BA5FF]">=</div>
                     </div>
                     <div className="w-[142px] shrink-0 flex">
-                      <div className="pt-[5px] pb-[6px] px-2 h-[28px] rounded-[4px] bg-[rgba(37,150,232,0.10)] flex items-center text-[#245AFF] text-[14px] font-fsemibold min-w-[50px] ">
+                      <div className="pt-[5px] pb-[6px] px-2 h-[28px] rounded-[4px] bg-[rgba(85,123,241,0.04)] flex items-center text-[#245AFF] text-[14px] font-fsemibold min-w-[50px] ">
                         {(Number(item.a || item.amount) * Number(item.s || item.size))}
                         {
                           offerToken && <CurrencyLogo currency={offerToken} size={'16px'} style={{marginLeft: 12}} />

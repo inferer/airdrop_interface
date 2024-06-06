@@ -13,7 +13,7 @@ import { useApproveCallback } from './useApproveCallback'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import { AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury'
 import { useSwapCallArguments } from './useSwapCallback'
-import { useAddPopup } from '../state/application/hooks'
+import { useAddPopup, useShowToast } from '../state/application/hooks'
 import { useAirTokenPercent, useAirTokenPercentBalance, useCreateContractABI, useCreateContractABIAll } from '../state/airdrop/hooks'
 import { Field } from '../state/swap/actions'
 import { useDispatch } from 'react-redux'
@@ -126,6 +126,8 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
   const campaignSender: Contract | null = useCampaignSenderContract()
   const [createStatus, setCreateStatus] = useState(0)
   const { independentField } = useSwapState()
+  const { handleShow } = useShowToast()
+  
   const handleCreateCampaign = useCallback(async (
     name: string,
     label: string,
@@ -154,7 +156,11 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
       console.log(offer_label_token)
       console.log(offer_label_locked)
       console.log(awardList)
-
+      if (voteDuration <= applyDuration) {
+        handleShow({ type: 'error', content: `Vote deadline should be later than apply deadline.`, title: 'Error' })
+        setCreateStatus(0)
+        return
+      }
       let gasLimit = '5000000'
       try {
         const gasEstimate = await campaignSender.estimateGas['createCampaign'](baseInfo, offer_label_token, offer_label_locked, awardList, 

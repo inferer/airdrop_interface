@@ -99,15 +99,16 @@ export const getCampaignList = async (multi: Contract, airdropLength: number | n
       const _offerLocked = (Number(airdrop[3][0].toString()) / (10 ** (offerTokenData?.decimals ?? 18))).toString()
       
       const _offerLabelLocked = (Number(airdrop[3][3].toString()) / (10 ** (labelTokenData?.decimals ?? 18))).toString()
-      const _applyExpireOn = Number(airdrop[4].toString()) * 1000 + Number(airdrop[3][1].toString()) * 1000
-      const _expireOn = Number(airdrop[4].toString()) * 1000 + Number(airdrop[3][2].toString()) * 1000
-      const _labelLocked = (Number(airdrop[3][3]) / (10 ** (labelTokenData?.decimals ?? 18))).toFixed(4)
+      const _applyExpireOn = Number(airdrop[3][1].toString()) * 1000
+      const _expireOn = Number(airdrop[3][2].toString()) * 1000
+      const _labelLocked = (Number(airdrop[3][3]) / (10 ** (labelTokenData?.decimals ?? 18))).toString()
       const _awardList = airdrop[6].map((item: any[]) => {
         return {
           a:  Number(item[0].toString()) / (10 ** (offerTokenData?.decimals ?? 18)),
           s: Number(item[1].toString())
         }
       })
+      
       const _otherContent = airdrop[1][5] ? airdrop[1][5].split('|') : []
       const tempData: any = {
         campaignId: airdrop[0].toString(),

@@ -113,33 +113,39 @@ const VoteContent = ({
   }, [applyVoteList])
 
   return (
-    <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
-      <LabelText>Vote</LabelText>
-      <div className="mt-4">
-        <div className=" grid grid-cols-5 gap-x-[88px] gap-y-[20px]">
-          {
-            applyVoteList?.map((item, index) => {
-              return (
-                <VoteItem 
-                  total={voteTotal}
-                  from={from}
-                  key={item.arwId} voteData={item} 
-                  selected={currentIndex === index} 
-                  onClick={(voteData) => {
-                    if (currentIndex === index) {
-                      setCurrentIndex(-1)
-                    } else {
-                      setCurrentIndex(index)
-                    }
-                  
-                }} />
-              )
-                
-            })
-          }
+    <>
+      {
+        applyVoteList?.length > 0 && 
+        <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
+          <LabelText>Vote</LabelText>
+          <div className="mt-4">
+            <div className=" grid grid-cols-5 gap-x-[88px] gap-y-[20px]">
+              {
+                applyVoteList?.map((item, index) => {
+                  return (
+                    <VoteItem 
+                      total={voteTotal}
+                      from={from}
+                      key={item.arwId} voteData={item} 
+                      selected={currentIndex === index} 
+                      onClick={(voteData) => {
+                        if (currentIndex === index) {
+                          setCurrentIndex(-1)
+                        } else {
+                          setCurrentIndex(index)
+                        }
+                      
+                    }} />
+                  )
+                    
+                })
+              }
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      }
+    </>
+    
   )
 }
 

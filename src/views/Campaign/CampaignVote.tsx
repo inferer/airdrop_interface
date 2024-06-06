@@ -66,7 +66,7 @@ const CampaignVote: React.FC<{
     setArwId(arwId)
     setFileType(fileType)
   }, [])
-  console.log(campaign)
+
   return (
     <div className="py-5 pt-0">
       <CampaignInfo campaign={campaign} from={isProjectMode ? 'project' : 'user'} isVote={isVote} onBonusChange={setBonus} />

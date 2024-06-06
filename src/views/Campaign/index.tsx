@@ -161,17 +161,35 @@ export default function Create() {
   }, [applyDeadline, voteDeadline])
 
   const applyDuration = useMemo(() => {
-    return Number(applyDeadline[0]) * 30 * 24 * 60 * 60 + 
-            Number(applyDeadline[1]) * 24 * 60 * 60 + 
-            Number(applyDeadline[2]) * 60 * 60 + 
-            Number(applyDeadline[3]) * 60 
+    // return Number(applyDeadline[0]) * 30 * 24 * 60 * 60 + 
+    //         Number(applyDeadline[1]) * 24 * 60 * 60 + 
+    //         Number(applyDeadline[2]) * 60 * 60 + 
+    //         Number(applyDeadline[3]) * 60 +
+    //         Math.floor(new Date(new Date().getFullYear(), 0, 0).getTime() / 1000)
+    return Math.floor(new Date(
+                        new Date().getFullYear(), 
+                        Number(applyDeadline[0]) - 1,
+                        Number(applyDeadline[1]),
+                        Number(applyDeadline[2]),
+                        Number(applyDeadline[3]),
+                        0
+                      ).getTime() / 1000)
   }, [applyDeadline])
 
   const voteDuration = useMemo(() => {
-    return Number(voteDeadline[0]) * 30 * 24 * 60 * 60 + 
-            Number(voteDeadline[1]) * 24 * 60 * 60 + 
-            Number(voteDeadline[2]) * 60 * 60 + 
-            Number(voteDeadline[3]) * 60 
+    // return Number(voteDeadline[0]) * 30 * 24 * 60 * 60 + 
+    //         Number(voteDeadline[1]) * 24 * 60 * 60 + 
+    //         Number(voteDeadline[2]) * 60 * 60 + 
+    //         Number(voteDeadline[3]) * 60 +
+    //         Math.floor(new Date(new Date().getFullYear(), 0, 0).getTime() / 1000) 
+    return Math.floor(new Date(
+                        new Date().getFullYear(), 
+                        Number(voteDeadline[0]) - 1,
+                        Number(voteDeadline[1]),
+                        Number(voteDeadline[2]),
+                        Number(voteDeadline[3]),
+                        0
+                      ).getTime() / 1000)
   }, [voteDeadline])
 
   const disabled = useMemo(() => {
@@ -236,8 +254,8 @@ export default function Create() {
                 }}
               >
                 <div className='flex items-center '>
-                  <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'24px'} />
-                  <div className='text-[20px] font-fsemibold ml-2'>{lockedCurrency?.symbol}</div>
+                  <CurrencyLogo type='payInputCreate' currency={selectedCurrencyBalanceUSDT?.currency || undefined} size={'24px'} />
+                  <div className='text-[20px] font-fsemibold ml-2'>{selectedCurrencyBalanceUSDT?.currency?.symbol}</div>
                 </div>
                 
                 <LazyImage src='/images/campaign/down.svg' className='ml-2' />
@@ -426,7 +444,7 @@ export default function Create() {
           </div>
         </ItemBox> */}
       </div>
-      <AwardList onChange={setAwardData} lockedCurrency={lockedCurrency ?? undefined} />
+      <AwardList onChange={setAwardData} lockedCurrency={selectedCurrencyBalanceUSDT ?? undefined} />
       <Content onChange={setCreateContent} />
       <ItemBox style={{height: '135px', width: '100%', marginTop: 24}}>
         <div className='shrink-0 '>

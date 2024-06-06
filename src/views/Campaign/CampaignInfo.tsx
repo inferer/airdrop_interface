@@ -159,7 +159,7 @@ const AirdropInfo = ({
               <div className="mt-3 flex">
                 <div className="flex items-baseline font-fnormal">
                   <div className=" text-[16px] text-[rgba(0,0,0,0.4)]">
-                    {campaign.expireOn}
+                    {isVote ? campaign.expireOn : campaign.applyExpireOn}
                   </div>
                 </div>
               </div>

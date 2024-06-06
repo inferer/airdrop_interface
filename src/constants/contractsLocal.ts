@@ -48,10 +48,10 @@ export const campaignContracts =
 {
   "Alg-Campaign": "0xE47979D2E691597FbFe0D180860de4EA99764b66",
   "Air-Campaign": "0xE3bfb47189603bd2f0C2CAeb9326092fc1ebF2cF",
-  "campaignManagerLogic": "0x396979288dc62343629730cfd92c3775F5206d49",
-  "campaignManager": "0xD2121df03BF55D58B834f90b8750cac6d432193C",
-  "campaignSenderLogic": "0x3362595fbA569155211605437e6Ac222f50f96AD",
-  "campaignSender": "0xdF1B5300bE6F14f0B4700d40dcBaA5208e7d2C68",
+  "campaignManagerLogic": "0x03d1981e00Bf0EED9f7d4a32dB3B93575c978641",
+  "campaignManager": "0x06Ed09B1715Bab3873d6Abcb53122015f06d1bf8",
+  "campaignSenderLogic": "0x53d02B1F4467F8D28240DA3489580630cE6ce941",
+  "campaignSender": "0x61b133E16cC215F61d2E47f7D228F5EC3FB6C8B8",
   "campaignApplyLogic": "0x115F96071Df73af33Ce068f2925e579D94352d4A",
   "campaignApply": "0x7Ce460881844Cc76ac2bD665f367B65530fC0560"
 }

@@ -41,7 +41,7 @@ function UserCampaign() {
               !isCampaignVote && <LazyImage src='/images/tokens/swap/air-campaign.svg' className=' w-[24px] h-[24px] mr-3' />
             }
             <div className=' font-fsemibold text-[32px]'>
-              {isCampaignVote ? 'Join the Campaign' : 'Campaigns'} 
+              {isCampaignVote ? isVote ? 'Vote the Campaign' : 'Apply the Campaign' : 'Campaigns'} 
             </div>
           </div>
           {

@@ -22,7 +22,7 @@ export const CampaignBody = styled.div`
   margin: 0 auto;
   border-radius: 24px;
   background: #FFF;
-  padding: 30px;
+  padding: 40px;
   margin-top: 36px;
   margin-bottom: 52px;
 `
@@ -89,7 +89,7 @@ export const CreateBody = styled.div`
   margin: 0 auto;
   border-radius: 24px;
   background: #FFF;
-  padding: 48px 45px 30px;
+  padding: 48px 40px 30px;
   margin-top: 56px;
 `
 
