@@ -26,8 +26,17 @@ import { useCurrencyBalanceUSDT } from '../../state/wallet/hooks'
 import { useInputTokens } from '../../hooks/Tokens'
 import { useAirCampaignAmount } from '../../hooks/useAirdropAssetTreasury'
 import BN from 'bignumber.js'
+import NumberAdd from '../../components/NumberAdd'
 
 let globalApproveList: string[] = ['usdt', 'label']
+
+export const InputWrap = ({ children }: any) => {
+  return (
+    <div className='w-[67px] h-[40px] py-3 pl-2 pr-2 rounded-lg border border-[rgba(85,123,241,0.1)] flex items-center'>
+      { children }
+    </div>
+  )
+}
 
 export default function Create() {
   const router = useRouter()
@@ -198,6 +207,10 @@ export default function Create() {
     return !name || !createContent || !landingPageVerify || !applyVerify || !voteVerify
   }, [name, createContent, landingPageVerify, offerAmount, ariCampaignAmount, applyDeadline, voteDeadline])
 
+  const InputNumberClass = {
+    width: 32, height: '17px', marginTop: 0, paddingLeft: '4px', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
+  }
+
   return (
     <CreateBody>
       <TitleWrap>
@@ -233,7 +246,6 @@ export default function Create() {
         <ItemBox style={{ height: '101px', width: 300, marginLeft: 15 }}>
           <ItemTitle>offer</ItemTitle>
           <div className='flex justify-between items-center mt-2'
-            
           >
             <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>
               <InputNumber style={{
@@ -294,13 +306,11 @@ export default function Create() {
             </TokenInfo>
           </div>
         </ItemBox>
-        <ItemBox style={{ marginTop: 25, height: '101px', width: 390, marginLeft: 15 }}>
+        <ItemBox style={{ marginTop: 25, height: '101px', width: 399, marginLeft: 15 }}>
           <ItemTitle>apply deadline (utc)</ItemTitle>
-          <div className='flex items-center mt-1'>
-            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
-              <InputNumber style={{
-                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
-              }} 
+          <div className='flex items-center mt-3'>
+            <InputWrap>
+              <InputNumber style={InputNumberClass} 
                 className=" rounded-lg" 
                 placeholder='0'
                 value={applyDeadline[0]} 
@@ -310,14 +320,24 @@ export default function Create() {
                   }
                   
                 }} />
-            </div>
+              <NumberAdd 
+                onPlus={() => {
+                  if (/^([1-9]|1[0-2])$/.test(String(Number(applyDeadline[0]) + 1))) {
+                    handleDeadlineInput(Number(applyDeadline[0]) + 1, 0, 'apply')
+                  }
+                }}
+                onMinus={() => {
+                  if (/^([1-9]|1[0-2])$/.test(String(Number(applyDeadline[0]) - 1))) {
+                    handleDeadlineInput(Number(applyDeadline[0]) - 1, 0, 'apply')
+                  }
+                }}
+              />
+            </InputWrap>
             <div className='px-2 text-[14px] font-fsemibold'>
               M
             </div>
-            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
-              <InputNumber style={{
-                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
-              }} 
+            <InputWrap>
+              <InputNumber style={InputNumberClass} 
                 className=" rounded-lg" 
                 placeholder='0'
                 value={applyDeadline[1]} 
@@ -327,14 +347,24 @@ export default function Create() {
                   }
                   
                 }} />
-            </div>
+              <NumberAdd 
+                onPlus={() => {
+                  if (/^(?:0?[1-9]|[12]\d|3[01])$/.test(String(Number(applyDeadline[1]) + 1))) {
+                    handleDeadlineInput(Number(applyDeadline[1]) + 1, 1, 'apply')
+                  }
+                }}
+                onMinus={() => {
+                  if (/^(?:0?[1-9]|[12]\d|3[01])$/.test(String(Number(applyDeadline[1]) - 1))) {
+                    handleDeadlineInput(Number(applyDeadline[1]) - 1, 1, 'apply')
+                  }
+                }}
+              />
+            </InputWrap>
             <div className='px-2 text-[14px] font-fsemibold'>
               D
             </div>
-            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
-              <InputNumber style={{
-                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
-              }} 
+            <InputWrap>
+              <InputNumber style={InputNumberClass} 
                 className=" rounded-lg" 
                 placeholder='0'
                 value={applyDeadline[2]} 
@@ -344,14 +374,24 @@ export default function Create() {
                   }
                   
                 }} />
-            </div>
+              <NumberAdd 
+                onPlus={() => {
+                  if (/^([01]?[0-9]|2[0-3])$/.test(String(Number(applyDeadline[2]) + 1))) {
+                    handleDeadlineInput(Number(applyDeadline[2]) + 1, 2, 'apply')
+                  }
+                }}
+                onMinus={() => {
+                  if (/^([01]?[0-9]|2[0-3])$/.test(String(Number(applyDeadline[2]) - 1))) {
+                    handleDeadlineInput(Number(applyDeadline[2]) - 1, 2, 'apply')
+                  }
+                }}
+              />
+            </InputWrap>
             <div className='px-2 text-[14px] font-fsemibold'>
               h
             </div>
-            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
-              <InputNumber style={{
-                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
-              }} 
+            <InputWrap>
+              <InputNumber style={InputNumberClass} 
                 className=" rounded-lg" 
                 placeholder='0'
                 value={applyDeadline[3]} 
@@ -360,19 +400,29 @@ export default function Create() {
                     handleDeadlineInput(value, 3, 'apply')
                   }
                 }} />
-            </div>
+              <NumberAdd 
+                onPlus={() => {
+                  if (/^([0-5]\d|[0-9])$/.test(String(Number(applyDeadline[3]) + 1))) {
+                    handleDeadlineInput(Number(applyDeadline[3]) + 1, 3, 'apply')
+                  }
+                }}
+                onMinus={() => {
+                  if (/^([0-5]\d|[0-9])$/.test(String(Number(applyDeadline[3]) - 1))) {
+                    handleDeadlineInput(Number(applyDeadline[3]) - 1, 3, 'apply')
+                  }
+                }}
+              />
+            </InputWrap>
             <div className='px-2 text-[14px] font-fsemibold'>
               m
             </div>
           </div>
         </ItemBox>
-        <ItemBox style={{ marginTop: 25, height: '101px', width: 390, marginLeft: 15 }}>
+        <ItemBox style={{ marginTop: 25, height: '101px', width: 398, marginLeft: 15 }}>
           <ItemTitle>vote deadline (utc)</ItemTitle>
-          <div className='flex items-center mt-1'>
-            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
-              <InputNumber style={{
-                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
-              }} 
+          <div className='flex items-center mt-3'>
+            <InputWrap>
+              <InputNumber style={InputNumberClass} 
                 className=" rounded-lg" 
                 placeholder='0'
                 value={voteDeadline[0]} 
@@ -382,14 +432,24 @@ export default function Create() {
                   }
                   
                 }} />
-            </div>
+              <NumberAdd 
+                onPlus={() => {
+                  if (/^([1-9]|1[0-2])$/.test(String(Number(voteDeadline[0]) + 1))) {
+                    handleDeadlineInput(Number(voteDeadline[0]) + 1, 0, 'vote')
+                  }
+                }}
+                onMinus={() => {
+                  if (/^([1-9]|1[0-2])$/.test(String(Number(voteDeadline[0]) - 1))) {
+                    handleDeadlineInput(Number(voteDeadline[0]) - 1, 0, 'vote')
+                  }
+                }}
+              />
+            </InputWrap>
             <div className='px-2 text-[14px] font-fsemibold'>
               M
             </div>
-            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
-              <InputNumber style={{
-                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
-              }} 
+            <InputWrap>
+              <InputNumber style={InputNumberClass} 
                 className=" rounded-lg" 
                 placeholder='0'
                 value={voteDeadline[1]} 
@@ -398,14 +458,24 @@ export default function Create() {
                     handleDeadlineInput(value, 1, 'vote')
                   }
                 }} />
-            </div>
+              <NumberAdd 
+                onPlus={() => {
+                  if (/^(?:0?[1-9]|[12]\d|3[01])$/.test(String(Number(voteDeadline[1]) + 1))) {
+                    handleDeadlineInput(Number(voteDeadline[1]) + 1, 1, 'vote')
+                  }
+                }}
+                onMinus={() => {
+                  if (/^(?:0?[1-9]|[12]\d|3[01])$/.test(String(Number(voteDeadline[1]) - 1))) {
+                    handleDeadlineInput(Number(voteDeadline[1]) - 1, 1, 'vote')
+                  }
+                }}
+              />
+            </InputWrap>
             <div className='px-2 text-[14px] font-fsemibold'>
               D
             </div>
-            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
-              <InputNumber style={{
-                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
-              }} 
+            <InputWrap>
+              <InputNumber style={InputNumberClass} 
                 className=" rounded-lg" 
                 placeholder='0'
                 value={voteDeadline[2]} 
@@ -415,14 +485,24 @@ export default function Create() {
                   }
                   
                 }} />
-            </div>
+              <NumberAdd 
+                onPlus={() => {
+                  if (/^([01]?[0-9]|2[0-3])$/.test(String(Number(voteDeadline[2]) + 1))) {
+                    handleDeadlineInput(Number(voteDeadline[2]) + 1, 2, 'vote')
+                  }
+                }}
+                onMinus={() => {
+                  if (/^([01]?[0-9]|2[0-3])$/.test(String(Number(voteDeadline[2]) - 1))) {
+                    handleDeadlineInput(Number(voteDeadline[2]) - 1, 2, 'vote')
+                  }
+                }}
+              />
+            </InputWrap>
             <div className='px-2 text-[14px] font-fsemibold'>
               h
             </div>
-            <div className='w-[64px] h-[52px] py-3 px-4 rounded-lg border border-[rgba(85,123,241,0.1)]'>
-              <InputNumber style={{
-                width: 32, height: 28, marginTop: 0, padding: '0', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
-              }} 
+            <InputWrap>
+              <InputNumber style={InputNumberClass} 
                 className=" rounded-lg" 
                 placeholder='0'
                 value={voteDeadline[3]} 
@@ -431,7 +511,19 @@ export default function Create() {
                     handleDeadlineInput(value, 3, 'vote')
                   }
                 }} />
-            </div>
+              <NumberAdd 
+                onPlus={() => {
+                  if (/^([0-5]\d|[0-9])$/.test(String(Number(voteDeadline[3]) + 1))) {
+                    handleDeadlineInput(Number(voteDeadline[3]) + 1, 3, 'vote')
+                  }
+                }}
+                onMinus={() => {
+                  if (/^([0-5]\d|[0-9])$/.test(String(Number(voteDeadline[3]) - 1))) {
+                    handleDeadlineInput(Number(voteDeadline[3]) - 1, 3, 'vote')
+                  }
+                }}
+              />
+            </InputWrap>
             <div className='px-2 text-[14px] font-fsemibold'>
               m
             </div>

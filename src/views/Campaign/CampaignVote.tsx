@@ -72,7 +72,7 @@ const CampaignVote: React.FC<{
       <CampaignInfo campaign={campaign} from={isProjectMode ? 'project' : 'user'} isVote={isVote} onBonusChange={setBonus} />
       <div>
         {
-          (isVote && campaignApplyVoteList?.length > 0) ? 
+          (isVote) ? 
             <VoteContent applyVoteList={campaignApplyVoteList} onSelect={setCurrentIndex} /> : 
             <WorkContent campaign={campaign} applyId={campaignApplyVoteList?.length}
               onUpload={handleOnUpload}

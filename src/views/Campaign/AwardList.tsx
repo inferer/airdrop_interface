@@ -6,6 +6,7 @@ import Input from "../../components/NumericalInput";
 import { Currency, CurrencyAmount } from "@uniswap/sdk";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import BigNumber from 'bignumber.js'
+import NumberAdd from "../../components/NumberAdd";
 
 const AwardList = ({
   onChange,
@@ -15,7 +16,7 @@ const AwardList = ({
   lockedCurrency?: CurrencyAmount
 }) => {
 
-  const [dataList, setDataList] = useState<any[]>([{a: '', s: '1'}])
+  const [dataList, setDataList] = useState<any[]>([{a: '', s: ''}])
 
   const handleAmountInput = useCallback((value, index) => {
     const dataItem = { ...dataList[index], a: value}
@@ -30,7 +31,7 @@ const AwardList = ({
   }, [dataList])
 
   const handleAddDataItem = useCallback(() => {
-    const dataItem = {a: '', s: '1'}
+    const dataItem = {a: '', s: ''}
     setDataList([...dataList, dataItem])
   }, [dataList])
 
@@ -112,16 +113,31 @@ const AwardList = ({
                     <div className="w-[100px] pl-[45px]">
                       <div className="text-[16px] font-fsemibold">x</div>
                     </div>
-                    <div className="w-[142px] flex items-center">
+                    <div className="w-[142px] flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg pr-4">
                       <Input style={{
-                        width: 142, height: 40, border: '1px solid rgba(85,123,241,0.1)', padding: '0 16px', fontSize: 14, textAlign: 'right'
+                        width: 142, height: 40, padding: '0 16px', fontSize: 14, textAlign: 'right'
                       }} 
-                        className=" rounded-lg" 
+                        className=" " 
                         value={item.s} 
                         placeholder="1"
                         onUserInput={ value => {
-                          handleSizeInput(value, index)
+                          if (/^[1-9]\d*$/.test(value)) {
+                            handleSizeInput(value, index)
+                          }
+                          
                         }} />
+                      <NumberAdd 
+                        onPlus={() => {
+                          if (/^[1-9]\d*$/.test(String(Number(item.s) + 1))) {
+                            handleSizeInput(Number(item.s) + 1, index)
+                          }
+                        }}
+                        onMinus={() => {
+                          if (/^[1-9]\d*$/.test(String(Number(item.s) - 1))) {
+                            handleSizeInput(Number(item.s) - 1, index)
+                          }
+                        }}
+                      />
                     </div>
                     <div className="w-[110px] pl-[50px]">
                       <div className="text-[16px] font-fsemibold">=</div>

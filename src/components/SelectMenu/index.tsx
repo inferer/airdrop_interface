@@ -46,14 +46,17 @@ export const SelectMenu: React.FC<{
   return (
     <div ref={wrapRef} className="flex items-center justify-end min-w-[120px] relative"
     >
-      <div className="flex justify-between items-center py-3 px-4 h-[48px] text-[16px] rounded-[8px] cursor-pointer group font-fsemibold text-[rgba(50,49,48,0.40)] hover:text-[#323130]"
+      <div className="flex justify-between items-center py-3 px-4 h-[48px] text-[16px] rounded-[8px] cursor-pointer group font-fsemibold text-[rgba(50,49,48,0.40)] hover:bg-[rgba(85,123,241,0.02)]"
         onClick={handleClick}
         
-        style={{color: showOptions || (router.query?.action && router.query?.action[0] === 'campaign' ) ? '#323130' : ''}}
+        style={{
+          color: (router.query?.action && router.query?.action[0] === 'campaign' ) ? '#323130' : '',
+          backgroundColor: showOptions ? 'rgba(85,123,241,0.02)' : ''
+        }}
       >
         <div className="flex items-center mr-1">
           <div className={`
-            rounded-[4px] 
+            rounded-[4px]
             ${showOptions ? '' : ''}
           `}>
             Campaign
@@ -88,7 +91,7 @@ export const SelectMenu: React.FC<{
                 setShowOptions(false)
                 router.push('/project/campaign/create')
               }}
-              className="flex items-center text-[14px] font-medium h-[44px] cursor-pointer px-4">
+              className="flex items-center text-[14px] font-fmedium h-[44px] cursor-pointer px-4">
                 <div className="rounded-[4px] mr-3 shrink-0 ">
                   <LazyImage2 className="w-[20px] h-[20px]" src={'/images/campaign/create.svg'}/>
                 </div>
@@ -122,7 +125,7 @@ export const SelectMenu: React.FC<{
                 setShowOptions(false)
                 router.push('/project/campaign')
               }}
-              className="flex items-center text-[14px] font-medium h-[44px] cursor-pointer px-4">
+              className="flex items-center text-[14px] font-fmedium h-[44px] cursor-pointer px-4">
                 <div className="rounded-[4px] mr-3 shrink-0 ">
                   <LazyImage2 className="w-[20px] h-[20px]" src={'/images/campaign/view.svg'}/>
                 </div>

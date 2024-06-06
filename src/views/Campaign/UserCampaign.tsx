@@ -25,13 +25,12 @@ function UserCampaign() {
   }, [campaignId, handleGetCampaignApplyVotes])
 
   useEffect(() => {
-    if (campaignApplyVoteList?.length < 1) {
-      setIsVote(false)
-    } else {
-      setIsVote(true)
-    }
+    // if (campaignApplyVoteList?.length < 1) {
+    //   setIsVote(false)
+    // } else {
+    //   setIsVote(true)
+    // }
   }, [campaignApplyVoteList])
-
   return (
     <div className='w-[1217px] mx-auto'>
       <CampaignBody>
@@ -41,12 +40,10 @@ function UserCampaign() {
               !isCampaignVote && <LazyImage src='/images/tokens/swap/air-campaign.svg' className=' w-[24px] h-[24px] mr-3' />
             }
             <div className=' font-fsemibold text-[32px]'>
-              {isCampaignVote ? isVote ? 'Vote the Campaign' : 'Apply the Campaign' : 'Campaigns'} 
+              {isCampaignVote ? (isVote ? 'Vote the Campaign' : 'Apply the Campaign') : 'Campaigns'} 
             </div>
           </div>
-          {
-            (isCampaignVote && campaignApplyVoteList?.length > 0) && <ApplyVoteSwitch onChange={setIsVote} />
-          }
+          <ApplyVoteSwitch onChange={setIsVote} value={isVote} />
           
         </div>
         
