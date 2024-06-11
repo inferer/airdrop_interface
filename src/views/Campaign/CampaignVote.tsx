@@ -31,17 +31,17 @@ const CampaignVote: React.FC<{
   const [fileType, setFileType] = useState('')
   const [bonus, setBonus] = useState('')
 
-  useEffect(() => {
-    if (campaignId) {
-      handleGetCampaignOne(Number(campaignId))
-    }
-  }, [campaignId, handleGetCampaignOne])
+  // useEffect(() => {
+  //   if (campaignId) {
+  //     handleGetCampaignOne(Number(campaignId))
+  //   }
+  // }, [campaignId, handleGetCampaignOne])
 
   const campaign = useCampaignList0(router.query?.action ? router.query?.action[2] as string : undefined)
   const [currentIndex, setCurrentIndex] = useState(-1)
   const handleApplyVote = useCallback(async () => {
     if (campaignId) {
-      if (isVote) {
+      if (campaign.isApplyExpired) {
         handleCampaignVote(campaignId, currentIndex)
       } else {
         handleCampaignApply(campaignId, fileType + '-' + arwId, bonus)
@@ -50,7 +50,7 @@ const CampaignVote: React.FC<{
           })
       }
     }
-  }, [isVote, campaignId, currentIndex, arwId, fileType, bonus])
+  }, [campaign, campaignId, currentIndex, arwId, fileType, bonus])
 
   const disabled = useMemo(() => {
     if (isVote) {
@@ -72,7 +72,7 @@ const CampaignVote: React.FC<{
       <CampaignInfo campaign={campaign} from={isProjectMode ? 'project' : 'user'} isVote={isVote} onBonusChange={setBonus} />
       <div>
         {
-          (isVote) ? 
+          (campaign.isApplyExpired) ? 
             <VoteContent applyVoteList={campaignApplyVoteList} onSelect={setCurrentIndex} /> : 
             <WorkContent campaign={campaign} applyId={campaignApplyVoteList?.length}
               onUpload={handleOnUpload}
@@ -111,7 +111,7 @@ const CampaignVote: React.FC<{
             >
               <div className="btn-text">
                 {
-                  applyStatus === 1 ? <LoadingX /> : isVote ? 'Vote' : 'Apply' 
+                  applyStatus === 1 ? <LoadingX /> : campaign.isApplyExpired ? 'Vote' : 'Apply' 
                 }
               </div>
             </ButtonSwap>

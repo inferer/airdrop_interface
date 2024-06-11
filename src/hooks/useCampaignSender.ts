@@ -156,6 +156,7 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
       console.log(offer_label_token)
       console.log(offer_label_locked)
       console.log(awardList)
+
       if (voteDuration <= applyDuration) {
         handleShow({ type: 'error', content: `Vote deadline should be later than apply deadline.`, title: 'Error' })
         setCreateStatus(0)
@@ -166,8 +167,15 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
         const gasEstimate = await campaignSender.estimateGas['createCampaign'](baseInfo, offer_label_token, offer_label_locked, awardList, 
           {value: isETH ? _offerAmount : '0'})
         gasLimit = gasEstimate.toString()
-      } catch (error) {
-        console.log(error)
+      } catch (error: any) {
+        const message = error.data?.data?.message || error.data?.message || error.message
+        if (message.indexOf('CampaignSender: Award not enough!') > -1){
+          handleShow({ type: 'error', content: `Award not enough!`, title: 'Error' })
+        } else {
+          handleShow({ type: 'error', content: message, title: 'Error' })
+        }       
+        setCreateStatus(0)
+        return
       }
       try {
         const tx = await campaignSender['createCampaign'](baseInfo, offer_label_token, offer_label_locked, awardList, { gasPrice: '1000000000', gasLimit: gasLimit, value: isETH ? _offerAmount : '0' })

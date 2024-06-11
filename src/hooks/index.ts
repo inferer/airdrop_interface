@@ -67,7 +67,7 @@ export function useInactiveListener(suppress = false) {
       const handleChainChanged = async (chainId: string) => {
         if (!active) {
           // eat errors
-          activate(await injected.getProvider(), undefined, true).catch(error => {
+          activate && activate(await injected.getProvider(), undefined, true).catch(error => {
             console.error('Failed to activate after chain changed', error)
           })
         } else {

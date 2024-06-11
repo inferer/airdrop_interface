@@ -121,7 +121,7 @@ const AwardList = ({
                         value={item.s} 
                         placeholder="1"
                         onUserInput={ value => {
-                          if (/^[1-9]\d*$/.test(value)) {
+                          if (/^[1-9]\d*$/.test(value) || value === '') {
                             handleSizeInput(value, index)
                           }
                           

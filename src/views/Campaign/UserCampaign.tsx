@@ -10,27 +10,29 @@ import { useRouter } from 'next/router'
 import CampaignVote from './CampaignVote'
 import ApplyVoteSwitch from './ApplyVoteSwitch'
 import { useCampaignApply } from '../../hooks/useCapmaignApply'
-import { useCampaignApplyVoteList } from '../../state/campaign/hooks'
+import { useCampaignApplyVoteList, useCampaignList0 } from '../../state/campaign/hooks'
+import { useCampaignManager } from '../../hooks/useCampaignManager'
 
 function UserCampaign() {
   const router = useRouter()
   const isCampaignVote = router.query.action ? router.query.action[2] : ''
   const campaignId = isCampaignVote
-  const [isVote, setIsVote] = useState(true)
   const { handleGetCampaignApplyVotes } = useCampaignApply()
+  const { handleGetCampaignOne } = useCampaignManager()
   const campaignApplyVoteList = useCampaignApplyVoteList(campaignId)
+  const campaign = useCampaignList0(router.query?.action ? router.query?.action[2] as string : undefined)
 
   useEffect(() => {
-    handleGetCampaignApplyVotes(campaignId)
-  }, [campaignId, handleGetCampaignApplyVotes])
+    if (campaignId) {
+      handleGetCampaignApplyVotes(campaignId)
+      handleGetCampaignOne(Number(campaignId))
+    }
+  }, [campaignId, handleGetCampaignApplyVotes, handleGetCampaignOne])
 
-  useEffect(() => {
-    // if (campaignApplyVoteList?.length < 1) {
-    //   setIsVote(false)
-    // } else {
-    //   setIsVote(true)
-    // }
-  }, [campaignApplyVoteList])
+  const isVote = useMemo(() => {
+    return campaign.isApplyExpired
+  }, [campaign])
+
   return (
     <div className='w-[1217px] mx-auto'>
       <CampaignBody>
@@ -40,10 +42,10 @@ function UserCampaign() {
               !isCampaignVote && <LazyImage src='/images/tokens/swap/air-campaign.svg' className=' w-[24px] h-[24px] mr-3' />
             }
             <div className=' font-fsemibold text-[32px]'>
-              {isCampaignVote ? (isVote ? 'Vote the Campaign' : 'Apply the Campaign') : 'Campaigns'} 
+              {isCampaignVote ? (campaign.isApplyExpired ? 'Vote the Campaign' : 'Apply the Campaign') : 'Campaigns'} 
             </div>
           </div>
-          <ApplyVoteSwitch onChange={setIsVote} value={isVote} />
+          {/* <ApplyVoteSwitch onChange={setIsVote} value={isVote} /> */}
           
         </div>
         

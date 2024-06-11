@@ -93,7 +93,7 @@ const AirdropInfo = ({
     <div className="">
       <div className="h-[171px] rounded-xl border border-[rgba(85, 123, 241, 0.1)] overflow-hidden">
         <div className="h-[64px] w-full flex items-center bg-[rgba(85,123,241,0.10)] pl-5 text-[24px] font-fsemibold"> {campaign.name}</div>
-        <div className="grid grid-cols-4 mt-5">
+        <div className="grid grid-cols-5 mt-5">
           <div className="pl-5">
             <LabelText>Type</LabelText>
             <div className="mt-3 flex">
@@ -108,19 +108,19 @@ const AirdropInfo = ({
             <div>
               <LabelText>Reward</LabelText>
               <div className="mt-3 flex">
-                <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px]">
-                  <div className=" text-[16px] font-semibold">
-                    { from === 'project' ? formatStringNumber(campaign.labelLocked) : 1}
+                <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px] shrink-0">
+                  <div className=" text-[16px] font-semibold shrink-0">
+                    { from === 'project' ? formatStringNumber(campaign.labelLocked) : 1} ×
                   </div>
                   {
                     from === 'project' ?
-                    <div className="px-2 py-[1px] ml-[11px] rounded flex items-center" style={{background: 'linear-gradient(96deg, rgba(63, 60, 255, 0.05) 0%, rgba(107, 190, 225, 0.05) 101.71%)'}}>
+                    <div className=" shrink-0 px-2 py-[1px] ml-[11px] rounded flex items-center" style={{background: 'linear-gradient(96deg, rgba(63, 60, 255, 0.05) 0%, rgba(107, 190, 225, 0.05) 101.71%)'}}>
                       {
                         campaign.labelToken && <CurrencyLogo type="campaign" currency={campaign.labelToken} size="20px" />
                       }
                       <div className="blue-text text-[16px] font-medium ml-1">{campaign.labelToken?.symbol}</div>
                     </div> : 
-                    <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
+                    <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px] shrink-0'>
                       {
                         campaign.labelToken && <CurrencyLogo type="campaign" currency={campaign.labelToken} size={'20px'} />
                       }
@@ -155,11 +155,24 @@ const AirdropInfo = ({
           <div className="pl-5 flex items-center">
             <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
             <div>
-              <LabelText>Expire On</LabelText>
+              <LabelText>Apply deadline</LabelText>
               <div className="mt-3 flex">
                 <div className="flex items-baseline font-fnormal">
                   <div className=" text-[16px] text-[rgba(0,0,0,0.4)]">
-                    {isVote ? campaign.expireOn : campaign.applyExpireOn}
+                    {campaign.applyExpireOn}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="pl-5 flex items-center">
+            <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
+            <div>
+              <LabelText>Vote deadline</LabelText>
+              <div className="mt-3 flex">
+                <div className="flex items-baseline font-fnormal">
+                  <div className=" text-[16px] text-[rgba(0,0,0,0.4)]">
+                    {campaign.expireOn}
                   </div>
                 </div>
               </div>

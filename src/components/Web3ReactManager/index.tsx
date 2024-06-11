@@ -83,6 +83,8 @@ export default function Web3ReactManager({ children }: { children: JSX.Element }
     }
   }, [router.query, chainId])
 
+  return children
+
   // on page load, do nothing until we've tried to connect to the injected connector
   if (!triedEager) {
     return null

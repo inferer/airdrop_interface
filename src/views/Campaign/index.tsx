@@ -156,6 +156,17 @@ export default function Create() {
 
   const [applyDeadline, setApplyDeadline] = useState(['', '', '', ''])
   const [voteDeadline, setVoteDeadline] = useState(['', '', '', ''])
+
+  useEffect(() => {
+    const date = new Date()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const hour = date.getHours()
+    console.log(month, day, hour)
+    setApplyDeadline([String(month), String(day), String(hour), '1'])
+    setVoteDeadline([String(month), String(day), String(hour), '1'])
+  }, [])
+
   const handleDeadlineInput = useCallback((value, index, type) => {
     if (type === 'apply') {
       const tempList = [...applyDeadline]
@@ -170,11 +181,6 @@ export default function Create() {
   }, [applyDeadline, voteDeadline])
 
   const applyDuration = useMemo(() => {
-    // return Number(applyDeadline[0]) * 30 * 24 * 60 * 60 + 
-    //         Number(applyDeadline[1]) * 24 * 60 * 60 + 
-    //         Number(applyDeadline[2]) * 60 * 60 + 
-    //         Number(applyDeadline[3]) * 60 +
-    //         Math.floor(new Date(new Date().getFullYear(), 0, 0).getTime() / 1000)
     return Math.floor(new Date(
                         new Date().getFullYear(), 
                         Number(applyDeadline[0]) - 1,
@@ -186,11 +192,6 @@ export default function Create() {
   }, [applyDeadline])
 
   const voteDuration = useMemo(() => {
-    // return Number(voteDeadline[0]) * 30 * 24 * 60 * 60 + 
-    //         Number(voteDeadline[1]) * 24 * 60 * 60 + 
-    //         Number(voteDeadline[2]) * 60 * 60 + 
-    //         Number(voteDeadline[3]) * 60 +
-    //         Math.floor(new Date(new Date().getFullYear(), 0, 0).getTime() / 1000) 
     return Math.floor(new Date(
                         new Date().getFullYear(), 
                         Number(voteDeadline[0]) - 1,
