@@ -16,41 +16,44 @@ const bundleId = 'M1y1pS5W-RC2aLjsojpIOA2CUflJPzyeCt3DxRb649Y'
 
 const CampaignVote: React.FC<{
   isVote?: boolean,
-  campaignApplyVoteList: ICampaignApplyVote[]
+  campaignApplyVoteList: ICampaignApplyVote[],
+  userApply?: ICampaignApplyVote
 }> = ({
   isVote,
   campaignApplyVoteList,
+  userApply
 }) => {
   const isProjectMode = useIsRoleProjectMode()
   const router = useRouter()
-  const { handleGetCampaignOne } = useCampaignManager()
-  const { applyStatus, handleCampaignApply, handleCampaignVote } = useCampaignApply()
+  const { applyStatus, handleCampaignApply, handleCampaignVote, handleCampaignUpdate } = useCampaignApply()
 
   const campaignId = router.query.action && router.query.action[2]
   const [arwId, setArwId] = useState('')
   const [fileType, setFileType] = useState('')
   const [bonus, setBonus] = useState('')
 
-  // useEffect(() => {
-  //   if (campaignId) {
-  //     handleGetCampaignOne(Number(campaignId))
-  //   }
-  // }, [campaignId, handleGetCampaignOne])
-
   const campaign = useCampaignList0(router.query?.action ? router.query?.action[2] as string : undefined)
   const [currentIndex, setCurrentIndex] = useState(-1)
   const handleApplyVote = useCallback(async () => {
     if (campaignId) {
-      if (campaign.isApplyExpired) {
-        handleCampaignVote(campaignId, currentIndex)
+      if (userApply) {
+        if (!campaign.isApplyExpired) {
+          handleCampaignUpdate(campaignId, fileType + '-' + arwId, bonus)
+        }
       } else {
-        handleCampaignApply(campaignId, fileType + '-' + arwId, bonus)
-          .then(() => {
-
-          })
+        if (campaign.isApplyExpired) {
+          handleCampaignVote(campaignId, currentIndex)
+        } else {
+          handleCampaignApply(campaignId, fileType + '-' + arwId, bonus)
+            .then(() => {
+  
+            })
+        }
       }
+      
     }
-  }, [campaign, campaignId, currentIndex, arwId, fileType, bonus])
+    
+  }, [campaign, campaignId, currentIndex, arwId, fileType, bonus, userApply])
 
   const disabled = useMemo(() => {
     if (isVote) {
@@ -69,13 +72,20 @@ const CampaignVote: React.FC<{
 
   return (
     <div className="py-5 pt-0">
-      <CampaignInfo campaign={campaign} from={isProjectMode ? 'project' : 'user'} isVote={isVote} onBonusChange={setBonus} />
+      <CampaignInfo 
+        campaign={campaign} 
+        from={isProjectMode ? 'project' : 'user'} 
+        isVote={isVote} 
+        onBonusChange={setBonus}
+        userApply={userApply}
+      />
       <div>
         {
           (campaign.isApplyExpired) ? 
             <VoteContent applyVoteList={campaignApplyVoteList} onSelect={setCurrentIndex} /> : 
             <WorkContent campaign={campaign} applyId={campaignApplyVoteList?.length}
               onUpload={handleOnUpload}
+              userApply={userApply}
             />
         }
       </div>
@@ -111,7 +121,7 @@ const CampaignVote: React.FC<{
             >
               <div className="btn-text">
                 {
-                  applyStatus === 1 ? <LoadingX /> : campaign.isApplyExpired ? 'Vote' : 'Apply' 
+                  applyStatus === 1 ? <LoadingX /> : (campaign.isApplyExpired ? 'Vote' : userApply ? 'Update' : 'Apply')
                 }
               </div>
             </ButtonSwap>

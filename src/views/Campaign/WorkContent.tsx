@@ -1,18 +1,20 @@
 
-import React, { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { LabelText } from "./styleds";
 import LazyImage from "../../components/LazyImage";
 import { uploadFileToIry } from "../../state/campaign/api";
-import { ICampaign } from "../../state/campaign/actions";
-import { openId } from "../../utils/iry";
+import { ICampaign, ICampaignApplyVote } from "../../state/campaign/actions";
+import { getIryId, getIryPath, openId } from "../../utils/iry";
 import { LoadingUpload } from "../../components/Loader";
 
 const UploadCom0 = ({
   onChange,
-  loading
+  loading,
+  userApply
 }: {
   onChange?: (file: File, fileType?: string) => void,
-  loading?: boolean
+  loading?: boolean,
+  userApply?: ICampaignApplyVote
 },
 ref: React.Ref<unknown> | undefined
 ) => {
@@ -57,7 +59,7 @@ ref: React.Ref<unknown> | undefined
       
     >
       {
-        !uploadFile && !imgPreview && 
+        !uploadFile && !imgPreview && !userApply && 
           <div className="flex items-center flex-col h-[197px] justify-center cursor-pointer "
             onClick={() => {
               filePickerRef.current?.click()
@@ -69,10 +71,10 @@ ref: React.Ref<unknown> | undefined
           </div>
       }
       {
-        (imgPreview && fileType.indexOf('image') > -1) &&
+        ((imgPreview && fileType.indexOf('image') > -1) || userApply) &&
         <div className="w-full h-full relative rounded group ">
           <div className="w-full h-[197px] flex justify-center items-center">
-            <img src={imgPreview} alt="" className=" max-w-[100%] max-h-[100%] rounded" />
+            <img src={imgPreview || (userApply && getIryPath(userApply?.arwId))} alt="" className=" max-w-[100%] max-h-[100%] rounded" />
           </div>
           {
             !loading && 
@@ -91,7 +93,7 @@ ref: React.Ref<unknown> | undefined
         </div>
       }
       {
-         (fileType.indexOf('zip') > -1) &&
+        (fileType.indexOf('zip') > -1) &&
         <div className="w-full h-full relative rounded group ">
           <div className="w-full h-[197px] flex justify-center items-center flex-col">
             <img src="/images/campaign/file.svg" alt="" className=" max-w-[100%] max-h-[100%]" />
@@ -131,11 +133,13 @@ export const UploadCom = forwardRef(UploadCom0)
 const WorkContent = ({
   campaign,
   applyId,
-  onUpload
+  onUpload,
+  userApply
 }: {
   campaign: ICampaign,
   applyId: number,
-  onUpload?: (arwId: string, fileType?: string) => void
+  onUpload?: (arwId: string, fileType?: string) => void,
+  userApply?: ICampaignApplyVote
 }) => {
   const [arwId, setArwId] = useState('')
   const [fileType, setFileType] = useState('')
@@ -161,13 +165,24 @@ const WorkContent = ({
     }
   }, [])
 
+  useEffect(() => {
+    if (userApply) {
+      setArwId(getIryId(userApply.arwId))
+      let _type = 'image'
+      if (userApply.arwId?.indexOf('zip-') === 0) {
+        _type = 'zip'
+      }
+      onUpload && onUpload(getIryId(userApply.arwId), _type)
+    }
+  }, [userApply, getIryId])
+
   return (
     <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
       <div className="flex justify-between min-h-[319px] ">
         <div className="w-full">
           <LabelText>Work</LabelText>
           <div className="flex justify-center w-full mt-5">
-            <UploadCom ref={uploadRef} onChange={handleFileChange} loading={uploading} />
+            <UploadCom ref={uploadRef} onChange={handleFileChange} loading={uploading} userApply={userApply} />
           </div>
         </div>
         

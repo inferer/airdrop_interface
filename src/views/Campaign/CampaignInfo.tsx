@@ -1,5 +1,5 @@
 'use client';
-import { ICampaign } from "../../state/campaign/actions";
+import { ICampaign, ICampaignApplyVote } from "../../state/campaign/actions";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FlexCenter, LabelText } from "./styleds";
 import CurrencyLogo from "../../components/CurrencyLogo";
@@ -41,14 +41,17 @@ const AirdropInfo = ({
   from = 'project',
   confirm = false,
   isVote,
-  onBonusChange
+  onBonusChange,
+  userApply
 }: {
   campaign: ICampaign,
   from?: string,
   confirm?: boolean,
   isVote?: boolean,
-  onBonusChange?: (value: string) => void
+  onBonusChange?: (value: string) => void,
+  userApply?: ICampaignApplyVote
 }) => {
+
   const contentJson = useMemo(() => {
     let obj: any = {
       contractAddress: '',
@@ -67,14 +70,6 @@ const AirdropInfo = ({
 
     return obj
   }, [campaign])
-
-  const contentAward = useMemo(() => {
-    try {
-      return JSON.parse(campaign.content)
-    } catch(error) {
-      return []
-    }
-  }, [campaign])
   
   const router = useRouter()
 
@@ -88,7 +83,12 @@ const AirdropInfo = ({
   const content = useIrysQuery(campaign.arwId)
 
   const [bonus, setBonus] = useState('')
-
+  useEffect(() => {
+    if (userApply) {
+      setBonus(userApply.bonus)
+      onBonusChange && onBonusChange(userApply.bonus)
+    }
+  }, [userApply, onBonusChange])
   return (
     <div className="">
       <div className="h-[171px] rounded-xl border border-[rgba(85, 123, 241, 0.1)] overflow-hidden">

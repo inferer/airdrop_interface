@@ -142,6 +142,7 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
     voteDuration: number,
     awardList: any[]
   ) => {
+    console.log(campaignSender, account, lockedToken)
     if (campaignSender && account && lockedToken) {
       setCreateStatus(1)
 

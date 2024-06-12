@@ -14,6 +14,7 @@ import { useCampaignApplyVoteList, useCampaignList0 } from '../../state/campaign
 import { useCampaignManager } from '../../hooks/useCampaignManager'
 
 function UserCampaign() {
+  const { account } = useActiveWeb3React()
   const router = useRouter()
   const isCampaignVote = router.query.action ? router.query.action[2] : ''
   const campaignId = isCampaignVote
@@ -33,6 +34,10 @@ function UserCampaign() {
     return campaign.isApplyExpired
   }, [campaign])
 
+  const userApply = useMemo(() => {
+    return account ? campaignApplyVoteList.find(item => item.applyUser.toLowerCase() === account.toLowerCase()) : undefined
+  }, [account, campaignApplyVoteList])
+
   return (
     <div className='w-[1217px] mx-auto'>
       <CampaignBody>
@@ -49,7 +54,13 @@ function UserCampaign() {
           
         </div>
         
-        {isCampaignVote ? <CampaignVote isVote={isVote} campaignApplyVoteList={campaignApplyVoteList} /> : <CampaignList /> } 
+        {isCampaignVote ? 
+          <CampaignVote 
+            isVote={isVote} 
+            campaignApplyVoteList={campaignApplyVoteList} 
+            userApply={userApply}
+          /> : 
+          <CampaignList /> } 
         
       </CampaignBody>
     </div>

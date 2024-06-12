@@ -87,6 +87,44 @@ export function useCampaignApply(algToken?: string) {
     }
   }, [campaignApply, account])
 
+  const handleCampaignUpdate = useCallback(async (
+    campaignId: string,
+    arwId: string,
+    bonus: string
+  ) => {
+    if (campaignApply && account) {
+      setApplyStatus(1)
+      let gasLimit = '5000000'
+      console.log(arwId)
+      try {
+        const gasEstimate = await campaignApply.estimateGas['updateApplyCampaign'](campaignId, arwId, bonus)
+        gasLimit = gasEstimate.toString()
+      } catch (error: any) {
+        console.log(error)
+        const message = error.data?.data?.message || error.data?.message || error.message
+        console.log(message)
+        handleShow({ type: 'error', content: `Fail to update.`, title: 'Error' })
+        setApplyStatus(2)
+        return
+      }
+      console.log('gasLimit: ', gasLimit)
+      try {
+        const tx = await campaignApply.updateApplyCampaign(campaignId, arwId, bonus, { gasPrice: '1000000000', gasLimit: gasLimit })
+        console.log(tx)
+        const receipt = await tx.wait()
+        if (receipt.status) {
+          handleGetCampaignApplyVotes(campaignId)
+          handleShow({ type: 'success', content: `Update success.`, title: 'Success' })
+        }
+
+      } catch (error) {
+        console.log(error)
+        handleShow({ type: 'error', content: `Fail to update.`, title: 'Error' })
+      }
+      setApplyStatus(2)
+    }
+  }, [campaignApply, account])
+
   const handleCampaignVote = useCallback(async (
     campaignId: string,
     index: number
@@ -140,7 +178,8 @@ export function useCampaignApply(algToken?: string) {
     handleGetCampaignApplyVotes,
     algTokenCurrency,
     approvalState,
-    approve
+    approve,
+    handleCampaignUpdate
   }
 }
 
