@@ -56,6 +56,7 @@ const CampaignVote: React.FC<{
   }, [campaign, campaignId, currentIndex, arwId, fileType, bonus, userApply])
 
   const disabled = useMemo(() => {
+    if (campaign.isExpired) return true
     if (isVote) {
       return currentIndex < 0 || campaign.isExpired
     }
@@ -121,7 +122,7 @@ const CampaignVote: React.FC<{
             >
               <div className="btn-text">
                 {
-                  applyStatus === 1 ? <LoadingX /> : (campaign.isApplyExpired ? 'Vote' : userApply ? 'Update' : 'Apply')
+                  applyStatus === 1 ? <LoadingX /> : ( campaign.isExpired ? 'Complete' : campaign.isApplyExpired ? 'Vote' : userApply ? 'Update' : 'Apply')
                 }
               </div>
             </ButtonSwap>

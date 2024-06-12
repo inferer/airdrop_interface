@@ -108,7 +108,7 @@ export const getCampaignList = async (multi: Contract, airdropLength: number | n
           s: Number(item[1].toString())
         }
       })
-      
+
       const _otherContent = airdrop[1][5] ? airdrop[1][5].split('|') : []
       const tempData: any = {
         campaignId: airdrop[0].toString(),

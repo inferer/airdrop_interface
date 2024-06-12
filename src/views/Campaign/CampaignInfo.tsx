@@ -87,6 +87,9 @@ const AirdropInfo = ({
     if (userApply) {
       setBonus(userApply.bonus)
       onBonusChange && onBonusChange(userApply.bonus)
+    } else {
+      setBonus('0')
+      onBonusChange && onBonusChange('0')
     }
   }, [userApply, onBonusChange])
   return (

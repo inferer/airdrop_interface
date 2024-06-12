@@ -11,7 +11,7 @@ import { Loading, LoadingContract, LoadingUint, LoadingX } from '../../component
 import { ETHER, Token } from '@uniswap/sdk'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { useRouter } from 'next/router'
-import { formatInput, formatStringNumber, isAddress, verifyInput } from '../../utils'
+import { formatInput, formatStringNumber, isAddress, transformTime, verifyInput } from '../../utils'
 import AwardList from './AwardList'
 import TextInput from '../../components/TextInput'
 import Content from './Content'
@@ -308,7 +308,11 @@ export default function Create() {
           </div>
         </ItemBox>
         <ItemBox style={{ marginTop: 25, height: '101px', width: 399, marginLeft: 15 }}>
-          <ItemTitle>apply deadline (utc)</ItemTitle>
+          <div className='flex items-center justify-between'>
+            <ItemTitle>apply deadline</ItemTitle>
+            <div className=' text-[12px] font-fnormal text-[rgba(0,0,0,0.30)]'>UTC: {transformTime(applyDuration * 1000, 2)}</div>
+          </div>
+          
           <div className='flex items-center mt-3'>
             <InputWrap>
               <InputNumber style={InputNumberClass} 
@@ -420,7 +424,10 @@ export default function Create() {
           </div>
         </ItemBox>
         <ItemBox style={{ marginTop: 25, height: '101px', width: 398, marginLeft: 15 }}>
-          <ItemTitle>vote deadline (utc)</ItemTitle>
+          <div className='flex items-center justify-between'>
+            <ItemTitle>vote deadline</ItemTitle>
+            <div className=' text-[12px] font-fnormal text-[rgba(0,0,0,0.30)]'>UTC: {transformTime(voteDuration * 1000, 2)}</div>
+          </div>
           <div className='flex items-center mt-3'>
             <InputWrap>
               <InputNumber style={InputNumberClass} 

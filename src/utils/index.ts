@@ -231,7 +231,7 @@ export function isTokenOnList(defaultTokens: TokenAddressMap, currency?: Currenc
 export function addZero(m: number) {
   return m < 10 ? '0' + m : m;
 }
-export function transformTime(timestamp: number) {
+export function transformTime(timestamp: number, type?: number) {
   var time = new Date(timestamp);
   var y = time.getFullYear();
   var M = time.getMonth() + 1;
@@ -239,7 +239,9 @@ export function transformTime(timestamp: number) {
   var h = time.getHours();
   var m = time.getMinutes();
   var s = time.getSeconds();
-
+  if (type === 2) {
+    return y + '-' + addZero(M) + '-' + addZero(d) + ' ' + addZero(h) + ':' + addZero(m) + ':' + addZero(s)
+  }
   return addZero(h) + ':' + addZero(m) + ' ' + addZero(M) + "/" + addZero(d) + ' ' + y;
 }
 

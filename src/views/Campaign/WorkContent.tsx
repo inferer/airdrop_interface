@@ -173,6 +173,9 @@ const WorkContent = ({
         _type = 'zip'
       }
       onUpload && onUpload(getIryId(userApply.arwId), _type)
+    } else {
+      setArwId('')
+      onUpload && onUpload('', '')
     }
   }, [userApply, getIryId])
 
