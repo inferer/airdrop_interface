@@ -3,9 +3,11 @@ import { TokenInfo } from '@uniswap/token-lists'
 import contractList, { campaignContracts} from '../contractsLocal'
 import contractsSepolia from '../contractsSepolia'
 import { AIRLABEL_TOKEN_LIST_ARBITRUM, AIR_TOKEN_LIST_ARBITRUM, ALGLABEL_TOKEN_LIST_ARBITRUM, ST_TOKEN_LIST_ARBITRUM } from './arbitrum'
+import { AIRLABEL_TOKEN_LIST_BASE, AIR_TOKEN_LIST_BASE, ALGLABEL_TOKEN_LIST_BASE, ST_TOKEN_LIST_BASE } from './base'
 
 export const ST_TOKEN_LIST: TokenInfo[] = [
   ...ST_TOKEN_LIST_ARBITRUM,
+  ...ST_TOKEN_LIST_BASE,
   {
     "name": "Dai Stablecoin",
     "address": contractsSepolia.Daitoken,
@@ -58,6 +60,7 @@ export const ST_TOKEN_LIST: TokenInfo[] = [
 
 export const AIR_TOKEN_LIST: TokenInfo[] = [
   ...AIR_TOKEN_LIST_ARBITRUM,
+  ...AIR_TOKEN_LIST_BASE,
   {
     "name": "Dai Stablecoin",
     "address": contractsSepolia.AirDaitoken,
@@ -126,6 +129,7 @@ export const AIR_TOKEN_LIST: TokenInfo[] = [
 
 export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   ...AIRLABEL_TOKEN_LIST_ARBITRUM,
+  ...AIRLABEL_TOKEN_LIST_BASE,
   {
     "name": "Air-Social",
     "address": contractsSepolia['Air-Social'],
@@ -234,6 +238,7 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
 
 export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   ...ALGLABEL_TOKEN_LIST_ARBITRUM,
+  ...ALGLABEL_TOKEN_LIST_BASE,
   {
     "name": "Alg-Social",
     "address": contractsSepolia['Alg-Social'],

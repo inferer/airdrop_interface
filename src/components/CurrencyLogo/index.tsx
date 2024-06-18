@@ -11,6 +11,7 @@ const getTokenLogoURL = (address: string) =>
   `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
 
 export const getTokenLogoURL2 = (currency: any, type?: string) => {
+  if (!currency?.symbol) return `/images/tokens/swap/eth.svg`
   if (currency?.symbol === 'WETH') return EthereumLogo.src
   let logoName = currency?.symbol?.toLowerCase()
   if (type === 'payInputCreate') {

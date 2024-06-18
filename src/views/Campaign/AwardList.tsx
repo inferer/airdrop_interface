@@ -53,7 +53,7 @@ const AwardList = ({
   }, [dataList])
 
   return (
-    <ItemBox style={{height: 'auto', width: 1128, marginTop: 25}}>
+    <ItemBox style={{height: 'auto', width: 1137, marginTop: 25}}>
       <div className='text-[16px] font-fsemibold text-[rgba(0,0,0,0.5)] mt-[14px]'>Award</div>
       <div className=' flex mt-6'>
         <div className='w-full pr-6'>

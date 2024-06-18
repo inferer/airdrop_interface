@@ -125,9 +125,11 @@ export const CampaignList: React.FC<{
               <TableHeadCell className="w-[220px] ">
                 <span>Rewards</span> 
               </TableHeadCell>
-              
-              <TableHeadCell className="w-[163px]">
+              {/* <TableHeadCell className="w-[163px]">
                 <span>Rule</span>
+              </TableHeadCell> */}
+              <TableHeadCell className="w-[163px]">
+                <span>Status</span>
               </TableHeadCell>
               <TableHeadCell className="w-[143px]">
                 <span>Expire On</span>
@@ -180,12 +182,22 @@ export const CampaignList: React.FC<{
                           </div>
                           {/* <span className="text-[#79D0C4] font-fmedium">{campaign.unit}x</span>  */}
                         </TableCell>
-                        <TableCell className="w-[163px]">
+                        {/* <TableCell className="w-[163px]">
                           <div className="min-w-[93px] h-[36px] flex items-center rounded border border-[rgba(0,0,0,0.06)] px-2">
                             <LazyImage src="/images/airdrop/chain_airdrop.svg" className=" w-5 h-5 rounded-full shrink-0" />
                             <div className="w-[1px] h-[14px] mx-3 bg-[rgba(0,0,0,0.06)] shrink-0"></div>
                             <div>By Order</div>
-                            
+                          </div>
+                        </TableCell> */}
+                        <TableCell className="w-[163px]">
+                          <div className={`h-[35px] px-2 py-1 flex items-center rounded border 
+                            ${ campaign.isExpired ? 'border-[rgba(0,0,0,0.2)] text-[rgba(0,0,0,0.4)]' : 
+                                campaign.isApplyExpired ? 'border-[rgba(255,21,105,0.30)] text-[rgba(255,21,105,0.60)]' : 
+                                'border-[rgba(63,60,255,0.30)] text-[rgba(63,60,255,0.60)]' }
+                          `}>
+                            <div className={`
+                              text-[16px] font-fmedium
+                            `}>{ campaign.isExpired ? 'Completed' : campaign.isApplyExpired ? 'Vote' : 'Apply' }</div>
                           </div>
                         </TableCell>
                         <TableCell className="w-[143px]">

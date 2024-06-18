@@ -14,6 +14,7 @@ export const APP_INFERER_CONNECTOR = 'APP_INFERER_CONNECTOR'
 
 export const BASE_BSC_SCAN_URLS = {
   [ChainId.MAINNET]: 'https://testnet.bscscan.com',
+  [ChainId.BASE]: 'https://basescan.org',
   [ChainId.ARBITRUM]: 'https://arbiscan.io',
   [ChainId.SEPOLIA]: 'https://sepolia-explorer.arbitrum.io',
   [ChainId.LOCAL]: 'https://bscscan.com',
@@ -23,6 +24,10 @@ export const BSC_RPC_URLS = [
   'https://bsc-dataseed1.ninicoin.io',
   'https://bsc-dataseed1.defibit.io',
   'https://bsc-dataseed.binance.org'
+]
+
+export const BSC_RPC_URLS_BASE = [
+  'https://mainnet.base.org',
 ]
 
 export const BSC_RPC_URLS_ABITRUM = [
@@ -41,6 +46,8 @@ export const BSC_RPC_URLS_LOCAL = [
 
 export const network = new NetworkConnector({
   urls: { 
+    [ChainId.MAINNET]: BSC_RPC_URLS_ABITRUM[0], 
+    [ChainId.BASE]: BSC_RPC_URLS_BASE[0], 
     [ChainId.ARBITRUM]: BSC_RPC_URLS_ABITRUM[0], 
     [ChainId.SEPOLIA]: BSC_RPC_URLS_SEPOLIA[0], 
     [ChainId.LOCAL]: BSC_RPC_URLS_LOCAL[0], 
@@ -54,7 +61,7 @@ export function getNetworkLibrary(): Web3Provider {
 }
 
 export const injected = new InjectedConnector({
-  supportedChainIds: [ChainId.ARBITRUM, ChainId.SEPOLIA, ChainId.LOCAL, ]
+  supportedChainIds: [ChainId.BASE, ChainId.ARBITRUM, ChainId.SEPOLIA, ChainId.LOCAL, ]
 })
 
 // mainnet only
@@ -63,13 +70,16 @@ export const fortmatic = new FortmaticConnector({
   chainId: 1
 })
 
-
-
 const NETWORK_CONFIG: any = {
   [ChainId.MAINNET]: {
     name: 'BNB Smart Chain Mainnet',
     scanURL: BASE_BSC_SCAN_URLS[ChainId.MAINNET],
     rpcUrls: BSC_RPC_URLS
+  },
+  [ChainId.BASE]: {
+    name: 'Base',
+    scanURL: BSC_RPC_URLS_BASE[ChainId.BASE],
+    rpcUrls: BSC_RPC_URLS_BASE
   },
   [ChainId.ARBITRUM]: {
     name: 'Arbitrum One',

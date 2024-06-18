@@ -161,7 +161,9 @@ const AirdropInfo = ({
               <LabelText>Apply deadline</LabelText>
               <div className="mt-3 flex">
                 <div className="flex items-baseline font-fnormal">
-                  <div className=" text-[16px] text-[rgba(0,0,0,0.4)]">
+                  <div className={`  text-[16px] 
+                    ${campaign.isApplyExpired ? 'text-[#DA5454]' : 'text-[rgba(0,0,0,0.4)]'}
+                  `}>
                     {campaign.applyExpireOn}
                   </div>
                 </div>
@@ -174,7 +176,9 @@ const AirdropInfo = ({
               <LabelText>Vote deadline</LabelText>
               <div className="mt-3 flex">
                 <div className="flex items-baseline font-fnormal">
-                  <div className=" text-[16px] text-[rgba(0,0,0,0.4)]">
+                <div className={`  text-[16px] 
+                    ${campaign.isExpired ? 'text-[#DA5454]' : 'text-[rgba(0,0,0,0.4)]'}
+                  `}>
                     {campaign.expireOn}
                   </div>
                 </div>

@@ -219,7 +219,7 @@ export default function Create() {
       </TitleWrap>
       <div className=' flex mt-6'>
         <ItemBox2
-          style={{width: 553}}
+          style={{width: 416}}
           error={nameError && name.length <= 0}
           errorCode={errorCode}
         >
@@ -240,11 +240,11 @@ export default function Create() {
           </div>
 
         </ItemBox2>
-        <ItemBox style={{height: '100px', width: 240, marginLeft: 15}}>
+        <ItemBox style={{height: '100px', width: 272, marginLeft: 16}}>
           <ItemTitle>Type</ItemTitle>
           <div className=' text-[20px] font-fsemibold mt-2 leading-10'>Competition</div>
         </ItemBox>
-        <ItemBox style={{ height: '101px', width: 300, marginLeft: 15 }}>
+        <ItemBox style={{ height: '101px', width: 416, marginLeft: 16 }}>
           <ItemTitle>offer</ItemTitle>
           <div className='flex justify-between items-center mt-2'
           >

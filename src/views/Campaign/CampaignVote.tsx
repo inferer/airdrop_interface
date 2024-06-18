@@ -90,20 +90,24 @@ const CampaignVote: React.FC<{
             />
         }
       </div>
-      <div className=" flex justify-center mt-5">
-        <div className='w-[260px] mr-[180px]'>
-          <ButtonCancel
-            onClick={e => {
-              e.stopPropagation()
-              router.back()
-            }}
-          >
-            <div className="btn-text">Cancel</div>
-          </ButtonCancel>
-        </div>
+      <div className=" flex justify-center mt-5"> 
+        {
+          !campaign.isExpired &&
+          <div className='w-[260px] mr-[180px]'>
+            <ButtonCancel
+              onClick={e => {
+                e.stopPropagation()
+                router.back()
+              }}
+            >
+              <div className="btn-text">Cancel</div>
+            </ButtonCancel>
+          </div>
+        }
+        
         <div className="w-[260px] ">
           {
-            isProjectMode ? 
+            (isProjectMode || campaign.isExpired) ? 
             <ButtonSwap
               onClick={() => {
                 router.back()

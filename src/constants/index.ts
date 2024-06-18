@@ -6,9 +6,11 @@ import { ethers } from 'ethers'
 import contractList from './contractsLocal'
 import contractsSepolia from './contractsSepolia'
 import contractsArbitrum from './contractsArbitrum'
+import contractsBase from './contractsBase'
 
 export const OWER_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+  [ChainId.BASE]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
   [ChainId.ARBITRUM]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
   [ChainId.SEPOLIA]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
   [ChainId.LOCAL]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea'
@@ -18,6 +20,7 @@ export const ROUTER_ADDRESS = contractsSepolia.router02
 
 export const ROUTER_ADDRESS2: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: contractsSepolia.router02,
+  [ChainId.BASE]: contractsBase.router02,
   [ChainId.ARBITRUM]: contractsArbitrum.router02,
   [ChainId.SEPOLIA]: contractsSepolia.router02,
   [ChainId.LOCAL]: contractList.router02
@@ -64,6 +67,7 @@ const WETH_ONLY: ChainTokenList = {
   [ChainId.MAINNET]: [WETH[ChainId.MAINNET]],
   [ChainId.SEPOLIA]: [WETH[ChainId.SEPOLIA]],
   [ChainId.ARBITRUM]: [WETH[ChainId.ARBITRUM]],
+  [ChainId.BASE]: [WETH[ChainId.BASE]],
   [ChainId.LOCAL]: [WETH[ChainId.LOCAL]],
 }
 
@@ -240,6 +244,7 @@ export const CHANNEL_LIST = [
 export const CHAIN_LIST = [
   { value: 'Airdrop', label: 'Airdrop', icon: '/images/airdrop/chain_airdrop.svg', chainId: ChainId.LOCAL },
   { value: 'Arbitrum', label: 'Arbitrum', icon: '/images/channel/arb.svg', chainId: ChainId.ARBITRUM },
+  { value: 'Base', label: 'Base', icon: '/images/channel/arb.svg', chainId: ChainId.BASE },
 ]
 
 export const TWITTER_ACTION = [
@@ -278,6 +283,7 @@ export const TWITTER_UNIT: {[key: string]: string} = {
 
 export const AddressZero_ETH = {
   [ChainId.MAINNET]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
+  [ChainId.BASE]: new Token(ChainId.BASE, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
   [ChainId.ARBITRUM]: new Token(ChainId.ARBITRUM, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
   [ChainId.SEPOLIA]: new Token(ChainId.SEPOLIA, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
   [ChainId.LOCAL]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH')

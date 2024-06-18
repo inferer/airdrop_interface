@@ -4,6 +4,7 @@ import { ItemBox, ItemTitle } from "./styleds";
 import LazyImage from "../../components/LazyImage";
 import { Token } from "@uniswap/sdk";
 import CurrencyLogo from "../../components/CurrencyLogo";
+import BigNumber from 'bignumber.js'
 
 const AwardListView = ({
   dataList = [],
@@ -14,8 +15,11 @@ const AwardListView = ({
 }) => {
 
   const totalAmount = useMemo(() => {
-    if (!dataList) return 0
-    return (dataList || []).reduce((total, item) => total + (Number(item.a || item.amount) * Number(item.s || item.size)), 0)
+    let total = new BigNumber(0)
+    dataList.forEach(item => {
+      total = total.plus(new BigNumber(item.a || 0).multipliedBy(new BigNumber(item.s || 0)))
+    })
+    return total.toString()
   }, [dataList])
 
   return (
@@ -64,7 +68,7 @@ const AwardListView = ({
                     </div>
                     <div className="w-[142px] shrink-0 flex">
                       <div className="pt-[5px] pb-[6px] px-2 h-[28px] rounded-[4px] bg-[rgba(70,108,228,0.04)] flex items-center text-[#466CE4] text-[14px] font-fsemibold min-w-[50px] ">
-                        {(Number(item.a || item.amount) * Number(item.s || item.size))}
+                        { new BigNumber(item.a || item.amount || 0).multipliedBy(new BigNumber(item.s || item.size || 0)).toString()}
                         {
                           offerToken && <CurrencyLogo currency={offerToken} size={'16px'} style={{marginLeft: 12}} />
                         }
