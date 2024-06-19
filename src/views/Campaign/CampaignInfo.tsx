@@ -189,7 +189,7 @@ const AirdropInfo = ({
       </div>
       <AwardListView dataList={campaign.awardList} offerToken={campaign.offerToken} />
       {
-        from !== 'project' && !isVote &&
+        (from !== 'project' && !isVote && !campaign.isApplyExpired) &&
         <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
           <LabelText>Bonus Settings</LabelText>
           <div className="mt-4 flex items-center">

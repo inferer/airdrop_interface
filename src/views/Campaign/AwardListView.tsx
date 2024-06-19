@@ -40,7 +40,10 @@ const AwardListView = ({
             {
               dataList.map((item, index) => {
                 return (
-                  <div key={index} className="h-[60px] text-[14px] flex items-center text-[rgba(0,0,0,1)] font-fsemibold award-table-item">
+                  <div key={index} className={` h-[60px] text-[14px] flex items-center text-[rgba(0,0,0,1)] font-fsemibold award-table-item
+                     hover:bg-[rgba(85,123,241,0.08)]
+                    ${index % 2 === 1 ? 'bg-[rgba(85,123,241,0.04)]' : ' '}
+                  `}>
                     <div className="w-[101px] pl-5">
                       <div className="w-[22px] h-[22px] text-[14px] rounded-[4px] border border-[rgba(121,142,206,0.10)] flex items-center justify-center font-fmedium text-[rgba(121,142,206,0.40)]">
                         {index + 1}

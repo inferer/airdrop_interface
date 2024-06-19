@@ -74,8 +74,7 @@ export function useCampaignApply(algToken?: string) {
         const tx = await campaignApply.applyCampaign(campaignId, arwId, bonus, { gasPrice: '1000000000', gasLimit: gasLimit })
         console.log(tx)
         const receipt = await tx.wait()
-        console.log((await campaignApply.timestamp()).toString(), 11111111)
-        console.log((await campaignApply.applyDeadline()).toString(), 11111111)
+
         if (receipt.status) {
           handleGetCampaignApplyVotes(campaignId)
           handleShow({ type: 'success', content: `Apply success.`, title: 'Success' })
