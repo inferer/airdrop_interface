@@ -225,3 +225,17 @@ body {
   font-weight: 400;
   line-height: normal;
 }
+.md-editor-preview ol {
+  list-style: auto !important;
+}
+.md-editor-preview-wrapper {
+  padding: 0 !important;
+}
+
+.cm-scroller {
+  font-family: Inter-Regular !important;
+  line-height: 32px !important;
+}
+.md-editor-preview ol, .md-editor-preview ul {
+  padding-left: 1.35em;
+}

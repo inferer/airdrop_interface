@@ -113,7 +113,7 @@ const AirdropInfo = ({
               <div className="mt-3 flex">
                 <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px] shrink-0">
                   <div className=" text-[16px] font-semibold shrink-0">
-                    { from === 'project' ? formatStringNumber(campaign.labelLocked) : 1} ×
+                    { from === 'project' ? formatStringNumber(campaign.labelLocked) : isVote ? 1 : 5} ×
                   </div>
                   {
                     from === 'project' ?
