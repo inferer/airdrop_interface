@@ -23,10 +23,9 @@ const CampaignConfirmDetails: React.FC<{
       handleGetCampaignOne(Number(id))
       handleGetCampaignApplyVotes(id)
     }
-  }, [router.query])
+  }, [router.query, handleGetCampaignOne, handleGetCampaignApplyVotes])
 
   const campaign = useCampaignList0(router.query?.action ? router.query?.action[1] as string : undefined)
-  
   
   return (
     <div className="py-5 pt-0">
