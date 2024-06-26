@@ -82,12 +82,16 @@ const CampaignVote: React.FC<{
       />
       <div>
         {
-          (campaign.isApplyExpired) ? 
-            <VoteContent applyVoteList={campaignApplyVoteList} onSelect={setCurrentIndex} /> : 
+          (campaign.campaignId && campaign.isApplyExpired) && <VoteContent campaign={campaign} applyVoteList={campaignApplyVoteList} onSelect={setCurrentIndex} /> 
+            
+        }
+        {
+          (campaign.campaignId && !campaign.isApplyExpired) && 
             <WorkContent campaign={campaign} applyId={campaignApplyVoteList?.length}
-              onUpload={handleOnUpload}
-              userApply={userApply}
-            />
+            onUpload={handleOnUpload}
+            userApply={userApply}
+          />
+            
         }
       </div>
       <div className=" flex justify-center mt-5"> 
@@ -104,35 +108,38 @@ const CampaignVote: React.FC<{
             </ButtonCancel>
           </div>
         }
+        {
+          Number(campaign.campaignId) > 0 && 
+          <div className="w-[260px] ">
+            {
+              (isProjectMode || campaign.isExpired) ? 
+              <ButtonSwap
+                onClick={() => {
+                  router.back()
+                }}
+              >
+                <div className="btn-text">
+                  Return
+                </div>
+              </ButtonSwap> :
+              <ButtonSwap
+                disabled={disabled}
+                onClick={() => {
+                  if (disabled) return
+                  handleApplyVote()
+                }}
+              >
+                <div className="btn-text">
+                  {
+                    applyStatus === 1 ? <LoadingX /> : ( campaign.isExpired ? 'Complete' : campaign.isApplyExpired ? 'Vote' : userApply ? 'Update' : 'Apply')
+                  }
+                </div>
+              </ButtonSwap>
+            }
+            
+          </div>
+        }
         
-        <div className="w-[260px] ">
-          {
-            (isProjectMode || campaign.isExpired) ? 
-            <ButtonSwap
-              onClick={() => {
-                router.back()
-              }}
-            >
-              <div className="btn-text">
-                Return
-              </div>
-            </ButtonSwap> :
-            <ButtonSwap
-              disabled={disabled}
-              onClick={() => {
-                if (disabled) return
-                handleApplyVote()
-              }}
-            >
-              <div className="btn-text">
-                {
-                  applyStatus === 1 ? <LoadingX /> : ( campaign.isExpired ? 'Complete' : campaign.isApplyExpired ? 'Vote' : userApply ? 'Update' : 'Apply')
-                }
-              </div>
-            </ButtonSwap>
-          }
-          
-        </div>
       </div>
     </div>
   )

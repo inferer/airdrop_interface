@@ -30,7 +30,7 @@ const CampaignConfirmDetails: React.FC<{
   return (
     <div className="py-5 pt-0">
       <CampaignInfo campaign={campaign} from={isProjectMode ? 'project' : 'user'} />
-      <VoteContent applyVoteList={campaignApplyVoteList} from="project" />
+      <VoteContent campaign={campaign} applyVoteList={campaignApplyVoteList} from="project" />
       <div className=" flex justify-center">
         <div className="w-[260px] mt-5">
           {

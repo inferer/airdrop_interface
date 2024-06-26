@@ -11,7 +11,7 @@ import { Loading, LoadingContract, LoadingUint, LoadingX } from '../../component
 import { ETHER, Token } from '@uniswap/sdk'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { useRouter } from 'next/router'
-import { formatInput, formatStringNumber, isAddress, transformTime, verifyInput } from '../../utils'
+import { formatInput, formatStringNumber, isAddress, transformTime, transformTimeUTC, verifyInput } from '../../utils'
 import AwardList from './AwardList'
 import TextInput from '../../components/TextInput'
 import Content from './Content'
@@ -162,9 +162,9 @@ export default function Create() {
     const month = date.getMonth() + 1
     const day = date.getDate()
     const hour = date.getHours()
-    console.log(month, day, hour)
-    setApplyDeadline([String(month), String(day), String(hour), '1'])
-    setVoteDeadline([String(month), String(day), String(hour), '1'])
+
+    setApplyDeadline([String(month), String(day), String(hour), '0'])
+    setVoteDeadline([String(month), String(day), String(hour), '0'])
   }, [])
 
   const handleDeadlineInput = useCallback((value, index, type) => {
@@ -179,26 +179,29 @@ export default function Create() {
       setVoteDeadline([...tempList])
     }
   }, [applyDeadline, voteDeadline])
-
   const applyDuration = useMemo(() => {
     return Math.floor(new Date(
-                        new Date().getFullYear(), 
-                        Number(applyDeadline[0]) - 1,
-                        Number(applyDeadline[1]),
-                        Number(applyDeadline[2]),
-                        Number(applyDeadline[3]),
-                        0
+                        Date.UTC(
+                          new Date().getFullYear(), 
+                          Number(applyDeadline[0]) - 1,
+                          Number(applyDeadline[1]),
+                          Number(applyDeadline[2]),
+                          Number(applyDeadline[3]),
+                          0
+                        )
                       ).getTime() / 1000)
   }, [applyDeadline])
 
   const voteDuration = useMemo(() => {
     return Math.floor(new Date(
-                        new Date().getFullYear(), 
-                        Number(voteDeadline[0]) - 1,
-                        Number(voteDeadline[1]),
-                        Number(voteDeadline[2]),
-                        Number(voteDeadline[3]),
-                        0
+                        Date.UTC(
+                          new Date().getFullYear(), 
+                          Number(voteDeadline[0]) - 1,
+                          Number(voteDeadline[1]),
+                          Number(voteDeadline[2]),
+                          Number(voteDeadline[3]),
+                          0
+                        )
                       ).getTime() / 1000)
   }, [voteDeadline])
 

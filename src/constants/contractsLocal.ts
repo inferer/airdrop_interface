@@ -48,12 +48,12 @@ export const campaignContracts =
 {
   "Alg-Campaign": "0x933db0AE938c55655C66177286c9AFdF58712fc1",
   "Air-Campaign": "0x558766cBC9AAE08e259eB682EB1C02f8f4Fc8620",
-  "campaignManagerLogic": "0x09893718816422c404460cbC91c0B1cb6F9f693f",
-  "campaignManager": "0x0ddF4A1a60594d9877D50d5da4435aaACcE6F89D",
-  "campaignSenderLogic": "0xb74EA183eBB0e85648184a66cCCF2Fa6D6D76fB0",
-  "campaignSender": "0x2626d159F3396BB5c234E363BEB9cE8CDFB5d889",
-  "campaignApplyLogic": "0x73d9D04086f61C7E3ea1f869C5Dc816C70d514D9",
-  "campaignApply": "0xB50d9B635989c7d09f1872E9BDe59616861Cbc20"
+  "campaignManagerLogic": "0xb75B434675Ac77880428d975A73f6e678D0E1eC4",
+  "campaignManager": "0xE755d9Ef7Afc74Ed9AA49fBec09Ee288b3B4a4f1",
+  "campaignSenderLogic": "0xB51cEd690687573a4d6a0A836860B0aa6033c40d",
+  "campaignSender": "0x30035B8dbA1a9e4F1D609DF05326d9047CC98Eb1",
+  "campaignApplyLogic": "0x65e057fc418D00619bC267c29475E191757A288D",
+  "campaignApply": "0xa82089F55289c3247Eb64fD3992955d0ebB9Ec51"
 }
 
 export default contractList

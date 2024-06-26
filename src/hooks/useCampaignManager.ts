@@ -99,6 +99,8 @@ export const getCampaignList = async (multi: Contract, airdropLength: number | n
       const _offerLocked = (Number(airdrop[3][0].toString()) / (10 ** (offerTokenData?.decimals ?? 18))).toString()
       
       const _offerLabelLocked = (Number(airdrop[3][3].toString()) / (10 ** (labelTokenData?.decimals ?? 18))).toString()
+      // const _applyExpireOnTime = new Date(Number(airdrop[3][1].toString()) * 1000) 
+      // const _applyExpireOn = new Date(_applyExpireOnTime.getTime() + _applyExpireOnTime.getTimezoneOffset() * 60000).getTime()
       const _applyExpireOn = Number(airdrop[3][1].toString()) * 1000
       const _expireOn = Number(airdrop[3][2].toString()) * 1000
       const _labelLocked = (Number(airdrop[3][3]) / (10 ** (labelTokenData?.decimals ?? 18))).toString()

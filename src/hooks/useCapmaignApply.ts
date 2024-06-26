@@ -59,6 +59,8 @@ export function useCampaignApply(algToken?: string) {
       let gasLimit = '5000000'
       console.log(arwId)
       try {
+        const blockTime = await campaignApply.getBlockTime()
+        console.log('blockTime: ', blockTime.toString())
         const gasEstimate = await campaignApply.estimateGas['applyCampaign'](campaignId, arwId, bonus)
         gasLimit = gasEstimate.toString()
       } catch (error: any) {

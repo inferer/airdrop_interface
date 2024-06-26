@@ -245,6 +245,26 @@ export function transformTime(timestamp: number, type?: number) {
   }
   return addZero(h) + ':' + addZero(m) + ' ' + addZero(M) + "/" + addZero(d) + ' ' + y;
 }
+export function transformTimeUTC(timestamp: number, type?: number) {
+  var time = new Date(timestamp);
+  var y = time.getFullYear();
+  var M = time.getMonth() + 1;
+  var d = time.getDate();
+  var h = time.getHours();
+  var m = time.getMinutes();
+  var s = time.getSeconds();
+  const utcDate = new Date(Date.UTC(y, M, d, h, m, s))
+  var y = utcDate.getFullYear();
+  var M = utcDate.getMonth();
+  var d = utcDate.getDate();
+  var h = utcDate.getHours();
+  var m = utcDate.getMinutes();
+  var s = utcDate.getSeconds();
+  if (type === 2) {
+    return y + '-' + addZero(M) + '-' + addZero(d) + ' ' + addZero(h) + ':' + addZero(m) + ':' + addZero(s)
+  }
+  return addZero(h) + ':' + addZero(m) + ' ' + addZero(M) + "/" + addZero(d) + ' ' + y;
+}
 
 export function formatStringNumber(num: string = '', decimals = 3) {
   const idx = num.indexOf('.')

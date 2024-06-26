@@ -1,7 +1,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { LabelText } from "./styleds";
-import { ICampaignApplyVote } from "../../state/campaign/actions";
+import { ICampaign, ICampaignApplyVote } from "../../state/campaign/actions";
 import LazyImage, { LazyImage2 } from "../../components/LazyImage";
 import { getIryPath, openId } from "../../utils/iry";
 import { openBrowser } from "../../utils";
@@ -11,13 +11,15 @@ const VoteItem = ({
   selected,
   onClick,
   from,
-  total
+  total,
+  isExpired
 }: {
   voteData: ICampaignApplyVote,
   selected: boolean,
   onClick?: (voteData: ICampaignApplyVote) => void,
   from?: string
   total?: number
+  isExpired?: boolean
 }) => {
   
   const perWidth = useMemo(() => {
@@ -59,6 +61,7 @@ const VoteItem = ({
           <>
             
           </> :
+          isExpired ? <></> :
           <div
             className=" cursor-pointer flex items-center"
             onClick={e => {
@@ -90,10 +93,12 @@ const VoteItem = ({
 
 
 const VoteContent = ({
+  campaign,
   applyVoteList,
   onSelect,
   from
 }: {
+  campaign: ICampaign
   applyVoteList: ICampaignApplyVote[],
   onSelect?: (index: number) => void,
   from?: string
@@ -124,6 +129,7 @@ const VoteContent = ({
                 applyVoteList?.map((item, index) => {
                   return (
                     <VoteItem 
+                      isExpired={campaign.isExpired}
                       total={voteTotal}
                       from={from}
                       key={item.arwId} voteData={item} 

@@ -215,7 +215,7 @@ body {
 .md-editor-toolbar-warp:not(.md-editor-toolbar-bottom) {
   display: none!important;
 }
-.cm-theme md-editor-inner {
+.cm-theme .md-editor-inner {
   background-color: #FFF !important;
 }
 .md-editor-content {
@@ -232,10 +232,15 @@ body {
   padding: 0 !important;
 }
 
-.cm-scroller {
+.cm-scroller,
+.md-editor {
   font-family: Inter-Regular !important;
   line-height: 32px !important;
+  border: none !important;
 }
 .md-editor-preview ol, .md-editor-preview ul {
   padding-left: 1.35em !important;
+}
+.cm-scroller .cm-content[contenteditable=true] {
+  margin: 0 !important;
 }

@@ -41,7 +41,7 @@ const AwardListView = ({
               dataList.map((item, index) => {
                 return (
                   <div key={index} className={` h-[60px] text-[14px] flex items-center text-[rgba(0,0,0,1)] font-fsemibold award-table-item
-                     hover:bg-[rgba(85,123,241,0.08)]
+                     hover:bg-[rgba(85,123,241,0.08)] cursor-pointer
                     ${index % 2 === 1 ? 'bg-[rgba(85,123,241,0.04)]' : ' '}
                   `}>
                     <div className="w-[101px] pl-5">
