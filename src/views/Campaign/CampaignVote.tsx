@@ -11,6 +11,7 @@ import WorkContent from "./WorkContent";
 import { useCampaignApply } from "../../hooks/useCapmaignApply";
 import { LoadingX, LoadingXUser } from "../../components/Loader";
 import { ICampaignApplyVote } from "../../state/campaign/actions";
+import { getIryId } from "../../utils/iry";
 
 const bundleId = 'M1y1pS5W-RC2aLjsojpIOA2CUflJPzyeCt3DxRb649Y'
 
@@ -61,10 +62,10 @@ const CampaignVote: React.FC<{
       return currentIndex < 0 || campaign.isExpired
     }
     if (!isVote) {
-      return !arwId || !bonus || campaign.isApplyExpired
+      return !arwId || campaign.isApplyExpired || (arwId === getIryId(userApply?.arwId || ''))
     }
     return false
-  }, [currentIndex, isVote, arwId, bonus, campaign])
+  }, [currentIndex, isVote, arwId, campaign, userApply])
 
   const handleOnUpload = useCallback(async (arwId, fileType) => {
     setArwId(arwId)

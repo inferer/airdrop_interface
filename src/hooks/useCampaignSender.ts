@@ -150,13 +150,18 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
       // @ts-ignore
       const offer_label_token = [isETH ? ethers.constants.AddressZero : offerToken.address, airCampaign.address]
       const _offerAmount = new BN(offerAmount).multipliedBy(10 ** offerToken.decimals).toString()
-      const offer_label_locked = [_offerAmount, applyDuration, voteDuration]
-
+      const _nowTime = Math.floor(Date.now() / 1000)
+      const offer_label_locked = [_offerAmount, applyDuration - _nowTime, voteDuration - _nowTime]
+      console.log(applyDuration, voteDuration, _nowTime)
       console.log(baseInfo)
       console.log(offer_label_token)
       console.log(offer_label_locked)
       console.log(awardList)
-
+      if (applyDuration <= _nowTime) {
+        handleShow({ type: 'error', content: `Apply deadline should be later than now.`, title: 'Error' })
+        setCreateStatus(0)
+        return
+      }
       if (voteDuration <= applyDuration) {
         handleShow({ type: 'error', content: `Vote deadline should be later than apply deadline.`, title: 'Error' })
         setCreateStatus(0)

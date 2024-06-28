@@ -8,6 +8,7 @@ import { useCampaignManager } from "../../hooks/useCampaignManager";
 import { useCampaignApplyVoteList, useCampaignList0 } from "../../state/campaign/hooks";
 import { useCampaignApply } from "../../hooks/useCapmaignApply";
 import VoteContent from "./VoteContent";
+import AwardContent from "./AwardContent";
 
 const CampaignConfirmDetails: React.FC<{
 
@@ -30,6 +31,7 @@ const CampaignConfirmDetails: React.FC<{
   return (
     <div className="py-5 pt-0">
       <CampaignInfo campaign={campaign} from={isProjectMode ? 'project' : 'user'} />
+      {/* <AwardContent campaign={campaign} applyVoteList={campaignApplyVoteList} from="project" /> */}
       <VoteContent campaign={campaign} applyVoteList={campaignApplyVoteList} from="project" />
       <div className=" flex justify-center">
         <div className="w-[260px] mt-5">

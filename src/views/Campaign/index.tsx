@@ -181,27 +181,27 @@ export default function Create() {
   }, [applyDeadline, voteDeadline])
   const applyDuration = useMemo(() => {
     return Math.floor(new Date(
-                        Date.UTC(
+                        // Date.UTC(
                           new Date().getFullYear(), 
                           Number(applyDeadline[0]) - 1,
                           Number(applyDeadline[1]),
                           Number(applyDeadline[2]),
                           Number(applyDeadline[3]),
                           0
-                        )
+                        // )
                       ).getTime() / 1000)
   }, [applyDeadline])
 
   const voteDuration = useMemo(() => {
     return Math.floor(new Date(
-                        Date.UTC(
+                        // Date.UTC(
                           new Date().getFullYear(), 
                           Number(voteDeadline[0]) - 1,
                           Number(voteDeadline[1]),
                           Number(voteDeadline[2]),
                           Number(voteDeadline[3]),
                           0
-                        )
+                        // )
                       ).getTime() / 1000)
   }, [voteDeadline])
 
@@ -313,7 +313,7 @@ export default function Create() {
         <ItemBox style={{ marginTop: 25, height: '101px', width: 399, marginLeft: 15 }}>
           <div className='flex items-center justify-between'>
             <ItemTitle>apply deadline</ItemTitle>
-            <div className=' text-[12px] font-fnormal text-[rgba(0,0,0,0.30)]'>UTC: {transformTime(applyDuration * 1000, 2)}</div>
+            <div className=' text-[12px] font-fnormal text-[rgba(0,0,0,0.30)]'>{transformTime(applyDuration * 1000, 2)}</div>
           </div>
           
           <div className='flex items-center mt-3'>
@@ -429,7 +429,7 @@ export default function Create() {
         <ItemBox style={{ marginTop: 25, height: '101px', width: 398, marginLeft: 15 }}>
           <div className='flex items-center justify-between'>
             <ItemTitle>vote deadline</ItemTitle>
-            <div className=' text-[12px] font-fnormal text-[rgba(0,0,0,0.30)]'>UTC: {transformTime(voteDuration * 1000, 2)}</div>
+            <div className=' text-[12px] font-fnormal text-[rgba(0,0,0,0.30)]'>{transformTime(voteDuration * 1000, 2)}</div>
           </div>
           <div className='flex items-center mt-3'>
             <InputWrap>
