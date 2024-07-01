@@ -24,7 +24,7 @@ const AwardListView = ({
 
   return (
     <ItemBox style={{height: 'auto', width: 1135, marginTop: 25}}>
-      <div className='text-[16px] font-fsemibold text-[rgba(0,0,0,1)]'>Award</div>
+      <div className='text-[18px] font-fsemibold text-[rgba(0,0,0,1)]'>Award</div>
       <div className=' flex mt-6'>
         <div className='w-full pr-6'>
           <div className="award-table">

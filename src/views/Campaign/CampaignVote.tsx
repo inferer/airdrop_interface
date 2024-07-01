@@ -12,8 +12,7 @@ import { useCampaignApply } from "../../hooks/useCapmaignApply";
 import { LoadingX, LoadingXUser } from "../../components/Loader";
 import { ICampaignApplyVote } from "../../state/campaign/actions";
 import { getIryId } from "../../utils/iry";
-
-const bundleId = 'M1y1pS5W-RC2aLjsojpIOA2CUflJPzyeCt3DxRb649Y'
+import CampaignProgress from "./CampaignProgress";
 
 const CampaignVote: React.FC<{
   isVote?: boolean,
@@ -38,8 +37,11 @@ const CampaignVote: React.FC<{
   const handleApplyVote = useCallback(async () => {
     if (campaignId) {
       if (userApply) {
+
         if (!campaign.isApplyExpired) {
           handleCampaignUpdate(campaignId, fileType + '-' + arwId, bonus)
+        } else {
+          handleCampaignVote(campaignId, currentIndex)
         }
       } else {
         if (campaign.isApplyExpired) {
@@ -62,10 +64,13 @@ const CampaignVote: React.FC<{
       return currentIndex < 0 || campaign.isExpired
     }
     if (!isVote) {
+      if (bonus !== userApply?.bonus) {
+        return false
+      }
       return !arwId || campaign.isApplyExpired || (arwId === getIryId(userApply?.arwId || ''))
     }
     return false
-  }, [currentIndex, isVote, arwId, campaign, userApply])
+  }, [currentIndex, isVote, arwId, campaign, userApply, bonus])
 
   const handleOnUpload = useCallback(async (arwId, fileType) => {
     setArwId(arwId)
@@ -87,10 +92,14 @@ const CampaignVote: React.FC<{
             
         }
         {
+          campaign.campaignId && <CampaignProgress campaign={campaign} applyVoteList={campaignApplyVoteList} from={isProjectMode ? 'project' : 'user'} />
+        }
+        {
           (campaign.campaignId && !campaign.isApplyExpired) && 
             <WorkContent campaign={campaign} applyId={campaignApplyVoteList?.length}
             onUpload={handleOnUpload}
             userApply={userApply}
+            bonusChange={bonus !== userApply?.bonus}
           />
             
         }

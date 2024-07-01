@@ -2,9 +2,20 @@ import { Text } from 'rebass'
 import styled from 'styled-components'
 
 
+export const LabelText0 = ({ children }: { children: React.ReactElement | string}) => {
+  return (
+    <div className='text-[rgba(0,0,0,1)] text-[18px] font-fsemibold '>{ children }</div>
+  )
+}
 export const LabelText = ({ children }: { children: React.ReactElement | string}) => {
   return (
     <div className='text-[rgba(0,0,0,1)] text-[14px] font-fsemibold '>{ children }</div>
+  )
+}
+
+export const LabelText2 = ({ children }: { children: React.ReactElement | string}) => {
+  return (
+    <div className='text-[rgba(0,0,0,0.5)] text-[14px] font-fsemibold '>{ children }</div>
   )
 }
 

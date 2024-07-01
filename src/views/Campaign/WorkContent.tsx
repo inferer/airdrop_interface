@@ -134,12 +134,14 @@ const WorkContent = ({
   campaign,
   applyId,
   onUpload,
-  userApply
+  userApply,
+  bonusChange
 }: {
   campaign: ICampaign,
   applyId: number,
   onUpload?: (arwId: string, fileType?: string) => void,
-  userApply?: ICampaignApplyVote
+  userApply?: ICampaignApplyVote,
+  bonusChange?: boolean
 }) => {
   const [arwId, setArwId] = useState('')
   const [fileType, setFileType] = useState('')

@@ -1,7 +1,7 @@
 'use client';
 import { ICampaign, ICampaignApplyVote } from "../../state/campaign/actions";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { FlexCenter, LabelText } from "./styleds";
+import { FlexCenter, LabelText, LabelText0 } from "./styleds";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import LazyImage from "../../components/LazyImage";
 import { formatStringNumber, openBrowser, shortenAddress } from "../../utils";
@@ -191,7 +191,7 @@ const AirdropInfo = ({
       {
         (from !== 'project' && !isVote && campaign.campaignId && !campaign.isApplyExpired) &&
         <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
-          <LabelText>Bonus Settings</LabelText>
+          <LabelText0>Bonus Settings</LabelText0>
           <div className="mt-4 flex items-center">
             <div className=" font-fnormal">Bonus Percentage :</div>
             <div className="ml-5 rounded-lg border border-[rgba(85,123,241,0.10)]">
@@ -216,7 +216,7 @@ const AirdropInfo = ({
       }
       
       <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
-        <LabelText>Content</LabelText>
+        <LabelText0>Content</LabelText0>
         <div className="mt-4">
           <div id="arwContent" style={{overflow: 'auto'}}>
             <MdPreview editorId={'preview-only'} modelValue={content} />
@@ -226,7 +226,7 @@ const AirdropInfo = ({
       </div>
       <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
         <div className="">
-          <LabelText>Landing Page</LabelText>
+          <LabelText0>Landing Page</LabelText0>
           <div className="flex">
             <div className="h-[44px] flex items-center mt-3 px-4 bg-[rgba(247,100,135,0.015)] cursor-pointer rounded-lg"
               onClick={e => {
