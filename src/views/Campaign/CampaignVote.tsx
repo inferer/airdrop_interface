@@ -64,7 +64,7 @@ const CampaignVote: React.FC<{
       return currentIndex < 0 || campaign.isExpired
     }
     if (!isVote) {
-      if (bonus !== userApply?.bonus) {
+      if (Number(bonus) > 0 && bonus !== userApply?.bonus) {
         return false
       }
       return !arwId || campaign.isApplyExpired || (arwId === getIryId(userApply?.arwId || ''))
@@ -91,9 +91,7 @@ const CampaignVote: React.FC<{
           (campaign.campaignId && campaign.isApplyExpired) && <VoteContent campaign={campaign} applyVoteList={campaignApplyVoteList} onSelect={setCurrentIndex} /> 
             
         }
-        {
-          campaign.campaignId && <CampaignProgress campaign={campaign} applyVoteList={campaignApplyVoteList} from={isProjectMode ? 'project' : 'user'} />
-        }
+        
         {
           (campaign.campaignId && !campaign.isApplyExpired) && 
             <WorkContent campaign={campaign} applyId={campaignApplyVoteList?.length}

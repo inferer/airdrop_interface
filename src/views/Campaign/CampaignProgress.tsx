@@ -92,7 +92,7 @@ const CampaignProgress = ({
             <div className="mt-3 flex">
               <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px]">
                 <div className=" text-[16px] font-fsemibold mr-1">
-                  {applyVoteList.length <= tierTotal ? applyVoteList.length : tierTotal}
+                  {campaign.awardList?.length}
                 </div>
               </div>
             </div>
@@ -105,7 +105,7 @@ const CampaignProgress = ({
               <div className="mt-3 flex">
                 <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px]">
                   <div className=" text-[16px] font-fsemibold mr-1">
-                    {campaign.offerLocked}
+                    {campaign.isExpired ? (applyVoteList.length <= tierTotal ? applyVoteList.length : tierTotal) : 'NA'}
                   </div>
                 </div>
               </div>

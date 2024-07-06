@@ -168,16 +168,20 @@ const AwardList = ({
             }
             
           </div>
-          <div className="bg-[rgba(107,190,225,0.02)] h-[60px] flex items-center">
-            <div className="pl-4 cursor-pointer"
-              onClick={e => {
-                e.stopPropagation()
-                handleAddDataItem()
-              }}
-            >
-              <LazyImage src="/images/campaign/add.svg" />
+          {
+            dataList.length < 5 && 
+            <div className="bg-[rgba(107,190,225,0.02)] h-[60px] flex items-center">
+              <div className="pl-4 cursor-pointer"
+                onClick={e => {
+                  e.stopPropagation()
+                  handleAddDataItem()
+                }}
+              >
+                <LazyImage src="/images/campaign/add.svg" />
+              </div>
             </div>
-          </div>
+          }
+          
         </div>
         <div className='p-5 rounded-xl bg-[rgba(85,123,241,0.06)] w-[225px] min-h-[277px] shrink-0 relative'>
           <LazyImage src='/images/campaign/bg2.png' className='w-[148px] h-[163px] absolute top-0 right-0' />

@@ -6,6 +6,7 @@ import { uploadFileToIry } from "../../state/campaign/api";
 import { ICampaign, ICampaignApplyVote } from "../../state/campaign/actions";
 import { getIryId, getIryPath, openId } from "../../utils/iry";
 import { LoadingUpload } from "../../components/Loader";
+import { useActiveWeb3React } from "../../hooks";
 
 const UploadCom0 = ({
   onChange,
@@ -51,6 +52,9 @@ ref: React.Ref<unknown> | undefined
         filePickerRef.current.value = ''
       }
     },
+    removePreview: () => {
+      setImgPreview('')
+    }
     
   }))
 
@@ -143,6 +147,7 @@ const WorkContent = ({
   userApply?: ICampaignApplyVote,
   bonusChange?: boolean
 }) => {
+  const { account } = useActiveWeb3React()
   const [arwId, setArwId] = useState('')
   const [fileType, setFileType] = useState('')
   const [uploading, setUploading] = useState(false)
@@ -180,6 +185,17 @@ const WorkContent = ({
       onUpload && onUpload('', '')
     }
   }, [userApply, getIryId])
+
+  useEffect(() => {
+    if (uploadRef.current) {
+      uploadRef.current.removePreview()
+      uploadRef.current.removeFile()
+    }
+    if (!userApply) {
+      setArwId('')
+      onUpload && onUpload('', '')
+    }
+  }, [account, userApply])
 
   return (
     <div className="rounded-xl border border-[rgba(85, 123, 241, 0.1)] mt-5 p-5">
