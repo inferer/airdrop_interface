@@ -19,10 +19,11 @@ const Content = ({
 }: {
   onChange?: (content: string) => void
 }) => {
-  const [value, setValue] = useState(`1. Create your artwork in one of the four categories of your choice, and mint on either Zora, Base or OP Mainnet networks.All submissions
-  must be new mints on the mentioned networks and must have been minted no further back than Nov 8th 2023.
-3. Pick one of the platforms below to deploy your creation on OP Mainnet by the January 8th submission deadline.
-4. Enter your submission to the contest through this website.`);
+//   const [value, setValue] = useState(`1. Create your artwork in one of the four categories of your choice, and mint on either Zora, Base or OP Mainnet networks.All submissions
+//   must be new mints on the mentioned networks and must have been minted no further back than Nov 8th 2023.
+// 3. Pick one of the platforms below to deploy your creation on OP Mainnet by the January 8th submission deadline.
+// 4. Enter your submission to the contest through this website.`);
+  const [value, setValue] = useState(`Please input the content here...`);
   
   useEffect(() => {
     setValue(value)
