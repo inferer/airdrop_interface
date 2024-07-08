@@ -8,7 +8,7 @@ import InputNumber from "../../components/NumericalInput";
 import { useCreateCallback } from '../../hooks/useCampaignSender'
 import { ApprovalState } from '../../hooks/useApproveCallback'
 import { Loading, LoadingContract, LoadingUint, LoadingX } from '../../components/Loader'
-import { ETHER, Token } from '@uniswap/sdk'
+import { Currency, ETHER, Token } from '@uniswap/sdk'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { useRouter } from 'next/router'
 import { formatInput, formatStringNumber, isAddress, transformTime, transformTimeUTC, verifyInput } from '../../utils'
@@ -22,11 +22,12 @@ import { useIry } from '../../hooks/useIry'
 import CurrencySearchModal from '../../components/SearchModal/CurrencySearchModal'
 import { useDerivedSwapInfo, useSwapActionHandlers } from '../../state/swap/hooks'
 import { Field } from '../../state/swap/actions'
-import { useCurrencyBalanceUSDT } from '../../state/wallet/hooks'
+import { useCurrencyBalance, useCurrencyBalanceUSDT } from '../../state/wallet/hooks'
 import { useInputTokens } from '../../hooks/Tokens'
 import { useAirCampaignAmount } from '../../hooks/useAirdropAssetTreasury'
 import BN from 'bignumber.js'
 import NumberAdd from '../../components/NumberAdd'
+import SelectOfferList from './SelectOfferList'
 
 let globalApproveList: string[] = ['usdt', 'label']
 
@@ -41,6 +42,8 @@ export const InputWrap = ({ children }: any) => {
 export default function Create() {
   const router = useRouter()
   const { account, chainId } = useActiveWeb3React()
+  const ETHERToken = ETHER as Token
+  const [lockedCurrency, setlockedCurrency] = useState<Currency>(ETHERToken)
 
   const [name, setName] = useState('')
   const [landingPage, setLandingPage] = useState('')
@@ -48,34 +51,19 @@ export default function Create() {
   const [errorCode, setErrorCode] = useState(1)
   const [approvedTokenA, setApprovedTokenA] = useState(false)
   const [awardData, setAwardData] = useState<any[]>([])
-  const [modalOpen, setModalOpen] = useState(false)
-  const handleDismissSearch = useCallback(() => {
-    setModalOpen(false)
-  }, [setModalOpen])
 
   const {
-    currencies,
-    args,
-    lockedAmount,
-    lockedAmountAB,
-    lockedCurrency,
-    lockedCurrencyAir,
     lockedCurrencyAirCampaign,
-    lockedCurrencyAmount,
-    outputAmount,
     approvalState,
     approve,
-    approvalStateLabel,
-    approveLabel,
-    approvalStateAir,
-    approveAir
-  } = useCreateCallback(undefined, undefined, undefined, null)
+  } = useCreateCallback(lockedCurrency, undefined, undefined, null)
+  
   const { onCurrencySelection } = useSwapActionHandlers()
-  // @ts-ignore
-  const selectedCurrencyBalanceUSDT = useCurrencyBalanceUSDT(account ?? undefined, currencies[Field.INPUT] && currencies[Field.INPUT].address, true)
+
+  const lockedCurrencyBalance = useCurrencyBalance(account ?? undefined, lockedCurrency)
   const airCampaignAmount = useAirCampaignAmount()
   const { uploadStatus, handleUploadStr } = useIry()
-  const { createStatus, handleCreateCampaign } = useCampaignSender(args, lockedCurrency as Token ?? undefined)
+  const { createStatus, handleCreateCampaign } = useCampaignSender(lockedCurrency as Token ?? undefined)
 
   const [approveLoading, setApproveLoading] = useState(true)
   const [unApproveList, setUnApproveList] = useState<string[]>(globalApproveList)
@@ -112,47 +100,19 @@ export default function Create() {
     return approvalState === ApprovalState.NOT_APPROVED && (lockedCurrency && lockedCurrency !== ETHER )
   }, [lockedCurrency, approvalState])
 
-  const approveB = useMemo(() => {
-    return approvalStateLabel === ApprovalState.NOT_APPROVED && !!outputAmount
-  }, [outputAmount, approvalStateLabel])
-
-
   const landingPageVerify = useMemo(() => {
     const ipUrlRegex = /^(https?:\/\/)?(\d{1,3}\.){3}\d{1,3}(\:\d+)?(\/\S*)?(\?\S*)?$/;
     const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9\-\_]+\.)+[a-zA-Z]{2,}(\/.*)?$/
     return urlRegex.test(landingPage) || ipUrlRegex.test(landingPage)
   }, [landingPage])
 
-  const [duration, setDutation] = useState('1')
-  const handleDurationChange = (data: any) => {
-    setDutation(data.value)
-  }
-  const label = useMemo(() => {
-    return outputAmount?.currency?.symbol?.slice(4) || ''
-  }, [outputAmount])
-
-  const currentChain = useMemo(() => {
-    if(chainId) {
-      return CHAIN_LIST.find(chain => chain.chainId === chainId)
-    }
-    return CHAIN_LIST[0]
-  }, [chainId])
+  const label = 'campaign'
   const channel = 'campaign'
   const action = 'competition'
   const [createContent, setCreateContent] = useState('') 
   const [arwId, setArwId] = useState('')
 
-
-  const handleInputSelect = useCallback(
-    inputCurrency => {
-      onCurrencySelection(Field.INPUT, inputCurrency)
-      // 
-    },
-    [onCurrencySelection, currencies]
-  )
-  
   const [offerAmount, setOfferAmount] = useState('')
-  const [ariCampaignAmount, setAirCampaignAmount] = useState('')
 
   const [applyDeadline, setApplyDeadline] = useState(['', '', '', ''])
   const [voteDeadline, setVoteDeadline] = useState(['', '', '', ''])
@@ -205,11 +165,25 @@ export default function Create() {
                       ).getTime() / 1000)
   }, [voteDeadline])
 
+  const handleOfferTokenChange = useCallback((currency: Currency) => {
+    setlockedCurrency(currency)
+  }, [setlockedCurrency])
+
+  const isValidOfferAmount = useMemo(() => {
+    if (Number(offerAmount) > 0) {
+      if (Number(lockedCurrencyBalance?.toSignificant()) > Number(offerAmount)) {
+        return true
+      }
+      return false
+    }
+    return true
+  }, [lockedCurrencyBalance, offerAmount])
+
   const disabled = useMemo(() => {
     const applyVerify = applyDeadline[0] !== '' && applyDeadline[1] !== '' && applyDeadline[2] !== '' && applyDeadline[3] !== ''
     const voteVerify = voteDeadline[0] !== '' && voteDeadline[1] !== '' && voteDeadline[2] !== '' && voteDeadline[3] !== ''
-    return !name || !createContent || !landingPageVerify || !applyVerify || !voteVerify
-  }, [name, createContent, landingPageVerify, offerAmount, ariCampaignAmount, applyDeadline, voteDeadline])
+    return !name || !createContent || !landingPageVerify || !applyVerify || !voteVerify || !isValidOfferAmount
+  }, [name, createContent, landingPageVerify, offerAmount, applyDeadline, voteDeadline, isValidOfferAmount])
 
   const InputNumberClass = {
     width: 32, height: '17px', marginTop: 0, paddingLeft: '4px', fontSize: 14, color: 'rgba(0, 0, 0, 1)'
@@ -253,7 +227,8 @@ export default function Create() {
           >
             <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>
               <InputNumber style={{
-                width: 110, height: 40, marginTop: 0, padding: '0', fontSize: 32
+                width: 110, height: 40, marginTop: 0, padding: '0', fontSize: 32,
+                color: isValidOfferAmount ? '#000' : 'red'
               }} 
                 className=" rounded-lg" 
                 placeholder='0'
@@ -262,7 +237,10 @@ export default function Create() {
                   setOfferAmount(value)
                 }} />
             </div>
-            {
+            <SelectOfferList 
+              onChange={handleOfferTokenChange}
+            />
+            {/* {
               lockedCurrency ? 
                 <TokenInfo className='flex items-center justify-between shrink-0 min-w-[146px] cursor-pointer'
                 onClick={() => {
@@ -282,7 +260,7 @@ export default function Create() {
                   setModalOpen(true)
                 }}
               >SelectToken</div>
-            }
+            } */}
             
           </div>
           
@@ -547,7 +525,7 @@ export default function Create() {
           </div>
         </ItemBox> */}
       </div>
-      <AwardList onChange={setAwardData} lockedCurrency={selectedCurrencyBalanceUSDT ?? undefined} />
+      <AwardList onChange={setAwardData} lockedCurrency={lockedCurrencyBalance ?? undefined} />
       <Content onChange={setCreateContent} />
       <ItemBox style={{height: '135px', width: '100%', marginTop: 24}}>
         <div className='shrink-0 '>
@@ -610,7 +588,7 @@ export default function Create() {
               }}
             >
               <div className='btn-text'>
-                Approve {lockedCurrency?.symbol} (1/{approveB ? 2 : 1})
+                Approve {lockedCurrency?.symbol}
               </div>
 
             </ButtonSwap> : null
@@ -658,15 +636,6 @@ export default function Create() {
         }
         </div>
       </div>
-      <CurrencySearchModal
-        isOpen={modalOpen}
-        onDismiss={handleDismissSearch}
-        onCurrencySelect={handleInputSelect}
-        selectedCurrency={currencies[Field.INPUT]}
-        otherSelectedCurrency={currencies[Field.OUTPUT]}
-        showCommonBases={false}
-        payInput={true}
-      />
     </CreateBody>
   )
 }

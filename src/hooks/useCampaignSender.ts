@@ -24,25 +24,19 @@ import BN from 'bignumber.js'
 
 
 export function useCreateCallback(
-  trade: Trade | undefined, // trade to execute, required
+  lockedCurrency: Currency | undefined, // trade to execute, required
   allowedSlippage: number = INITIAL_ALLOWED_SLIPPAGE, // in bips
   deadline: number = DEFAULT_DEADLINE_FROM_NOW, // in seconds from now
   recipientAddressOrName: string | null // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
 ) {
   const { account, chainId, library } = useActiveWeb3React()
   const {
-    v1Trade,
     v2Trade,
-    currencyBalances,
-    parsedAmount,
     currencies,
     inputError: swapInputError
   } = useDerivedSwapInfo()
-  const { independentField, typedValue, recipient } = useSwapState()
-  const airPercent = useAirTokenPercent()
 
   const swapCalls = useSwapCallArguments(v2Trade, allowedSlippage, deadline, recipientAddressOrName)
-  let lockedToken
   let lockedTokenAir
   let lockedLabel
   let args: any = []
@@ -52,76 +46,20 @@ export function useCreateCallback(
     lockedLabel = args[2][1]
     
   }
-    // @ts-ignore
-  lockedToken = getUSDTTokenFromAirToken(currencies[Field.INPUT] && currencies[Field.INPUT].address, chainId)
-  const lockedCurrency = useCurrency(lockedToken)
 
   const lockedCurrencyAmount = useCurrencyBalance(account ?? undefined, lockedCurrency ?? undefined)
-  const lockedAmount = useMemo(() => {
-    if (args[0] && lockedCurrency) {
-      if (independentField === Field.INPUT) {
-        const div1 = BigNumber.from(parseInt(args[0], 16).toString()).toString()
-        const div2 = BigNumber.from((10 ** lockedCurrency?.decimals).toString(10)).toString()
-        return (Number(div1) / Number(div2)).toString()
-      } else {
-        const div1 = BigNumber.from(parseInt(args[1], 16).toString()).toString()
-        const div2 = BigNumber.from((10 ** lockedCurrency?.decimals).toString(10)).toString()
-        return (Number(div1) / Number(div2)).toString()
-      }
-      
-    }
-    return '0'
-  }, [args, lockedCurrency, independentField])
-  const lockedLabelCurrency = useCurrency(lockedLabel)
-  const lockedLabelCurrencyAmount = useCurrencyBalance(account ?? undefined, lockedLabelCurrency ?? undefined)
-  const percentBalance = useAirTokenPercentBalance(lockedLabelCurrencyAmount)
-  const lockedAmountAB = useMemo(() => {
-    let lockedAmountA = ''
-    let lockedAmountAShow = ''
-    let lockedAmountB = ''
-    let lockedAmountBShow = ''
-    if (args[0] && lockedCurrency && v2Trade) {
-      const _lockedAmountB = percentBalance.balance2
-      // const _lockedAmountA = BigNumber.from(parseInt(args[0], 16).toString())
-      const _lockedAmountA = independentField === Field.INPUT ? BigNumber.from(args[0]) : BigNumber.from(args[1])
-      lockedAmountB = BigNumber.from((_lockedAmountB * (10 ** v2Trade.outputAmount.currency.decimals)).toString()).toHexString()
-      lockedAmountA = _lockedAmountA.toHexString()
-      lockedAmountAShow = (Number(_lockedAmountA.toString()) / (10 ** lockedCurrency?.decimals)).toString()
-      lockedAmountBShow = percentBalance.balance2?.toString(10)
 
-    }
-    
-    return {
-      lockedAmountA,
-      lockedAmountB,
-      lockedAmountAShow,
-      lockedAmountBShow
-    }
-  }, [args, lockedCurrency, airPercent, v2Trade, percentBalance, independentField])
   const [approvalState, approve] = useApproveCallback(lockedCurrencyAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
-  const [approvalStateAir, approveAir] = useApproveCallback(v2Trade?.inputAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
-  const [approvalStateLabel, approveLabel] = useApproveCallback(v2Trade?.outputAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
 
   return {
-    currencies,
-    args,
-    lockedAmount,
-    lockedAmountAB,
-    lockedCurrency,
-    lockedCurrencyAir: currencies[Field.INPUT],
+
     lockedCurrencyAirCampaign: currencies[Field.OUTPUT],
-    lockedCurrencyAmount,
-    outputAmount: v2Trade?.outputAmount,
     approvalState,
     approve,
-    approvalStateLabel,
-    approveLabel,
-    approvalStateAir,
-    approveAir
   }
 }
 
-export function useCampaignSender(args: any[], lockedToken?: Token, ) {
+export function useCampaignSender(lockedToken?: Token, ) {
   const { account, chainId, library } = useActiveWeb3React()
   const campaignSender: Contract | null = useCampaignSenderContract()
   const [createStatus, setCreateStatus] = useState(0)
@@ -202,7 +140,7 @@ export function useCampaignSender(args: any[], lockedToken?: Token, ) {
       // await campaignSender.setAirdropAssetTreasury('0x59E56cDc025083c8D2cd6E01FAD0c56174c735E9')
       // console.log(airdropManager, airdropAssetTreasury)
     }
-  }, [campaignSender, account, args, lockedToken, independentField])
+  }, [campaignSender, account, lockedToken, independentField])
 
   return {
     createStatus,

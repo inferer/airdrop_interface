@@ -112,7 +112,9 @@ export const SelectChain2: React.FC<{
     const height = options.length * 41
     return height
   }, [options])
+
   useOnClickOutside(node, showOptions ? () => setShowOptions(false) : undefined)
+  
   const label = useMemo(() => {
     return current.label || defaultValue?.label || 'Select'
   }, [defaultValue, current])
