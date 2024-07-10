@@ -89,7 +89,7 @@ export function useCampaignSender(lockedToken?: Token, ) {
       const offer_label_token = [isETH ? ethers.constants.AddressZero : offerToken.address, airCampaign.address]
       const _offerAmount = new BN(offerAmount).multipliedBy(10 ** offerToken.decimals).toString()
       const _nowTime = Math.floor(Date.now() / 1000)
-      const offer_label_locked = [_offerAmount, applyDuration - _nowTime, voteDuration - _nowTime]
+      const offer_label_locked = [_offerAmount, applyDuration - _nowTime, voteDuration - _nowTime, _nowTime]
       console.log(applyDuration, voteDuration, _nowTime)
       console.log(baseInfo)
       console.log(offer_label_token)

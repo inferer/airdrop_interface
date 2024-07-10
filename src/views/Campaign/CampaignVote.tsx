@@ -12,7 +12,6 @@ import { useCampaignApply } from "../../hooks/useCapmaignApply";
 import { LoadingX, LoadingXUser } from "../../components/Loader";
 import { ICampaignApplyVote } from "../../state/campaign/actions";
 import { getIryId } from "../../utils/iry";
-import CampaignProgress from "./CampaignProgress";
 
 const CampaignVote: React.FC<{
   isVote?: boolean,

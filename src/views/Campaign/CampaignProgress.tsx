@@ -17,7 +17,7 @@ const CampaignProgress = ({
   isVote,
   onBonusChange,
   userApply,
-  applyVoteList
+  applyVoteList = []
 }: {
   campaign: ICampaign,
   from?: string,
@@ -25,7 +25,7 @@ const CampaignProgress = ({
   isVote?: boolean,
   onBonusChange?: (value: string) => void,
   userApply?: ICampaignApplyVote,
-  applyVoteList: ICampaignApplyVote[]
+  applyVoteList?: ICampaignApplyVote[]
 }) => {
 
   
@@ -128,7 +128,7 @@ const CampaignProgress = ({
             <div className="w-[1px] bg-[rgba(85,123,241,0.1)] h-[43px] mr-5"></div>
             <div>
               <LabelText2>Protocol Distribution</LabelText2>
-              <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px] shrink-0">
+              <div className="flex items-center border border-[rgba(85,123,241,0.1)] rounded-lg py-[4px] px-[10px] shrink-0 mt-3">
                 <div className=" text-[16px] font-semibold shrink-0">
                   { from === 'project' ? formatStringNumber(campaign.labelLocked) : isVote ? 1 : 5} ×
                 </div>

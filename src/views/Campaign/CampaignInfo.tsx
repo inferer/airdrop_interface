@@ -14,6 +14,7 @@ import InputNumber from "../../components/NumericalInput";
 import { MdPreview } from 'md-editor-rt';
 import 'md-editor-rt/lib/preview.css';
 import AwardListView from "./AwardListView";
+import CampaignProgress from "./CampaignProgress";
 
 const ProgressItem = ({
   amount,
@@ -42,14 +43,16 @@ const AirdropInfo = ({
   confirm = false,
   isVote,
   onBonusChange,
-  userApply
+  userApply,
+  applyVoteList = []
 }: {
   campaign: ICampaign,
   from?: string,
   confirm?: boolean,
   isVote?: boolean,
   onBonusChange?: (value: string) => void,
-  userApply?: ICampaignApplyVote
+  userApply?: ICampaignApplyVote,
+  applyVoteList?: ICampaignApplyVote[]
 }) => {
 
   const contentJson = useMemo(() => {
@@ -187,6 +190,9 @@ const AirdropInfo = ({
           </div>
         </div>
       </div>
+      {
+        from === 'project' && <CampaignProgress campaign={campaign} applyVoteList={applyVoteList} from={from} />
+      }
       <AwardListView dataList={campaign.awardList} offerToken={campaign.offerToken} />
       {
         (from !== 'project' && !isVote && campaign.campaignId && !campaign.isApplyExpired) &&

@@ -23,7 +23,7 @@ const Content = ({
 //   must be new mints on the mentioned networks and must have been minted no further back than Nov 8th 2023.
 // 3. Pick one of the platforms below to deploy your creation on OP Mainnet by the January 8th submission deadline.
 // 4. Enter your submission to the contest through this website.`);
-  const [value, setValue] = useState(`Please input the content here...`);
+  const [value, setValue] = useState(``);
   
   useEffect(() => {
     setValue(value)
@@ -44,6 +44,7 @@ const Content = ({
         /> */}
         <MdEditor 
           modelValue={value} 
+          placeholder='Please input the content here...'
           style={{height: 210}}
           onChange={setValue} 
           preview={false}

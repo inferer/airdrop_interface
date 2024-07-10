@@ -31,8 +31,12 @@ const CampaignConfirmDetails: React.FC<{
   
   return (
     <div className="py-5 pt-0">
-      <CampaignInfo campaign={campaign} from={isProjectMode ? 'project' : 'user'} />
-      <CampaignProgress campaign={campaign} applyVoteList={campaignApplyVoteList} from={isProjectMode ? 'project' : 'user'} />
+      <CampaignInfo 
+        campaign={campaign} 
+        from={isProjectMode ? 'project' : 'user'}
+        applyVoteList={campaignApplyVoteList} 
+      />
+      {/* <CampaignProgress campaign={campaign} applyVoteList={campaignApplyVoteList} from={isProjectMode ? 'project' : 'user'} /> */}
       {
         campaign.isExpired && <AwardContent campaign={campaign} applyVoteList={campaignApplyVoteList} from="project" />
       }
