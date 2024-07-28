@@ -18,8 +18,6 @@ import { othersContracts } from '../../constants/contractsLocal'
 import ContractABI from './ContractABI'
 import { formatInput, formatStringNumber, isAddress, verifyInput } from '../../utils'
 import { useCreateContractABI } from '../../state/airdrop/hooks'
-import SpreadingColor from './SpreadingColor'
-import SpreadingChart from './SpreadingChart'
 
 // ["airdrop 01","Social"]
 // ["0x8797847c9d63D8Ed9C30B058F408d4257A33B76C","0x8797847c9d63D8Ed9C30B058F408d4257A33B76C"]
@@ -319,7 +317,7 @@ export default function Create() {
   }, [paremeterVerify, funName, contractAddress])
 
   return (
-    <CreateBody className='create-body-root'>
+    <CreateBody>
 
       <TitleWrap>
         {/* <Link to="/swap">
@@ -330,12 +328,11 @@ export default function Create() {
 
         <div className=' text-[32px] font-fsemibold text-black leading-normal' style={{lineHeight: 'normal'}}>Create the airdrop</div>
       </TitleWrap>
-      <div className='mt-6'>
-        <div className='flex'>
+      <ItemWrap>
+        <div>
           <ItemBox2
             error={nameError && name.length <= 0}
             errorCode={errorCode}
-            style={{width: 555 }}
           >
             <div className='content bg-white h-full'>
               <ItemTitle>airdrop name</ItemTitle>
@@ -354,7 +351,7 @@ export default function Create() {
             </div>
 
           </ItemBox2>
-          <ItemBox style={{ width: 531,  height: '100px', marginLeft: 20 }}>
+          <ItemBox style={{ marginTop: 20, height: '144px'}}>
             <ItemTitle>offer</ItemTitle>
             <div className='flex justify-between items-center mt-2'>
               {/* <Input value={''} placeholder='10' onUserInput={function (input: string): void {
@@ -388,137 +385,319 @@ export default function Create() {
 
 
           </ItemBox>
-        </div>
-        <div className='flex mt-5'>
-          <div className='flex items-center w-[555px]'>
+          <div className='flex justify-between mt-5'>
             <ItemBox width={180} height={100}>
               <ItemTitle>pool</ItemTitle>
-                <div className=' text-[14px] font-fsemibold mt-2 text-[rgba(0,0,0,0.40)]'>
-                  <div className="flex items-center justify-between bg-[rgba(85,123,241,0.02)] rounded-[8px] cursor-pointer min-w-[120px] relative py-3 px-4 ">
-                    {label}
+              <div className=' text-[14px] font-fsemibold mt-2 text-[rgba(0,0,0,0.40)]'>
+                <div className="flex items-center justify-between bg-[rgba(85,123,241,0.02)] rounded-[8px] cursor-pointer min-w-[120px] relative py-3 px-4 ">
+                  {label}
 
-                  </div>
                 </div>
-              </ItemBox>
-              <ItemBox width={180} height={100} style={{marginLeft: 20}}>
-                <ItemTitle>duration</ItemTitle>
-                <div className='mt-2 font-fmedium'>
-                  <Select defaultValue={AIRDROP_DURATION[0]} options={AIRDROP_DURATION} onChange={handleDurationChange} />
-                </div>
-              </ItemBox>
-          </div>
-          <div className='w-[531px] ml-5'>
+              </div>
+            </ItemBox>
             <ItemBox width={180} height={100}>
-              <ItemTitle>Type</ItemTitle>
+              <ItemTitle>duration</ItemTitle>
               <div className='mt-2 font-fmedium'>
                 <Select defaultValue={AIRDROP_DURATION[0]} options={AIRDROP_DURATION} onChange={handleDurationChange} />
               </div>
             </ItemBox>
-          </div>  
-        </div>
-        <div className='mt-5'>
-          <ItemBox width={1120} height={385} style={{paddingRight: 0}}>
-            
-            <div className=' flex items-center h-full'>
-              <div ref={functionRef} className={`h-[340px] overflow-auto scrollbar-container pr-4 function_ref ${contractABI.length > 0 ? 'pb-[0px]' : ''}`}>
-                <div className='text-[16px] font-fbold text-[rgba(0,0,0,0.50)]'>Commodity info</div>
-                <div className='flex w-full mt-[22px]'>
-                  <div className='w-full'>
-                    <ItemTitle style={{ fontSize: '12px' }}>NFT contract</ItemTitle>
-                    <div className='mt-2 font-fmedium '>
-                      <div className='w-[420px] rounded-xl border border-[rgba(85,123,241,0.10)] px-4 py-3 flex items-center h-[44px]'>
-                        <LazyImage src='/images/airdrop/contract_logo.svg' className=' shrink-0 mr-2' />
-                        <TextInput  value={contractAddress} onUserInput={value => {
-                          handleChangeAddress(value)
-                        }} />
-                        {
-                          verifying && <LoadingContract />
-                        }
-                        {
-                          !verifyStatus && contractABI.length <= 0 &&
-                          <div className=' cursor-pointer'
-                            onClick={e => {
-                              e.stopPropagation()
-                              setOpen(true)
-                            }}
-                          >
-                            <LazyImage src='/images/airdrop/contract_code.svg' />
-                          </div>
-                        }
-                        {
-                          contractABI.length > 0 &&
-                          <div className=' cursor-pointer'
-                          >
-                            <LazyImage src='/images/airdrop/contract_verify.svg' />
-                          </div>
-                        }
+          </div>
 
+        </div>
+        <ItemCenter></ItemCenter>
+        <div>
+          {/* <ItemBox width={664} height={244}>
+            <div className='flex w-full'>
+              <div>
+                <ItemTitle>Channel</ItemTitle>
+                <div className='mt-2 font-fmedium'>
+                  <Select defaultValue={CHANNEL_LIST[0]} options={CHANNEL_LIST} onChange={handleChangeChannel} />
+                </div>
+              </div>
+              <div className='ml-[40px]'>
+                <ItemTitle>Action</ItemTitle>
+                <div className='mt-2 font-fmedium min-w-[146px]'>
+                  <Select defaultValue={actionList[0]} options={actionList} onChange={handleChange} />
+                </div>
+              </div>
+              <div className='ml-[34px]'>
+                <div className='mt-1'>
+                  <LazyImage src='/images/airdrop/to.svg' />
+                </div>
+
+              </div>
+              <div className='ml-[34px] shrink-0'>
+                <ItemTitle>Offer per unit</ItemTitle>
+                <div className='mt-2'>
+                  <div className='flex items-center justify-between font-fsemibold text-[16px] py-3 px-4 bg-[rgba(85,123,241,0.02)] rounded-[8px]'>
+                    <div>{TWITTER_UNIT[action]} x</div>
+                    <div className='bg-[#F2F9F3] rounded flex items-center py-[1px] px-2 ml-[11px]'>
+                      <CurrencyLogo currency={outputAmount?.currency} size={'20px'} />
+                      <div className=' font-fmedium text-[#A1CEA8] ml-1'>
+                        {outputAmount?.currency?.symbol}
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div className='mt-4'>
+              <ItemTitle>Content</ItemTitle>
+              <div className='mt-2 py-3 px-4 h-[90px] bg-[rgba(85,123,241,0.02)] rounded-lg overflow-auto'>
+                <textarea className=' w-full h-full bg-[rgba(85,123,241,0)] outline-none leading-6 resize-none'
+                  value={content}
+                  onChange={() => {
+
+                  }}
+                >
+
+                </textarea>
+              </div>
+            </div>
+          </ItemBox> */}
+          <ItemBox width={664} height={385} style={{paddingRight: 0}}>
+            <div className=' flex flex-col justify-between items-stretch h-full'>
+              <div ref={functionRef} className={`h-[320px] overflow-auto scrollbar-container pr-4 function_ref ${contractABI.length > 0 ? 'pb-[0px]' : ''}`}>
                 <div className='flex w-full'>
-                  <div className='w-full mt-[26px]'>
-                    <ItemTitle style={{ fontSize: '12px' }}>NFT id</ItemTitle>
-                    <div className='mt-2 font-fmedium '>
-                      <div className='w-[308px] rounded-xl border border-[rgba(85,123,241,0.10)] px-4 py-3 flex items-center h-[44px]'>
-                        <TextInput  value={contractAddress} onUserInput={value => {
-                          handleChangeAddress(value)
-                        }} />
-                        {
-                          verifying && <LoadingContract />
-                        }
-                        {
-                          !verifyStatus && contractABI.length <= 0 &&
-                          <div className=' cursor-pointer'
-                            onClick={e => {
-                              e.stopPropagation()
-                              setOpen(true)
-                            }}
-                          >
-                            <LazyImage src='/images/airdrop/contract_code.svg' />
+                  <div className=' shrink-0'>
+                    <ItemTitle>Chain</ItemTitle>
+                    <div className='mt-2 font-fmedium'>
+                      {/* <SelectChain defaultValue={{}} options={CHAIN_LIST} onChange={handleChangeChain} /> */}
+                      {
+                        currentChain && 
+                        <div className='flex items-center bg-[rgba(85,123,241,0.02)] h-[44px] rounded-lg px-4'>
+                          <div>
+                            <LazyImage src={currentChain?.icon} className='w-5 h-5' />
                           </div>
-                        }
-                        {
-                          contractABI.length > 0 &&
-                          <div className=' cursor-pointer'
-                          >
-                            <LazyImage src='/images/airdrop/contract_verify.svg' />
-                          </div>
-                        }
+                          <div className='text-[14px] font-medium ml-2'>{currentChain?.label}</div>
+                        </div>
+                      }
+                      
+                    </div>
+                  </div>
+                  {
+                    chain &&
+                    <div className='ml-[20px] w-full'>
+                      <ItemTitle>Contract</ItemTitle>
+                      <div className='mt-2 font-fmedium '>
+                        <div className=' rounded-xl border border-[rgba(85,123,241,0.10)] px-4 py-3 flex items-center h-[44px]'>
+                          <LazyImage src='/images/airdrop/contract_logo.svg' className=' shrink-0 mr-2' />
+                          <TextInput  value={contractAddress} onUserInput={value => {
+                            handleChangeAddress(value)
+                          }} />
+                          {
+                            verifying && <LoadingContract />
+                          }
+                          {
+                            !verifyStatus && contractABI.length <= 0 &&
+                            <div className=' cursor-pointer'
+                              onClick={e => {
+                                e.stopPropagation()
+                                setOpen(true)
+                              }}
+                            >
+                              <LazyImage src='/images/airdrop/contract_code.svg' />
+                            </div>
+                          }
+                          {
+                            contractABI.length > 0 &&
+                            <div className=' cursor-pointer'
+                            >
+                              <LazyImage src='/images/airdrop/contract_verify.svg' />
+                            </div>
+                          }
 
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div className='shrink-0 mt-[26px]'>
-                  <ItemTitle style={{ fontSize: '12px' }}>Landing Page</ItemTitle>
-                  <div className='mt-3 flex items-center'>
-                    <div className='w-[567px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[44px]'>
-                      <LazyImage src='/images/airdrop/landing.svg' className='mr-2' />
+                  }
 
-                      <TextInput
-                        color='rgba(0,0,0,0.80)'
-                        fontSize='14px'
-                        value={ladningPage}
-                        onUserInput={value => {
-                          setLandingPage(value)
-                        }}
-                      />
-                    </div>
-                    <div className=' shrink-0 ml-3'>
-                      <LazyImage2 src={landingPageVerify ? '/images/airdrop/status_2.svg' : '/images/airdrop/status_0.svg'} />
-                    </div>
-                  </div>
                 </div>
+                {
+                  chain && contractAddress && contractABI.length > 0 &&
+                  <>
+                    <div className='flex w-full mt-6'>
+                      <div className=' shrink-0 w-[300px]'>
+                        <ItemTitle>Function</ItemTitle>
+                        <div className='mt-2 font-fmedium'>
+                          <SelectChain icon='/images/airdrop/fun1.svg' defaultValue={{}} options={contractABI} onChange={handleChangeFun} />
+                        </div>
+                      </div>
+
+
+                    </div>
+
+                    <div className='mt-1 flex items-center text-[12px] text-[rgba(0,0,0,0.60)]'>
+                      <LazyImage className='mr-1' src='/images/airdrop/info.svg' />
+                      <div className=' '>Function must call ‘Inferer Airdrop Interface’. Check</div>
+                      <div className='flex items-center cursor-pointer group hover:text-[rgba(79,88,127,1)] pl-[4px]'>
+                         API document
+                        <img src='/images/airdrop/link5.svg' className='mx-1 inline-block group-hover:hidden' />
+                        <img src='/images/airdrop/link6.svg' className='mx-1 hidden group-hover:inline-block' />
+                        {/* <LazyImage4 src='/images/airdrop/link5.svg' activeSrc='/images/airdrop/link6.svg' className='mx-1' /> */}
+                      </div>
+                      <div> for more details.</div>
+                    </div>
+                    {
+                      parameter.length > 0 &&
+                        <div className=' shrink-0 w-full mt-6 pb-1'>
+                        <ItemTitle>Parameter</ItemTitle>
+                        <div className='mt-3'>
+                          {
+                            parameter.map((pv: any, index: number) => {
+                              return (
+                                <div key={pv.name} className='flex justify-between items-center mb-3'>
+                                  <div className=' w-full flex items-center'>
+                                    <LazyImage src='/images/airdrop/param.svg' />
+                                    <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>{pv.name} ({pv.type})</div>
+                                  </div>
+                                  <div className='w-[348px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 mx-3 flex items-center h-[32px]'>
+                                    <TextInput
+                                      color='rgba(0,0,0,0, 1)'
+                                      fontSize='13px'
+                                      value={parameter[index].pValue}
+                                      onUserInput={value => {
+                                        handleParameterChange(value, index)
+                                      }}
+                                    />
+                                  </div>
+                                  <div className=' shrink-0'>
+                                    <LazyImage2 src={pv.status ? '/images/airdrop/status_1.svg' : '/images/airdrop/status_0.svg'} />
+                                  </div>
+                                </div>
+                              )
+                            })
+                          }
+
+                          {/* <div className='flex justify-between items-center mb-3'>
+                            <div className=' w-full flex items-center'>
+                              <LazyImage src='/images/airdrop/param.svg' />
+                              <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>_stakingAddress (address)</div>
+                            </div>
+                            <div className='w-[300px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
+                              <TextInput
+                                color='rgba(0,0,0,0.40)'
+                                fontSize='13px'
+                                value={''}
+                                onUserInput={value => {
+
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <div className='flex justify-between items-center mb-3'>
+                            <div className=' w-full flex items-center'>
+                              <LazyImage src='/images/airdrop/param.svg' />
+                              <div className='text-[13px] text-[rgba(0,0,0,0.60)] pl-2 pr-4'>_depositCalldata (bytes)</div>
+                            </div>
+                            <div className='w-[300px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[32px]'>
+                              <TextInput
+                                color='rgba(0,0,0,0.40)'
+                                fontSize='13px'
+                                value={''}
+                                onUserInput={value => {
+
+                                }}
+                              />
+                            </div>
+                          </div> */}
+
+                        </div>
+                    </div>
+                    }
+
+                    {
+                      paremeterVerify &&
+                        <div className='shrink-0 mt-6'>
+                          <ItemTitle>Landing Page</ItemTitle>
+                          <div className='mt-3 flex items-center'>
+                            <div className='w-[524px] shrink-0 rounded-lg border border-[rgba(85,123,241,0.10)] px-3 flex items-center h-[44px]'>
+                              <LazyImage src='/images/airdrop/landing.svg' className='mr-2' />
+
+                              <TextInput
+                                color='rgba(0,0,0,0.80)'
+                                fontSize='14px'
+                                value={ladningPage}
+                                onUserInput={value => {
+                                  setLandingPage(value)
+                                }}
+                              />
+                            </div>
+                            <div className=' shrink-0 ml-3'>
+                              <LazyImage2 src={landingPageVerify ? '/images/airdrop/status_2.svg' : '/images/airdrop/status_0.svg'} />
+                            </div>
+                          </div>
+                        </div>
+                    }
+                    {
+                      paremeterVerify && landingPageVerify &&
+                        <div className='shrink-0 mt-6'>
+                          <ItemTitle>Offer per unit</ItemTitle>
+                          <div className='mt-3 flex items-center cursor-pointer h-[44px]'>
+                            <div
+                              onClick={e => {
+                                e.stopPropagation()
+                                setVerifyUint(1)
+                                setTimeout(() => {
+                                  setVerifyUint(2)
+                                }, 1000)
+                              }}
+                            >
+                              <LazyImage src='/images/airdrop/card_from.svg' className='' />
+                              <img src='/images/airdrop/eq.svg' className=' fixed -z-10 left-[10000px]' />
+                            </div>
+
+                            {
+                              verifyUint === 1 &&
+                              <div className='ml-3'>
+                                <LoadingUint />
+                              </div>
+                            }
+
+                            {
+                              verifyUint === 2 &&
+                              <>
+                                <div className='mx-3'>
+                                  <img src='/images/airdrop/eq.svg' className='w-3 h-3' />
+                                  {/* <span className=' text-[rgba(0,0,0,0.5)] text-[24px] relative -top-[1px]'>=</span> */}
+                                </div>
+                                <div className='mr-3 font-fsemibold text-[16px]'>
+                                  <div>{gasUnit} x</div>
+                                </div>
+                                <div className='flex items-center justify-between font-fsemibold text-[16px] h-[28px] px-2 rounded-[4px]'
+                                  style={{background: 'linear-gradient(96deg, rgba(63, 60, 255, 0.05) 0%, rgba(107, 190, 225, 0.05) 101.71%)'}}
+                                >
+
+                                  <div className='flex items-center'>
+                                    <CurrencyLogo currency={outputAmount?.currency} size={'20px'} />
+                                    <div className=' font-fmedium text-[16px] ml-1 blue-text'>
+                                      {outputAmount?.currency?.symbol}
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </>
+                            }
+                          </div>
+                        </div>
+                    }
+
+                    {
+                      paremeterVerify && landingPageVerify &&
+                      <div className='h-[121px] bg-[rgba(123,120,255,0.06)] rounded-xl px-4 py-[18px] mt-5'>
+                        <div className=' font-fsemibold text-[#7B78FF] text-[14px] leading-normal'>Airdrop assets would be locked in contract.</div>
+                        <div className=' text-[#7B78FF] text-[13px] mt-3 leading-[18px]'>When you try to create an airdrop, the associated token assets would be locked in contract, and you would receive same amount of correspondant “Air-” tokens, which are permitted to trade in airdrop pools.</div>
+                      </div>
+                    }
+                  </>
+                }
+
               </div>
-              <div className='w-[1px] h-[86px] bg-[rgba(63,70,100,0.10)] ml-[184px]'></div>
-              <div className='mt-[10px] text-[14px] text-[rgba(0,0,0,0.60)] ml-[120px]'>
-                <div className='text-[16px] font-fbold text-[rgba(0,0,0,0.50)]'>Commodity Preview</div>
-                <div className=' mt-6'>
-                  <LazyImage src='/images/demo2.png' className='w-[162px] h-[162px] rounded-[8px]' />
+              <div className='mt-[10px] text-[14px] text-[rgba(0,0,0,0.60)] flex items-center'>
+                <div className='flex items-center text-[12px] justify-center w-[16px] h-[16px] bg-[rgba(0,0,0,0.06)] rounded-[4px]'>
+                  { contractTip.num }
                 </div>
-
+                <div className='ml-2'>{ contractTip.text }</div>
               </div>
             </div>
 
@@ -526,106 +705,7 @@ export default function Create() {
 
 
         </div>
-        <div className='mt-6'>
-          <ItemBox width={1120} height={1349} >
-            <ItemTitle>Refer Action</ItemTitle>
-            <div className='px-1'>
-              <div className='text-[rgba(0,0,0,0.80)] text-[16px] font-fmedium my-[30px]'>Scoll the indicator to forcast the refer spreading outcome.</div>
-              <ItemBox width={1080} height={207} >
-                <div className='flex items-center'>
-                  <div className='w-full'>
-                    <div className='flex items-center'>
-                      <div className='w-[50%] shrink-0'>
-                        <div className='flex items-center text-[#3F4664] font-fbold'>
-                          <LazyImage src='/images/airdrop/icon/icon1.svg' className='mr-[6px]' />
-                          Refer Percentage
-                        </div>
-                        <div className='text-[rgba(63,70,100,0.60)] text-[16px] font-fnormal mt-4'>
-                          50%
-                        </div>
-                      </div>
-                      <div className='w-[50%] shrink-0'>
-                        <div className='flex items-center text-[#3F4664] font-fbold'>
-                          <LazyImage src='/images/airdrop/icon/icon2.svg' className='mr-[6px]' />
-                          Estimate coverage
-                        </div>
-                        <div className='text-[rgba(63,70,100,0.60)] text-[16px] font-fnormal mt-4'>
-                        30,000
-                        </div>
-                      </div>
-                    </div>
-                    <div className='flex items-center mt-[37px]'>
-                      <div className='w-[50%] shrink-0'>
-                        <div className='flex items-center text-[#3F4664] font-fbold'>
-                          <LazyImage src='/images/airdrop/icon/icon3.svg' className='mr-[6px]' />
-                          Offer per unit
-                        </div>
-                        <div className='flex items-center mt-4'>
-                          <div className='text-[rgba(63,70,100,0.60)] inline-flex text-[16px] font-fnormal px-2 py-[6px] h-[36px] items-center justify-center rounded-[4px] border border-[rgba(85,123,241,0.10)]'>
-                            Air-Social
-                          </div>
-                          <div className='text-[rgba(63,70,100,0.60)] text-base ml-2'>
-                            X 1
-                          </div>
-                        </div>
-                      </div>
-                      <div className='w-[50%] shrink-0'>
-                        <div className='flex items-center text-[#3F4664] font-fbold'>
-                          <LazyImage src='/images/airdrop/icon/icon4.svg' className='mr-[6px]' />
-                          Contract
-                        </div>
-                        <div className='text-[rgba(63,70,100,0.60)] inline-flex text-[16px] font-fnormal mt-4 px-2 py-[6px] h-[36px] items-center justify-center rounded-[4px] border border-[rgba(85,123,241,0.10)] cursor-pointer'>
-                          Code Preview
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className=' shrink-0 w-[370px]'>
-                    <div className=' flex items-center justify-between'>
-                      <div className='w-[1px] h-[86px] bg-[rgba(63,70,100,0.10)] '></div>
-                      <div className='text-[102px] font-fbold primary-text leading-[110%]'>
-                        200%
-                      </div>
-                    </div>
-                    <div className=' text-right'>
-                      Compound income
-                    </div>
-                  </div>
-                </div>
-              </ItemBox>
-              <ItemBox width={1080} height={982} style={{ marginTop: 20 }} >
-                <div className=' flex justify-center text-[14px] font-fnormal'>Spreading chart</div>
-                <SpreadingChart />
-                <div className='w-full h-[428px] border border-[rgba(85,123,241,0.10) rounded-md mt-[30px]'>
-                  <div className='flex items-center justify-between bg-[rgba(85,123,241,0.10)] w-full h-[48px] px-5' style={{borderRadius: '6px 6px 0px 0px'}}>
-                    <div className=' flex items-center'>
-                      <LazyImage src='/images/airdrop/icon/info.svg' />
-                      <span className='text-[12px] font-fmedium ml-[6px]'>Compound income calculation</span>
-                    </div>
-                    <div>
-                      <LazyImage src='/images/airdrop/icon/arrow-down.svg' />
-                    </div>
-                  </div>
-                  <div className='p-5 text-[12px] font-fnormal'>
-                    <div>Compound income is calculated exponentially based on 1 Air-Social. As the refer percentage changes, compound benefits would grow massively. Assume the compound income is CI, the refer precentage is R, the offer per unit is O, n is the number of people who refers, then the formula would be such as:</div>
-                    <div className='mt-[39px] mb-[33px]'>
-                      <LazyImage src='/images/airdrop/icon/ci1.png' className='w-[462px]' />
-                    </div>
-                    <div>For example, the refer percentage is 0.75, the offer per unit is 1 x Air-Social token, and we maximize the refer process, then we could have the compound income equal to 3 x Air-Social token.</div>
-                    <div className='mt-[20px] mb-[32px]'>
-                      <LazyImage src='/images/airdrop/icon/ci2.png' className='w-[746px]' />
-                    </div>
-                    <div>
-                    With thid refer design mechanism deployed in contract, there would be always expotential benefits when peple refer further and acquire lots of fun.
-                    </div>
-                  </div>
-                </div>
-                
-              </ItemBox>
-            </div>
-          </ItemBox>
-        </div>
-      </div>
+      </ItemWrap>
       <div className='flex justify-end mt-5'>
         <div className='w-[260px]'>
           <ButtonCancel

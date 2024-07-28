@@ -82,6 +82,12 @@ export const ItemWrap = styled.div`
   margin-top: 24px;
 
 `
+export const ItemWrap2 = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+
+`
 export const ItemBox = styled.div<{ width?: number, height?: number }>`
   border-radius: 12px;
   border: 1px solid rgba(85, 123, 241, 0.10);

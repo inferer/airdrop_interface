@@ -16,6 +16,7 @@
   }
 }
 
+
 body {
   color: rgb(var(--foreground-rgb));
 }
@@ -23,6 +24,15 @@ body {
   padding-left: calc(100vw - 100%);
 }
 
+.font-dmedium{
+  font-family: DMSans-Medium;
+}
+.font-dbold {
+  font-family: DMSans-Bold;
+}
+.font-dnormal {
+  font-family: DMSans-Regular;
+}
 
 .font-fnormal{
   font-family: Inter-Regular;
@@ -166,7 +176,12 @@ body {
 .scrollbar-container::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.08); /* 设置滑块hover状态时的背景颜色 */
 }
-
+.primary-text {
+  background: var(--1, linear-gradient(124deg, #3555FF 8.05%, #A157FF 66.68%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 .blue-text {
   background: linear-gradient(96deg, #3F3CFF 0%, #6BBEE1 101.71%);
   background-clip: text;
