@@ -11,6 +11,7 @@ const CampaignManager_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: contractsArbitrumList.airdropSender,
   [ChainId.SEPOLIA]: sepoliaContractList.airdropSender,
   [ChainId.LOCAL]: campaignContracts.campaignManager,
+  [ChainId.AIRDROP]: campaignContracts.campaignManager,
 }
 
 export { CampaignManager_ABI, CampaignManager_NETWORKS }

@@ -13,7 +13,8 @@ export const OWER_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.BASE]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
   [ChainId.ARBITRUM]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
   [ChainId.SEPOLIA]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
-  [ChainId.LOCAL]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea'
+  [ChainId.LOCAL]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
+  [ChainId.AIRDROP]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea'
 }
 
 export const ROUTER_ADDRESS = contractsSepolia.router02
@@ -23,7 +24,8 @@ export const ROUTER_ADDRESS2: { [chainId in ChainId]: string } = {
   [ChainId.BASE]: contractsBase.router02,
   [ChainId.ARBITRUM]: contractsArbitrum.router02,
   [ChainId.SEPOLIA]: contractsSepolia.router02,
-  [ChainId.LOCAL]: contractList.router02
+  [ChainId.LOCAL]: contractList.router02,
+  [ChainId.AIRDROP]: contractList.router02
 }
 
 // a list of tokens by chain
@@ -69,6 +71,7 @@ const WETH_ONLY: ChainTokenList = {
   [ChainId.ARBITRUM]: [WETH[ChainId.ARBITRUM]],
   [ChainId.BASE]: [WETH[ChainId.BASE]],
   [ChainId.LOCAL]: [WETH[ChainId.LOCAL]],
+  [ChainId.AIRDROP]: [WETH[ChainId.AIRDROP]],
 }
 
 // used to construct intermediary pairs for trading
@@ -286,7 +289,8 @@ export const AddressZero_ETH = {
   [ChainId.BASE]: new Token(ChainId.BASE, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
   [ChainId.ARBITRUM]: new Token(ChainId.ARBITRUM, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
   [ChainId.SEPOLIA]: new Token(ChainId.SEPOLIA, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
-  [ChainId.LOCAL]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH')
+  [ChainId.LOCAL]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
+  [ChainId.AIRDROP]: new Token(ChainId.AIRDROP, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
 }
 
 export const TEL_URL = 'https://t.me/+zTwxF2bS6a85NzI1'

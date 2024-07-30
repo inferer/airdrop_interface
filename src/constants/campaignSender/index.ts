@@ -11,6 +11,7 @@ const CampaignSender_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: contractsArbitrumList.airdropSender,
   [ChainId.SEPOLIA]: sepoliaContractList.airdropSender,
   [ChainId.LOCAL]: campaignContracts.campaignSender,
+  [ChainId.AIRDROP]: campaignContracts.campaignSender,
 }
 
 export { CampaignSender_ABI, CampaignSender_NETWORKS }

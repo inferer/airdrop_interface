@@ -11,6 +11,7 @@ const AirdropAssetTreasury_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: contractsArbitrumList.airdropAssetTreasury,
   [ChainId.SEPOLIA]: sepoliaContractList.airdropAssetTreasury,
   [ChainId.LOCAL]: contractList.airdropAssetTreasury,
+  [ChainId.AIRDROP]: contractList.airdropAssetTreasury,
 }
 
 export { AirdropAssetTreasury_ABI, AirdropAssetTreasury_NETWORKS }

@@ -11,6 +11,7 @@ const AirdropUserTask_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: contractsArbitrumList.airdropUserTask,
   [ChainId.SEPOLIA]: sepoliaContractList.airdropUserTask,
   [ChainId.LOCAL]: contractList.airdropUserTask,
+  [ChainId.AIRDROP]: contractList.airdropUserTask,
 }
 
 export { AirdropUserTask_ABI, AirdropUserTask_NETWORKS }

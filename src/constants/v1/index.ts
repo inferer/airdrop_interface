@@ -8,7 +8,8 @@ const V1_FACTORY_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.BASE]: '0x9c83dCE8CA20E9aAF9D3efc003b2ea62aBC08351',
   [ChainId.ARBITRUM]: '0x9c83dCE8CA20E9aAF9D3efc003b2ea62aBC08351',
   [ChainId.SEPOLIA]: '0x9c83dCE8CA20E9aAF9D3efc003b2ea62aBC08351',
-  [ChainId.LOCAL]: ''
+  [ChainId.LOCAL]: '',
+  [ChainId.AIRDROP]: '',
 }
 
 const V1_FACTORY_INTERFACE = new Interface(V1_FACTORY_ABI)

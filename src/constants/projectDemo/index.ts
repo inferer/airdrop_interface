@@ -10,6 +10,7 @@ const PROJECTDEMO_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: arbitrumOthersContracts.projectContract,
   [ChainId.SEPOLIA]: seopliaOthersContracts.projectContract,
   [ChainId.LOCAL]: othersContracts.projectContract,
+  [ChainId.AIRDROP]: othersContracts.projectContract,
 }
 
 export { PROJECTDEMO_ABI, PROJECTDEMO_NETWORKS }

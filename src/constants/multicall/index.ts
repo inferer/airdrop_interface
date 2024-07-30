@@ -11,6 +11,7 @@ const MULTICALL_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: contractsArbitrumList.multicall,
   [ChainId.SEPOLIA]: sepoliaContractList.multicall,
   [ChainId.LOCAL]: contractList.multicall,
+  [ChainId.AIRDROP]: contractList.multicall,
 }
 
 export { MULTICALL_ABI, MULTICALL_NETWORKS }

@@ -125,7 +125,8 @@ const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
   [ChainId.BASE]: '',
   [ChainId.ARBITRUM]: 'arbitrum.',
   [ChainId.SEPOLIA]: 'sepolia.',
-  [ChainId.LOCAL]: 'Local'
+  [ChainId.LOCAL]: 'Local',
+  [ChainId.AIRDROP]: 'Airdrop',
 }
 
 export function getRouterAddress(chaidId: ChainId) {

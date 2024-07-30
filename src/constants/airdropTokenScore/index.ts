@@ -11,6 +11,7 @@ const AirdropTokenScore_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: contractsArbitrumList.airdropTokenScore,
   [ChainId.SEPOLIA]: sepoliaContractList.airdropTokenScore,
   [ChainId.LOCAL]: contractList.airdropTokenScore,
+  [ChainId.AIRDROP]: contractList.airdropTokenScore,
 }
 
 export { AirdropTokenScore_ABI, AirdropTokenScore_NETWORKS }
