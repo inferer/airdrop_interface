@@ -35,10 +35,10 @@ const SpreadingChart = () => {
     return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${opacity})`
   }
 
-  const drawContent = useCallback((diameter = 24, index = 0) => {
+  const drawContent = useCallback((_diameter = 24, index = 0) => {
+    const diameter = 40 - index * 8
     draw?.clear()
-    drawBg()
-
+    drawBg(diameter)
     const rowNums = Math.floor(drawHeight / (diameter + 1)) 
     const columnNums = Math.floor(drawWidth / (diameter + 1)) 
     const colorData = colorList[index]
@@ -51,8 +51,9 @@ const SpreadingChart = () => {
     const _subX = (diameter - 1 - 10) / 2
     draw?.circle(10).fill(getColor(colorData, 1)).move(centerX + _subX, centerY + _subX)
 
-    for(let row = 1; row < rowNums; row++) {
-      if (row > 8) break;
+    let row = 1;
+    for( ;row < rowNums; row++) {
+      if (row > rowNums / 2) break;
       // 从中间往左画
       let xL = centerX - (diameter + 1) * 1
       let y = row * (diameter + 1) + 2
@@ -75,10 +76,15 @@ const SpreadingChart = () => {
         xR = xR + (diameter + 1) * 2
         num = num - 1
       }
-
     }
-    
-
+    let fillColor = 1 - row / 10
+    if (fillColor < 0.4) fillColor = 0.4
+    for(let column = 0; column < columnNums; column++) {
+      let x = column * (diameter + 1) + 2
+      let y = row * (diameter + 1) + 2
+      
+      draw?.circle(diameter).fill(getColor(colorData, fillColor)).move(x, y)
+    }
 
   }, [colorList])
 
