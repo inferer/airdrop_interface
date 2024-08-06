@@ -56,6 +56,12 @@ export const campaignContracts =
   "campaignApply": "0xa82089F55289c3247Eb64fD3992955d0ebB9Ec51"
 }
 
+export const airdropReferContracts = {
+  "airdropNFT721":"0x6Fdd07619fd154b7936D96bb9Ed1a896626852db",
+  "referManager":"0x447486f0AA6D573D63CE51B9A0eFfCa05314fd00",
+  "airdropSenderRefer":"0x0a934DD3A35471C0DC90123400D521e1B6F136F4"
+}
+
 export default contractList
 
   

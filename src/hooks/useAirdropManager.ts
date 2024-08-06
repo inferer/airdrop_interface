@@ -111,15 +111,18 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
       const parameterType = _otherContent[1] ? JSON.parse(_otherContent[1] ?? '""') : []
       const parameterValue = airdrop[1][6] ? airdrop[1][6].split('|') : []
       const parameterInfo = parameterType.map((item: any, index: number) => ({...item, value: parameterValue[index] }))
+
+      const isAirdropRefer = airdrop[1][6] === 'ERC721'
+
       const tempData: any = {
         airdropId: airdrop[0].toString(),
         name: airdrop[1][0],
         label: airdrop[1][1],
         channel: airdrop[1][2],
         action: airdrop[1][3],
-        content: airdrop[1][4],
+        content: isAirdropRefer ? airdrop[1][3] : airdrop[1][4],
         chain: _otherContent[0],
-        landingPage: _otherContent[2],
+        landingPage: isAirdropRefer ? _otherContent[0] : _otherContent[2],
         parameterInfo: parameterInfo,
         offerToken: {
           ...offerTokenData,
@@ -141,7 +144,8 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
         completed: expireOnTimestamp < Date.now() || airdrop[7],
         realCompleted: airdrop[7],
         isExpired: expireOnTimestamp < Date.now(),
-        completedClaimed: _completedClaimed
+        completedClaimed: _completedClaimed,
+        isAirdropRefer 
 
       }
       airdropList.push(tempData)

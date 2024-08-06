@@ -6,7 +6,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 let draw: Svg | null = null
 
-const SpreadingChart = () => {
+const SpreadingChart = ({
+  onChange
+}: {
+  onChange?: (per: number) => void
+}) => {
   const [drawWidth, setDrawWidth] = useState(928)
   const [drawHeight, setDrawHeight] = useState(453)
   
@@ -35,14 +39,17 @@ const SpreadingChart = () => {
     return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${opacity})`
   }
 
-  const drawContent = useCallback((_diameter = 24, index = 0) => {
-    const diameter = 40 - index * 8
+  const drawContent = useCallback((_diameter = 24, index = 0, per = 0.5) => {
+    const diameter = 40 - (per) * 24
     draw?.clear()
     drawBg(diameter)
     const rowNums = Math.floor(drawHeight / (diameter + 1)) 
     const columnNums = Math.floor(drawWidth / (diameter + 1)) 
     const colorData = colorList[index]
-    
+    const opacity = 1 - (per - index * 0.25) / 0.25
+
+    let fillColor = opacity
+    if (fillColor < 0.4) fillColor = 0.4
     // draw?.clear()
     // 计算中间点的位置
     const centerX = Math.floor(columnNums / 2) * (diameter + 1) + 2
@@ -58,8 +65,6 @@ const SpreadingChart = () => {
       let xL = centerX - (diameter + 1) * 1
       let y = row * (diameter + 1) + 2
       let num = row
-      let fillColor = 1 - row / 10
-      if (fillColor < 0.4) fillColor = 0.4
       while(xL >= 2 && num > 0) {
         draw?.circle(diameter - 1).fill(getColor(colorData, fillColor)).move(xL, y)
         xL = xL - (diameter + 1) * 2
@@ -68,8 +73,6 @@ const SpreadingChart = () => {
 
       // 从中间往右画
       num = row
-      fillColor = 1 - row / 10
-      if (fillColor < 0.4) fillColor = 0.4
       let xR = centerX + (diameter + 1) * 1
       while(xR < (drawWidth - diameter ) && num > 0) {
         draw?.circle(diameter - 1).fill(getColor(colorData, fillColor)).move(xR, y)
@@ -77,8 +80,7 @@ const SpreadingChart = () => {
         num = num - 1
       }
     }
-    let fillColor = 1 - row / 10
-    if (fillColor < 0.4) fillColor = 0.4
+
     for(let column = 0; column < columnNums; column++) {
       let x = column * (diameter + 1) + 2
       let y = row * (diameter + 1) + 2
@@ -92,28 +94,37 @@ const SpreadingChart = () => {
     if (!draw) {
       draw = SVG().addTo('#SpreadingChart').size(928, 453)
     }
-    drawBg()
-    drawContent()
+    // drawBg()
+    drawContent(24, 3)
     
   }, [])
 
-  const [preIndex, setPreIndex] = useState(0)
-
+  const [preIndex, setPreIndex] = useState(3)
+  const [per, setPer] = useState(0.5)
   return (
     <div className=' flex'>
       <div id='SpreadingChart' className='w-[932px] h-[457px] border-2 border-[#FFD24D] border-solid rounded-[14px] mt-3 shrink-0'>
         
       </div>
-      <div className=' mt-3 ml-[55px]'
+      <div className=' mt-3 ml-[37px] relative flex'
         
       >
         <SpreadingColor value={''} 
-          onChange={index => {
-            if (index === preIndex) return
+          onChange={(index, per) => {
+            setPer(per)
+            // if (index === preIndex) return
             setPreIndex(index)
-            drawContent(24, index)
+            drawContent(24, index, per)
+            onChange && onChange(per)
           }}
         />
+        <div className=' flex flex-col justify-between text-[rgba(0,0,0,0.6)] text-[14px] font-dbold'>
+          <div>1.25</div>
+          <div>1.00</div>
+          <div>0.75</div>
+          <div>0.50</div>
+          <div>0.25</div>
+        </div>
       </div>
     </div>
   )

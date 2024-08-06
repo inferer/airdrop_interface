@@ -7,31 +7,18 @@ import LazyImage, { LazyImage2, LazyImage4 } from '../../components/LazyImage'
 import Input from '../../components/TextInput/Input'
 import TextInput from '../../components/TextInput'
 import Select, { SelectChain } from './Select'
-import { useCreateAirdrop, useCreateCallback, useCreateContractAirdrop } from '../../hooks/useAirdropSender'
 import { ApprovalState } from '../../hooks/useApproveCallback'
 import { Loading, LoadingContract, LoadingUint, LoadingX } from '../../components/Loader'
 import { ETHER, Token } from '@uniswap/sdk'
-import { AIRDROP_DURATION, CHANNEL_LIST, TWITTER_ACTION, TWITTER_UNIT, CONTRACT_ACTION, CHAIN_LIST } from '../../constants'
+import { AIRDROP_DURATION, AIRDROPREFER_TYPE } from '../../constants'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { useRouter } from 'next/router'
-import { othersContracts } from '../../constants/contractsLocal'
 import ContractABI from './ContractABI'
 import { formatInput, formatStringNumber, isAddress, verifyInput } from '../../utils'
-import { useCreateContractABI } from '../../state/airdrop/hooks'
-import SpreadingColor from './SpreadingColor'
+import { useCreateAirdropRefer, useCreateCallback } from '../../hooks/useAirdropSenderRefer'
 import SpreadingChart from './SpreadingChart'
 
-// ["airdrop 01","Social"]
-// ["0x8797847c9d63D8Ed9C30B058F408d4257A33B76C","0x8797847c9d63D8Ed9C30B058F408d4257A33B76C"]
-// ["100000000","1000000000000000000"]
-// 176890023123
-
-
 let globalApproveList: string[] = ['usdt', 'label']
-
-const twitterContent = 'https://twitter.com/intent/like?tweet_id=1720373913576952121'
-// const contractContent = othersContracts.projectContract.toLowerCase() + '.0xf4f3c8a4'
-const contractContent = othersContracts.projectContract.toLowerCase() + '.comment'
 
 export default function Create() {
   const router = useRouter()
@@ -39,19 +26,14 @@ export default function Create() {
   const [open, setOpen] = useState(false)
 
   const [name, setName] = useState('')
-  const [nameError, setNameError] = useState(false)
   const [errorCode, setErrorCode] = useState(1)
   const [approvedTokenA, setApprovedTokenA] = useState(false)
-
-  const [content, setContent] = useState(twitterContent)
 
   const {
     args,
     lockedAmount,
     lockedAmountAB,
     lockedCurrency,
-    lockedCurrencyAir,
-    lockedCurrencyAmount,
     outputAmount,
     approvalState,
     approve,
@@ -61,51 +43,24 @@ export default function Create() {
     approveAir
   } = useCreateCallback(undefined, undefined, undefined, null)
 
-  const { createStatus, handleCreateAirdrop, handleEstimateGas } = useCreateAirdrop(args, lockedCurrency as Token ?? undefined)
-  const { handleUpdateContractABI } = useCreateContractAirdrop()
-  const contractABI = useCreateContractABI()
-
+  const { createStatus, handleCreateAirdrop, handleVerifyNFTOwner } = useCreateAirdropRefer(args, lockedCurrency as Token ?? undefined)
   const label = useMemo(() => {
     return outputAmount?.currency?.symbol?.slice(4) || ''
   }, [outputAmount])
-
-  const [channel, setChannel] = useState<string>('contract')
-  const handleChangeChannel = (data: any) => {
-    setChannel(data.value)
-    if (data.value === 'twitter') {
-      setAction('like')
-      setContent(twitterContent)
-    }
-    if (data.value === 'contract') {
-      setAction('function')
-      setContent(contractContent)
-    }
-  }
-
-  const [action, setAction] = useState<string>('function')
-  const handleChange = (data: any) => {
-    setAction(data.value)
-  }
 
   const [duration, setDutation] = useState('1')
   const handleDurationChange = (data: any) => {
     setDutation(data.value)
   }
-
-  const currentChain = useMemo(() => {
-    if(chainId) {
-      return CHAIN_LIST.find(chain => chain.chainId === chainId)
-    }
-    return CHAIN_LIST[0]
-  }, [chainId])
-
-  const [chain, setChain] = useState(currentChain?.value || '')
-  const handleChangeChain = (data: any) => {
-    setChain(data.value)
+  const [type, setType] = useState('Commodity')
+  const handleTypeChange = (data: any) => {
+    setType(data.value)
   }
-  const [contractAddress, setContractAddress] = useState('')
+
   const [verifying, setVerifying] = useState(false)
   const [verifyStatus, setVerifyStatus] = useState(true)
+
+  const [contractAddress, setContractAddress] = useState('')
   const handleChangeAddress = useCallback(value => {
     if (verifying) return
     setContractAddress(value)
@@ -118,35 +73,38 @@ export default function Create() {
     }
   }, [verifying, setVerifying])
 
-  const [funName, setFunName] = useState('')
-  const [parameter, setParameter] = useState<any>([])
-
-  // useEffect(() => {
-  //   if (contractABI[0]) {
-  //     setFunName(contractABI[0].value)
-  //     setParameter(contractABI[0].inputs)
-  //   }
-  // }, [contractABI])
-
-  const handleParameterChange = useCallback((val, index) => {
-    const status = verifyInput(val, parameter[index].type)
-
-    parameter[index].value = val
-    parameter[index].status = Number(status)
-    setParameter([...parameter])
-  }, [parameter, setParameter])
-
-  const handleChangeFun = useCallback((data: any) => {
-    setFunName(data.value)
-    setParameter(data.inputs.map((item: any) => ({ ...item, status: 0 })))
-  }, [setFunName, setParameter])
+  const timer = useRef<any>(null)
+  const [verifyingNFTId, setVerifyingNFTId] = useState(false)
+  const [verifyNFTIdStatus, setVerifyNFTIdStatus] = useState(false)
+  const [nftURI, setNFTURI] = useState({
+    "name": "",
+    "description": "",
+    "image": "",
+    "strength": 20
+  })
+  const [nftId, setNftId] = useState('')
+  const handleChangeNFTId = useCallback((value) => {
+    setNftId(value)
+    if (!value) return
+    if (!contractAddress) return
+    if (timer.current) {
+      clearTimeout(timer.current)
+    }
+    timer.current = setTimeout(() => {
+      setVerifyingNFTId(true)
+      handleVerifyNFTOwner(contractAddress, value)
+        .then(res => {
+          setVerifyingNFTId(false)
+          setVerifyNFTIdStatus(!!res)
+          setNFTURI(res || {"name": "",
+          "description": "",
+          "image": "",
+          "strength": 20})
+        })
+    }, 800)
+  }, [handleVerifyNFTOwner, contractAddress])
 
   const [ladningPage, setLandingPage] = useState('')
-  useEffect(() => {
-    if (contractABI.length > 0) {
-      setVerifyStatus(true)
-    }
-  }, [contractABI])
 
   const [approveLoading, setApproveLoading] = useState(true)
   const [unApproveList, setUnApproveList] = useState<string[]>(globalApproveList)
@@ -182,158 +140,46 @@ export default function Create() {
     return approvalStateLabel === ApprovalState.NOT_APPROVED && !!outputAmount
   }, [outputAmount, approvalStateLabel])
 
-  const actionList = useMemo(() => {
-    if (channel === 'twitter') {
-      return TWITTER_ACTION
-    }
-    return CONTRACT_ACTION
-  }, [channel])
-
-  const paremeterVerify = useMemo(() => {
-    const filterList = parameter.filter((item: { status: number }) => item.status === 1)
-    return funName && filterList.length === parameter.length
-  }, [parameter, funName])
-
   const landingPageVerify = useMemo(() => {
     const ipUrlRegex = /^(https?:\/\/)?(\d{1,3}\.){3}\d{1,3}(\:\d+)?(\/\S*)?(\?\S*)?$/;
     const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9\-\_]+\.)+[a-zA-Z]{2,}(\/.*)?$/
     return urlRegex.test(ladningPage) || ipUrlRegex.test(ladningPage)
   }, [ladningPage])
 
-  const [verifyUint, setVerifyUint] = useState(0)
-
-
-  const contractTip = useMemo(() => {
-    let tip = {
-      num: 1,
-      text: 'Please select the target chain to continue'
-    }
-    if (chain && contractABI.length <= 0) {
-      tip = {
-        num: 2,
-        text: 'Please input the contract address'
-      }
-    }
-    if (chain && contractAddress && !verifyStatus && contractABI.length <= 0) {
-      tip = {
-        num: 3,
-        text: 'Please fill contract ABI for verification'
-      }
-    }
-    if (chain && contractAddress && contractABI.length > 0 && !funName) {
-      tip = {
-        num: 4,
-        text: 'Please select the target function'
-      }
-    }
-    if (chain && contractAddress && contractABI.length > 0 && funName && parameter.length > 0 && !paremeterVerify) {
-      tip = {
-        num: 5,
-        text: 'Please fill in the required parameters'
-      }
-    }
-    if (chain && contractAddress && contractABI.length > 0 && funName && paremeterVerify) {
-      tip = {
-        num: 6,
-        text: 'Please fill in the required landing page'
-      }
-    }
-    if (chain && contractAddress && contractABI.length > 0 && funName && paremeterVerify && landingPageVerify) {
-      tip = {
-        num: 7,
-        text: 'Please check the calculated offer per unit'
-      }
-    }
-    return tip
-
-  }, [chain, contractAddress, contractABI, verifyStatus, isAddress, funName, parameter, paremeterVerify, landingPageVerify])
-
-  useEffect(() => {
-    return () => {
-      handleUpdateContractABI([])
-    }
-  }, [])
-  const functionRef = useRef<any>(null)
-  useEffect(() => {
-    if (chain && contractAddress && contractABI.length > 0) {
-      if (functionRef.current) {
-        setTimeout(() => {
-          functionRef.current.scrollTop = 88
-        }, 500)
-      }
-    }
-  }, [chain, contractAddress, contractABI])
-
   const createDisabled = useMemo(() => {
-    return !name || !chain || !isAddress(contractAddress) || (!funName && !contractABI[0]) || !paremeterVerify || !landingPageVerify
-  }, [name, chain, contractAddress, funName, contractABI, paremeterVerify, landingPageVerify])
+    return !name || !isAddress(contractAddress) || !landingPageVerify
+  }, [name, contractAddress, landingPageVerify])
 
-  useEffect(() => {
-    // if (createDisabled) {
-    //   setVerifyUint(1)
-    //   setTimeout(() => {
-    //     setVerifyUint(2)
-    //   }, 1000)
-    // }
-  }, [createDisabled])
-  const [gasUnit, setGasUnit] = useState(0)
-  useEffect(() => {
-    if (paremeterVerify && landingPageVerify && funName && contractAddress) {
-      if (functionRef.current) {
-        setTimeout(() => {
-          functionRef.current.scrollTop = 888
-        }, 300)
-        setVerifyUint(1)
-        setTimeout(() => {
-          handleEstimateGas(contractAddress, funName, parameter)
-            .then((unit) => {
-              setVerifyUint(2)
-              setGasUnit(unit)
-              // setGasUnit(1)
-            })
-        }, 500)
-      }
-    } else {
-      setVerifyUint(1)
-    }
-  }, [paremeterVerify, landingPageVerify, funName, contractAddress, parameter, handleEstimateGas])
+  const [currentPer, setCurrentPer] = useState(0.5)
 
-  useEffect(() => {
-    if (paremeterVerify && landingPageVerify && funName && contractAddress) {
-      if (functionRef.current && verifyUint === 2) {
-        setTimeout(() => {
-          functionRef.current.scrollTop = 888
-        }, 300)
-      }
-    }
-  }, [paremeterVerify, landingPageVerify, funName, contractAddress, verifyUint])
+  const onSpreadingChartChange = useCallback((per: number) => {
+    setCurrentPer(1 - per + 0.25)
+  }, [])
 
-  useEffect(() => {
-    if (paremeterVerify && funName && contractAddress) {
-      if (functionRef.current) {
-        setTimeout(() => {
-          functionRef.current.scrollTop = 888
-        }, 300)
-      }
+  const coverage = useMemo(() => {
+    return Math.ceil(Number(lockedAmount) / currentPer)
+  }, [currentPer, lockedAmount])
+
+  const incomePer = useMemo(() => {
+    let _index = coverage;
+    let _amount = 0;
+    while(_index > 0) {
+      _amount += Math.pow(0.5, _index)
+      _index--;
     }
-  }, [paremeterVerify, funName, contractAddress])
+    return _amount
+  }, [currentPer, coverage])
 
   return (
     <CreateBody className='create-body-root'>
 
       <TitleWrap>
-        {/* <Link to="/swap">
-          <div>
-          <LazyImage className='icon-left cursor-pointer' src="/images/airdrop/arrow-left.svg" />
-          </div>
-        </Link> */}
-
         <div className=' text-[32px] font-fsemibold text-black leading-normal' style={{lineHeight: 'normal'}}>Create the airdrop</div>
       </TitleWrap>
       <div className='mt-6'>
         <div className='flex'>
           <ItemBox2
-            error={nameError && name.length <= 0}
+            error={name.length <= 0}
             errorCode={errorCode}
             style={{width: 555 }}
           >
@@ -357,12 +203,8 @@ export default function Create() {
           <ItemBox style={{ width: 531,  height: '100px', marginLeft: 20 }}>
             <ItemTitle>offer</ItemTitle>
             <div className='flex justify-between items-center mt-2'>
-              {/* <Input value={''} placeholder='10' onUserInput={function (input: string): void {
-                throw new Error('Function not implemented.')
-              } } /> */}
               <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>{formatStringNumber(lockedAmount)}</div>
               <TokenInfo className='flex items-center shrink-0'>
-                {/* <LazyImage2 src='/images/airdrop/eth.svg' /> */}
                 <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'24px'} />
                 <div className='text-[20px] font-fsemibold ml-1'>{lockedCurrency?.symbol}</div>
               </TokenInfo>
@@ -411,7 +253,7 @@ export default function Create() {
             <ItemBox width={180} height={100}>
               <ItemTitle>Type</ItemTitle>
               <div className='mt-2 font-fmedium'>
-                <Select defaultValue={AIRDROP_DURATION[0]} options={AIRDROP_DURATION} onChange={handleDurationChange} />
+                <Select defaultValue={AIRDROPREFER_TYPE[0]} options={AIRDROPREFER_TYPE} onChange={handleTypeChange} />
               </div>
             </ItemBox>
           </div>  
@@ -420,13 +262,13 @@ export default function Create() {
           <ItemBox width={1120} height={385} style={{paddingRight: 0}}>
             
             <div className=' flex items-center h-full'>
-              <div ref={functionRef} className={`h-[340px] overflow-auto scrollbar-container pr-4 function_ref ${contractABI.length > 0 ? 'pb-[0px]' : ''}`}>
+              <div className={`h-[340px] overflow-auto scrollbar-container pr-4 function_ref`}>
                 <div className='text-[16px] font-fbold text-[rgba(0,0,0,0.50)]'>Commodity info</div>
                 <div className='flex w-full mt-[22px]'>
                   <div className='w-full'>
                     <ItemTitle style={{ fontSize: '12px' }}>NFT contract</ItemTitle>
                     <div className='mt-2 font-fmedium '>
-                      <div className='w-[420px] rounded-xl border border-[rgba(85,123,241,0.10)] px-4 py-3 flex items-center h-[44px]'>
+                      <div className='w-[430px] rounded-xl border border-[rgba(85,123,241,0.10)] px-4 py-3 flex items-center h-[44px]'>
                         <LazyImage src='/images/airdrop/contract_logo.svg' className=' shrink-0 mr-2' />
                         <TextInput  value={contractAddress} onUserInput={value => {
                           handleChangeAddress(value)
@@ -434,19 +276,9 @@ export default function Create() {
                         {
                           verifying && <LoadingContract />
                         }
+                        
                         {
-                          !verifyStatus && contractABI.length <= 0 &&
-                          <div className=' cursor-pointer'
-                            onClick={e => {
-                              e.stopPropagation()
-                              setOpen(true)
-                            }}
-                          >
-                            <LazyImage src='/images/airdrop/contract_code.svg' />
-                          </div>
-                        }
-                        {
-                          contractABI.length > 0 &&
+                          !verifyStatus && 
                           <div className=' cursor-pointer'
                           >
                             <LazyImage src='/images/airdrop/contract_verify.svg' />
@@ -462,25 +294,15 @@ export default function Create() {
                     <ItemTitle style={{ fontSize: '12px' }}>NFT id</ItemTitle>
                     <div className='mt-2 font-fmedium '>
                       <div className='w-[308px] rounded-xl border border-[rgba(85,123,241,0.10)] px-4 py-3 flex items-center h-[44px]'>
-                        <TextInput  value={contractAddress} onUserInput={value => {
-                          handleChangeAddress(value)
+                        <TextInput  value={nftId} onUserInput={value => {
+                          handleChangeNFTId(value)
                         }} />
                         {
-                          verifying && <LoadingContract />
+                          verifyingNFTId && <LoadingContract />
                         }
+                        
                         {
-                          !verifyStatus && contractABI.length <= 0 &&
-                          <div className=' cursor-pointer'
-                            onClick={e => {
-                              e.stopPropagation()
-                              setOpen(true)
-                            }}
-                          >
-                            <LazyImage src='/images/airdrop/contract_code.svg' />
-                          </div>
-                        }
-                        {
-                          contractABI.length > 0 &&
+                          verifyNFTIdStatus && nftId &&
                           <div className=' cursor-pointer'
                           >
                             <LazyImage src='/images/airdrop/contract_verify.svg' />
@@ -516,7 +338,12 @@ export default function Create() {
               <div className='mt-[10px] text-[14px] text-[rgba(0,0,0,0.60)] ml-[120px]'>
                 <div className='text-[16px] font-fbold text-[rgba(0,0,0,0.50)]'>Commodity Preview</div>
                 <div className=' mt-6'>
-                  <LazyImage src='/images/demo2.png' className='w-[162px] h-[162px] rounded-[8px]' />
+                  {
+                    nftURI.image 
+                      ? <LazyImage src={nftURI.image} className='w-[162px] h-[162px] rounded-[8px]' />
+                      : <div className='w-[162px] h-[162px] rounded-[8px]'></div>
+                  }
+                  
                 </div>
 
               </div>
@@ -530,7 +357,7 @@ export default function Create() {
           <ItemBox width={1120} height={1349} >
             <ItemTitle>Refer Action</ItemTitle>
             <div className='px-1'>
-              <div className='text-[rgba(0,0,0,0.80)] text-[16px] font-fmedium my-[30px]'>Scoll the indicator to forcast the refer spreading outcome.</div>
+              <div className='text-[rgba(0,0,0,0.80)] text-[16px] font-fmedium my-[30px]'>Scroll the indicator to forcast the refer spreading outcome.</div>
               <ItemBox width={1080} height={207} >
                 <div className='flex items-center'>
                   <div className='w-full'>
@@ -541,7 +368,7 @@ export default function Create() {
                           Refer Percentage
                         </div>
                         <div className='text-[rgba(63,70,100,0.60)] text-[16px] font-fnormal mt-4'>
-                          50%
+                          {(currentPer * 100).toFixed(0)}%
                         </div>
                       </div>
                       <div className='w-[50%] shrink-0'>
@@ -550,7 +377,7 @@ export default function Create() {
                           Estimate coverage
                         </div>
                         <div className='text-[rgba(63,70,100,0.60)] text-[16px] font-fnormal mt-4'>
-                        30,000
+                          {coverage}
                         </div>
                       </div>
                     </div>
@@ -595,7 +422,7 @@ export default function Create() {
               </ItemBox>
               <ItemBox width={1080} height={982} style={{ marginTop: 20 }} >
                 <div className=' flex justify-center text-[14px] font-fnormal'>Spreading chart</div>
-                <SpreadingChart />
+                <SpreadingChart onChange={onSpreadingChartChange} />
                 <div className='w-full h-[428px] border border-[rgba(85,123,241,0.10) rounded-md mt-[30px]'>
                   <div className='flex items-center justify-between bg-[rgba(85,123,241,0.10)] w-full h-[48px] px-5' style={{borderRadius: '6px 6px 0px 0px'}}>
                     <div className=' flex items-center'>
@@ -710,10 +537,8 @@ export default function Create() {
                 e.stopPropagation()
                 if (createStatus === 1) return
                 if (createDisabled) return
-                const _content = contractAddress.toLowerCase() + '.' + (funName ? funName : contractABI[0].value)
-                console.log(chain, contractAddress, funName, gasUnit, _content)
                 // return
-                handleCreateAirdrop(name, label, duration, channel, action, String(gasUnit), _content, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, chain, parameter, ladningPage)
+                handleCreateAirdrop(name, label, type, contractAddress, nftId, ladningPage, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, duration)
               }}
             >
               <div className='btn-text'>

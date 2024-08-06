@@ -7,7 +7,7 @@ const SpreadingColor = ({
   onChange
 }: {
   value: string
-  onChange?: (colorIndex: number) => void
+  onChange?: (colorIndex: number, per: number) => void
 }, ref: React.Ref<unknown> | undefined) => {
   const updateAirTokenPercent = useUpdateAirTokenPercent()
   const airPercent = useAirTokenPercent()
@@ -21,6 +21,7 @@ const SpreadingColor = ({
   const [currentTop, setCurrentTop] = useState(0)
   const [preTop, setPreTop] = useState(0)
 
+  const moveTimer = useRef<any>(null)
   const handleMouseMove = useCallback(async (e) => {
     if (focusPointer) {
       let _top = e.pageY - downPageY
@@ -34,17 +35,26 @@ const SpreadingColor = ({
       setCurrentTop(_currentTop)
       const per = _currentTop / wrapInfo.height
       let colorIndex = 0
-      if (per > 0.2) colorIndex = 1
-      if (per > 0.4) colorIndex = 2
-      if (per > 0.6) colorIndex = 3
-      if (per > 0.8) colorIndex = 4
-      onChange && onChange(colorIndex)
+      if (per >= 0.25) colorIndex = 1
+      if (per >= 0.5) colorIndex = 2
+      if (per >= 0.75) colorIndex = 3
+      if (per >= 1) colorIndex = 4
+      if (moveTimer.current) {
+        clearTimeout(moveTimer.current)
+      }
+      moveTimer.current = setTimeout(() => {
+        onChange && onChange(colorIndex, per > 0.96 ? 1 : per)
+      }, 300)
+      
     }
   }, [focusPointer, downPageY, preTop, currentTop, onChange])
 
   useEffect(() => {
     if (wrapRef.current) {
       const data = wrapRef.current?.getBoundingClientRect()
+      const _initTop = Math.floor(data.height / 4) * 3 - 12
+      setCurrentTop(_initTop)
+      setPreTop(_initTop)
       setWrapInfo({ left: data.left, top: data.top, height: data.height })
     }
     updateAirTokenPercent(0)
@@ -56,7 +66,7 @@ const SpreadingColor = ({
   }, [wrapInfo, currentTop])
 
   return (
-    <div className="flex items-center px-4">
+    <div className="flex items-center pl-4">
       <div ref={wrapRef} className=" relative bg-[#F4F6FE] w-[8px] h-[453px] mx-[10px] shrink-0 rounded-[5px] flex items-center justify-between overflow-hidden"
         style={{background: 'linear-gradient(0deg, #73ABFE 0%, #52FEDF 28.7%, #FFD24D 56.05%, #FF40BE 80.66%, #FD1029 99.89%)'}}
         onMouseEnter={e => {

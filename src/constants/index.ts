@@ -277,6 +277,10 @@ export const CAMPAIGN_DURATION = [
   { value: '90', label: '90day' },
 ]
 
+export const AIRDROPREFER_TYPE = [
+  { value: 'Commodity', label: 'Commodity' },
+]
+
 export const TWITTER_UNIT: {[key: string]: string} = {
   like: '1',
   follow: '2',

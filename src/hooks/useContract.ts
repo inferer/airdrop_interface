@@ -23,6 +23,7 @@ import { PROJECTDEMO_ABI, PROJECTDEMO_NETWORKS } from '../constants/projectDemo'
 import { AirdropUserTask_ABI, AirdropUserTask_NETWORKS } from '../constants/airdropUserTask'
 import { CampaignSender_ABI, CampaignSender_NETWORKS } from '../constants/campaignSender'
 import { CampaignApply_ABI, CampaignApply_NETWORKS } from '../constants/campaignApply'
+import { AirdropSenderRefer_ABI, AirdropSenderRefer_NETWORKS } from '../constants/airdropSenderRefer'
 
 // returns null on errors
 function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
@@ -98,6 +99,11 @@ export function useMulticallContract(): Contract | null {
 export function useAirdropSenderContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && AirdropSender_NETWORKS[chainId], AirdropSender_ABI, true)
+}
+
+export function useAirdropSenderReferContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && AirdropSenderRefer_NETWORKS[chainId], AirdropSenderRefer_ABI, true)
 }
 
 export function useAirdropReceiverContract(): Contract | null {

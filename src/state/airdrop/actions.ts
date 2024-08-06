@@ -30,7 +30,8 @@ export interface IAirdrop {
   realCompleted?: boolean,
   userCompleted?: boolean,
   isExpired?: boolean,
-  completedClaimed?: string
+  completedClaimed?: string,
+  isAirdropRefer?: boolean
 }
 export interface IAlgAirdrop {
   claimed: string,
