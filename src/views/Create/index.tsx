@@ -161,14 +161,17 @@ export default function Create() {
   }, [currentPer, lockedAmount])
 
   const incomePer = useMemo(() => {
-    let _index = coverage;
+    let _index = 5;
+    if (currentPer >= 1) {
+      _index = 5
+    }
     let _amount = 0;
     while(_index > 0) {
-      _amount += Math.pow(0.5, _index)
+      _amount += Math.pow(currentPer, _index)
       _index--;
     }
-    return _amount
-  }, [currentPer, coverage])
+    return 100 + Math.floor(_amount * 100)
+  }, [currentPer])
 
   return (
     <CreateBody className='create-body-root'>
@@ -411,7 +414,7 @@ export default function Create() {
                     <div className=' flex items-center justify-between'>
                       <div className='w-[1px] h-[86px] bg-[rgba(63,70,100,0.10)] '></div>
                       <div className='text-[102px] font-fbold primary-text leading-[110%]'>
-                        200%
+                        {incomePer}%
                       </div>
                     </div>
                     <div className=' text-right'>

@@ -38,13 +38,13 @@ const SpreadingColor = ({
       if (per >= 0.25) colorIndex = 1
       if (per >= 0.5) colorIndex = 2
       if (per >= 0.75) colorIndex = 3
-      if (per >= 1) colorIndex = 4
-      if (moveTimer.current) {
-        clearTimeout(moveTimer.current)
-      }
+      if (per >= 0.96) colorIndex = 4
+      // if (moveTimer.current) {
+      //   clearTimeout(moveTimer.current)
+      // }
       moveTimer.current = setTimeout(() => {
         onChange && onChange(colorIndex, per > 0.96 ? 1 : per)
-      }, 300)
+      }, 200)
       
     }
   }, [focusPointer, downPageY, preTop, currentTop, onChange])

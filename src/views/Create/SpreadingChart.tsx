@@ -15,11 +15,11 @@ const SpreadingChart = ({
   const [drawHeight, setDrawHeight] = useState(453)
   
   const [colorList, setColorList] = useState([
-    [253, 16, 41],
-    [255, 64, 190],
-    [255, 210, 77],
-    [82, 254, 223],
     [115, 171, 254],
+    [82, 254, 223],
+    [255, 210, 77],
+    [255, 64, 190],
+    [253, 16, 41],
   ])
 
   const drawBg = (diameter = 24) => {
@@ -36,16 +36,46 @@ const SpreadingChart = ({
   }
 
   const getColor = (color: number[] = [], opacity = 1) => {
-    return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${opacity})`
+    return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${1})`
   }
 
-  const drawContent = useCallback((_diameter = 24, index = 0, per = 0.5) => {
+  const getColor2 = (colorPer: number) => {
+    let color1 = colorList[0]
+    let color2 = colorList[1]
+    let colorPer2 = 0
+    if (colorPer < 0.25) {
+      color1 = colorList[0]
+      color2 = colorList[1]
+      colorPer2 = colorPer
+    } else if (colorPer < 0.5 && colorPer >= 0.25) {
+      color1 = colorList[1]
+      color2 = colorList[2]
+      colorPer2 = colorPer - 0.25
+    } else if (colorPer < 0.75 && colorPer >= 0.5) {
+      color1 = colorList[2]
+      color2 = colorList[3]
+      colorPer2 = colorPer - 0.5
+    } else {
+      color1 = colorList[3]
+      color2 = colorList[4]
+      colorPer2 = colorPer - 0.75
+    } 
+
+    const colorNew = color1.map((cl, index) => {
+      return cl + Math.ceil((color2[index] - cl) * (colorPer2 / 0.25))
+    })
+    return colorNew
+  }
+
+  const drawContent = useCallback((_diameter = 24, index = 0, per = 0.75) => {
+    const colorPer = 1 - per;
+
     const diameter = 40 - (per) * 24
     draw?.clear()
     drawBg(diameter)
     const rowNums = Math.floor(drawHeight / (diameter + 1)) 
     const columnNums = Math.floor(drawWidth / (diameter + 1)) 
-    const colorData = colorList[index]
+    const colorData = getColor2(colorPer)
     const opacity = 1 - (per - index * 0.25) / 0.25
 
     let fillColor = opacity
@@ -100,7 +130,10 @@ const SpreadingChart = ({
   }, [])
 
   const [preIndex, setPreIndex] = useState(3)
-  const [per, setPer] = useState(0.5)
+  const [per, setPer] = useState(0.25)
+
+  
+
   return (
     <div className=' flex'>
       <div id='SpreadingChart' className='w-[932px] h-[457px] border-2 border-[#FFD24D] border-solid rounded-[14px] mt-3 shrink-0'>
