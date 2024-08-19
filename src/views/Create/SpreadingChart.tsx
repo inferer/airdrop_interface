@@ -26,17 +26,30 @@ const SpreadingChart = ({
     const rowNums = Math.floor(drawHeight / (diameter + 1)) 
     const columnNums = Math.floor(drawWidth / (diameter + 1)) 
     for(let row = 0; row < rowNums; row++) {
-      for(let column = 0; column < columnNums; column++) {
-        let x = column * (diameter + 1) + 2
-        let y = row * (diameter + 1) + 2
-       
-        draw?.circle(diameter).fill('#EFEFEF').move(x, y)
+      const centerX = Math.floor(columnNums / 2) * (diameter + 1) + 2
+      let xL = centerX - (diameter + 1) * 1
+      let y = row * (diameter + 1) + 2
+      while(xL > 0) {
+        draw?.circle(diameter).fill('#EFEFEF').move(xL, y)
+        xL = xL - (diameter + 1) - 0
       }
+      let xR = centerX 
+      while (xR < (drawWidth - diameter )) {
+        draw?.circle(diameter).fill('#EFEFEF').move(xR, y)
+        xR = xR + (diameter + 1)  + 0
+      }
+      // for(let column = 0; column < columnNums; column++) {
+      //   let x = column * (diameter + 1) + 2
+      //   let y = row * (diameter + 1) + 2
+       
+      //   draw?.circle(diameter).fill('#EFEFEF').move(x, y)
+      // }
+      
     }
   }
 
   const getColor = (color: number[] = [], opacity = 1) => {
-    return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${1})`
+    return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${opacity})`
   }
 
   const getColor2 = (colorPer: number) => {
@@ -78,8 +91,7 @@ const SpreadingChart = ({
     const colorData = getColor2(colorPer)
     const opacity = 1 - (per - index * 0.25) / 0.25
 
-    let fillColor = opacity
-    if (fillColor < 0.4) fillColor = 0.4
+    
     // draw?.clear()
     // 计算中间点的位置
     const centerX = Math.floor(columnNums / 2) * (diameter + 1) + 2
@@ -95,7 +107,10 @@ const SpreadingChart = ({
       let xL = centerX - (diameter + 1) * 1
       let y = row * (diameter + 1) + 2
       let num = row
+      let fillColor = 1 - (num * 0.1)
+      if (fillColor < 0.4) fillColor = 0.4
       while(xL >= 2 && num > 0) {
+        
         draw?.circle(diameter - 1).fill(getColor(colorData, fillColor)).move(xL, y)
         xL = xL - (diameter + 1) * 2
         num = num - 1
@@ -105,12 +120,13 @@ const SpreadingChart = ({
       num = row
       let xR = centerX + (diameter + 1) * 1
       while(xR < (drawWidth - diameter ) && num > 0) {
+        
         draw?.circle(diameter - 1).fill(getColor(colorData, fillColor)).move(xR, y)
         xR = xR + (diameter + 1) * 2
         num = num - 1
       }
     }
-
+    let fillColor = 1 - (row * 0.1)
     for(let column = 0; column < columnNums; column++) {
       let x = column * (diameter + 1) + 2
       let y = row * (diameter + 1) + 2
