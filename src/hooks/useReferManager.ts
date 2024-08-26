@@ -34,7 +34,6 @@ export const getReferNodeList = async (multi: Contract, airdropId: string, chaid
       addr: node.addr
     }
   })
-
   return nodeListNew
 }
 
@@ -50,12 +49,13 @@ export function useAirdropReferManager() {
       const list = await getReferNodeList(multi, airdropId, chainId)
       return list
     }
+    return []
   }, [multi, dispatch, chainId, router.query])
 
   const handleReferTo = useCallback(async (airdropId: string, pAddress: string) => {
 
     const res = await referTo(airdropId, pAddress)
-    console.log(res, 222222)
+    
     return res
   }, [referManager])
   return {

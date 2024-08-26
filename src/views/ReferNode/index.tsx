@@ -4,8 +4,10 @@ import Head from 'next/head';
 import { useAirdropReferManager } from '../../hooks/useReferManager';
 import { useRouter } from 'next/router';
 import { Loading, Loading2, LoadingProject, LoadingUser, LoadingXUser } from '../../components/Loader';
+import { useActiveWeb3React } from '../../hooks';
 
 const ReferTree = () => {
+  const { account } = useActiveWeb3React()
   const router = useRouter()
   const refContainer = useRef(null);
   const addNode = useRef<HTMLDivElement>(null)
@@ -32,13 +34,17 @@ const ReferTree = () => {
       addNode.current.style.left = '-10000px'
 
       const airdropId = router.query.airdropId as string
-      const pAddress = nodeList2[selectNode.id - 1].addr
+      const pAddress = nodeList2.length > 0 ? nodeList2[selectNode.id - 1].addr : account
       const res = await handleReferTo(airdropId, pAddress)
       setAdding(false)
       if (res.status !== 0) {
         alert('Error')
         return
       } 
+      if (nodeList2.length <= 0) {
+        window.location.reload()
+        return
+      }
       let newNodeList = nodeList2.map(item => ({...item}))
       const newNode = {
         "id": nodeList2.length + 1,
@@ -80,7 +86,7 @@ const ReferTree = () => {
       })
       setNodeList2([...newNodeList, newNode])
     }
-  }, [selectNode, nodeList2, setNodeList2, handleReferTo, setAdding, router.query])
+  }, [selectNode, nodeList2, setNodeList2, handleReferTo, setAdding, router.query, account])
 
   useEffect(() => {
     handleInitReferNodeList()
@@ -94,6 +100,8 @@ const ReferTree = () => {
         const Core = window.Core
         if (Core) {
           clearInterval(timer)
+        } else {
+          return
         }
         const xData: any = {
 
@@ -175,6 +183,17 @@ const ReferTree = () => {
           }
         })
         lfRef.current = lf
+
+        if (dataList.length <= 0) {
+          if (addNode.current) {
+            addNode.current.style.left = (document.body.clientWidth / 2)+ 'px'
+            addNode.current.style.top = (document.body.clientHeight / 2) + 'px'
+          }
+        } else {
+          if (addNode.current) {
+            addNode.current.style.left = '-10000px'
+          }
+        }
       }, 100)
 
     }
