@@ -23,6 +23,8 @@ const ReferTree = () => {
   const handleInitReferNodeList = useCallback(async () => {
     const dataList = await handleGetReferNodeList()
     console.log(dataList)
+    // @ts-ignore
+    window.nodeList = dataList
     setNodeList(dataList)
     setNodeList2(dataList)
     
@@ -92,6 +94,7 @@ const ReferTree = () => {
     handleInitReferNodeList()
   }, [handleInitReferNodeList])
 
+  const initTimer = useRef<any>(null)
   useEffect(() => {
     const dataList = nodeList
     if (refContainer.current && dataList) {
@@ -183,8 +186,14 @@ const ReferTree = () => {
           }
         })
         lfRef.current = lf
-
-        if (dataList.length <= 0) {
+        
+        
+      }, 100)
+    }
+    if (!initTimer.current) {
+      initTimer.current = setTimeout(() => {
+        // @ts-ignore
+        if (window.nodeList.length <= 0) {
           if (addNode.current) {
             addNode.current.style.left = (document.body.clientWidth / 2)+ 'px'
             addNode.current.style.top = (document.body.clientHeight / 2) + 'px'
@@ -194,16 +203,15 @@ const ReferTree = () => {
             addNode.current.style.left = '-10000px'
           }
         }
-      }, 100)
-
+      }, 1500)
     }
   }, [nodeList, setSelectNode])
 
   return (
     <>
       <Head>
-        <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js" async></script>
-        <link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet" />
+        <script src="/js/logicflow.min.js" async></script>
+        <link href="/js/logicflow.min.css" rel="stylesheet" />
       </Head>
       <div className=" w-screen h-screen" ref={refContainer}></div>
 
