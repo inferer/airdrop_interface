@@ -80,7 +80,7 @@ const ReferTree = () => {
       })
       setNodeList2([...newNodeList, newNode])
     }
-  }, [selectNode, nodeList2, setNodeList2, handleReferTo, setAdding])
+  }, [selectNode, nodeList2, setNodeList2, handleReferTo, setAdding, router.query])
 
   useEffect(() => {
     handleInitReferNodeList()
@@ -183,7 +183,7 @@ const ReferTree = () => {
   return (
     <>
       <Head>
-        <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@logicflow/core/dist/index.min.js" async></script>
         <link href="https://cdn.jsdelivr.net/npm/@logicflow/core/lib/style/index.min.css" rel="stylesheet" />
       </Head>
       <div className=" w-screen h-screen" ref={refContainer}></div>
