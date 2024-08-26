@@ -24,6 +24,7 @@ import { AirdropUserTask_ABI, AirdropUserTask_NETWORKS } from '../constants/aird
 import { CampaignSender_ABI, CampaignSender_NETWORKS } from '../constants/campaignSender'
 import { CampaignApply_ABI, CampaignApply_NETWORKS } from '../constants/campaignApply'
 import { AirdropSenderRefer_ABI, AirdropSenderRefer_NETWORKS } from '../constants/airdropSenderRefer'
+import { AirdropReferManager_ABI, AirdropReferManager_NETWORKS } from '../constants/airdropReferManager'
 
 // returns null on errors
 function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
@@ -104,6 +105,11 @@ export function useAirdropSenderContract(): Contract | null {
 export function useAirdropSenderReferContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && AirdropSenderRefer_NETWORKS[chainId], AirdropSenderRefer_ABI, true)
+}
+
+export function useAirdropReferManagerContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && AirdropReferManager_NETWORKS[chainId], AirdropReferManager_ABI, true)
 }
 
 export function useAirdropReceiverContract(): Contract | null {

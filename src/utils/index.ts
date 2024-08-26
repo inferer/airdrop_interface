@@ -9,6 +9,7 @@ import ERC20_ABI from '../constants/abis/erc20.json'
 import { OWER_ADDRESS, ROUTER_ADDRESS2 } from '../constants'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@uniswap/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
+import { BSC_RPC_URLS_LOCAL } from '../connectors';
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -210,6 +211,23 @@ export function getContract(address: string, ABI: any, library: Web3Provider, ac
   }
 
   return new Contract(address, ABI, getProviderOrSigner(library, account) as any)
+}
+export function getContract2(address: string, ABI: any): Contract {
+  if (!isAddress(address) || address === AddressZero) {
+    throw Error(`Invalid 'address' parameter '${address}'.`)
+  }
+  const rpc = BSC_RPC_URLS_LOCAL[0]
+  const privateKey = "YOUR_PRIVATE_KEY";
+ 
+  // 创建钱包
+  const wallet = new ethers.Wallet(privateKey);
+  // const provider = new ethers.providers.JsonRpcProvider(rpc)
+  // @ts-ignore
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  // 创建一个交易签名者，使用钱包和提供者
+  const signer = wallet.connect(provider);
+
+  return new Contract(address, ABI, signer)
 }
 
 

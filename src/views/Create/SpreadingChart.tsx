@@ -13,6 +13,8 @@ const SpreadingChart = ({
 }) => {
   const [drawWidth, setDrawWidth] = useState(928)
   const [drawHeight, setDrawHeight] = useState(453)
+  const [borderColor, setBorderColor] = useState('')
+  const [bgColor, setBgrColor] = useState('')
   
   const [colorList, setColorList] = useState([
     [115, 171, 254],
@@ -25,16 +27,19 @@ const SpreadingChart = ({
   const drawBg = (diameter = 24) => {
     const rowNums = Math.floor(drawHeight / (diameter + 1)) 
     const columnNums = Math.floor(drawWidth / (diameter + 1)) 
+
     for(let row = 0; row < rowNums; row++) {
-      const centerX = Math.floor(columnNums / 2) * (diameter + 1) + 2
+      // const centerX = Math.floor(columnNums / 2) * (diameter + 1) + 2
+      const centerX = Math.floor(drawWidth / 2)
+
       let xL = centerX - (diameter + 1) * 1
       let y = row * (diameter + 1) + 2
-      while(xL > 0) {
+      while(xL > -diameter) {
         draw?.circle(diameter).fill('#EFEFEF').move(xL, y)
         xL = xL - (diameter + 1) - 0
       }
       let xR = centerX 
-      while (xR < (drawWidth - diameter )) {
+      while (xR < (drawWidth )) {
         draw?.circle(diameter).fill('#EFEFEF').move(xR, y)
         xR = xR + (diameter + 1)  + 0
       }
@@ -79,22 +84,29 @@ const SpreadingChart = ({
     })
     return colorNew
   }
-
+  const [rowCol, setRowCol] = useState({row: 0, col: 0})
   const drawContent = useCallback((_diameter = 24, index = 0, per = 0.75) => {
     const colorPer = 1 - per;
-
     const diameter = 40 - (per) * 24
-    draw?.clear()
-    drawBg(diameter)
     const rowNums = Math.floor(drawHeight / (diameter + 1)) 
     const columnNums = Math.floor(drawWidth / (diameter + 1)) 
     const colorData = getColor2(colorPer)
-    const opacity = 1 - (per - index * 0.25) / 0.25
 
-    
+    setBgrColor(getColor(colorData, 0.06))
+    setBorderColor(getColor(colorData, 1))
+
+    // if (Math.abs(rowNums - rowCol.row) < 1 || Math.abs(columnNums - rowCol.col) < 1) {
+    //   setRowCol({row: rowNums, col: columnNums})
+    //   return
+    // }    
+    setRowCol({row: rowNums, col: columnNums})
+    draw?.clear()
+    drawBg(diameter)
+
     // draw?.clear()
     // 计算中间点的位置
-    const centerX = Math.floor(columnNums / 2) * (diameter + 1) + 2
+    // const centerX = Math.floor(columnNums / 2) * (diameter + 1) + 2
+    const centerX = Math.floor(drawWidth / 2)
     const centerY = 2
     draw?.circle(diameter - 1).fill('#ffffff').stroke({ width: 1, color: getColor(colorData, 1) }).move(centerX, centerY)
     const _subX = (diameter - 1 - 10) / 2
@@ -109,8 +121,7 @@ const SpreadingChart = ({
       let num = row
       let fillColor = 1 - (num * 0.1)
       if (fillColor < 0.4) fillColor = 0.4
-      while(xL >= 2 && num > 0) {
-        
+      while(xL >= -diameter && num > 0) {
         draw?.circle(diameter - 1).fill(getColor(colorData, fillColor)).move(xL, y)
         xL = xL - (diameter + 1) * 2
         num = num - 1
@@ -119,22 +130,27 @@ const SpreadingChart = ({
       // 从中间往右画
       num = row
       let xR = centerX + (diameter + 1) * 1
-      while(xR < (drawWidth - diameter ) && num > 0) {
-        
+      while(xR < (drawWidth ) && num > 0) {
         draw?.circle(diameter - 1).fill(getColor(colorData, fillColor)).move(xR, y)
         xR = xR + (diameter + 1) * 2
         num = num - 1
       }
     }
-    let fillColor = 1 - (row * 0.1)
-    for(let column = 0; column < columnNums; column++) {
-      let x = column * (diameter + 1) + 2
-      let y = row * (diameter + 1) + 2
-      
-      draw?.circle(diameter).fill(getColor(colorData, fillColor)).move(x, y)
+    let fillColor = 0.4
+    let xL = centerX - (diameter + 1) * 1
+    let y = (row) * (diameter + 1) + 2
+    while(xL >= -diameter) {
+      draw?.circle(diameter - 1).fill(getColor(colorData, fillColor)).move(xL, y)
+      xL = xL - (diameter + 1) * 1
     }
+    let xR = centerX
+    while(xR < (drawWidth )) {
+      draw?.circle(diameter - 1).fill(getColor(colorData, fillColor)).move(xR, y)
+      xR = xR + (diameter + 1) * 1
+    }
+      
 
-  }, [colorList])
+  }, [colorList, rowCol])
 
   useEffect(() => {
     if (!draw) {
@@ -148,11 +164,14 @@ const SpreadingChart = ({
   const [preIndex, setPreIndex] = useState(3)
   const [per, setPer] = useState(0.25)
 
-  
-
   return (
     <div className=' flex'>
-      <div id='SpreadingChart' className='w-[932px] h-[457px] border-2 border-[#FFD24D] border-solid rounded-[14px] mt-3 shrink-0'>
+      <div id='SpreadingChart' className='w-[932px] h-[457px] border-2 border-[#FFD24D] border-solid rounded-[14px] mt-3 shrink-0 overflow-hidden'
+        style={{
+          borderColor: borderColor,
+          backgroundColor: bgColor
+        }}
+      >
         
       </div>
       <div className=' mt-3 ml-[37px] relative flex'

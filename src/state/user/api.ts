@@ -54,3 +54,13 @@ export const addUser2Pool = async (
 
   return res && res.data || {}
 }
+
+
+export const referTo = async (
+  airdropId: string, 
+  pAddress: string, 
+) => {
+  const res = await poster(`/api/airdrop-manager/referTo`, { airdropId, pAddress})
+
+  return res && res || {}
+}

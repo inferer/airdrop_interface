@@ -44,7 +44,7 @@ const SpreadingColor = ({
       // }
       moveTimer.current = setTimeout(() => {
         onChange && onChange(colorIndex, per > 0.96 ? 1 : per)
-      }, 200)
+      }, 10)
       
     }
   }, [focusPointer, downPageY, preTop, currentTop, onChange])

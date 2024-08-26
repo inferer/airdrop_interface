@@ -96,6 +96,7 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@irys/query": "^0.0.8",
+    "@logicflow/core": "^2.0.2",
     "@svgdotjs/svg.js": "^3.2.4",
     "@toast-ui/editor": "^3.2.2",
     "@uiw/react-markdown-editor": "^6.1.1",
