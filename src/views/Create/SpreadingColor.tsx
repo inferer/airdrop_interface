@@ -66,27 +66,36 @@ const SpreadingColor = ({
   }, [wrapInfo, currentTop])
 
   return (
-    <div className="flex items-center pl-4">
+    <div className="flex items-center pl-4 mt-3 pl-[37px] relative"
+      onMouseEnter={e => {
+        e.stopPropagation()
+        setShowpointer(true)
+      }}
+      onMouseLeave={e => {
+        e.stopPropagation()
+        setShowpointer(false)
+        setFocusPointer(false)
+        setPreTop(currentTop)
+      }}
+      onMouseMove={e => {
+        e.stopPropagation()
+        handleMouseMove(e)
+      }}
+      onMouseUp={e => {
+        e.stopPropagation()
+        // setFocusPointer(false)
+      }}
+      // onMouseOut={e => {
+      //   e.stopPropagation()
+      //   setFocusPointer(false)
+      //   setPreTop(currentTop)
+      // }}
+    >
       <div ref={wrapRef} className=" relative bg-[#F4F6FE] w-[8px] h-[453px] mx-[10px] shrink-0 rounded-[5px] flex items-center justify-between overflow-hidden"
         style={{background: 'linear-gradient(0deg, #73ABFE 0%, #52FEDF 28.7%, #FFD24D 56.05%, #FF40BE 80.66%, #FD1029 99.89%)'}}
-        onMouseEnter={e => {
-          e.stopPropagation()
-          setShowpointer(true)
-        }}
-        onMouseLeave={e => {
-          e.stopPropagation()
-          setShowpointer(false)
-          setFocusPointer(false)
-        }}
-        onMouseMove={e => {
-          e.stopPropagation()
-          handleMouseMove(e)
-        }}
-        onMouseUp={e => {
-          e.stopPropagation()
-          setFocusPointer(false)
-        }}
+        
       >
+        
         <div ref={pointerRef} className="w-[16px] h-[16px] border-2 border-white border-solid rounded-[18px] cursor-pointer absolute -left-[4px] top-10" 
           style={{ top: pointerTop }}
           onMouseDown={e => {
@@ -95,18 +104,21 @@ const SpreadingColor = ({
             setFocusPointer(true)
           }}
           onMouseUp={e => {
-            e.stopPropagation()
-            setFocusPointer(false)
-            setPreTop(currentTop)
+            // e.stopPropagation()
+            // setFocusPointer(false)
+            // setPreTop(currentTop)
           }}
-          onMouseOut={e => {
-            e.stopPropagation()
-            setFocusPointer(false)
-            setPreTop(currentTop)
-          }}
+          
           >
         </div>
-        
+          
+      </div>
+      <div className=' flex flex-col justify-between text-[rgba(0,0,0,0.6)] text-[14px] font-dbold h-full'>
+        <div>1.25</div>
+        <div>1.00</div>
+        <div>0.75</div>
+        <div>0.50</div>
+        <div>0.25</div>
       </div>
     </div>
   )

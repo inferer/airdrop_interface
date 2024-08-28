@@ -17,24 +17,30 @@ export const getReferManagerAddress = (chainId: ChainId) => {
 }
 
 export const getReferNodeList = async (multi: Contract, airdropId: string, chaidId: ChainId) => {
-  const calls = []
+  try {
+    const calls = []
     calls.push({
       address: getReferManagerAddress(chaidId),
       name: 'getReferNodeList',
       params: [airdropId]
     })
 
-  const [ nodeList ] = await multicall(multi, AirdropReferManager_ABI, calls)
-  const list = nodeList[0] || []
-  const nodeListNew = list.map((node: any) => {
-    return {
-      id: node.id.toString(),
-      pid: node.pid.toString(),
-      index: node.index.toString(),
-      addr: node.addr
-    }
-  })
-  return nodeListNew
+    const [ nodeList ] = await multicall(multi, AirdropReferManager_ABI, calls)
+    const list = nodeList && nodeList[0] || []
+    const nodeListNew = list.map((node: any) => {
+      return {
+        id: node.id.toString(),
+        pid: node.pid.toString(),
+        index: node.index.toString(),
+        addr: node.addr
+      }
+    })
+    return nodeListNew
+  } catch(error) {
+    console.log(error)
+    return []
+  }
+  
 }
 
 export function useAirdropReferManager() {

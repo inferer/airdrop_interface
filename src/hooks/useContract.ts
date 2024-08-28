@@ -93,8 +93,9 @@ export function usePairContract(pairAddress?: string, withSignerIfPossible?: boo
 }
 
 export function useMulticallContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false)
+  const { account, chainId } = useActiveWeb3React()
+  const _chainId = account && chainId ? chainId : ChainId.LOCAL
+  return useContract(MULTICALL_NETWORKS[_chainId], MULTICALL_ABI, false)
 }
 
 export function useAirdropSenderContract(): Contract | null {

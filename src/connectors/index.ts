@@ -52,7 +52,7 @@ export const network = new NetworkConnector({
     [ChainId.SEPOLIA]: BSC_RPC_URLS_SEPOLIA[0], 
     [ChainId.LOCAL]: BSC_RPC_URLS_LOCAL[0], 
   },
-  defaultChainId: ChainId.MAINNET
+  defaultChainId: ChainId.LOCAL
 })
 
 let networkLibrary: Web3Provider | undefined

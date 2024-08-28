@@ -174,9 +174,7 @@ const SpreadingChart = ({
       >
         
       </div>
-      <div className=' mt-3 ml-[37px] relative flex'
-        
-      >
+      
         <SpreadingColor value={''} 
           onChange={(index, per) => {
             setPer(per)
@@ -186,14 +184,7 @@ const SpreadingChart = ({
             onChange && onChange(per)
           }}
         />
-        <div className=' flex flex-col justify-between text-[rgba(0,0,0,0.6)] text-[14px] font-dbold'>
-          <div>1.25</div>
-          <div>1.00</div>
-          <div>0.75</div>
-          <div>0.50</div>
-          <div>0.25</div>
-        </div>
-      </div>
+        
     </div>
   )
 }

@@ -203,7 +203,7 @@ const ReferTree = () => {
             addNode.current.style.left = '-10000px'
           }
         }
-      }, 1500)
+      }, 3000)
     }
   }, [nodeList, setSelectNode])
 
