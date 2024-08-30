@@ -206,6 +206,20 @@ const ReferTree = () => {
       }, 3000)
     }
   }, [nodeList, setSelectNode])
+  const accountTime = useRef<any>(null)
+  useEffect(() => {
+    // @ts-ignore
+    window.loginAccount = account
+    if (!accountTime.current) {
+      accountTime.current = setTimeout(() => {
+        // @ts-ignore
+        if (!window.loginAccount) {
+          router.push('/project/create')
+        }
+      }, 2000)
+    }
+    
+  }, [account])
 
   return (
     <>

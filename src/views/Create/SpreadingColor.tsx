@@ -66,7 +66,7 @@ const SpreadingColor = ({
   }, [wrapInfo, currentTop])
 
   return (
-    <div className="flex items-center pl-4 mt-3 pl-[37px] relative"
+    <div className="flex items-center mt-3 pl-[37px] relative w-full"
       onMouseEnter={e => {
         e.stopPropagation()
         setShowpointer(true)
@@ -91,13 +91,20 @@ const SpreadingColor = ({
       //   setPreTop(currentTop)
       // }}
     >
-      <div ref={wrapRef} className=" relative bg-[#F4F6FE] w-[8px] h-[453px] mx-[10px] shrink-0 rounded-[5px] flex items-center justify-between overflow-hidden"
+      <div ref={wrapRef} className=" relative bg-[#F4F6FE] w-[8px] h-[453px] mx-[10px] shrink-0 rounded-[5px] flex items-center justify-between "
         style={{background: 'linear-gradient(0deg, #73ABFE 0%, #52FEDF 28.7%, #FFD24D 56.05%, #FF40BE 80.66%, #FD1029 99.89%)'}}
         
       >
         
-        <div ref={pointerRef} className="w-[16px] h-[16px] border-2 border-white border-solid rounded-[18px] cursor-pointer absolute -left-[4px] top-10" 
-          style={{ top: pointerTop }}
+        <div ref={pointerRef} className="w-[20px] h-[20px] border-2 border-white border-solid rounded-[18px] cursor-pointer absolute -left-[6px] top-10" 
+          style={{ 
+            top: pointerTop,
+            fill: '#FFD24D',
+            strokeWidth: '2px',
+            stroke: '#FFF',
+            filter: 'drop-shadow(0px 4px 20px rgba(0, 0, 0, 0.05))', 
+            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.05)'
+          }}
           onMouseDown={e => {
             e.stopPropagation()
             setDownPageY(e.pageY)

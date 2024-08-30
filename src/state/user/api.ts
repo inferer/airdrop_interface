@@ -60,7 +60,12 @@ export const referTo = async (
   airdropId: string, 
   pAddress: string, 
 ) => {
-  const res = await poster(`/api/airdrop-manager/referTo`, { airdropId, pAddress})
+  try {
+    const res = await poster(`/api/airdrop-manager/referTo`, { airdropId, pAddress})
 
-  return res && res || {}
+    return res && res || {}
+  } catch (error) {
+    return {}
+  }
+  
 }
