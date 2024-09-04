@@ -175,6 +175,25 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_airdropId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getUserReferAwardTotal",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "initialize",
     "outputs": [],
@@ -260,6 +279,19 @@
         "type": "uint256"
       }
     ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_airdropManager",
+        "type": "address"
+      }
+    ],
+    "name": "setAirdropManager",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },

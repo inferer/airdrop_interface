@@ -3,6 +3,12 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
         "indexed": true,
         "internalType": "address",
         "name": "sender",
@@ -137,6 +143,11 @@
       {
         "internalType": "uint256",
         "name": "completedClaimed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "referId",
         "type": "uint256"
       }
     ],
@@ -282,6 +293,11 @@
           {
             "internalType": "uint256",
             "name": "completedClaimed",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "referId",
             "type": "uint256"
           }
         ],
@@ -491,6 +507,19 @@
   },
   {
     "inputs": [],
+    "name": "referManager",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -510,6 +539,19 @@
       }
     ],
     "name": "setOperator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_referManager",
+        "type": "address"
+      }
+    ],
+    "name": "setReferManager",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -589,6 +631,24 @@
       }
     ],
     "name": "updateAirdrop",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_airdropId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateAirdropClaimed",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

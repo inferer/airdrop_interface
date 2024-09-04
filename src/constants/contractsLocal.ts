@@ -27,8 +27,8 @@ const contractList =
   "router02": "0x2a26e48fc6d26cC0B9B78cfD69e68e2ee6F31Ee8",
   "airdropTokenScoreLogic": "0xc80E7e7e4E16aDfcf9A17fccC4d3F6CBdaf7fE34",
   "airdropTokenScore": "0xCe0023F59f235b877233418be3BfE1e9378a50E1",
-  "airdropManagerLogic": "0x77891eF17Dc381c27CeCBc08E801d5B3f5f0c3A4",
-  "airdropManager": "0x0e3CA4C4d479A22ff498c4560887894899258699",
+  "airdropManagerLogic": "0x4766b213E1bd012E00a9f1F774FCB05513D3E615",
+  "airdropManager": "0x4B51ffb515Ad4ef2a7cCC1ed24a516aE6D2465C0",
   "airdropUserTaskLogic": "0x6fE1886F866aC159b771D5caa229a4295061c907",
   "airdropUserTask": "0x8175F88E0438A2BD3E6304E4dA281EB7066F0929",
   "airdropSenderLogic": "0xC1E57146A8C41Ac2e6fF48cb0338f4B882Cc8540",
@@ -58,8 +58,8 @@ export const campaignContracts =
 
 export const airdropReferContracts = {
   "airdropNFT721":"0x6Fdd07619fd154b7936D96bb9Ed1a896626852db",
-  "referManager":"0x447486f0AA6D573D63CE51B9A0eFfCa05314fd00",
-  "airdropSenderRefer":"0x0a934DD3A35471C0DC90123400D521e1B6F136F4"
+  "referManager":"0xf7B8D9Cc924780f9655f99D063468b2a811202c1",
+  "airdropSenderRefer":"0xa26Be196e8d10a986a404d40E684B0114b557b09"
 }
 
 export default contractList

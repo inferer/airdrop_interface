@@ -89,6 +89,32 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "airdropReferManager",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_airdropId",
+        "type": "uint256"
+      }
+    ],
+    "name": "completeAirdrop",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "string[]",
@@ -184,6 +210,19 @@
       }
     ],
     "name": "setAirdropManager",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_airdropReferManager",
+        "type": "address"
+      }
+    ],
+    "name": "setAirdropReferManager",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

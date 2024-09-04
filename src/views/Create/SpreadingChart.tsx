@@ -102,7 +102,6 @@ const SpreadingChart = ({
     setRowCol({row: rowNums, col: columnNums})
     draw?.clear()
     drawBg(diameter)
-
     // draw?.clear()
     // 计算中间点的位置
     // const centerX = Math.floor(columnNums / 2) * (diameter + 1) + 2
@@ -158,7 +157,10 @@ const SpreadingChart = ({
     }
     // drawBg()
     drawContent(24, 3)
-    
+
+    return () => {
+      draw = null
+    }
   }, [])
 
   const [preIndex, setPreIndex] = useState(3)
