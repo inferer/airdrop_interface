@@ -15,6 +15,7 @@ const SpreadingChart = ({
   const [drawHeight, setDrawHeight] = useState(453)
   const [borderColor, setBorderColor] = useState('')
   const [bgColor, setBgrColor] = useState('')
+  const [currentColor, setCurrentColor] = useState('')
   
   const [colorList, setColorList] = useState([
     [115, 171, 254],
@@ -93,6 +94,7 @@ const SpreadingChart = ({
     const colorData = getColor2(colorPer)
 
     setBgrColor(getColor(colorData, 0.06))
+    setCurrentColor(getColor(colorData, 1))
     setBorderColor(getColor(colorData, 1))
 
     // if (Math.abs(rowNums - rowCol.row) < 1 || Math.abs(columnNums - rowCol.col) < 1) {
@@ -177,7 +179,8 @@ const SpreadingChart = ({
         
       </div>
       
-        <SpreadingColor value={''} 
+        <SpreadingColor 
+          value={currentColor} 
           onChange={(index, per) => {
             setPer(per)
             // if (index === preIndex) return

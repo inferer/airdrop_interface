@@ -93,7 +93,7 @@ export default function Create() {
     timer.current = setTimeout(() => {
       setVerifyingNFTId(true)
       handleVerifyNFTOwner(contractAddress, value)
-        .then(res => {
+        .then((res) => {
           setVerifyingNFTId(false)
           setVerifyNFTIdStatus(!!res)
           setNFTURI(res || {"name": "",
@@ -147,8 +147,8 @@ export default function Create() {
   }, [ladningPage])
 
   const createDisabled = useMemo(() => {
-    return !name || !isAddress(contractAddress) || !landingPageVerify
-  }, [name, contractAddress, landingPageVerify])
+    return !name || !isAddress(contractAddress) || !landingPageVerify || !nftURI.name
+  }, [name, contractAddress, landingPageVerify, nftURI])
 
   const [currentPer, setCurrentPer] = useState(0.5)
 
@@ -173,7 +173,7 @@ export default function Create() {
     return 100 + Math.floor(_amount * 100)
   }, [currentPer])
 
-  const [expend, setExpend] = useState(false)
+  const [expend, setExpend] = useState(true)
 
   return (
     <CreateBody className='create-body-root'>
@@ -428,18 +428,20 @@ export default function Create() {
               <ItemBox width={1080} height={982} style={{ marginTop: 20, height: 'auto' }} >
                 <div className=' flex justify-center text-[14px] font-fnormal'>Spreading chart</div>
                 <SpreadingChart onChange={onSpreadingChartChange} />
-                <div className='w-full h-auto border border-[rgba(85,123,241,0.10) rounded-md mt-[30px]'>
-                  <div className='flex items-center justify-between bg-[rgba(85,123,241,0.10)] w-full h-[48px] px-5' style={{borderRadius: '6px 6px 0px 0px'}}>
+                <div className='w-full h-auto border border-[rgba(85,123,241,0.10) rounded-md mt-[30px] cursor-pointer'>
+                  <div
+                    onClick={e => {
+                      e.stopPropagation()
+                      setExpend(!expend)
+                    }} 
+                    className='flex items-center justify-between bg-[rgba(85,123,241,0.10)] w-full h-[48px] px-5' style={{borderRadius: '6px 6px 0px 0px'}}>
                     <div className=' flex items-center'>
                       <LazyImage src='/images/airdrop/icon/info.svg' />
                       <span className='text-[12px] font-fmedium ml-[6px]'>Compound income calculation</span>
                     </div>
                     <div
                       className=' cursor-pointer'
-                      onClick={e => {
-                        e.stopPropagation()
-                        setExpend(!expend)
-                      }}
+                      
                     >
                       <LazyImage src='/images/airdrop/icon/arrow-down.svg' className={`transition-all ${expend ? ' -rotate-180' : ''}`} />
                     </div>

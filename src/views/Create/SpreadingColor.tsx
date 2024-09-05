@@ -96,14 +96,15 @@ const SpreadingColor = ({
         
       >
         
-        <div ref={pointerRef} className="w-[20px] h-[20px] border-2 border-white border-solid rounded-[18px] cursor-pointer absolute -left-[6px] top-10" 
+        <div ref={pointerRef} className="w-[22px] h-[22px] border-2 border-white border-solid rounded-[18px] cursor-pointer absolute -left-[7px] top-10" 
           style={{ 
             top: pointerTop,
             fill: '#FFD24D',
             strokeWidth: '2px',
             stroke: '#FFF',
             filter: 'drop-shadow(0px 4px 20px rgba(0, 0, 0, 0.05))', 
-            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.05)'
+            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.05)',
+            background: value ?? 'none'
           }}
           onMouseDown={e => {
             e.stopPropagation()
