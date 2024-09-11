@@ -112,9 +112,9 @@ const SpreadingColor = ({
             setFocusPointer(true)
           }}
           onMouseUp={e => {
-            // e.stopPropagation()
-            // setFocusPointer(false)
-            // setPreTop(currentTop)
+            e.stopPropagation()
+            setFocusPointer(false)
+            setPreTop(currentTop)
           }}
           
           >

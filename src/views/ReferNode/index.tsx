@@ -40,7 +40,7 @@ const ReferTree = () => {
       const res = await handleReferTo(airdropId, pAddress)
       setAdding(false)
       if (res.status !== 0) {
-        alert('Error')
+        alert(res.message || 'Error')
         return
       } 
       if (nodeList2.length <= 0) {

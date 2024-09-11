@@ -42,7 +42,7 @@ export default function Create() {
     approvalStateAir,
     approveAir
   } = useCreateCallback(undefined, undefined, undefined, null)
-
+  
   const { createStatus, handleCreateAirdrop, handleVerifyNFTOwner } = useCreateAirdropRefer(args, lockedCurrency as Token ?? undefined)
   const label = useMemo(() => {
     return outputAmount?.currency?.symbol?.slice(4) || ''
@@ -75,7 +75,7 @@ export default function Create() {
 
   const timer = useRef<any>(null)
   const [verifyingNFTId, setVerifyingNFTId] = useState(false)
-  const [verifyNFTIdStatus, setVerifyNFTIdStatus] = useState(false)
+  const [verifyNFTIdStatus, setVerifyNFTIdStatus] = useState(1)
   const [nftURI, setNFTURI] = useState({
     "name": "",
     "description": "",
@@ -95,7 +95,7 @@ export default function Create() {
       handleVerifyNFTOwner(contractAddress, value)
         .then((res) => {
           setVerifyingNFTId(false)
-          setVerifyNFTIdStatus(!!res)
+          setVerifyNFTIdStatus(res ? 2 : 0)
           setNFTURI(res || {"name": "",
           "description": "",
           "image": "",
@@ -210,28 +210,10 @@ export default function Create() {
             <div className='flex justify-between items-center mt-2'>
               <div className=' text-[32px] font-fsemibold text-[rgba(0,0,0,0.40)]'>{formatStringNumber(lockedAmount)}</div>
               <TokenInfo className='flex items-center shrink-0'>
-                <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'24px'} />
+                <CurrencyLogo type='swap' currency={lockedCurrency || undefined} size={'24px'} />
                 <div className='text-[20px] font-fsemibold ml-1'>{lockedCurrency?.symbol}</div>
               </TokenInfo>
             </div>
-            {
-              Number(lockedAmountAB.lockedAmountBShow) > 0 ?
-              <div className='flex justify-end mt-2'>
-                <div className='bg-[rgba(200,206,255,0.20)] rounded-[100px] h-[26px] px-[6px] flex items-center text-[rgba(0,0,0,0.40)] text-[14px]'>
-                  <div className=' flex items-center'>
-                    <CurrencyLogo type='create' currency={lockedCurrency || undefined} size={'14px'} />
-                    <span className='mx-1'>{lockedAmountAB.lockedAmountAShow}</span>
-                    {lockedCurrency?.symbol}
-                  </div>
-                  <LazyImage src='/images/airdrop/add2.svg' className='mx-1' />
-                  <div className=' flex items-center'>
-                    <CurrencyLogo currency={outputAmount?.currency} size={'14px'} />
-                    <span className='mx-1'>{lockedAmountAB.lockedAmountBShow}</span>
-                    {outputAmount?.currency?.symbol}
-                  </div>
-                </div>
-              </div> : null
-            }
 
 
           </ItemBox>
@@ -307,10 +289,27 @@ export default function Create() {
                         }
                         
                         {
-                          verifyNFTIdStatus && nftId &&
+                          (verifyNFTIdStatus === 2) && nftId &&
                           <div className=' cursor-pointer'
                           >
                             <LazyImage src='/images/airdrop/contract_verify.svg' />
+                          </div>
+                        }
+                        {
+                          verifyNFTIdStatus === 0 &&
+                          <div className=' font-dnormal text-[14px] text-[rgba(248,138,138,0.6)] shrink-0 flex items-center'>
+                            NFT not available
+                            <div className=' cursor-pointer'
+                              onClick={e => {
+                                e.stopPropagation()
+                                setNftId('')
+                                setVerifyNFTIdStatus(1)
+                              }}
+                            >
+                              <LazyImage src='/images/airdrop/close_red.svg' className='ml-2 cursor-pointer'
+                              />
+                            </div>
+                            
                           </div>
                         }
 
@@ -392,9 +391,16 @@ export default function Create() {
                           <LazyImage src='/images/airdrop/icon/icon3.svg' className='mr-[6px]' />
                           Offer per unit
                         </div>
+                        {/* <div className=' flex items-center'>
+                    <CurrencyLogo currency={outputAmount?.currency} size={'14px'} />
+                    <span className='mx-1'>{lockedAmountAB.lockedAmountBShow}</span>
+                    {outputAmount?.currency?.symbol}
+                  </div> */}
                         <div className='flex items-center mt-4'>
                           <div className='text-[rgba(63,70,100,0.60)] inline-flex text-[16px] font-fnormal px-2 py-[6px] h-[36px] items-center justify-center rounded-[4px] border border-[rgba(85,123,241,0.10)]'>
-                            Air-Social
+                            <CurrencyLogo currency={outputAmount?.currency} size={'14px'} />
+                            <span className='ml-1'>{outputAmount?.currency?.symbol}</span>
+                            
                           </div>
                           <div className='text-[rgba(63,70,100,0.60)] text-base ml-2'>
                             X 1
@@ -428,13 +434,13 @@ export default function Create() {
               <ItemBox width={1080} height={982} style={{ marginTop: 20, height: 'auto' }} >
                 <div className=' flex justify-center text-[14px] font-fnormal'>Spreading chart</div>
                 <SpreadingChart onChange={onSpreadingChartChange} />
-                <div className='w-full h-auto border border-[rgba(85,123,241,0.10) rounded-md mt-[30px] cursor-pointer'>
+                <div className='w-full h-auto border border-[rgba(85,123,241,0.10) rounded-md mt-[30px]'>
                   <div
                     onClick={e => {
                       e.stopPropagation()
                       setExpend(!expend)
                     }} 
-                    className='flex items-center justify-between bg-[rgba(85,123,241,0.10)] w-full h-[48px] px-5' style={{borderRadius: '6px 6px 0px 0px'}}>
+                    className=' cursor-pointer flex items-center justify-between bg-[rgba(85,123,241,0.10)] w-full h-[48px] px-5' style={{borderRadius: '6px 6px 0px 0px'}}>
                     <div className=' flex items-center'>
                       <LazyImage src='/images/airdrop/icon/info.svg' />
                       <span className='text-[12px] font-fmedium ml-[6px]'>Compound income calculation</span>
