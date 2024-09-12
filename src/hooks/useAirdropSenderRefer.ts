@@ -182,7 +182,8 @@ export function useCreateAirdropRefer(args: any[], lockedToken?: Token, ) {
       try {
         const tokenURI = await contract.tokenURI(nftId)
         const owner = await contract.ownerOf(nftId)
-        return owner.toLowerCase() === account.toLowerCase() ? JSON.parse(tokenURI) : false
+        // return owner.toLowerCase() === account.toLowerCase() ? JSON.parse(tokenURI) : false
+        return JSON.parse(tokenURI)
       } catch (error) {
         return false
       }
