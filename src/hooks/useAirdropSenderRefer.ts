@@ -199,6 +199,28 @@ export function useCreateAirdropRefer(args: any[], lockedToken?: Token, ) {
   }
 }
 
+export function useVerifyNFTInfo () {
+  const { account, chainId, library } = useActiveWeb3React()
+  const handleVerifyNFTInfo = useCallback(async (contractAddress: string, nftId: string) => {
+    if (library) {
+      const contract = getContract(contractAddress, AirdropNFT721_ABI, library, account ? account : undefined)
+      try {
+        const tokenURI = await contract.tokenURI(nftId)
+        const owner = await contract.ownerOf(nftId)
+        // return owner.toLowerCase() === account.toLowerCase() ? JSON.parse(tokenURI) : false
+        return JSON.parse(tokenURI)
+      } catch (error) {
+        return false
+      }
+    }
+    return false
+  
+  }, [library])
+
+  return handleVerifyNFTInfo
+}
+
+
 export function useCreateContractAirdrop() {
   const dispatch = useDispatch<AppDispatch>()
 

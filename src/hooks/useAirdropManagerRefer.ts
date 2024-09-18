@@ -96,6 +96,7 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
     const res = await multicall(multi, AirdropManager_ABI, calls.reverse());
     (res || []).forEach((data: any) => {
       const airdrop = data[0]
+      console.log(airdrop, 11111111)
       const offerTokenData = getUSDTTokenByAddress(airdrop[2][0])
       const labelTokenData = getLabelTokenByAddress(airdrop[2][2])
       // const subDecimals = String((10 ** (offerTokenData?.decimals ?? 18))).length - (airdrop[3][0].toString()).length
@@ -121,9 +122,9 @@ export const getAirdropList = async (multi: Contract, airdropLength: number | nu
         channel: airdrop[1][2],
         action: airdrop[1][3],
         content: isAirdropRefer ? airdrop[1][3] : airdrop[1][4],
+        chain: _otherContent[0],
         nftAddress: airdrop[1][3],
         nftId: airdrop[1][4],
-        chain: _otherContent[0],
         landingPage: isAirdropRefer ? _otherContent[0] : _otherContent[2],
         parameterInfo: parameterInfo,
         offerToken: {

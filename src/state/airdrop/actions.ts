@@ -31,7 +31,9 @@ export interface IAirdrop {
   userCompleted?: boolean,
   isExpired?: boolean,
   completedClaimed?: string,
-  isAirdropRefer?: boolean
+  isAirdropRefer?: boolean,
+  nftAddress?: string,
+  nftId?: string,
 }
 export interface IAlgAirdrop {
   claimed: string,

@@ -6,9 +6,8 @@ import TasksPage from "../../views/Tasks";
 import CompletedPage from "../../views/Completed";
 import InviteCodePage from "../../views/InviteCode";
 import AirdropDetails from "../../views/Collect/AirdropDetails";
-import CollectPage from "../../views/Collect";
+import CollectPage from "../../views/CollectRefer";
 import UserCampaign from "../../views/Campaign/UserCampaign";
-import CampaignListPage from "../../views/CampaignList/Ongoing";
 
 function UserPage() {
   const router = useRouter()
