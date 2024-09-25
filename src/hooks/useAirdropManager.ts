@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAirdropManagerContract, useAirdropUserTaskContract, useMulticallContract } from "./useContract";
+import { useAirdropManagerContract, useAirdropReferManagerContract, useAirdropUserTaskContract, useMulticallContract } from "./useContract";
 import { BigNumber, Contract } from "ethers";
 import { AirdropManager_ABI, AirdropManager_NETWORKS } from "../constants/airdropManager";
 import { AirdropUserTask_ABI, AirdropUserTask_NETWORKS } from "../constants/airdropUserTask";
@@ -65,7 +65,6 @@ export const getUserAirdropIds = async (multi: Contract, account: string, chaidI
 
 export const getAirdropList = async (multi: Contract, airdropLength: number | number[], chaidId: ChainId) => {
 
-  
   const calls = []
   if (typeof airdropLength === 'number') {
     for(let i = 1; i <= airdropLength; i++) {
@@ -234,6 +233,22 @@ export const getUserTaskConfirmed = async (airdropManager: Contract, airdropId: 
   }
 }
 
+export const getUserReferNodeList = async (airdropReferManager: Contract, account: string) => {
+  const userReferNodeList = await airdropReferManager.getUserReferNodeList(account);
+
+  return (userReferNodeList || []).map((tempItem: any) => {
+    return {
+      id: tempItem.id.toString(),
+      pid: tempItem.pid.toString(),
+      index: tempItem.index.toString(),
+      addr: tempItem.addr,
+      airdropId: tempItem.airdropId.toString(),
+    }
+  });
+  
+  
+}
+
 export function useAirdropManager() {
   const dispatch = useDispatch<AppDispatch>()
   const { account, chainId } = useActiveWeb3React()
@@ -241,12 +256,14 @@ export function useAirdropManager() {
   const multi = useMulticallContract()
   const airdropManager = useAirdropManagerContract()
   const airdropUserTask = useAirdropUserTaskContract()
+  const airdropReferManager = useAirdropReferManagerContract()
 
   const handleUpdateAirdropList = useCallback(async () => {
     dispatch(updateAirdropList({ airdropList: [] }))
   }, [dispatch])
 
   const handleGetAirdropList = useCallback(async (algToken?: string) => {
+
     if (multi && chainId) {
       if (algToken) {
         const airToken = getAirTokenFromAlgToken(algToken, chainId)
@@ -270,9 +287,19 @@ export function useAirdropManager() {
         const list = await getAirdropList(multi, airdropIds, chainId)
         dispatch(updateProjectAirdropList({ airdropList: list as any }))
       }
-      
     }
   }, [multi, dispatch, chainId])
+
+  const handleGetUserAirdropReferList = useCallback(async (refresh?: boolean) => {
+    if (multi && airdropReferManager && account && (refresh || airdropList.length <= 0) && chainId ) {
+      let referNodeList = await getUserReferNodeList(airdropReferManager, account) 
+      const airdropIds = referNodeList.map((item: { airdropId: any; }) => item.airdropId)
+      const list = await getAirdropList(multi, airdropIds, chainId)
+      const tempConfirmed = referNodeList.reverse()
+      const newList = list.map((item, index) => ({ ...item, ...tempConfirmed[index]}))
+      dispatch(updateUserAirdropConfirmed({ airdropList: newList as any }))
+    }
+  }, [multi, airdropReferManager, account, airdropList, dispatch, chainId])
 
   const handleGetAirdropOne = useCallback(async (airdropId: number) => {
     if (multi && chainId) {
@@ -329,7 +356,10 @@ export function useAirdropManager() {
     handleGetAirdropOne2,
     handleUpdateAirdropList,
     handleGetAirdropUserConfirmed,
-    airdropUserConfirmed
+    airdropUserConfirmed,
+    multi,
+    chainId,
+    handleGetUserAirdropReferList
   }
 
 }

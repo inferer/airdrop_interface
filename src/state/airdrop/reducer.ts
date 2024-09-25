@@ -1,8 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { IAirdrop, IAlgAirdrop, updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed, updateUserAlgAirdropList, updateUserLabelScore, updateMaxUnits, updateAirTokenPercent, updateProjectLabelLocked, TokenLocked, updateProjectUSDTLocked, updateUserAlgTokenLocked, updateUserAirdropConfirmedByTaskId, updateProjectAirdropList, updateUserDepositBalance, updateCreateContractABI, IABIItem } from './actions'
-
-import { PROJECTDEMO_ABI } from '../../constants/projectDemo'
-
+import { IAirdrop, IAlgAirdrop, updateAirdropList, updateAirdropListOne, updateUserAirdropConfirmed, updateUserAlgAirdropList, updateUserLabelScore, updateMaxUnits, updateAirTokenPercent, updateProjectLabelLocked, TokenLocked, updateProjectUSDTLocked, updateUserAlgTokenLocked, updateUserAirdropConfirmedByTaskId, updateProjectAirdropList, updateUserDepositBalance, updateCreateContractABI, IABIItem, IReferNode, updateAirdropReferNodeList } from './actions'
 
 export interface AirdropState {
   airdropList: IAirdrop[]
@@ -17,7 +14,8 @@ export interface AirdropState {
   userDepositBalanceList: TokenLocked[],
   userAlgTokenLocked: TokenLocked[],
   projectAirdropList: IAirdrop[],
-  createContractABI: IABIItem[]
+  createContractABI: IABIItem[],
+  airdropReferNodeList: IReferNode[],
 }
 
 const initialState: AirdropState = {
@@ -33,7 +31,8 @@ const initialState: AirdropState = {
   userAlgTokenLocked: [],
   projectAirdropList: [],
   userDepositBalanceList: [],
-  createContractABI: []
+  createContractABI: [],
+  airdropReferNodeList: []
 }
 
 export default createReducer<AirdropState>(initialState, builder => {
@@ -92,5 +91,8 @@ export default createReducer<AirdropState>(initialState, builder => {
   })
   builder.addCase(updateCreateContractABI, (state, { payload: { ABIList } }) => {
     state.createContractABI = ABIList
+  })
+  builder.addCase(updateAirdropReferNodeList, (state, { payload: { referNodeList } }) => {
+    state.airdropReferNodeList = referNodeList
   })
 })

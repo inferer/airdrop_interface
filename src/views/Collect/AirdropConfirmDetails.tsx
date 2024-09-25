@@ -3,9 +3,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useAirdropList0 } from "../../state/airdrop/hooks";
 import router, { useRouter } from 'next/router'
 import { useAirdropManager } from "../../hooks/useAirdropManager";
-import AirdropInfo from "./AirdropInfo";
 import { ButtonSwap, ButtonSwapUser } from "../../components/Button";
 import { useIsRoleProjectMode } from "../../state/user/hooks";
+import AirdropInfo from "../CollectRefer/AirdropInfo";
 
 const AirdropConfirmDetails: React.FC<{
 

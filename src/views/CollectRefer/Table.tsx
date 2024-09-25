@@ -39,7 +39,7 @@ export const TableRow = ({
 
 export const TableBody = ({
   children,
-}: { children: React.ReactElement, className?: string }) => {
+}: { children: React.ReactChild, className?: string }) => {
   return (
     <div className="table__body">
       { children }

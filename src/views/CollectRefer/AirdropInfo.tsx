@@ -265,7 +265,10 @@ const AirdropInfo = ({
         }
         
       </div>
-      <ReferAction airdrop={airdrop} />
+      {
+        from === 'project' && <ReferAction airdrop={airdrop} />
+      }
+      
       
     </div>
   )

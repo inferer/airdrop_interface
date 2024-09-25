@@ -6,6 +6,13 @@ import { AppDispatch, AppState } from '../index'
 import { IAirdrop, IAlgAirdrop, TokenLocked, updateAirTokenPercent, updateMaxUnits } from './actions'
 import { ethers } from 'ethers'
 
+export function useReferNode0(address?: string) {
+  const nodeList = useSelector<AppState, AppState['airdrop']['airdropReferNodeList']>(state => state.airdrop.airdropReferNodeList)
+  return useMemo(() => {
+    if (!address) return nodeList[0]
+    return nodeList.find(node => node.addr?.toLowerCase() === address.toLowerCase())
+  }, [address, nodeList])
+}
 
 export function useProjectAirdropList() {
   return useSelector<AppState, AppState['airdrop']['projectAirdropList']>(state => state.airdrop.projectAirdropList)

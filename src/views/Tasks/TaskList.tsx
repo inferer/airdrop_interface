@@ -22,14 +22,14 @@ const AirdropList: React.FC<{
   const router = useRouter()
   const { account } = useActiveWeb3React()
   const [ isCopied, staticCopy ] = useCopyClipboard()
-  const { handleGetUserAirdropConfirmed } = useAirdropManager()
+  const { handleGetUserAirdropReferList } = useAirdropManager()
   const airdropList = useUserAirdropConfirmedList()
   const userConfirmedList = useMemo(() => {
     return airdropList.filter((airdrop) => !airdrop.userCompleted)
   }, [airdropList])
   useEffect(() => {
     // handleGetAirdropList()
-    handleGetUserAirdropConfirmed(true)
+    handleGetUserAirdropReferList(true)
   }, [account])
   
   const [checkList, setCheckList ] = useState<IAirdrop[]>([])

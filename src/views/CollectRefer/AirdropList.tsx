@@ -82,7 +82,7 @@ const AirdropList: React.FC<{
     return () => {
       handleUpdateAirdropList()
     }
-  }, [router])
+  }, [router, chainId])
 
   return (
     <div>

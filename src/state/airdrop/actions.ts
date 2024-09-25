@@ -63,6 +63,13 @@ export type IABIItem = {
   "type": string
 }
 
+export type IReferNode = {
+  "id": string,
+  "pid": string,
+  "index": string,
+  "addr": string
+}
+
 
 export const updateAirdropList = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateAirdropList')
 export const updateAirdropListOne = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateAirdropListOne')
@@ -78,3 +85,4 @@ export const updateUserAlgTokenLocked = createAction<{ tokenLockedList: TokenLoc
 export const updateUserDepositBalance = createAction<{ tokenLockedList: TokenLocked[] }>('airdrop/updateUserDepositBalance')
 export const updateProjectAirdropList = createAction<{ airdropList: IAirdrop[] }>('airdrop/updateProjectAirdropList')
 export const updateCreateContractABI = createAction<{ ABIList: IABIItem[] }>('airdrop/updateCreateContractABI')
+export const updateAirdropReferNodeList = createAction<{ referNodeList: IReferNode[] }>('airdrop/updateAirdropReferNodeList')

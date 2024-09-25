@@ -99,6 +99,11 @@
             "internalType": "address",
             "name": "addr",
             "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "airdropId",
+            "type": "uint256"
           }
         ],
         "internalType": "struct IReferManager.ReferNode",
@@ -140,6 +145,11 @@
             "internalType": "address",
             "name": "addr",
             "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "airdropId",
+            "type": "uint256"
           }
         ],
         "internalType": "struct IReferManager.ReferNode[]",
@@ -188,6 +198,52 @@
         "internalType": "uint256",
         "name": "_amount",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_userAddr",
+        "type": "address"
+      }
+    ],
+    "name": "getUserReferNodeList",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "pid",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "addr",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "airdropId",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IReferManager.ReferNode[]",
+        "name": "_referNodeList",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",

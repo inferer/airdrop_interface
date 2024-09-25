@@ -108,11 +108,6 @@ export function useAirdropSenderReferContract(): Contract | null {
   return useContract(chainId && AirdropSenderRefer_NETWORKS[chainId], AirdropSenderRefer_ABI, true)
 }
 
-export function useAirdropReferManagerContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId && AirdropReferManager_NETWORKS[chainId], AirdropReferManager_ABI, true)
-}
-
 export function useAirdropReceiverContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && AirdropReceiver_NETWORKS[chainId], AirdropReceiver_ABI, true)
@@ -121,6 +116,11 @@ export function useAirdropReceiverContract(): Contract | null {
 export function useAirdropManagerContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && AirdropManager_NETWORKS[chainId], AirdropManager_ABI, true)
+}
+
+export function useAirdropReferManagerContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && AirdropReferManager_NETWORKS[chainId], AirdropReferManager_ABI, true)
 }
 
 export function useAirdropUserTaskContract(): Contract | null {
