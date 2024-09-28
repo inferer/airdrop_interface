@@ -203,13 +203,17 @@ export function useAccountLabelScore(account: string, label?: string) {
         setScore(userScore)
       } else
       if (getAlgTokenByLabel(label) && userScore < 0) {
-        getAccountScore(account, label)
-        .then(res => {
-          const score = Number(res.score) < 0 ? 0 : Number(res.score)
+        const score = 1.5
           setScore(score)
           dispatch(updateUserLabelScore({key: `${account?.toLocaleLowerCase()}_${label?.toLocaleLowerCase()}`, score: score}))
+
+        // getAccountScore(account, label)
+        // .then(res => {
+        //   const score = Number(res.score) < 0 ? 0 : Number(res.score)
+        //   setScore(score)
+        //   dispatch(updateUserLabelScore({key: `${account?.toLocaleLowerCase()}_${label?.toLocaleLowerCase()}`, score: score}))
           
-        })
+        // })
       }
     }
   }, [account, label, getAlgTokenByLabel, userScore])
