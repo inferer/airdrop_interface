@@ -86,6 +86,7 @@ const AirdropList: React.FC<{
 
   return (
     <div>
+      
       <Table>
         <>
           <TableHead>

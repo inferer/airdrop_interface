@@ -180,6 +180,7 @@ const SpreadingChart = ({
       </div>
       
         <SpreadingColor 
+          view={!onChange}
           value={currentColor} 
           onChange={(index, per) => {
             setPer(per)

@@ -3,9 +3,11 @@ import { useAirTokenPercent, useUpdateAirTokenPercent } from "../../state/airdro
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 
 const SpreadingColor = ({
+  view,
   value,
   onChange
 }: {
+  view?: boolean
   value: string
   onChange?: (colorIndex: number, per: number) => void
 }, ref: React.Ref<unknown> | undefined) => {
@@ -73,12 +75,14 @@ const SpreadingColor = ({
       }}
       onMouseLeave={e => {
         e.stopPropagation()
+        if (view) return
         setShowpointer(false)
         setFocusPointer(false)
         setPreTop(currentTop)
       }}
       onMouseMove={e => {
         e.stopPropagation()
+        if (view) return
         handleMouseMove(e)
       }}
       onMouseUp={e => {
@@ -108,11 +112,13 @@ const SpreadingColor = ({
           }}
           onMouseDown={e => {
             e.stopPropagation()
+            if (view) return
             setDownPageY(e.pageY)
             setFocusPointer(true)
           }}
           onMouseUp={e => {
             e.stopPropagation()
+            if (view) return
             setFocusPointer(false)
             setPreTop(currentTop)
           }}

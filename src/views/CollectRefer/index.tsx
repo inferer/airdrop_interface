@@ -17,7 +17,6 @@ function Collect() {
   // const isAirdropConfirm = router.query.id && router.query.id[1]
   const isAirdropConfirm = router.query.action ? router.query.action[2] : ''
 
-
   return (
     <div className='w-[1217px] mx-auto'>
       <CollectBody>

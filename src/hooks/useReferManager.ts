@@ -91,7 +91,8 @@ export function useAirdropReferManager(algToken?: string) {
         console.log(error)
         const message = error.data?.data?.message || error.data?.message || error.message
         console.log(message)
-        handleShow({ type: 'error', content: `Fail to confirm.`, title: 'Error' })
+        const errorContent = message.indexOf('ReferManager: sender is in the referNodeList') > -1 ? 'You have already referred this airdrop.' : 'Fail to confirm.'
+        handleShow({ type: 'error', content: errorContent, title: 'Error' })
         setConfirmStatus(2)
         return
       }
@@ -101,9 +102,11 @@ export function useAirdropReferManager(algToken?: string) {
         if (receipt.status) {
           router.push('/user/ongoing')
         }
-      } catch (error) {
+      } catch (error: any) {
         console.log(error)
-        handleShow({ type: 'error', content: `Fail to confirm.`, title: 'Error' })
+        const message = error.data?.data?.message || error.data?.message || error.message
+        const errorContent = message.indexOf('ReferManager: sender is in the referNodeList') > -1 ? 'You have already referred this airdrop.' : 'Fail to confirm.'
+        handleShow({ type: 'error', content: errorContent, title: 'Error' })
       }
       
       setConfirmStatus(2)

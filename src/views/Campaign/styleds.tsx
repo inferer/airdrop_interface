@@ -102,6 +102,7 @@ export const CreateBody = styled.div`
   background: #FFF;
   padding: 48px 40px 30px;
   margin-top: 56px;
+  margin-bottom: 52px;
 `
 
 export const TitleWrap = styled.div`

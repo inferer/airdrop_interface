@@ -4,6 +4,7 @@ import SpreadingColor from "./SpreadingColor"
 import { useReferNode0 } from "../../state/airdrop/hooks"
 import { useRouter } from "next/router"
 import { useMemo } from "react"
+import { useActiveWeb3React } from "../../hooks"
 
 const Box = ({
   children
@@ -18,6 +19,7 @@ const Box = ({
 }
 
 const R8Compound = () => {
+  const { account } = useActiveWeb3React()
   const router = useRouter()
   const pNode = useReferNode0(router.query.inviter as string)
   const pId = useMemo(() => {
@@ -37,7 +39,7 @@ const R8Compound = () => {
                 <div className=" absolute bottom-0 left-0 ml-[100px] flex items-center w-[200px]">
                   <LazyImage src="/images/airdrop-refer/user.svg" className="w-3 h-3" />
                   <div className="w-[1px] h-[12px] bg-[rgba(85,123,241,0.12)] mx-[6px]"></div>
-                  <div className="text-[#3F4664] text-[12px] font-dnormal">{ shortenAddress('0x7b3f5C0C56AA1A851D16D3bc2d2cB9725A6154Bd') }</div>
+                  <div className="text-[#3F4664] text-[12px] font-dnormal">{ shortenAddress(account ?? '') }</div>
                 </div>
               </div>
             </div>
