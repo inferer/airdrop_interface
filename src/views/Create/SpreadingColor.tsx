@@ -35,7 +35,7 @@ const SpreadingColor = ({
         _currentTop = 0
       }
       setCurrentTop(_currentTop)
-      const per = _currentTop / wrapInfo.height
+      const per = (_currentTop + 8) / wrapInfo.height
       let colorIndex = 0
       if (per >= 0.25) colorIndex = 1
       if (per >= 0.5) colorIndex = 2
@@ -54,7 +54,7 @@ const SpreadingColor = ({
   useEffect(() => {
     if (wrapRef.current) {
       const data = wrapRef.current?.getBoundingClientRect()
-      const _initTop = Math.floor(data.height / 4) * 3 - 12
+      const _initTop = Math.floor(data.height / 4) * 3 - 8
       setCurrentTop(_initTop)
       setPreTop(_initTop)
       setWrapInfo({ left: data.left, top: data.top, height: data.height })
@@ -99,7 +99,11 @@ const SpreadingColor = ({
         style={{background: 'linear-gradient(0deg, #73ABFE 0%, #52FEDF 28.7%, #FFD24D 56.05%, #FF40BE 80.66%, #FD1029 99.89%)'}}
         
       >
-        
+        <div className='text-[rgba(0,0,0,0.6)] text-[14px] font-dbold h-full absolute top-0 left-[1px] py-[6px]'>
+          <div className="w-[6px] h-[2px] bg-white rounded-[100px] absolute left-0 top-[25%]"></div>
+          <div className="w-[6px] h-[2px] bg-white rounded-[100px] absolute left-0 top-[50%]"></div>
+          <div className="w-[6px] h-[2px] bg-white rounded-[100px] absolute left-0 top-[75%]"></div>
+        </div>
         <div ref={pointerRef} className="w-[22px] h-[22px] border-2 border-white border-solid rounded-[18px] cursor-pointer absolute -left-[7px] top-10" 
           style={{ 
             top: pointerTop,
@@ -127,12 +131,12 @@ const SpreadingColor = ({
         </div>
           
       </div>
-      <div className=' flex flex-col justify-between text-[rgba(0,0,0,0.6)] text-[14px] font-dbold h-full'>
-        <div>1.25</div>
-        <div>1.00</div>
-        <div>0.75</div>
-        <div>0.50</div>
-        <div>0.25</div>
+      <div className=' flex flex-col justify-between text-[rgba(0,0,0,0.6)] text-[14px] font-dbold h-full relative'>
+        <div className=" absolute left-0 top-0">1.25</div>
+        <div className=" absolute left-0 top-[25%] -mt-[8px]">1.00</div>
+        <div className=" absolute left-0 top-[50%] -mt-[8px]">0.75</div>
+        <div className=" absolute left-0 top-[75%] -mt-[8px]">0.50</div>
+        <div className=" absolute left-0 top-[100%] -mt-[20px]">0.25</div>
       </div>
     </div>
   )
