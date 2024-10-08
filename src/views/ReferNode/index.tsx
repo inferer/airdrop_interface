@@ -104,9 +104,9 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
 }) {
   const isRoot = node.depth === 0;
   const isParent = !!node.children;
+  const [mouseOver, setMouseOver] = useState(false)
 
   if (isRoot) return <RootNode node={node} onAddNode={onAddNode} />;
-  const [mouseOver, setMouseOver] = useState(false)
   return (
     <Group top={node.y} left={node.x}
       style={{position: 'relative'}}
