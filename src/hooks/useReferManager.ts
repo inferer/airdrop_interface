@@ -31,7 +31,6 @@ export const getReferNodeList = async (multi: Contract, airdropId: string, chaid
     })
 
     const [ nodeList ] = await multicall(multi, AirdropReferManager_ABI, calls)
-    console.log(nodeList, getReferManagerAddress(chaidId), airdropId, 333333)
     const list = nodeList && nodeList[0] || []
     const nodeListNew = list.map((node: any) => {
       return {
