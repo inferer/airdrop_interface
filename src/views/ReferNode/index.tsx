@@ -37,8 +37,8 @@ interface NodeShape {
 }
 
 function RootNode({ node, onAddNode }: { node: HierarchyPointNode<NodeShape>, onAddNode?: (data: HierarchyPointNode<NodeShape>) => void }) {
-  const width = 40;
-  const height = 20;
+  const width = 70;
+  const height = 40;
   const centerX = -width / 2;
   const centerY = -height / 2;
   const [mouseOver, setMouseOver] = useState(false)
@@ -53,7 +53,7 @@ function RootNode({ node, onAddNode }: { node: HierarchyPointNode<NodeShape>, on
       <rect width={width} height={height} y={centerY} x={centerX} fill="url('#top')" />
       <text
         dy=".33em"
-        fontSize={9}
+        fontSize={16}
         fontFamily="Arial"
         textAnchor="middle"
         style={{ pointerEvents: 'none' }}
@@ -127,14 +127,14 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
       
       {node.depth !== 0 && (
         <circle
-          r={12}
+          r={22}
           fill={background}
           stroke={isParent ? white : citrus}
         />
       )}
       <text
         dy=".33em"
-        fontSize={9}
+        fontSize={16}
         fontFamily="Arial"
         textAnchor="middle"
         style={{ pointerEvents: 'none' }}
@@ -151,7 +151,7 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
             setMouseOver(false)
           }}
         >
-          <rect width={50} height={30} x={-14} y={-14}
+          <rect width={70} height={30} x={-14} y={-14}
             fill={'rgba(0,0,0,0)'}
             onClickCapture={(e) => {
               e.stopPropagation()
@@ -161,9 +161,9 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
           >
           </rect>
           <text
-              x={20} y={-0}
+              x={40} y={-0}
               dy=".33em"
-              fontSize={18}
+              fontSize={32}
               fontFamily="Arial"
               textAnchor="middle"
               style={{ pointerEvents: 'none', position: 'absolute', left: '100%' }}
@@ -435,8 +435,8 @@ const ReferTree = () => {
     
   }, [account])
 
-  const width = 1200
-  const height = 700
+  const width = 1900
+  const height = 800
   const margin = defaultMargin
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
@@ -551,72 +551,9 @@ const ReferTree = () => {
                   )}
                 </Cluster>
               </g>
-              {showMiniMap && (
-                <g
-                  clipPath="url(#zoom-clip)"
-                  transform={`
-                    scale(0.25)
-                    translate(${width * 4 - width - 60}, ${height * 4 - height - 60})
-                  `}
-                >
-                  <rect width={width} height={height} fill="#1a1a1a" />
-                    <LinearGradient id="top" from={green} to={aqua} />
-                    <Cluster<NodeShape> root={dataList} size={[xMax, yMax]}>
-                      {(cluster) => (
-                        <Group top={margin.top} left={margin.left}>
-                          {cluster.links().map((link, i) => (
-                            <LinkVertical<HierarchyPointLink<NodeShape>, HierarchyPointNode<NodeShape>>
-                              key={`cluster-link-${i}`}
-                              data={link}
-                              stroke={merlinsbeard}
-                              strokeWidth="1"
-                              strokeOpacity={0.2}
-                              fill="none"
-                            />
-                          ))}
-                          {cluster.descendants().map((node, i) => (
-                            <Node key={`cluster-node-${i}`} node={node} />
-                          ))}
-                        </Group>
-                      )}
-                    </Cluster>
-                  <rect
-                    width={width}
-                    height={height}
-                    fill="white"
-                    fillOpacity={0.2}
-                    stroke="white"
-                    strokeWidth={4}
-                    transform={zoom.toStringInvert()}
-                  />
-                </g>
-              )}
+              
             </svg>
-            {/* <div className="controls">
-              <button
-                type="button"
-                className="btn btn-zoom"
-                onClick={() => zoom.scale({ scaleX: 1.2, scaleY: 1.2 })}
-              >
-                +
-              </button>
-              <button
-                type="button"
-                className="btn btn-zoom btn-bottom"
-                onClick={() => zoom.scale({ scaleX: 0.8, scaleY: 0.8 })}
-              >
-                -
-              </button>
-              <button type="button" className="btn btn-lg" onClick={zoom.center}>
-                Center
-              </button>
-              <button type="button" className="btn btn-lg" onClick={zoom.reset}>
-                Reset
-              </button>
-              <button type="button" className="btn btn-lg" onClick={zoom.clear}>
-                Clear
-              </button>
-            </div> */}
+            
           </div>
         )}
       </Zoom>

@@ -13,7 +13,7 @@ const IncomeCalculation = () => {
           e.stopPropagation()
           setExpend(!expend)
         }} 
-        className=' cursor-pointer flex items-center justify-between bg-[rgba(85,123,241,0.10)] w-full h-[48px] px-5' style={{borderRadius: '6px 6px 0px 0px'}}>
+        className='flex items-center justify-between bg-[rgba(85,123,241,0.10)] w-full h-[48px] px-5' style={{borderRadius: '6px 6px 0px 0px'}}>
         <div className=' flex items-center'>
           <LazyImage src='/images/airdrop/icon/info.svg' />
           <span className='text-[12px] font-fmedium ml-[6px]'>Compound income calculation</span>

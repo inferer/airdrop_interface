@@ -265,7 +265,7 @@ const AirdropInfo = ({
         }
         
       </div>
-      <ReferAction airdrop={airdrop} from={'user'} />
+      <ReferAction airdrop={airdrop} from={from} />
       
     </div>
   )

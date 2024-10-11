@@ -339,14 +339,17 @@ export default function Create() {
                 </div>
               </div>
               <div className='w-[1px] h-[86px] bg-[rgba(63,70,100,0.10)] ml-[184px]'></div>
-              <div className='mt-[10px] text-[14px] text-[rgba(0,0,0,0.60)] ml-[120px]'>
-                <div className='text-[16px] font-fbold text-[rgba(0,0,0,0.50)]'>Commodity Preview</div>
-                <div className=' mt-6'>
-                  <LazyImage2 src={nftURI.image || '/images/airdrop-refer/nft_default.png'} className='w-[162px] h-[162px] rounded-[8px]' />
-                  
-                </div>
+              {
+                (nftId) && 
+                <div className='mt-[10px] text-[14px] text-[rgba(0,0,0,0.60)] ml-[120px]'>
+                  <div className='text-[16px] font-fbold text-[rgba(0,0,0,0.50)]'>Commodity Preview</div>
+                  <div className=' mt-6'>
+                    <LazyImage2 src={nftURI.image || '/images/airdrop-refer/nft_default.png'} className='w-[162px] h-[162px] rounded-[8px]' />
+                  </div>
 
-              </div>
+                </div>
+              }
+              
             </div>
 
           </ItemBox>
