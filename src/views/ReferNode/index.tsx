@@ -53,7 +53,7 @@ function RootNode({ node, onAddNode }: { node: HierarchyPointNode<NodeShape>, on
       <rect width={width} height={height} y={centerY} x={centerX} fill="url('#top')" />
       <text
         dy=".33em"
-        fontSize={16}
+        fontSize={24}
         fontFamily="Arial"
         textAnchor="middle"
         style={{ pointerEvents: 'none' }}
@@ -80,9 +80,9 @@ function RootNode({ node, onAddNode }: { node: HierarchyPointNode<NodeShape>, on
           >
           </rect>
           <text
-              x={30} y={-0}
+              x={50} y={-0}
               dy=".33em"
-              fontSize={18}
+              fontSize={32}
               fontFamily="Arial"
               textAnchor="middle"
               style={{ pointerEvents: 'none', position: 'absolute', left: '100%' }}
@@ -134,7 +134,7 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
       )}
       <text
         dy=".33em"
-        fontSize={16}
+        fontSize={18}
         fontFamily="Arial"
         textAnchor="middle"
         style={{ pointerEvents: 'none' }}
