@@ -83,7 +83,7 @@ const SpreadingColor = ({
         
       >
         
-        <div ref={pointerRef} className="w-[14px] h-[14px] cursor-pointer absolute -left-[7px] top-10" 
+        <div ref={pointerRef} className="w-[14px] h-[14px] absolute -left-[7px] top-10" 
           style={{ 
             top: pointerTop
           }}

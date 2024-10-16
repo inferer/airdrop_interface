@@ -60,7 +60,7 @@ function RootNode({ node, onAddNode }: { node: HierarchyPointNode<NodeShape>, on
         fill={background}
       >
         {/* @ts-ignore */}
-        {node.data.name ? node.data.name + '-' + node.data.index : 'Add root'}
+        {node.data.name ? node.data.name + '-' + parseFloat(node.data.income) : 'Add root'}
       </text>
       {
         mouseOver && 
@@ -127,7 +127,7 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
       
       {node.depth !== 0 && (
         <circle
-          r={22}
+          r={isParent ? 40 : 32}
           fill={background}
           stroke={isParent ? white : citrus}
         />
@@ -141,7 +141,7 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
         fill={isParent ? white : citrus}
       >
         {/* @ts-ignore */}
-        {node.data.name + '-' + node.data.index}
+        {node.data.name + '-' + parseFloat(node.data.income) }
       </text>
       {
         mouseOver && 
@@ -151,7 +151,7 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
             setMouseOver(false)
           }}
         >
-          <rect width={70} height={30} x={-14} y={-14}
+          <rect width={100} height={70} x={-24} y={-34}
             fill={'rgba(0,0,0,0)'}
             onClickCapture={(e) => {
               e.stopPropagation()
@@ -161,7 +161,7 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
           >
           </rect>
           <text
-              x={40} y={-0}
+              x={isParent ? 54 : 44} y={-0}
               dy=".33em"
               fontSize={32}
               fontFamily="Arial"
@@ -474,12 +474,18 @@ const ReferTree = () => {
           let treeMap: any = {};
           let tree: any = [];
           nodeList.forEach((item: any) => {
-              treeMap[item.id] = {...item, name: item.id, children: []};
-              if (item.pid === '0') {
-                  tree.push(treeMap[item.id]);
-              } else if (treeMap[item.pid]) {
-                  treeMap[item.pid].children.push(treeMap[item.id]);
-              }
+            let _index = item.index;
+            let _amount = 0;
+            while(_index > 0) {
+              _amount += Math.pow(0.5, _index)
+              _index--;
+            }
+            treeMap[item.id] = {...item, name: item.id, income: _amount.toFixed(4), children: []};
+            if (item.pid === '0') {
+                tree.push(treeMap[item.id]);
+            } else if (treeMap[item.pid]) {
+                treeMap[item.pid].children.push(treeMap[item.id]);
+            }
           });
           return tree;
       }

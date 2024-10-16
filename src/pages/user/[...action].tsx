@@ -8,6 +8,7 @@ import InviteCodePage from "../../views/InviteCode";
 import AirdropDetails from "../../views/Collect/AirdropDetails";
 import CollectPage from "../../views/CollectRefer";
 import UserCampaign from "../../views/Campaign/UserCampaign";
+import ReferListPage from "../../views/Tasks/ReferListPage";
 
 function UserPage() {
   const router = useRouter()
@@ -45,6 +46,10 @@ function UserPage() {
       return <UserCampaign />
     }
     return <UserCampaign />
+  }
+  if (action === 'refer-list') {
+    
+    return <ReferListPage />
   }
 
   return (

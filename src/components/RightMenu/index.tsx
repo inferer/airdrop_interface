@@ -147,6 +147,9 @@ export default function RightMenu() {
       } else {
       }
     }
+    if (action === 'referList') {
+      router.push('/user/refer-list')
+    }
    }, [router, isProjectMode, showRightMenu])
 
   return (
@@ -243,7 +246,12 @@ export default function RightMenu() {
             <MenuItem icon='/images/airdrop/invite.svg' text='Invitation Code' isProjectMode={isProjectMode} 
               onClick={() => handleClick('invite')}
             />
-            
+            {
+              !isProjectMode && 
+              <MenuItem icon='/images/airdrop/referList.svg' text='Refer List' isProjectMode={isProjectMode} 
+                onClick={() => handleClick('referList')}
+              />
+            }
 
           </div>
         </div>

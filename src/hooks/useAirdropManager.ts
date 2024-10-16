@@ -235,14 +235,21 @@ export const getUserTaskConfirmed = async (airdropManager: Contract, airdropId: 
 
 export const getUserReferNodeList = async (airdropReferManager: Contract, account: string) => {
   const userReferNodeList = await airdropReferManager.getUserReferNodeList(account);
-
   return (userReferNodeList || []).map((tempItem: any) => {
+    console.log(tempItem.airdropId.toString(), tempItem.index.toString())
+    let _index = Number(tempItem.index.toString());
+    let _amount = 0;
+    while(_index > 0) {
+      _amount += Math.pow(0.5, _index)
+      _index--;
+    }
     return {
       id: tempItem.id.toString(),
       pid: tempItem.pid.toString(),
       index: tempItem.index.toString(),
       addr: tempItem.addr,
       airdropId: tempItem.airdropId.toString(),
+      income: parseFloat(_amount.toFixed(4))
     }
   });
   
@@ -297,6 +304,7 @@ export function useAirdropManager() {
       const list = await getAirdropList(multi, airdropIds, chainId)
       const tempConfirmed = referNodeList.reverse()
       const newList = list.map((item, index) => ({ ...item, ...tempConfirmed[index]}))
+      console.log(referNodeList)
       dispatch(updateUserAirdropConfirmed({ airdropList: newList as any }))
     }
   }, [multi, airdropReferManager, account, airdropList, dispatch, chainId])

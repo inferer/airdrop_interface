@@ -37,7 +37,6 @@ const AirdropConfirm: React.FC<{
 
   const pNode = useReferNode0(router.query.inviter as string)
 
-
   const airdrop = useAirdropList0(router.query.action && router.query.action[2])
   const accountScore = useAccountLabelScore(account || '', airdrop.labelToken?.symbol?.slice(4) || '' )
 
@@ -104,7 +103,7 @@ const AirdropConfirm: React.FC<{
               e.stopPropagation()
               if (confirmStatus === 1 || !router.query.action) return
               // handleConfirmTask(airdrop.airdropId, airdrop.labelToken.address, airdrop.labelToken?.symbol?.slice(4) || '', accountScore)
-              handleReferTo2(router.query.action[2], pNode ? pNode.addr : account ?? '')
+              handleReferTo2(router.query.action[2],  pNode ? pNode.addr : account ?? '')
             }}
           >
             <div className="btn-text">

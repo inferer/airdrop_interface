@@ -13,8 +13,10 @@ import { openBrowser, shortenAddress } from "../../utils";
 import useCopyClipboard from "../../hooks/useCopyClipboard";
 import { Tooltip2 } from "../../components/Tooltip";
 import { useRouter } from "next/router";
+import { FundToken } from "../Project/Ongoing";
+import { getALgTokenFromAirToken } from "../../utils/getTokenList";
 
-const AirdropList: React.FC<{
+const ReferList: React.FC<{
   onChecked?: (keys: IAirdrop[]) => void
 }> = ({
   onChecked
@@ -32,19 +34,6 @@ const AirdropList: React.FC<{
     handleGetUserAirdropReferList(true)
   }, [account])
   
-  const [checkList, setCheckList ] = useState<IAirdrop[]>([])
-  const handleChecked = useCallback((checkedAirdrop, checked) => {
-    const index = checkList.findIndex(checkId => checkId.id === checkedAirdrop.id)
-    if (!checked && index > -1) {
-      checkList.splice(index, 1)
-    }
-    if (checked && index < 0) {
-      checkList.push(checkedAirdrop)
-    }
-    onChecked && onChecked([...checkList])
-    setCheckList(checkList)
-  }, [checkList, userConfirmedList])
-
   return (
     <div>
       <Table>
@@ -57,26 +46,30 @@ const AirdropList: React.FC<{
                   <span className="">Name</span>
                 </div>
               </TableHeadCell>
-              <TableHeadCell className="w-[100px] ">
-                <div>TaskID</div> 
-              </TableHeadCell>
               <TableHeadCell className="w-[118px] ">
                 <span>Pools</span> 
               </TableHeadCell>
-              {/* <TableHeadCell className="w-[120px] ">
-                <span>Units</span> 
-              </TableHeadCell> */}
+              <TableHeadCell className="w-[126px]">
+                <span>Fund</span>
+              </TableHeadCell>
               <TableHeadCell className="w-[200px]">
                 <span>Rewards</span>
               </TableHeadCell>
-              <TableHeadCell className="w-[234px]">
-                <span>Content</span>
+              <TableHeadCell className="w-[120px]">
+                <div style={{width: 100, wordWrap: 'break-word', fontSize: 14, lineHeight: 'normal'}}>
+                  Refer Percentage
+                </div>
+              </TableHeadCell>
+              <TableHeadCell className="w-[120px]">
+                <div style={{width: 100, wordWrap: 'break-word', fontSize: 14, lineHeight: 'normal'}}>
+                  Compound Income
+                </div>
               </TableHeadCell>
               <TableHeadCell className="w-[143px]">
                 <span>Expire On</span>
               </TableHeadCell>
-              <TableHeadCell className="w-[95px]">
-                <span>Landing Page</span>
+              <TableHeadCell className="w-[90px]">
+                <span>Refer Action</span>
               </TableHeadCell>
             </>
           </TableHead>
@@ -100,62 +93,50 @@ const AirdropList: React.FC<{
                         </div>
                           
                         </TableCell>
-                        <TableHeadCell className="w-[100px] ">
-                          <div className=" grid grid-cols-2 w-full text-[16px] font-fsemibold text-black">
-                            <div className=" text-center">{airdrop.id}</div>
-                            <div></div>
-                          </div>
-                        </TableHeadCell>
+                        
                         <TableCell className="w-[118px] ">
                           <div className="bg-[rgba(63,60,255,0.05)] rounded-lg h-[35px] px-[8px] flex items-center justify-center text-[rgba(63,60,255,0.80)] font-fmedium text-[16px]">
                             {airdrop.label}
                           </div>
                         </TableCell>
-                        {/* <TableCell className="w-[120px] ">
-                          <span className="text-[#79D0C4] font-fmedium">2x</span> 
-                        </TableCell> */}
+                        <TableCell className="w-[126px]">
+                          <FundToken airdrop={airdrop} from='user' />
+                        </TableCell>
                         <TableCell className="w-[200px]">
                           <div className="flex items-center">
                             <span className="mr-2">{airdrop.airAmount} {airdrop.labelToken?.symbol}</span>
                             <CurrencyLogo currency={airdrop.labelToken} size="24" />
                           </div>
                         </TableCell>
-                        <TableCell className="w-[234px]">
-                          <div className="min-w-[93px] h-[36px] flex items-center rounded border border-[rgba(0,0,0,0.06)] px-2">
-                            <LazyImage src="/images/airdrop/chain_airdrop.svg" className=" w-5 h-5 rounded-full shrink-0" />
-                            <div className="w-[1px] h-[14px] mx-3 bg-[rgba(0,0,0,0.06)] shrink-0"></div>
-                            <div
-                              className="shrink-0"
-                              onClick={e => {
-                                e.stopPropagation()
-                                staticCopy(account || '')
-                              }}>
-                              <Tooltip2 text={isCopied ? 'Copied' : 'Copy' } >
-                                <span className=" cursor-pointer text-[16px] font-fnormal text-black">{shortenAddress(airdrop.content?.slice(0, 42))}</span>
-                              </Tooltip2>
-                            </div>
-                            
+                        <TableCell className="w-[120px]">
+                          <div>
+                            50%
+                          </div>
+                        </TableCell>
+                        <TableCell className="w-[120px]">
+                          <div>
+                            {(Number(airdrop.income ?? '0')) * 100}%
                           </div>
                         </TableCell>
                         <TableCell className="w-[143px]">
                           <span>{airdrop.expireOn}</span>
                         </TableCell>
-                        <TableCell className="w-[95px]">
+                        <TableCell className="w-[90px]">
                           <div className="flex justify-center w-full">
-                            
-                            {/* {
-                              airdrop.completed ? <div className=" text-gray-400 text-sm">Completed</div> : <CheckedWrap airdrop={airdrop} handleChecked={handleChecked} />
-                            } */}
-                            <Tooltip2 text={airdrop.landingPage + '?taskId=' + airdrop.id} >
+                            {/* <Tooltip2 text={airdrop.landingPage + '?taskId=' + airdrop.id} > */}
                               <div
                                 onClick={e => {
                                   e.stopPropagation()
-                                  openBrowser(airdrop.landingPage + '?taskId=' + airdrop.id)
+                                  const labelToken = airdrop.labelToken
+                                  const algToken = getALgTokenFromAirToken(labelToken.address, labelToken.chainId)
+                                  console.log(algToken)
+                                  const referUrl = window.location.origin + `/user/collect/${algToken}/${airdrop.airdropId}?inviter=` + account
+                                  openBrowser(referUrl)
                                 }}
                               >
-                                <LazyImage src="/images/airdrop/landing.svg" className="w-[24px] h-[24px]" />
+                                <LazyImage src="/images/airdrop/refer.svg" className="w-[24px] h-[24px]" />
                               </div>
-                            </Tooltip2>
+                            {/* </Tooltip2> */}
                             
                           </div>
                         </TableCell>
@@ -185,4 +166,4 @@ const CheckedWrap = ({
   return <CheckBox onChange={checked => handleChecked({...airdrop, accountScore}, checked)} /> 
 }
 
-export default AirdropList
+export default ReferList

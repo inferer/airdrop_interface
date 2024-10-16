@@ -34,6 +34,7 @@ export interface IAirdrop {
   isAirdropRefer?: boolean,
   nftAddress?: string,
   nftId?: string,
+  income?: string | Number
 }
 export interface IAlgAirdrop {
   claimed: string,
