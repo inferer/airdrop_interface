@@ -34,8 +34,22 @@ const SpreadingColor = ({
       if (_currentTop <= 0) {
         _currentTop = 0
       }
-      setCurrentTop(_currentTop)
-      const per = (_currentTop + 8) / wrapInfo.height
+      let per = (_currentTop + 8) / wrapInfo.height
+      if (per > 0.745 && per < 0.755) {
+        per = 0.75
+        _currentTop = 332
+      }
+      if (per > 0.495 && per < 0.505) {
+        per = 0.5
+        _currentTop = 218
+      }
+      if (per > 0.245 && per < 0.255) {
+        per = 0.25
+        _currentTop = 103
+      }
+      if (per < 0.02) {
+        per = 0
+      }
       let colorIndex = 0
       if (per >= 0.25) colorIndex = 1
       if (per >= 0.5) colorIndex = 2
@@ -44,6 +58,8 @@ const SpreadingColor = ({
       // if (moveTimer.current) {
       //   clearTimeout(moveTimer.current)
       // }
+      setCurrentTop(_currentTop)
+      
       moveTimer.current = setTimeout(() => {
         onChange && onChange(colorIndex, per > 0.96 ? 1 : per)
       }, 10)
@@ -135,7 +151,7 @@ const SpreadingColor = ({
         <div className=" absolute left-0 top-0">1.25</div>
         <div className=" absolute left-0 top-[25%] -mt-[8px]">1.00</div>
         <div className=" absolute left-0 top-[50%] -mt-[8px]">0.75</div>
-        <div className=" absolute left-0 top-[75%] -mt-[8px]">0.50</div>
+        <div className=" absolute left-0 top-[75%] -mt-[9px]">0.50</div>
         <div className=" absolute left-0 top-[100%] -mt-[20px]">0.25</div>
       </div>
     </div>
