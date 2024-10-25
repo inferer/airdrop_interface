@@ -1,3 +1,14 @@
+**INFERER AIRDROP PROTOCOL INFERFACE**
+
+Inferer Airdrop protocol is the first ever decentralized crypto airdrop protocol, which is based on uniswap, targeted on web3 airdrop(advertisement) and created new possibilities on airdrop. It’s AMM based, user analyzed and data(user) profited.
+
+
+
+
+
+
+Protocol token addressess:
+```
 [
   '0xfba7fE606D2253BDD2955f8a8fEC240A4c6f279a',
   '0x9538d919Fb24522F67EA9a1C527a8D575d3c212d',
@@ -76,10 +87,5 @@
 ]
 
 "typescript": "^3.8.3"
+```
 
-
-
-Host github.com
-Hostname ssh.github.com
-Port 443
-IdentityFile ~/.ssh/id_ed25519
