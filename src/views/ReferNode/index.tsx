@@ -37,7 +37,7 @@ interface NodeShape {
 }
 
 function RootNode({ node, onAddNode }: { node: HierarchyPointNode<NodeShape>, onAddNode?: (data: HierarchyPointNode<NodeShape>) => void }) {
-  const width = 70;
+  const width = 160;
   const height = 40;
   const centerX = -width / 2;
   const centerY = -height / 2;
@@ -60,7 +60,7 @@ function RootNode({ node, onAddNode }: { node: HierarchyPointNode<NodeShape>, on
         fill={background}
       >
         {/* @ts-ignore */}
-        {node.data.name ? node.data.name + '-' + parseFloat(node.data.income) : 'Add root'}
+        {node.data.name ? node.data.name + '-' + node.data.index + '-' + parseFloat(node.data.income) : 'Add root'}
       </text>
       {
         mouseOver && 
@@ -70,7 +70,7 @@ function RootNode({ node, onAddNode }: { node: HierarchyPointNode<NodeShape>, on
             setMouseOver(false)
           }}
         >
-          <rect width={50} height={30} x={-14} y={-14}
+          <rect width={170} height={40} x={-60} y={-20}
             fill={'rgba(0,0,0,0)'}
             onClickCapture={(e) => {
               e.stopPropagation()
@@ -80,7 +80,7 @@ function RootNode({ node, onAddNode }: { node: HierarchyPointNode<NodeShape>, on
           >
           </rect>
           <text
-              x={50} y={-0}
+              x={100} y={-0}
               dy=".33em"
               fontSize={32}
               fontFamily="Arial"
@@ -127,7 +127,7 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
       
       {node.depth !== 0 && (
         <circle
-          r={isParent ? 40 : 32}
+          r={isParent ? 50 : 42}
           fill={background}
           stroke={isParent ? white : citrus}
         />
@@ -141,7 +141,7 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
         fill={isParent ? white : citrus}
       >
         {/* @ts-ignore */}
-        {node.data.name + '-' + parseFloat(node.data.income) }
+        {node.data.name + '-' + node.data.index + '-' + parseFloat(node.data.income) }
       </text>
       {
         mouseOver && 
@@ -151,7 +151,7 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
             setMouseOver(false)
           }}
         >
-          <rect width={100} height={70} x={-24} y={-34}
+          <rect width={140} height={70} x={-40} y={-34}
             fill={'rgba(0,0,0,0)'}
             onClickCapture={(e) => {
               e.stopPropagation()
@@ -161,7 +161,7 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
           >
           </rect>
           <text
-              x={isParent ? 54 : 44} y={-0}
+              x={isParent ? 74 : 64} y={-0}
               dy=".33em"
               fontSize={32}
               fontFamily="Arial"

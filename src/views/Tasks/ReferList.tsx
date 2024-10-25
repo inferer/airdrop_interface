@@ -14,7 +14,7 @@ import useCopyClipboard from "../../hooks/useCopyClipboard";
 import { Tooltip2 } from "../../components/Tooltip";
 import { useRouter } from "next/router";
 import { FundToken } from "../Project/Ongoing";
-import { getALgTokenFromAirToken } from "../../utils/getTokenList";
+import { useAirdropReferManager } from "../../hooks/useReferManager";
 
 const ReferList: React.FC<{
   onChecked?: (keys: IAirdrop[]) => void
@@ -23,17 +23,24 @@ const ReferList: React.FC<{
 }) => {
   const router = useRouter()
   const { account } = useActiveWeb3React()
-  const [ isCopied, staticCopy ] = useCopyClipboard()
-  const { handleGetUserAirdropReferList } = useAirdropManager()
+  const { 
+    handleReferTo2, 
+    confirmStatus,
+    approvalState, 
+    approve 
+  } = useAirdropReferManager()
+  
+  const { handleGetAirdropReferList, multi, chainId } = useAirdropManager()
   const airdropList = useUserAirdropConfirmedList()
+
   const userConfirmedList = useMemo(() => {
     return airdropList.filter((airdrop) => !airdrop.completed)
   }, [airdropList])
+
   useEffect(() => {
-    // handleGetAirdropList()
-    handleGetUserAirdropReferList(true)
-  }, [account])
-  
+    handleGetAirdropReferList()
+  }, [handleGetAirdropReferList, multi, chainId, account])
+
   return (
     <div>
       <Table>
@@ -46,13 +53,18 @@ const ReferList: React.FC<{
                   <span className="">Name</span>
                 </div>
               </TableHeadCell>
-              <TableHeadCell className="w-[118px] ">
+              <TableHeadCell className="w-[80px]">
+                <div style={{width: 60, wordWrap: 'break-word', fontSize: 14, lineHeight: 'normal'}}>
+                  Index Node ID
+                </div>
+              </TableHeadCell>
+              <TableHeadCell className="w-[80px] ">
                 <span>Pools</span> 
               </TableHeadCell>
               <TableHeadCell className="w-[126px]">
                 <span>Fund</span>
               </TableHeadCell>
-              <TableHeadCell className="w-[200px]">
+              <TableHeadCell className="w-[120px]">
                 <span>Rewards</span>
               </TableHeadCell>
               <TableHeadCell className="w-[120px]">
@@ -93,8 +105,13 @@ const ReferList: React.FC<{
                         </div>
                           
                         </TableCell>
+                        <TableHeadCell className="w-[80px]">
+                          <div >
+                            {airdrop.referNodeId}
+                          </div>
+                        </TableHeadCell>
                         
-                        <TableCell className="w-[118px] ">
+                        <TableCell className="w-[80px] ">
                           <div className="bg-[rgba(63,60,255,0.05)] rounded-lg h-[35px] px-[8px] flex items-center justify-center text-[rgba(63,60,255,0.80)] font-fmedium text-[16px]">
                             {airdrop.label}
                           </div>
@@ -102,7 +119,7 @@ const ReferList: React.FC<{
                         <TableCell className="w-[126px]">
                           <FundToken airdrop={airdrop} from='user' />
                         </TableCell>
-                        <TableCell className="w-[200px]">
+                        <TableCell className="w-[120px]">
                           <div className="flex items-center">
                             <span className="mr-2">{airdrop.airAmount} {airdrop.labelToken?.symbol}</span>
                             <CurrencyLogo currency={airdrop.labelToken} size="24" />
@@ -110,12 +127,12 @@ const ReferList: React.FC<{
                         </TableCell>
                         <TableCell className="w-[120px]">
                           <div>
-                            50%
+                            {airdrop.incomePer}%
                           </div>
                         </TableCell>
                         <TableCell className="w-[120px]">
                           <div>
-                            {(Number(airdrop.income ?? '0')) * 100}%
+                            {parseFloat(((Number(airdrop.income ?? '0')) * 100).toFixed(4))}%
                           </div>
                         </TableCell>
                         <TableCell className="w-[143px]">
@@ -123,20 +140,24 @@ const ReferList: React.FC<{
                         </TableCell>
                         <TableCell className="w-[90px]">
                           <div className="flex justify-center w-full">
-                            {/* <Tooltip2 text={airdrop.landingPage + '?taskId=' + airdrop.id} > */}
-                              <div
-                                onClick={e => {
-                                  e.stopPropagation()
-                                  const labelToken = airdrop.labelToken
-                                  const algToken = getALgTokenFromAirToken(labelToken.address, labelToken.chainId)
-                                  console.log(algToken)
-                                  const referUrl = window.location.origin + `/user/collect/${algToken}/${airdrop.airdropId}?inviter=` + account
-                                  openBrowser(referUrl)
-                                }}
-                              >
-                                <LazyImage src="/images/airdrop/refer.svg" className="w-[24px] h-[24px]" />
-                              </div>
-                            {/* </Tooltip2> */}
+                            {
+                              (airdrop.selfNode && airdrop.selfNode.addr === airdrop.addr) ? 
+                                <div className="text-[rgba(63,60,255,0.80)]">{airdrop.referNodeId}</div> : 
+                                <div
+                                  onClick={e => {
+                                    e.stopPropagation()
+                                    console.log(airdrop)
+                                    if (airdrop.selfNode) {
+                                      return
+                                    }
+                                    // @ts-ignore
+                                    handleReferTo2(airdrop.airdropId, airdrop.addr)
+                                  }}
+                                  style={{ opacity: airdrop.selfNode ? '0.5' : 1}}
+                                >
+                                  <LazyImage src="/images/airdrop/refer.svg" className="w-[24px] h-[24px]" />
+                                </div>
+                            }
                             
                           </div>
                         </TableCell>

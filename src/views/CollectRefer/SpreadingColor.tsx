@@ -18,12 +18,12 @@ const SpreadingColor = ({
   useEffect(() => {
     if (wrapRef.current) {
       const data = wrapRef.current?.getBoundingClientRect()
-      const _initTop = Math.floor(data.height / 4) * 3 - 24
+      const _initTop = Math.floor(data.height / 4) * ((Number(value) * 100 / 25)) - 24
       setCurrentTop(_initTop)
       setWrapInfo({ left: data.left, top: data.top, height: data.height })
     }
     updateAirTokenPercent(0)
-  }, [])
+  }, [value])
 
   const pointerTop = useMemo(() => {
     return currentTop
@@ -71,7 +71,6 @@ const SpreadingColor = ({
   useEffect(() => {
     const colorPer = 1 - Number(value);
     const colorData = getColor2(colorPer)
-
     setCurrentColor(getColor(colorData, 1))
   }, [value])
 

@@ -86,8 +86,15 @@ export default function Create() {
   const [nftId, setNftId] = useState('')
   const handleChangeNFTId = useCallback((value) => {
     setNftId(value)
-    if (!value) return
-    if (!contractAddress) return
+    if (!value || !contractAddress) {
+      setNFTURI({
+        "name": "",
+        "description": "",
+        "image": "",
+        "strength": 20
+      })
+      return
+    } 
     if (timer.current) {
       clearTimeout(timer.current)
     }
@@ -98,10 +105,10 @@ export default function Create() {
           setVerifyingNFTId(false)
           setVerifyNFTIdStatus(res ? 2 : 0)
           setNFTURI(res || {"name": "",
-          "description": "",
-          "image": "",
-          "strength": 20})
-        })
+            "description": "",
+            "image": "-1",
+            "strength": 20})
+          })
     }, 800)
   }, [handleVerifyNFTOwner, contractAddress])
 
@@ -296,7 +303,7 @@ export default function Create() {
                           </div>
                         }
                         {
-                          verifyNFTIdStatus === 0 &&
+                          (verifyNFTIdStatus === 0) && nftId &&
                           <div className=' font-dnormal text-[14px] text-[rgba(248,138,138,0.6)] shrink-0 flex items-center'>
                             NFT not available
                             <div className=' cursor-pointer'
@@ -340,11 +347,21 @@ export default function Create() {
               </div>
               <div className='w-[1px] h-[86px] bg-[rgba(63,70,100,0.10)] ml-[184px]'></div>
               {
-                (nftId) && 
+                (nftId && nftURI.image === '-1') && 
                 <div className='mt-[10px] text-[14px] text-[rgba(0,0,0,0.60)] ml-[120px]'>
                   <div className='text-[16px] font-fbold text-[rgba(0,0,0,0.50)]'>Commodity Preview</div>
                   <div className=' mt-6'>
-                    <LazyImage2 src={nftURI.image || '/images/airdrop-refer/nft_default.png'} className='w-[162px] h-[162px] rounded-[8px]' />
+                    <LazyImage src={'/images/airdrop-refer/nft_default.png'} className='w-[162px] h-[162px] rounded-[8px]' />
+                  </div>
+
+                </div>
+              }
+              {
+                (nftId && nftURI.image && nftURI.image !== '-1') && 
+                <div className='mt-[10px] text-[14px] text-[rgba(0,0,0,0.60)] ml-[120px]'>
+                  <div className='text-[16px] font-fbold text-[rgba(0,0,0,0.50)]'>Commodity Preview</div>
+                  <div className=' mt-6'>
+                    <LazyImage src={nftURI.image} className='w-[162px] h-[162px] rounded-[8px]' />
                   </div>
 
                 </div>
@@ -525,7 +542,7 @@ export default function Create() {
                 if (createStatus === 1) return
                 if (createDisabled) return
                 // return
-                handleCreateAirdrop(name, label, type, contractAddress, nftId, ladningPage, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, duration)
+                handleCreateAirdrop(name, label, type, contractAddress, nftId, ladningPage, lockedAmountAB.lockedAmountA, lockedAmountAB.lockedAmountB, duration, currentPer)
               }}
             >
               <div className='btn-text'>

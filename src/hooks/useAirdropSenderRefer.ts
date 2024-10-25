@@ -1,5 +1,6 @@
 import router from 'next/router'
 import { BigNumber, ethers } from 'ethers'
+import BN from 'bignumber.js'
 import { Contract } from '@ethersproject/contracts'
 import { Currency, ETHER, Token, Trade } from '@uniswap/sdk'
 import { useCallback, useMemo, useState } from 'react'
@@ -13,7 +14,6 @@ import { useApproveCallback } from './useApproveCallback'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import { AirdropAssetTreasury_NETWORKS } from '../constants/airdropAssetTreasury'
 import { useSwapCallArguments } from './useSwapCallback'
-import { useAddPopup } from '../state/application/hooks'
 import { useAirTokenPercent, useAirTokenPercentBalance, useCreateContractABI, useCreateContractABIAll } from '../state/airdrop/hooks'
 import { Field } from '../state/swap/actions'
 import { useDispatch } from 'react-redux'
@@ -131,6 +131,7 @@ export function useCreateAirdropRefer(args: any[], lockedToken?: Token, ) {
     lockedAmountA: string,
     lockedAmountB: string,
     _duration: string,
+    currentPer: Number
 
   ) => {
     if (airdropSenderRefer && account && lockedToken) {
@@ -141,10 +142,11 @@ export function useCreateAirdropRefer(args: any[], lockedToken?: Token, ) {
       const baseInfo = [name, label, type, nftContract.toLowerCase(), nftId, ladningPage, 'ERC721', 'inferer']
       const route = args[2]
       const offer_label_token = [isETH ? ethers.constants.AddressZero : lockedToken.address, route[0], route[route.length - 1], nftContract]
-      const offer_label_locked = independentField === Field.INPUT ? [lockedAmountA, lockedAmountB, args[1], 1] : [args[1], lockedAmountB, lockedAmountA, 1]
+      const per = new BN(currentPer.toString()).multipliedBy(100).toFixed(0)
+      const offer_label_locked = independentField === Field.INPUT ? [lockedAmountA, lockedAmountB, args[1], 1, per] : [args[1], lockedAmountB, lockedAmountA, 1, per]
       const duration = parseInt(_duration) * 24 * 60 * 60
       // const duration = 1 * 10 * 60
-      console.log(baseInfo, offer_label_token, offer_label_locked, duration)
+      console.log(currentPer, baseInfo, offer_label_token, offer_label_locked, duration)
       let gasLimit = '5000000'
 
       try {

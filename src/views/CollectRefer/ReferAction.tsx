@@ -11,7 +11,7 @@ const ReferAction = ({airdrop, from = 'project'}: {
   airdrop: IAirdrop,
   from?: String,
 }) => {
-  const [currentPer, setCurrentPer] = useState(0.5)
+  const [currentPer, setCurrentPer] = useState(airdrop.incomePer ? Number(airdrop.incomePer) / 100 : 0.5)
   const [lockedAmount, setlockedAmount] = useState(100)
   const coverage = useMemo(() => {
     return Math.ceil(Number(airdrop.labelLocked) / currentPer)
@@ -47,7 +47,7 @@ const ReferAction = ({airdrop, from = 'project'}: {
                       Refer Percentage
                     </div>
                     <div className='text-[rgba(63,70,100,0.60)] text-[16px] font-fnormal mt-4'>
-                      {(currentPer * 100).toFixed(0)}%
+                      {airdrop.incomePer}%
                     </div>
                   </div>
                   <div className='w-[50%] shrink-0'>
@@ -104,7 +104,7 @@ const ReferAction = ({airdrop, from = 'project'}: {
           </ItemBox>
           <ItemBox width={1120} height={982} style={{ marginTop: 20, height: 'auto' }} >
             {
-              from === 'project' ? <SpreadingChart /> : <R8Compound />
+             airdrop.airdropId ? (from === 'project' ? <SpreadingChart incomePer={125 - Number(airdrop.incomePer || '0')} /> : <R8Compound  incomePer={125 - Number(airdrop.incomePer || '0')} />) : null
             }
             
             <IncomeCalculation />

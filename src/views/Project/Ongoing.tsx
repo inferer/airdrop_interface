@@ -115,7 +115,9 @@ export const OngoingList: React.FC<{
     if (account) {
       handleGetUserAirdropList(account)
     }
-  }, [account])
+  }, [account, handleGetUserAirdropList])
+
+  console.log(filterAirdropList)
 
   return (
     <div>

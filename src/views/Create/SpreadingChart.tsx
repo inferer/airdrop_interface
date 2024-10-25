@@ -7,9 +7,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 let draw: Svg | null = null
 
 const SpreadingChart = ({
-  onChange
+  onChange,
+  incomePer = 75
 }: {
-  onChange?: (per: number) => void
+  onChange?: (per: number) => void,
+  incomePer?: number
 }) => {
   const [drawWidth, setDrawWidth] = useState(928)
   const [drawHeight, setDrawHeight] = useState(453)
@@ -90,23 +92,13 @@ const SpreadingChart = ({
     const colorPer = 1 - per;
     const diameter = 40 - (per) * 24
     const rowNums = Math.floor(drawHeight / (diameter + 1)) 
-    const columnNums = Math.floor(drawWidth / (diameter + 1)) 
     const colorData = getColor2(colorPer)
 
     setBgrColor(getColor(colorData, 0.06))
     setCurrentColor(getColor(colorData, 1))
     setBorderColor(getColor(colorData, 1))
-
-    // if (Math.abs(rowNums - rowCol.row) < 1 || Math.abs(columnNums - rowCol.col) < 1) {
-    //   setRowCol({row: rowNums, col: columnNums})
-    //   return
-    // }    
-    setRowCol({row: rowNums, col: columnNums})
     draw?.clear()
     drawBg(diameter)
-    // draw?.clear()
-    // 计算中间点的位置
-    // const centerX = Math.floor(columnNums / 2) * (diameter + 1) + 2
     const centerX = Math.floor(drawWidth / 2)
     const centerY = 2
     draw?.circle(diameter - 1).fill('#ffffff').stroke({ width: 1, color: getColor(colorData, 1) }).move(centerX, centerY)
@@ -149,21 +141,80 @@ const SpreadingChart = ({
       draw?.circle(diameter - 1).fill(getColor(colorData, fillColor)).move(xR, y)
       xR = xR + (diameter + 1) * 1
     }
-      
-
   }, [colorList, rowCol])
+
+  const drawContentInit = useCallback((_diameter = 24, index = 0, per = 0.75) => {
+    console.log(per)
+    const colorPer = 1 - per;
+    const diameter = 40 - (per) * 24
+    const rowNums = Math.floor(drawHeight / (diameter + 1)) 
+    const columnNums = Math.floor(drawWidth / (diameter + 1)) 
+    const colorData = getColor2(colorPer)
+
+    setBgrColor(getColor(colorData, 0.06))
+    setCurrentColor(getColor(colorData, 1))
+    setBorderColor(getColor(colorData, 1))
+    setRowCol({row: rowNums, col: columnNums})
+    draw?.clear()
+    drawBg(diameter)
+    const centerX = Math.floor(drawWidth / 2)
+    const centerY = 2
+    draw?.circle(diameter - 1).fill('#ffffff').stroke({ width: 1, color: getColor(colorData, 1) }).move(centerX, centerY)
+    const _subX = (diameter - 1 - 10) / 2
+    draw?.circle(10).fill(getColor(colorData, 1)).move(centerX + _subX, centerY + _subX)
+
+    let row = 1;
+    for( ;row < rowNums; row++) {
+      if (row > rowNums / 2) break;
+      // 从中间往左画
+      let xL = centerX - (diameter + 1) * 1
+      let y = row * (diameter + 1) + 2
+      let num = row
+      let fillColor = 1 - (num * 0.1)
+      if (fillColor < 0.4) fillColor = 0.4
+      while(xL >= -diameter && num > 0) {
+        draw?.circle(diameter - 1).fill(getColor(colorData, fillColor)).move(xL, y)
+        xL = xL - (diameter + 1) * 2
+        num = num - 1
+      }
+
+      // 从中间往右画
+      num = row
+      let xR = centerX + (diameter + 1) * 1
+      while(xR < (drawWidth ) && num > 0) {
+        draw?.circle(diameter - 1).fill(getColor(colorData, fillColor)).move(xR, y)
+        xR = xR + (diameter + 1) * 2
+        num = num - 1
+      }
+    }
+    let fillColor = 0.4
+    let xL = centerX - (diameter + 1) * 1
+    let y = (row) * (diameter + 1) + 2
+    while(xL >= -diameter) {
+      draw?.circle(diameter - 1).fill(getColor(colorData, fillColor)).move(xL, y)
+      xL = xL - (diameter + 1) * 1
+    }
+    let xR = centerX
+    while(xR < (drawWidth )) {
+      draw?.circle(diameter - 1).fill(getColor(colorData, fillColor)).move(xR, y)
+      xR = xR + (diameter + 1) * 1
+    }
+  }, [colorList])
 
   useEffect(() => {
     if (!draw) {
       draw = SVG().addTo('#SpreadingChart').size(928, 453)
     }
     // drawBg()
-    drawContent(24, 3)
+    if (incomePer > 0) {
+      
+    }
+    drawContentInit(24, 3, parseFloat((incomePer / 100).toFixed(2)))
 
     return () => {
       draw = null
     }
-  }, [])
+  }, [incomePer, drawContentInit])
 
   const [preIndex, setPreIndex] = useState(3)
   const [per, setPer] = useState(0.25)
@@ -180,6 +231,7 @@ const SpreadingChart = ({
       </div>
       
         <SpreadingColor 
+          incomePer={incomePer}
           view={!onChange}
           value={currentColor} 
           onChange={(index, per) => {

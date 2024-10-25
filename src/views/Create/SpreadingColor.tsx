@@ -5,11 +5,13 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo
 const SpreadingColor = ({
   view,
   value,
-  onChange
+  onChange,
+  incomePer = 70
 }: {
   view?: boolean
   value: string
-  onChange?: (colorIndex: number, per: number) => void
+  onChange?: (colorIndex: number, per: number) => void,
+  incomePer?: number
 }, ref: React.Ref<unknown> | undefined) => {
   const updateAirTokenPercent = useUpdateAirTokenPercent()
   const airPercent = useAirTokenPercent()
@@ -70,18 +72,18 @@ const SpreadingColor = ({
   useEffect(() => {
     if (wrapRef.current) {
       const data = wrapRef.current?.getBoundingClientRect()
-      const _initTop = Math.floor(data.height / 4) * 3 - 8
+      const _initTop = Math.floor(data.height / 4) * ((incomePer / 25)) - 8
       setCurrentTop(_initTop)
       setPreTop(_initTop)
       setWrapInfo({ left: data.left, top: data.top, height: data.height })
     }
     updateAirTokenPercent(0)
-  }, [])
+  }, [incomePer])
 
   const pointerTop = useMemo(() => {
     // if (selectWidth > wrapInfo.height - 3) return wrapInfo.height - 3
     return currentTop
-  }, [wrapInfo, currentTop])
+  }, [currentTop])
 
   return (
     <div className="flex items-center mt-3 pl-[37px] relative w-full"
@@ -128,7 +130,8 @@ const SpreadingColor = ({
             stroke: '#FFF',
             filter: 'drop-shadow(0px 4px 20px rgba(0, 0, 0, 0.05))', 
             boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.05)',
-            background: value ?? 'none'
+            background: value ?? 'none',
+            cursor: view ? 'default' : 'pointer'
           }}
           onMouseDown={e => {
             e.stopPropagation()

@@ -4,7 +4,7 @@ export const TableCell = ({
   className
 }: { children: React.ReactChild, className?: string }) => {
   return (
-    <div className={`flex items-center font-fnormal text-[16px] leading-[21px] text-[#000] whitespace-nowrap ${className}`}>
+    <div className={`flex items-center font-fnormal shrink-0 text-[16px] leading-[21px] text-[#000] whitespace-nowrap ${className}`}>
       { children }
     </div>
   )
@@ -15,7 +15,7 @@ export const TableHeadCell = ({
   className
 }: { children: React.ReactElement, className?: string }) => {
   return (
-    <div className={` flex items-center font-fbold text-sm leading-[21px] text-[rgba(0,0,0,0.4)] ${className}`}>
+    <div className={` flex items-center font-fbold shrink-0 text-sm leading-[21px] text-[rgba(0,0,0,0.4)] ${className}`}>
       { children }
     </div>
   )

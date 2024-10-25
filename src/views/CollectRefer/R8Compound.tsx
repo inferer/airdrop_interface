@@ -7,7 +7,7 @@ import { useMemo } from "react"
 import { useActiveWeb3React } from "../../hooks"
 
 const Box = ({
-  children
+  children,
 }: {
   children: React.ReactChild
 }) => {
@@ -18,7 +18,11 @@ const Box = ({
   )
 }
 
-const R8Compound = () => {
+const R8Compound = ({
+  incomePer
+}: {
+  incomePer?: number
+}) => {
   const { account } = useActiveWeb3React()
   const router = useRouter()
   const pNode = useReferNode0(router.query.inviter as string)
@@ -313,7 +317,7 @@ const R8Compound = () => {
         </div>
       </div>
       <div className="pt-[35px] pb-[80px]">
-        <SpreadingColor value={'0.75'} />
+        <SpreadingColor value={(Number(incomePer) / 100).toFixed(2)} />
       </div>
       
     </div>

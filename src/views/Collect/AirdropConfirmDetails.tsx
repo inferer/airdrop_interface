@@ -20,7 +20,7 @@ const AirdropConfirmDetails: React.FC<{
       handleGetAirdropOne(Number(id))
       handleGetAirdropUserConfirmed(Number(id))
     }
-  }, [router.query])
+  }, [router.query, handleGetAirdropOne, handleGetAirdropUserConfirmed])
 
   const airdrop = useAirdropList0(router.query?.action ? router.query?.action[1] as string : undefined)
   
