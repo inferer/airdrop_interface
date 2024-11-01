@@ -18,7 +18,7 @@ const LazyImage: React.FC<LazyImageProps> = ({ src, className, alt, ...others}) 
   const { ref: inViewRef, inView, entry } = useInView({});
   useEffect(() => {
     if (inView && !imgSrc) {
-      setImgSrc(isDev ? src.replace('http://36.26.92.165:13880/', 'http://180.163.81.72:13880') : `https://website-1315068501.cos.ap-nanjing.myqcloud.com/airdrop_interface${src}`)
+      setImgSrc(isDev ? src.replace('http://36.26.92.165:13880/', 'http://180.163.81.72:13880/') : `https://website-1315068501.cos.ap-nanjing.myqcloud.com/airdrop_interface${src}`)
     }
     
   }, [inView, src, imgSrc])
