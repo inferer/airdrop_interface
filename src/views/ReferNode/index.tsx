@@ -22,6 +22,7 @@ import genPhyllotaxis, {
 } from '@visx/mock-data/lib/generators/genPhyllotaxis';
 import { scaleLinear } from '@visx/scale';
 import React from 'react';
+import { useAirdropManager } from '../../hooks/useAirdropManager';
 
 const citrus = '#ddf163';
 const white = '#ffffff';
@@ -228,6 +229,7 @@ const ReferTree = () => {
   const [adding, setAdding] = useState(false)
 
   const { handleGetReferNodeList, handleReferTo } = useAirdropReferManager()
+  const { handleGetAirdropOne2 } = useAirdropManager()
 
   const handleInitReferNodeList = useCallback(async (fresh?: boolean) => {
     const dataList = await handleGetReferNodeList()
@@ -307,6 +309,17 @@ const ReferTree = () => {
   useEffect(() => {
     handleInitReferNodeList()
   }, [handleInitReferNodeList])
+  const [incomePer, setIncomePer] = useState(0)
+  useEffect(() => {
+    const airdropId = Number(router.query.airdropId as string)
+    if (airdropId > 0) {
+      handleGetAirdropOne2(airdropId)
+        .then((res: any) => {
+          res && setIncomePer(Number(res.incomePer) / 100)
+        })
+    }
+    
+  }, [router.query, handleGetAirdropOne2])
 
   const initTimer = useRef<any>(null)
   useEffect(() => {
@@ -469,7 +482,7 @@ const ReferTree = () => {
   }, [nodeList])
 
   const dataList = useMemo(() => {
-    if (nodeList.length > 0) {
+    if (nodeList.length > 0 && incomePer > 0) {
       const buildTree = (nodeList: any[]) =>  {
           let treeMap: any = {};
           let tree: any = [];
@@ -477,10 +490,10 @@ const ReferTree = () => {
             let _index = item.index;
             let _amount = 0;
             while(_index > 0) {
-              _amount += Math.pow(0.5, _index)
+              _amount += Math.pow(incomePer, _index)
               _index--;
             }
-            treeMap[item.id] = {...item, name: item.id, income: _amount.toFixed(4), children: []};
+            treeMap[item.id] = {...item, name: item.id, income: _amount.toFixed(4), incomePer: incomePer, children: []};
             if (item.pid === '0') {
                 tree.push(treeMap[item.id]);
             } else if (treeMap[item.pid]) {
@@ -495,7 +508,7 @@ const ReferTree = () => {
     // @ts-ignore
     return hierarchy<NodeShape>([])
     
-  }, [nodeList]);
+  }, [nodeList, incomePer]);
 
   const handleAddNode2 = useCallback(async (node: HierarchyPointNode<NodeShape>) => {
 

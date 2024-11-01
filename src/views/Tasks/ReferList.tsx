@@ -49,7 +49,7 @@ const ReferList: React.FC<{
             <>
               <TableHeadCell className="flex-1 w-[243px]">
                 <div className='flex items-center'>
-                  <div className="w-[35px]">ID</div>
+                  <div className="w-[65px]">Airdrop ID</div>
                   <span className="">Name</span>
                 </div>
               </TableHeadCell>
@@ -98,7 +98,7 @@ const ReferList: React.FC<{
                       <>
                         <TableCell className="flex-1 w-[243px]">
                         <div className='flex items-center text-[16px] font-fsemibold text-black'>
-                          <div className="w-[35px]">{index + 1}</div>
+                          <div className="w-[65px]">{airdrop.airdropId}</div>
                           <div className=''>
                             <span className="">{airdrop.name}</span>
                           </div>
@@ -142,21 +142,26 @@ const ReferList: React.FC<{
                           <div className="flex justify-center w-full">
                             {
                               (airdrop.selfNode && airdrop.selfNode.addr === airdrop.addr) ? 
-                                <div className="text-[rgba(63,60,255,0.80)]">{airdrop.referNodeId}</div> : 
-                                <div
-                                  onClick={e => {
-                                    e.stopPropagation()
-                                    console.log(airdrop)
-                                    if (airdrop.selfNode) {
-                                      return
-                                    }
-                                    // @ts-ignore
-                                    handleReferTo2(airdrop.airdropId, airdrop.addr)
-                                  }}
-                                  style={{ opacity: airdrop.selfNode ? '0.5' : 1}}
-                                >
-                                  <LazyImage src="/images/airdrop/refer.svg" className="w-[24px] h-[24px]" />
-                                </div>
+                                <Tooltip2 text={`You have referred this airdrop on node id ${airdrop.referNodeId}`} >
+                                  <div className="text-[rgba(63,60,255,0.80)]">{airdrop.referNodeId}</div>
+                                </Tooltip2> : 
+                                <Tooltip2 text={`You have referred this airdrop`} >
+                                  <div
+                                    onClick={e => {
+                                      e.stopPropagation()
+                                      console.log(airdrop)
+                                      if (airdrop.selfNode) {
+                                        return
+                                      }
+                                      // @ts-ignore
+                                      handleReferTo2(airdrop.airdropId, airdrop.addr)
+                                    }}
+                                    style={{ opacity: airdrop.selfNode ? '0.5' : 1}}
+                                  >
+                                    <LazyImage src="/images/airdrop/refer.svg" className="w-[24px] h-[24px]" />
+                                  </div>
+                                </Tooltip2>
+                                
                             }
                             
                           </div>

@@ -89,3 +89,6 @@ Protocol token addressess:
 "typescript": "^3.8.3"
 ```
 
+
+scp token36:/pragrams/airdrop_model_service/scoredata.zip ./scoredata.zip
+scp token36:/pragrams/airdrop_model_service/airdropdata.zip ./airdropdata.zip

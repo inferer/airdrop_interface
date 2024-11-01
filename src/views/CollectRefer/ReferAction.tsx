@@ -19,16 +19,17 @@ const ReferAction = ({airdrop, from = 'project'}: {
 
   const incomePer = useMemo(() => {
     let _index = 5;
-    if (currentPer >= 1) {
+    const per = airdrop.incomePer ? Number(airdrop.incomePer) / 100 : 0.5
+    if (per >= 1) {
       _index = 5
     }
     let _amount = 0;
     while(_index > 0) {
-      _amount += Math.pow(currentPer, _index)
+      _amount += Math.pow(per, _index)
       _index--;
     }
     return 100 + Math.floor(_amount * 100)
-  }, [currentPer])
+  }, [airdrop.incomePer])
   const [expend, setExpend] = useState(true)
 
   return (
