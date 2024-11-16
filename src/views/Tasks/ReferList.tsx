@@ -23,6 +23,7 @@ const ReferList: React.FC<{
 }) => {
   const router = useRouter()
   const { account } = useActiveWeb3React()
+  const [ isCopied, staticCopy ] = useCopyClipboard()
   const { 
     handleReferTo2, 
     confirmStatus,
@@ -40,17 +41,22 @@ const ReferList: React.FC<{
   useEffect(() => {
     handleGetAirdropReferList()
   }, [handleGetAirdropReferList, multi, chainId, account])
-
+  console.log(airdropList)
   return (
     <div>
       <Table>
         <>
           <TableHead>
             <>
-              <TableHeadCell className="flex-1 w-[243px]">
+              <TableHeadCell className="flex-1 w-[283px]">
                 <div className='flex items-center'>
                   <div className="w-[65px]">Airdrop ID</div>
                   <span className="">Name</span>
+                </div>
+              </TableHeadCell>
+              <TableHeadCell className="w-[160px]">
+                <div style={{ wordWrap: 'break-word', fontSize: 14, lineHeight: 'normal'}}>
+                  Refer user
                 </div>
               </TableHeadCell>
               <TableHeadCell className="w-[80px]">
@@ -96,7 +102,7 @@ const ReferList: React.FC<{
                       }}
                     >
                       <>
-                        <TableCell className="flex-1 w-[243px]">
+                        <TableCell className="flex-1 w-[283px]">
                         <div className='flex items-center text-[16px] font-fsemibold text-black'>
                           <div className="w-[65px]">{airdrop.airdropId}</div>
                           <div className=''>
@@ -105,6 +111,18 @@ const ReferList: React.FC<{
                         </div>
                           
                         </TableCell>
+                        <TableHeadCell className="w-[160px]">
+                          <div
+                              className="shrink-0"
+                              onClick={e => {
+                                e.stopPropagation()
+                                staticCopy(airdrop.addr ?? '')
+                              }}>
+                              <Tooltip2 text={isCopied ? 'Copied' : 'Copy' } >
+                                <span className=" cursor-pointer text-[16px] font-fnormal text-black">{shortenAddress(airdrop.addr ?? '')}</span>
+                              </Tooltip2>
+                            </div>
+                        </TableHeadCell>
                         <TableHeadCell className="w-[80px]">
                           <div >
                             {airdrop.referNodeId}
@@ -141,26 +159,41 @@ const ReferList: React.FC<{
                         <TableCell className="w-[90px]">
                           <div className="flex justify-center w-full">
                             {
-                              (airdrop.selfNode && airdrop.selfNode.addr === airdrop.addr) ? 
-                                <Tooltip2 text={`You have referred this airdrop on node id ${airdrop.referNodeId}`} >
-                                  <div className="text-[rgba(63,60,255,0.80)]">{airdrop.referNodeId}</div>
-                                </Tooltip2> : 
-                                <Tooltip2 text={`You have referred this airdrop`} >
-                                  <div
-                                    onClick={e => {
-                                      e.stopPropagation()
-                                      console.log(airdrop)
-                                      if (airdrop.selfNode) {
-                                        return
-                                      }
-                                      // @ts-ignore
-                                      handleReferTo2(airdrop.airdropId, airdrop.addr)
-                                    }}
-                                    style={{ opacity: airdrop.selfNode ? '0.5' : 1}}
-                                  >
-                                    <LazyImage src="/images/airdrop/refer.svg" className="w-[24px] h-[24px]" />
-                                  </div>
-                                </Tooltip2>
+                              !airdrop.selfNode ?
+                                <div
+                                  onClick={e => {
+                                    e.stopPropagation()
+                                    console.log(airdrop)
+                                    if (airdrop.selfNode) {
+                                      return
+                                    }
+                                    // @ts-ignore
+                                    handleReferTo2(airdrop.airdropId, airdrop.addr)
+                                  }}
+                                  style={{ opacity: airdrop.selfNode ? '0.5' : 1}}
+                                >
+                                  <LazyImage src="/images/airdrop/refer.svg" className="w-[24px] h-[24px]" />
+                                </div> :
+                                airdrop.selfNode.addr === airdrop.addr ?
+                                  <Tooltip2 text={`You have referred this airdrop on node id ${airdrop.referNodeId}`} >
+                                    <div className="text-[rgba(63,60,255,0.80)]">{airdrop.referNodeId}</div>
+                                  </Tooltip2> :
+                                  <Tooltip2 text={`You have referred this airdrop`} >
+                                    <div
+                                      onClick={e => {
+                                        e.stopPropagation()
+                                        if (airdrop.selfNode) {
+                                          return
+                                        }
+                                        // @ts-ignore
+                                        handleReferTo2(airdrop.airdropId, airdrop.addr)
+                                      }}
+                                      style={{ opacity: airdrop.selfNode ? '0.5' : 1}}
+                                    >
+                                      <LazyImage src="/images/airdrop/refer.svg" className="w-[24px] h-[24px]" />
+                                    </div>
+                                  </Tooltip2>
+                                
                                 
                             }
                             

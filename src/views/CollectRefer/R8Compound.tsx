@@ -3,8 +3,9 @@ import LazyImage from "../../components/LazyImage"
 import SpreadingColor from "./SpreadingColor"
 import { useReferNode0 } from "../../state/airdrop/hooks"
 import { useRouter } from "next/router"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import { useActiveWeb3React } from "../../hooks"
+import { useAirdropReferManager } from "../../hooks/useReferManager"
 
 const Box = ({
   children,
@@ -18,6 +19,16 @@ const Box = ({
   )
 }
 
+function getIncome(index: number, incomePer: number) {
+  let _amount = 0;
+  let _index = index;
+  while(_index > 0) {
+    _amount += Math.pow(incomePer, _index)
+    _index--;
+  }
+  return _amount.toFixed(3)
+}
+
 const R8Compound = ({
   incomePer
 }: {
@@ -25,10 +36,35 @@ const R8Compound = ({
 }) => {
   const { account } = useActiveWeb3React()
   const router = useRouter()
+
+  const { handleGetReferNodeList } = useAirdropReferManager()
+  useEffect(() => {
+    const airdropId = router.query.action ? router.query.action[1] as string : ''
+    handleGetReferNodeList(airdropId)
+  }, [handleGetReferNodeList, router])
+  
   const pNode = useReferNode0(router.query.inviter as string)
+  const aNode = useReferNode0(account as string)
   const pId = useMemo(() => {
-    return pNode ? Number(pNode.id) + 1 : 0
-  }, [pNode])
+    return pNode ? Number(pNode.id) + 1 : aNode ? Number(aNode.id) : 0
+  }, [pNode, aNode])
+
+  const incomePerStr = useMemo(() => {
+    return ((125 - Number(incomePer)) / 100).toFixed(2)
+  }, [incomePer])
+
+  const income1 = useMemo(() => {
+    return getIncome(1, Number(incomePerStr))
+  }, [incomePerStr])
+
+  const income2 = useMemo(() => {
+    return getIncome(2, Number(incomePerStr))
+  }, [incomePerStr])
+
+  const income3 = useMemo(() => {
+    return getIncome(3, Number(incomePerStr))
+  }, [incomePerStr])
+
   return (
     <div className=" flex">
       <div>
@@ -72,7 +108,7 @@ const R8Compound = ({
               <div className="flex items-center">
                 <div className="w-[200px] shrink-0 pl-5 flex items-center">
                   <span className=" text-[20px] font-dmedium text-[#FFD879]">+</span>
-                  <span className=" text-[30px] font-dbold text-[#FFD879] ml-[6px] mr-1">0.5</span>
+                  <span className=" text-[30px] font-dbold text-[#FFD879] ml-[6px] mr-1">{income1}</span>
                   <LazyImage src="/images/airdrop-refer/air-token.svg" className="w-4 h-4" />
                 </div>
                 <div className=" flex items-center" >
@@ -100,7 +136,7 @@ const R8Compound = ({
                   </div>
                   <div className="w-[30px] rounded-[4px] flex justify-center items-center text-[16px] font-dbold text-[#FFD879]">
                     <span className=" text-[10px] font-dmedium text-[#FFD879]">+</span>
-                    <span className=" text-[10px] font-dbold text-[#FFD879] ml-[6px] mr-1">0.5</span>
+                    <span className=" text-[10px] font-dbold text-[#FFD879] ml-[6px] mr-1">{incomePerStr}</span>
                     <LazyImage src="/images/airdrop-refer/air-token.svg" className="w-2 h-2" />
                   </div>
                 </div>
@@ -137,7 +173,7 @@ const R8Compound = ({
               <div className="flex items-center">
                 <div className="w-[200px] shrink-0 pl-5 flex items-center text-[#9AADE0]">
                   <span className=" text-[20px] font-dmedium ">+</span>
-                  <span className=" text-[30px] font-dbold ml-[6px] mr-1">0.75</span>
+                  <span className=" text-[30px] font-dbold ml-[6px] mr-1">{income2}</span>
                   <LazyImage src="/images/airdrop-refer/air-token.svg" className="w-4 h-4" />
                 </div>
                 <div className=" flex items-center" >
@@ -171,7 +207,7 @@ const R8Compound = ({
                   </div>
                   <div className="w-[30px] rounded-[4px] flex justify-center items-center text-[16px] font-dbold text-[#FFD879]">
                     <span className=" text-[10px] font-dmedium text-[#FFD879]">+</span>
-                    <span className=" text-[10px] font-dbold text-[#FFD879] ml-[6px] mr-1">0.5</span>
+                    <span className=" text-[10px] font-dbold text-[#FFD879] ml-[6px] mr-1">{incomePerStr}</span>
                     <LazyImage src="/images/airdrop-refer/air-token.svg" className="w-2 h-2" />
                   </div>
                   <div className="px-1 opacity-0">
@@ -180,7 +216,7 @@ const R8Compound = ({
                   <div className="w-[30px] rounded-[4px] flex justify-center items-center text-[16px] font-dbold text-[#9AADE0]">
                     <span className=" text-[10px] font-dmedium text-[#9AADE0]">+</span>
                     {/* <div className=" text-[10px] font-dbold text-[#FFD879] ml-[6px] mr-1">0.5 <sup>2</sup></div> */}
-                    <div className=" font-dbold ml-[6px]  mr-1 text-[10px]">0.5<sup>2</sup></div>
+                    <div className=" font-dbold ml-[6px]  mr-1 text-[10px]">{incomePerStr}<sup>2</sup></div>
 
                     <LazyImage src="/images/airdrop-refer/air-token.svg" className="w-2 h-2" />
                   </div>
@@ -226,7 +262,7 @@ const R8Compound = ({
               <div className="flex items-center">
                 <div className="w-[200px] shrink-0 pl-5 flex items-center text-[#FFA68C]">
                   <span className=" text-[20px] font-dmedium ">+</span>
-                  <span className=" text-[30px] font-dbold ml-[6px] mr-1">0.875</span>
+                  <span className=" text-[30px] font-dbold ml-[6px] mr-1">{income3}</span>
                   <LazyImage src="/images/airdrop-refer/air-token.svg" className="w-4 h-4" />
                 </div>
                 <div className=" flex items-center" >
@@ -266,7 +302,7 @@ const R8Compound = ({
                   </div>
                   <div className="w-[30px] rounded-[4px] flex justify-center items-center text-[16px] font-dbold text-[#FFD879]">
                     <span className=" text-[10px] font-dmedium text-[#FFD879]">+</span>
-                    <span className=" text-[10px] font-dbold text-[#FFD879] ml-[6px] mr-1">0.5</span>
+                    <span className=" text-[10px] font-dbold text-[#FFD879] ml-[6px] mr-1">{incomePerStr}</span>
                     <LazyImage src="/images/airdrop-refer/air-token.svg" className="w-2 h-2" />
                   </div>
                   <div className="px-1 opacity-0">
@@ -274,7 +310,7 @@ const R8Compound = ({
                   </div>
                   <div className="w-[30px] rounded-[4px] flex justify-center items-center text-[16px] font-dbold text-[#9AADE0]">
                     <span className=" text-[10px] font-dmedium text-[#9AADE0]">+</span>
-                    <div className=" font-dbold ml-[6px]  mr-1 text-[10px]">0.5<sup>2</sup></div>
+                    <div className=" font-dbold ml-[6px]  mr-1 text-[10px]">{incomePerStr}<sup>2</sup></div>
 
                     <LazyImage src="/images/airdrop-refer/air-token.svg" className="w-2 h-2" />
                   </div>
@@ -283,7 +319,7 @@ const R8Compound = ({
                   </div>
                   <div className="w-[30px] rounded-[4px] flex justify-center items-center text-[16px] font-dbold text-[#FFA68C]">
                     <span className=" text-[10px] font-dmedium ">+</span>
-                    <div className=" font-dbold ml-[6px]  mr-1 text-[10px]">0.5<sup>3</sup></div>
+                    <div className=" font-dbold ml-[6px]  mr-1 text-[10px]">{incomePerStr}<sup>3</sup></div>
 
                     <LazyImage src="/images/airdrop-refer/air-token.svg" className="w-2 h-2" />
                   </div>

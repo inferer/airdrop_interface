@@ -12,9 +12,7 @@ import { HierarchyPointNode, HierarchyPointLink } from '@visx/hierarchy/lib/type
 import { LinkVertical } from '@visx/shape';
 import { LinearGradient } from '@visx/gradient';
 import { Zoom } from '@visx/zoom';
-// @ts-ignore
-import { interpolateRainbow } from 'd3-scale-chromatic';
-import { localPoint } from '@visx/event';
+
 import { RectClipPath } from '@visx/clip-path';
 import genPhyllotaxis, {
   GenPhyllotaxisFunction,
@@ -23,6 +21,7 @@ import genPhyllotaxis, {
 import { scaleLinear } from '@visx/scale';
 import React from 'react';
 import { useAirdropManager } from '../../hooks/useAirdropManager';
+import { shortenAddress } from "../../utils";
 
 const citrus = '#ddf163';
 const white = '#ffffff';
@@ -62,6 +61,18 @@ function RootNode({ node, onAddNode }: { node: HierarchyPointNode<NodeShape>, on
       >
         {/* @ts-ignore */}
         {node.data.name ? node.data.name + '-' + node.data.index + '-' + parseFloat(node.data.income) : 'Add root'}
+      </text>
+      <text
+        dy=".33em"
+        fontSize={16}
+        fontFamily="Arial"
+        textAnchor="middle"
+        style={{ pointerEvents: 'none' }}
+        fill={'#fff'}
+        y={36}
+      >
+        {/* @ts-ignore */}
+        { shortenAddress(node.data.addr) }
       </text>
       {
         mouseOver && 
@@ -143,6 +154,18 @@ function Node({ node, onClick, onContextMenu, onAddNode }: {
       >
         {/* @ts-ignore */}
         {node.data.name + '-' + node.data.index + '-' + parseFloat(node.data.income) }
+      </text>
+      <text
+        dy=".33em"
+        fontSize={16}
+        fontFamily="Arial"
+        textAnchor="middle"
+        style={{ pointerEvents: 'none' }}
+        fill={'#fff'}
+        y={26}
+      >
+        {/* @ts-ignore */}
+        { shortenAddress(node.data.addr) }
       </text>
       {
         mouseOver && 
@@ -233,10 +256,11 @@ const ReferTree = () => {
 
   const handleInitReferNodeList = useCallback(async (fresh?: boolean) => {
     const dataList = await handleGetReferNodeList()
-    console.log(dataList)
     // @ts-ignore
-    if (window.nodeList && window.nodeList.length > 0 && window.nodeList.length === dataList.length && fresh) {
-      handleGetReferNodeList()
+    console.log(dataList, window.nodeList, fresh)
+    // @ts-ignore
+    if (window.nodeList && window.nodeList.length > 0 && (window.nodeList.length === dataList.length) && fresh) {
+      handleInitReferNodeList()
       return
     }
     // @ts-ignore
@@ -519,7 +543,8 @@ const ReferTree = () => {
     const res = await handleReferTo(airdropId, pAddress)
     setAdding(false)
     if (res.status !== 0) {
-      alert(res.message || 'Error')
+      const errorContent = res.message.indexOf('ReferManager: sender is in the referNodeList') > -1 ? 'You have already referred this airdrop.' : 'Fail to confirm.'
+      alert(errorContent || 'Error')
       return
     } 
     handleInitReferNodeList(true)

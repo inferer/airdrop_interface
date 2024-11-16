@@ -324,4 +324,36 @@ export function randomStr(length: number) {
   
   return result;
 }
+
+export function insertScript(path: string, id: string, cb: any) {
+  if (document.getElementById(id)) {
+    // 脚本加载后再次调用直接返回
+    return false;
+  }
+  var scriptElement = document.createElement("script");
+  scriptElement.src = path;
+  scriptElement.async = true;
+  scriptElement.id = id;
+  // 循环调用时 Chrome 不会重复请求 js
+  document.head.appendChild(scriptElement);
+  scriptElement.onload = () => {
+    cb();
+  };
+};
+
+export const insertCssLink = (path: string, id: string) => {
+  return new Promise((resolve) => {
+      if (document.getElementById(id)) {
+          // 脚本加载后再次调用直接返回
+          resolve(false);
+          return false;
+      }
+      const linkElement = document.createElement("link");
+      linkElement.href = path;
+      linkElement.id = id;
+      linkElement.rel = "stylesheet";
+      // 循环调用时 Chrome 不会重复请求 js
+      document.head.appendChild(linkElement);
+  });
+};
  

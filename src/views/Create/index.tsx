@@ -165,8 +165,8 @@ export default function Create() {
   }, [])
 
   const coverage = useMemo(() => {
-    return Math.ceil(Number(lockedAmount) / currentPer)
-  }, [currentPer, lockedAmount])
+    return Math.ceil(Number(outputAmount?.toSignificant(18)) / currentPer)
+  }, [currentPer, outputAmount])
 
   const incomePer = useMemo(() => {
     let _index = 5;

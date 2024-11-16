@@ -8,8 +8,8 @@ function ReferListPage() {
 
   return (
     <>
-      <div className='w-[1217px] mx-auto' style={{paddingBottom: 0}}>
-        <CollectBody>
+      <div className='w-[1400px] mx-auto' style={{paddingBottom: 0}}>
+        <CollectBody style={{width: 1400}}>
           <div className='text-[32px] font-fsemibold mb-10 flex items-center'>
             <LazyImage src='/images/airdrop/ongoing.svg' className=' w-[32px] h-[32px] mr-3' />
             Ongoing refering airdrops

@@ -14,7 +14,7 @@ const ReferAction = ({airdrop, from = 'project'}: {
   const [currentPer, setCurrentPer] = useState(airdrop.incomePer ? Number(airdrop.incomePer) / 100 : 0.5)
   const [lockedAmount, setlockedAmount] = useState(100)
   const coverage = useMemo(() => {
-    return Math.ceil(Number(airdrop.labelLocked) / currentPer)
+    return Math.ceil(Number(airdrop.labelLocked) / (airdrop.incomePer ? Number(airdrop.incomePer) / 100 : 0.5))
   }, [currentPer, airdrop])
 
   const incomePer = useMemo(() => {
