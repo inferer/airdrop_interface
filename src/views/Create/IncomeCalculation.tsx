@@ -62,6 +62,7 @@ const IncomeCalculation = () => {
       
     });
   }, [])
+  
   return (
     <div className='w-full h-auto border border-[rgba(85,123,241,0.10) rounded-md mt-[30px]'>
       <div

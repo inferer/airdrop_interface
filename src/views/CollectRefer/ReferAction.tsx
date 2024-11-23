@@ -28,7 +28,7 @@ const ReferAction = ({airdrop, from = 'project'}: {
       _amount += Math.pow(per, _index)
       _index--;
     }
-    return 100 + Math.floor(_amount * 100)
+    return 100 + Math.ceil(_amount * 100)
   }, [airdrop.incomePer])
   const [expend, setExpend] = useState(true)
 

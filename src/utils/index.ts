@@ -328,7 +328,7 @@ export function randomStr(length: number) {
 export function insertScript(path: string, id: string, cb: any) {
   if (document.getElementById(id)) {
     // 脚本加载后再次调用直接返回
-    return false;
+    return cb();
   }
   var scriptElement = document.createElement("script");
   scriptElement.src = path;

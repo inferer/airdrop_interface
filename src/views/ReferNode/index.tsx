@@ -543,7 +543,11 @@ const ReferTree = () => {
     const res = await handleReferTo(airdropId, pAddress)
     setAdding(false)
     if (res.status !== 0) {
-      const errorContent = res.message.indexOf('ReferManager: sender is in the referNodeList') > -1 ? 'You have already referred this airdrop.' : 'Fail to confirm.'
+      const errorContent = 
+        res.message.indexOf('Not enough label tokens') > -1 ? 'Airdrop fund is used up.' :
+        res.message.indexOf('ReferManager: sender is in the referNodeList') > -1 ? 
+        'You have already referred this airdrop.' : 
+        res.message
       alert(errorContent || 'Error')
       return
     } 

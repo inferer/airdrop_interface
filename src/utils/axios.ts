@@ -9,7 +9,7 @@ const instance = axios.create({
 
 const userPoolService = axios.create({
   baseURL: USER_POOL_SERVICE_ROOT,
-  timeout: 60000
+  timeout: 600000
 })
 
 const getHeaders = () => {

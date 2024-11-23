@@ -90,7 +90,11 @@ export function useAirdropReferManager(algToken?: string) {
         console.log(error)
         const message = error.data?.data?.message || error.data?.message || error.message
         console.log(message)
-        const errorContent = message.indexOf('ReferManager: sender is in the referNodeList') > -1 ? 'You have already referred this airdrop.' : 'Fail to confirm.'
+        const errorContent = 
+          message.indexOf('Not enough label tokens') > -1 ? 'Airdrop fund is used up.' :
+          message.indexOf('ReferManager: sender is in the referNodeList') > -1 ? 
+          'You have already referred this airdrop.' : 
+          message
         handleShow({ type: 'error', content: errorContent, title: 'Error' })
         setConfirmStatus(2)
         return
@@ -104,7 +108,11 @@ export function useAirdropReferManager(algToken?: string) {
       } catch (error: any) {
         console.log(error)
         const message = error.data?.data?.message || error.data?.message || error.message
-        const errorContent = message.indexOf('ReferManager: sender is in the referNodeList') > -1 ? 'You have already referred this airdrop.' : 'Fail to confirm.'
+        const errorContent = 
+          message.indexOf('Not enough label tokens') > -1 ? 'Airdrop fund is used up.' :
+          message.indexOf('ReferManager: sender is in the referNodeList') > -1 ? 
+          'You have already referred this airdrop.' : 
+          message
         handleShow({ type: 'error', content: errorContent, title: 'Error' })
       }
       
