@@ -15,6 +15,71 @@ import { Tooltip2 } from "../../components/Tooltip";
 import { useRouter } from "next/router";
 import { FundToken } from "../Project/Ongoing";
 import { useAirdropReferManager } from "../../hooks/useReferManager";
+import { ApprovalState } from "../../hooks/useApproveCallback";
+import { getALgTokenFromAirToken } from "../../utils/getTokenList";
+
+const ReferItemAction = ({
+  airdrop
+}: {
+  airdrop: IAirdrop
+}) => {
+  const algToken = useMemo(() => {
+    return getALgTokenFromAirToken(airdrop.labelToken.address, airdrop.labelToken.chainId)
+  }, [airdrop])
+
+  const { 
+    handleReferTo2, 
+    confirmStatus,
+    approvalState, 
+    approve 
+  } = useAirdropReferManager(algToken)
+  return (
+    <div className="flex justify-center w-full">
+      {
+        !airdrop.selfNode ?
+          <div
+            onClick={e => {
+              e.stopPropagation()
+              console.log(airdrop)
+              if (airdrop.selfNode) {
+                return
+              }
+              if (approvalState === ApprovalState.NOT_APPROVED) {
+                approve()
+                return
+              }
+              // @ts-ignore
+              handleReferTo2(airdrop.airdropId, airdrop.addr)
+            }}
+            style={{ opacity: airdrop.selfNode ? '0.5' : 1}}
+          >
+            <LazyImage src="/images/airdrop/refer.svg" className="w-[24px] h-[24px]" />
+          </div> :
+          airdrop.selfNode.addr === airdrop.addr ?
+            <Tooltip2 text={`You have referred this airdrop on node id ${airdrop.referNodeId}`} >
+              <div className="text-[rgba(63,60,255,0.80)]">{airdrop.referNodeId}</div>
+            </Tooltip2> :
+            <Tooltip2 text={`You have referred this airdrop`} >
+              <div
+                onClick={e => {
+                  e.stopPropagation()
+                  if (airdrop.selfNode) {
+                    return
+                  }
+                  
+                  // @ts-ignore
+                  // handleReferTo2(airdrop.airdropId, airdrop.addr)
+                }}
+                style={{ opacity: airdrop.selfNode ? '0.5' : 1}}
+              >
+                <LazyImage src="/images/airdrop/refer.svg" className="w-[24px] h-[24px]" />
+              </div>
+            </Tooltip2>
+      }
+      
+    </div>
+  )
+}
 
 const ReferList: React.FC<{
   onChecked?: (keys: IAirdrop[]) => void
@@ -24,12 +89,6 @@ const ReferList: React.FC<{
   const router = useRouter()
   const { account } = useActiveWeb3React()
   const [ isCopied, staticCopy ] = useCopyClipboard()
-  const { 
-    handleReferTo2, 
-    confirmStatus,
-    approvalState, 
-    approve 
-  } = useAirdropReferManager()
   
   const { handleGetAirdropReferList, multi, chainId } = useAirdropManager()
   const airdropList = useUserAirdropConfirmedList()
@@ -41,7 +100,7 @@ const ReferList: React.FC<{
   useEffect(() => {
     handleGetAirdropReferList()
   }, [handleGetAirdropReferList, multi, chainId, account])
-  console.log(airdropList)
+
   return (
     <div>
       <Table>
@@ -157,47 +216,7 @@ const ReferList: React.FC<{
                           <span>{airdrop.expireOn}</span>
                         </TableCell>
                         <TableCell className="w-[90px]">
-                          <div className="flex justify-center w-full">
-                            {
-                              !airdrop.selfNode ?
-                                <div
-                                  onClick={e => {
-                                    e.stopPropagation()
-                                    console.log(airdrop)
-                                    if (airdrop.selfNode) {
-                                      return
-                                    }
-                                    // @ts-ignore
-                                    handleReferTo2(airdrop.airdropId, airdrop.addr)
-                                  }}
-                                  style={{ opacity: airdrop.selfNode ? '0.5' : 1}}
-                                >
-                                  <LazyImage src="/images/airdrop/refer.svg" className="w-[24px] h-[24px]" />
-                                </div> :
-                                airdrop.selfNode.addr === airdrop.addr ?
-                                  <Tooltip2 text={`You have referred this airdrop on node id ${airdrop.referNodeId}`} >
-                                    <div className="text-[rgba(63,60,255,0.80)]">{airdrop.referNodeId}</div>
-                                  </Tooltip2> :
-                                  <Tooltip2 text={`You have referred this airdrop`} >
-                                    <div
-                                      onClick={e => {
-                                        e.stopPropagation()
-                                        if (airdrop.selfNode) {
-                                          return
-                                        }
-                                        // @ts-ignore
-                                        handleReferTo2(airdrop.airdropId, airdrop.addr)
-                                      }}
-                                      style={{ opacity: airdrop.selfNode ? '0.5' : 1}}
-                                    >
-                                      <LazyImage src="/images/airdrop/refer.svg" className="w-[24px] h-[24px]" />
-                                    </div>
-                                  </Tooltip2>
-                                
-                                
-                            }
-                            
-                          </div>
+                          <ReferItemAction airdrop={airdrop} />
                         </TableCell>
                       </>
                     </TableRow>
@@ -213,16 +232,5 @@ const ReferList: React.FC<{
   )
 }
 
-const CheckedWrap = ({
-  airdrop,
-  handleChecked
-}: {
-  airdrop: IAirdrop,
-  handleChecked: (airdrop: IAirdrop, checked: boolean) => void
-}) => {
-  const { account } = useActiveWeb3React()
-  const accountScore = useAccountLabelScore(account || '', airdrop.labelToken?.symbol?.slice(4) || '' )
-  return <CheckBox onChange={checked => handleChecked({...airdrop, accountScore}, checked)} /> 
-}
 
 export default ReferList

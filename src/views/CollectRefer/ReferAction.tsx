@@ -6,6 +6,7 @@ import CurrencyLogo from "../../components/CurrencyLogo"
 import R8Compound from "./R8Compound"
 import IncomeCalculation from "../Create/IncomeCalculation"
 import SpreadingChart from "../Create/SpreadingChart"
+import BigNumber from "bignumber.js"
 
 const ReferAction = ({airdrop, from = 'project'}: {
   airdrop: IAirdrop,
@@ -13,6 +14,7 @@ const ReferAction = ({airdrop, from = 'project'}: {
 }) => {
   const [currentPer, setCurrentPer] = useState(airdrop.incomePer ? Number(airdrop.incomePer) / 100 : 0.5)
   const [lockedAmount, setlockedAmount] = useState(100)
+
   const coverage = useMemo(() => {
     return Math.ceil(Number(airdrop.labelLocked) / (airdrop.incomePer ? Number(airdrop.incomePer) / 100 : 0.5))
   }, [currentPer, airdrop])
@@ -23,14 +25,13 @@ const ReferAction = ({airdrop, from = 'project'}: {
     if (per >= 1) {
       _index = 5
     }
-    let _amount = 0;
+    let _amount = new BigNumber(0);
     while(_index > 0) {
-      _amount += Math.pow(per, _index)
+      _amount = _amount.plus(new BigNumber(per).pow(_index))
       _index--;
     }
-    return 100 + Math.ceil(_amount * 100)
+    return new BigNumber(100).plus(_amount.multipliedBy(100)).toFixed(0)
   }, [airdrop.incomePer])
-  const [expend, setExpend] = useState(true)
 
   return (
     <div className='mt-5'>

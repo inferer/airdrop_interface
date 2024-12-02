@@ -260,7 +260,9 @@ html {
 }
 
 body {
-  min-height: 100vh;
+  /* max-height: 100vh; */
+  height: 100vh;
+  overflow: hidden;
   background-repeat: no-repeat;
   background-image: url('/images/airdrop/bg.svg');
   background-position: center center;

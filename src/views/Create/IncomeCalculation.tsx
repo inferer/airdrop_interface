@@ -90,14 +90,14 @@ const IncomeCalculation = () => {
         expend && 
         <div className='p-5 text-[12px] font-fnormal'>
           <div>Compound income is calculated exponentially based on 1 Air-Social. As the refer percentage changes, compound benefits would grow massively. Assume the compound income is CI, the refer precentage is R, the offer per unit is O, n is the number of people who refers, then the formula would be such as:</div>
-          <div className='mt-[39px] mb-[33px] text-[16px] flex justify-start pl-2'>
+          <div className='mt-[39px] mb-[33px] text-[18px] flex justify-start pl-2'>
             {/* <LazyImage src='/images/airdrop/icon/ci1.png' className='w-[462px]' /> */}
-            <div dangerouslySetInnerHTML={{ __html: svgHtml }} />
+            <div className="katex-wrap" dangerouslySetInnerHTML={{ __html: svgHtml }} />
           </div>
           <div>For example, the refer percentage is 0.75, the offer per unit is 1 x Air-Social token, and we maximize the refer process, then we could have the compound income equal to 3 x Air-Social token.</div>
-          <div className='mt-[20px] mb-[32px] text-[16px] flex justify-start pl-2'>
+          <div className='mt-[20px] mb-[32px] text-[18px] flex justify-start pl-2'>
             {/* <LazyImage src='/images/airdrop/icon/ci2.png' className='w-[746px]' /> */}
-            <div dangerouslySetInnerHTML={{ __html: svgHtml2 }} />
+            <div className="katex-wrap" dangerouslySetInnerHTML={{ __html: svgHtml2 }} />
           </div>
           <div>
           With thid refer design mechanism deployed in contract, there would be always expotential benefits when peple refer further and acquire lots of fun.

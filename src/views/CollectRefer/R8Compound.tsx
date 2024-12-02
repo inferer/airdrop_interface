@@ -39,8 +39,11 @@ const R8Compound = ({
 
   const { handleGetReferNodeList } = useAirdropReferManager()
   useEffect(() => {
-    const airdropId = router.query.action ? router.query.action[1] as string : ''
-    handleGetReferNodeList(airdropId)
+    if (router.query.action?.length === 2) {
+      const airdropId = router.query.action ? router.query.action[1] as string : ''
+      handleGetReferNodeList(airdropId)
+    }
+    
   }, [handleGetReferNodeList, router])
   
   const pNode = useReferNode0(router.query.inviter as string)

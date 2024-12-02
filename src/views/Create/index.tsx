@@ -18,6 +18,7 @@ import { formatInput, formatStringNumber, isAddress, verifyInput } from '../../u
 import { useCreateAirdropRefer, useCreateCallback } from '../../hooks/useAirdropSenderRefer'
 import SpreadingChart from './SpreadingChart'
 import IncomeCalculation from './IncomeCalculation'
+import BigNumber from 'bignumber.js'
 
 let globalApproveList: string[] = ['usdt', 'label']
 
@@ -161,11 +162,12 @@ export default function Create() {
   const [currentPer, setCurrentPer] = useState(0.5)
 
   const onSpreadingChartChange = useCallback((per: number) => {
-    setCurrentPer(1 - per + 0.25)
+    const _per = new BigNumber(1).minus(new BigNumber(per)).plus(new BigNumber(0.25))
+    setCurrentPer(Number(_per.toFixed(2)))
   }, [])
 
   const coverage = useMemo(() => {
-    return Math.ceil(Number(outputAmount?.toSignificant(18)) / currentPer)
+    return outputAmount ? Math.ceil(Number(outputAmount?.toSignificant(18)) / currentPer) : 10
   }, [currentPer, outputAmount])
 
   const incomePer = useMemo(() => {
@@ -173,14 +175,13 @@ export default function Create() {
     if (currentPer >= 1) {
       _index = 5
     }
-    let _amount = 0;
+    let _amount = new BigNumber(0);
     while(_index > 0) {
-      _amount += Math.pow(currentPer, _index)
+      _amount = _amount.plus(new BigNumber(currentPer).pow(_index))
       _index--;
     }
-    return 100 + Math.floor(_amount * 100)
+    return new BigNumber(100).plus(_amount.multipliedBy(100)).toFixed(0)
   }, [currentPer])
-
 
   return (
     <CreateBody className='create-body-root'>

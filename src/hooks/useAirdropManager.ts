@@ -14,6 +14,7 @@ import { updateAirdropList, updateAirdropListOne, updateProjectAirdropList, upda
 import { useActiveWeb3React } from ".";
 import { useMaxUnits, useUserAirdropConfirmedList } from "../state/airdrop/hooks";
 import { AirdropReferManager_ABI, AirdropReferManager_NETWORKS } from "../constants/airdropReferManager";
+import BGN from "bignumber.js"
 
 export const getReferManagerAddress = (chainId: ChainId) => {
   return AirdropReferManager_NETWORKS[chainId]
@@ -275,10 +276,12 @@ export const getReferNodeList = async (multi: Contract, airdropIds: string[], ch
     const tempNodeList = node[0] || []
     const newList = tempNodeList.map((tempItem: any) => {
       let _index = Number(tempItem.index.toString());
-      let _amount = 0;
+
       let _incomePer = Number(airdropIncomePers[index]) / 100
+
+      let _amount = new BGN(0);
       while(_index > 0) {
-        _amount += Math.pow(_incomePer, _index)
+        _amount = _amount.plus(new BGN(_incomePer).pow(_index))
         _index--;
       }
       return {
@@ -287,7 +290,7 @@ export const getReferNodeList = async (multi: Contract, airdropIds: string[], ch
         index: tempItem.index.toString(),
         addr: tempItem.addr,
         airdropId: tempItem.airdropId.toString(),
-        income: parseFloat(_amount.toFixed(4))
+        income: _amount.toFixed(4)
       }
     })
     return newList

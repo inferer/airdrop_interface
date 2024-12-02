@@ -34,7 +34,6 @@ const AirdropConfirm: React.FC<{
       handleGetReferNodeList(Number(router.query.action[2]))
     }
   }, [router.query, multi, chainId])
-
   const pNode = useReferNode0(router.query.inviter as string)
 
   const airdrop = useAirdropList0(router.query.action && router.query.action[2])

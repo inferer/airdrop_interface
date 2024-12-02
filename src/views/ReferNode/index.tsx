@@ -22,6 +22,7 @@ import { scaleLinear } from '@visx/scale';
 import React from 'react';
 import { useAirdropManager } from '../../hooks/useAirdropManager';
 import { shortenAddress } from "../../utils";
+import { getALgTokenFromAirToken } from '../../utils/getTokenList';
 
 const citrus = '#ddf163';
 const white = '#ffffff';
@@ -250,8 +251,13 @@ const ReferTree = () => {
   const [nodeList2, setNodeList2] = useState<any[]>([])
   const [selectNode, setSelectNode] = useState<any>({})
   const [adding, setAdding] = useState(false)
+  const [airdrop, setAirdrop] = useState<any>({})
 
-  const { handleGetReferNodeList, handleReferTo } = useAirdropReferManager()
+  const algToken = useMemo(() => {
+    return airdrop && airdrop.labelToken && getALgTokenFromAirToken(airdrop.labelToken.address, airdrop.labelToken.chainId)
+  }, [airdrop])
+
+  const { handleGetReferNodeList, handleReferTo } = useAirdropReferManager(algToken)
   const { handleGetAirdropOne2 } = useAirdropManager()
 
   const handleInitReferNodeList = useCallback(async (fresh?: boolean) => {
@@ -339,6 +345,7 @@ const ReferTree = () => {
     if (airdropId > 0) {
       handleGetAirdropOne2(airdropId)
         .then((res: any) => {
+          setAirdrop(res)
           res && setIncomePer(Number(res.incomePer) / 100)
         })
     }
@@ -540,7 +547,7 @@ const ReferTree = () => {
     const airdropId = router.query.airdropId as string
     // @ts-ignore
     const pAddress = node.data.addr || account
-    const res = await handleReferTo(airdropId, pAddress)
+    const res: any = await handleReferTo(airdropId, pAddress)
     setAdding(false)
     if (res.status !== 0) {
       const errorContent = 
@@ -549,8 +556,7 @@ const ReferTree = () => {
         'You have already referred this airdrop.' : 
         res.message
       alert(errorContent || 'Error')
-      return
-    } 
+    }
     handleInitReferNodeList(true)
 
   }, [handleReferTo, setAdding, router.query, account, handleInitReferNodeList])

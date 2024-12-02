@@ -304,3 +304,11 @@ body {
 .relative {
   position: relative;
 }
+.katex-wrap  .mathnormal {
+  font-family: Symbola,Times New Roman,serif !important;
+  font-size: inherit !important;
+}
+/* .katex-wrap  .mord {
+  font-family: Symbola,Times New Roman,serif !important;
+  font-size: inherit !important;
+} */

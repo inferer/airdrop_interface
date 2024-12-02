@@ -16,6 +16,7 @@ import { useShowToast } from "../state/application/hooks";
 import { useCurrency } from "./Tokens";
 import { useCurrencyBalance } from "../state/wallet/hooks";
 import { useApproveCallback } from "./useApproveCallback";
+import { AirdropAssetTreasury_NETWORKS } from "../constants/airdropAssetTreasury";
 
 export const getReferManagerAddress = (chainId: ChainId) => {
   return AirdropReferManager_NETWORKS[chainId]
@@ -54,7 +55,7 @@ export function useAirdropReferManager(algToken?: string) {
 
   const algTokenCurrency = useCurrency(algToken)
   const algTokenCurrencyAmount = useCurrencyBalance(account ?? undefined, algTokenCurrency ?? undefined)
-  const [approvalState, approve] = useApproveCallback(algTokenCurrencyAmount,  chainId && AirdropReferManager_NETWORKS[chainId])
+  const [approvalState, approve] = useApproveCallback(algTokenCurrencyAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
 
   const multi = useMulticallContract()
   const referManager = useAirdropReferManagerContract()
@@ -97,7 +98,7 @@ export function useAirdropReferManager(algToken?: string) {
           message
         handleShow({ type: 'error', content: errorContent, title: 'Error' })
         setConfirmStatus(2)
-        return
+        return errorContent
       }
       try {
         const tx = await referManager.referTo(airdropId, pAddress, { gasPrice: '1000000000', gasLimit: gasLimit })
@@ -114,6 +115,7 @@ export function useAirdropReferManager(algToken?: string) {
           'You have already referred this airdrop.' : 
           message
         handleShow({ type: 'error', content: errorContent, title: 'Error' })
+        return errorContent
       }
       
       setConfirmStatus(2)
