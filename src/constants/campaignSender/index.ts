@@ -4,6 +4,7 @@ import contractList, { campaignContracts } from '../contractsLocal'
 import sepoliaContractList from '../contractsSepolia'
 import contractsArbitrumList from '../contractsArbitrum'
 import contractsBase from '../contractsBase'
+import contractsAirdrop, { campaignContracts as airdropCampaign } from '../contractsAirdrop'
 
 const CampaignSender_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '',
@@ -11,7 +12,7 @@ const CampaignSender_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: contractsArbitrumList.airdropSender,
   [ChainId.SEPOLIA]: sepoliaContractList.airdropSender,
   [ChainId.LOCAL]: campaignContracts.campaignSender,
-  [ChainId.AIRDROP]: campaignContracts.campaignSender,
+  [ChainId.AIRDROP]: airdropCampaign.campaignSender,
 }
 
 export { CampaignSender_ABI, CampaignSender_NETWORKS }

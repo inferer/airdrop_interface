@@ -7,6 +7,7 @@ import contractList from './contractsLocal'
 import contractsSepolia from './contractsSepolia'
 import contractsArbitrum from './contractsArbitrum'
 import contractsBase from './contractsBase'
+import contractsAirdrop from './contractsAirdrop'
 
 export const OWER_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
@@ -14,7 +15,7 @@ export const OWER_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
   [ChainId.SEPOLIA]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
   [ChainId.LOCAL]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
-  [ChainId.AIRDROP]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea'
+  [ChainId.AIRDROP]: '0x80a38b1Af51c55a7EC6af75a49e3f51f5FBAB3f8'
 }
 
 export const ROUTER_ADDRESS = contractsSepolia.router02
@@ -25,7 +26,7 @@ export const ROUTER_ADDRESS2: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: contractsArbitrum.router02,
   [ChainId.SEPOLIA]: contractsSepolia.router02,
   [ChainId.LOCAL]: contractList.router02,
-  [ChainId.AIRDROP]: contractList.router02
+  [ChainId.AIRDROP]: contractsAirdrop.router02
 }
 
 // a list of tokens by chain

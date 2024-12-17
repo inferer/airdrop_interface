@@ -4,6 +4,7 @@ import contractList from '../contractsLocal'
 import sepoliaContractList from '../contractsSepolia'
 import contractsArbitrumList from '../contractsArbitrum'
 import contractsBase from '../contractsBase'
+import contractsAirdrop from '../contractsAirdrop'
 
 const AirdropTokenScore_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '',
@@ -11,7 +12,7 @@ const AirdropTokenScore_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: contractsArbitrumList.airdropTokenScore,
   [ChainId.SEPOLIA]: sepoliaContractList.airdropTokenScore,
   [ChainId.LOCAL]: contractList.airdropTokenScore,
-  [ChainId.AIRDROP]: contractList.airdropTokenScore,
+  [ChainId.AIRDROP]: contractsAirdrop.airdropTokenScore,
 }
 
 export { AirdropTokenScore_ABI, AirdropTokenScore_NETWORKS }

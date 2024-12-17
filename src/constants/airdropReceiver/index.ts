@@ -4,6 +4,7 @@ import contractList from '../contractsLocal'
 import sepoliaContractList from '../contractsSepolia'
 import contractsArbitrumList from '../contractsArbitrum'
 import contractsBase from '../contractsBase'
+import contractsAirdrop from '../contractsAirdrop'
 
 const AirdropReceiver_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '',
@@ -11,7 +12,7 @@ const AirdropReceiver_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: contractsArbitrumList.airdropReceriver,
   [ChainId.SEPOLIA]: sepoliaContractList.airdropReceriver,
   [ChainId.LOCAL]: contractList.airdropReceriver,
-  [ChainId.AIRDROP]: contractList.airdropReceriver,
+  [ChainId.AIRDROP]: contractsAirdrop.airdropReceriver,
 }
 
 export { AirdropReceiver_ABI, AirdropReceiver_NETWORKS }

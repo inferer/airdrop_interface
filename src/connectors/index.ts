@@ -18,6 +18,7 @@ export const BASE_BSC_SCAN_URLS = {
   [ChainId.ARBITRUM]: 'https://arbiscan.io',
   [ChainId.SEPOLIA]: 'https://sepolia-explorer.arbitrum.io',
   [ChainId.LOCAL]: 'https://bscscan.com',
+  [ChainId.AIRDROP]: 'https://explorer.inferer.xyz',
 }
 
 export const BSC_RPC_URLS = [
@@ -44,6 +45,10 @@ export const BSC_RPC_URLS_LOCAL = [
   // 'https://rpc.inferer.xyz',
 ]
 
+export const BSC_RPC_URLS_AIRDROP = [
+  'http://124.221.80.199:8545',
+]
+
 export const network = new NetworkConnector({
   urls: { 
     [ChainId.MAINNET]: BSC_RPC_URLS_ABITRUM[0], 
@@ -51,8 +56,9 @@ export const network = new NetworkConnector({
     [ChainId.ARBITRUM]: BSC_RPC_URLS_ABITRUM[0], 
     [ChainId.SEPOLIA]: BSC_RPC_URLS_SEPOLIA[0], 
     [ChainId.LOCAL]: BSC_RPC_URLS_LOCAL[0], 
+    [ChainId.AIRDROP]: BSC_RPC_URLS_AIRDROP[0], 
   },
-  defaultChainId: ChainId.LOCAL
+  defaultChainId: ChainId.AIRDROP
 })
 
 let networkLibrary: Web3Provider | undefined
@@ -61,7 +67,7 @@ export function getNetworkLibrary(): Web3Provider {
 }
 
 export const injected = new InjectedConnector({
-  supportedChainIds: [ChainId.BASE, ChainId.ARBITRUM, ChainId.SEPOLIA, ChainId.LOCAL, ]
+  supportedChainIds: [ChainId.BASE, ChainId.ARBITRUM, ChainId.SEPOLIA, ChainId.LOCAL, ChainId.AIRDROP ]
 })
 
 // mainnet only
@@ -95,6 +101,11 @@ const NETWORK_CONFIG: any = {
     name: 'Airdrop Network',
     scanURL: BASE_BSC_SCAN_URLS[ChainId.LOCAL],
     rpcUrls: BSC_RPC_URLS_LOCAL
+  },
+  [ChainId.AIRDROP]: {
+    name: 'Airdrop Network',
+    scanURL: BASE_BSC_SCAN_URLS[ChainId.AIRDROP],
+    rpcUrls: BSC_RPC_URLS_AIRDROP
   },
 
 }

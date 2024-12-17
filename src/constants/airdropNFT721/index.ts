@@ -4,6 +4,7 @@ import contractList, { airdropReferContracts } from '../contractsLocal'
 import sepoliaContractList from '../contractsSepolia'
 import contractsArbitrumList from '../contractsArbitrum'
 import contractsBase from '../contractsBase'
+import contractsAirdrop from '../contractsAirdrop'
 
 const AirdropNFT721_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '',
@@ -11,7 +12,7 @@ const AirdropNFT721_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: contractsArbitrumList.airdropSender,
   [ChainId.SEPOLIA]: sepoliaContractList.airdropSender,
   [ChainId.LOCAL]: airdropReferContracts.airdropNFT721,
-  [ChainId.AIRDROP]: contractList.airdropSender,
+  [ChainId.AIRDROP]: contractsAirdrop.airdropSender,
 }
 
 export { AirdropNFT721_ABI, AirdropNFT721_NETWORKS }
