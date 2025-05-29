@@ -95,6 +95,9 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@ethersproject/address": "^5.8.0",
+    "@ethersproject/contracts": "^5.8.0",
+    "@ethersproject/providers": "^5.8.0",
     "@irys/query": "^0.0.8",
     "@logicflow/core": "^2.0.2",
     "@svgdotjs/svg.js": "^3.2.4",
@@ -123,6 +126,8 @@
     "react-select": "^5.8.0",
     "react-simple-code-editor": "^0.13.1",
     "sass": "^1.69.5",
-    "tailwindcss": "^3.3.5"
-  }
+    "tailwindcss": "^3.3.5",
+    "zksync-web3": "^0.17.1"
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

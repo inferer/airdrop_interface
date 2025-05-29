@@ -94,7 +94,7 @@ export function usePairContract(pairAddress?: string, withSignerIfPossible?: boo
 
 export function useMulticallContract(): Contract | null {
   const { account, chainId } = useActiveWeb3React()
-  const _chainId = account && chainId ? chainId : ChainId.LOCAL
+  const _chainId = account && chainId ? chainId : ChainId.LENSSEPOLIA
   return useContract(MULTICALL_NETWORKS[_chainId], MULTICALL_ABI, false)
 }
 

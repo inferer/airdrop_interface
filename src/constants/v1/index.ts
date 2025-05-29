@@ -10,6 +10,7 @@ const V1_FACTORY_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.SEPOLIA]: '0x9c83dCE8CA20E9aAF9D3efc003b2ea62aBC08351',
   [ChainId.LOCAL]: '',
   [ChainId.AIRDROP]: '',
+  [ChainId.LENSSEPOLIA]: '',
 }
 
 const V1_FACTORY_INTERFACE = new Interface(V1_FACTORY_ABI)

@@ -4,6 +4,7 @@ import contractList, { othersContracts } from '../contractsLocal'
 import { othersContracts as seopliaOthersContracts } from '../contractsSepolia'
 import { othersContracts as arbitrumOthersContracts } from '../contractsArbitrum'
 import { othersContracts as airdropOthersContracts } from '../contractsAirdrop'
+import { othersContracts as lensSepoliaOthersContracts } from '../contractsLensSepolia'
 
 const PROJECTDEMO_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0xeefBa1e63905eF1D7ACbA5a8513c70307C1cE441',
@@ -12,6 +13,7 @@ const PROJECTDEMO_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.SEPOLIA]: seopliaOthersContracts.projectContract,
   [ChainId.LOCAL]: othersContracts.projectContract,
   [ChainId.AIRDROP]: airdropOthersContracts.projectContract,
+  [ChainId.LENSSEPOLIA]: lensSepoliaOthersContracts.projectContract,
 }
 
 export { PROJECTDEMO_ABI, PROJECTDEMO_NETWORKS }

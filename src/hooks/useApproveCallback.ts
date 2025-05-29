@@ -85,6 +85,7 @@ export function useApproveCallback(
       try {
         
         const tx = await tokenContract.approve(spender, useExact ? amountToApprove.raw.toString() : MaxUint256, {
+          // @ts-ignore
           gasLimit: calculateGasMargin(estimatedGas)
         })
         const receipt = await tx.wait()

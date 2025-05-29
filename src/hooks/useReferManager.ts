@@ -57,7 +57,7 @@ export function useAirdropReferManager(algToken?: string) {
   const algTokenCurrencyAmount = useCurrencyBalance(account ?? undefined, algTokenCurrency ?? undefined)
   const [approvalState, approve] = useApproveCallback(algTokenCurrencyAmount,  chainId && AirdropAssetTreasury_NETWORKS[chainId])
 
-  const multi = useMulticallContract()
+  const multi: any = useMulticallContract()
   const referManager = useAirdropReferManagerContract()
   const { handleShow } = useShowToast()
   const [confirmStatus, setConfirmStatus] = useState(0)

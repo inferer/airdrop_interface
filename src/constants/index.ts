@@ -8,6 +8,7 @@ import contractsSepolia from './contractsSepolia'
 import contractsArbitrum from './contractsArbitrum'
 import contractsBase from './contractsBase'
 import contractsAirdrop from './contractsAirdrop'
+import contractsLensSepolia from './contractsLensSepolia'
 
 export const OWER_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
@@ -15,7 +16,8 @@ export const OWER_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
   [ChainId.SEPOLIA]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
   [ChainId.LOCAL]: '0xD815eCd85248f82AC48e12aAd2C23EFad86A89ea',
-  [ChainId.AIRDROP]: '0x80a38b1Af51c55a7EC6af75a49e3f51f5FBAB3f8'
+  [ChainId.AIRDROP]: '0x80a38b1Af51c55a7EC6af75a49e3f51f5FBAB3f8',
+  [ChainId.LENSSEPOLIA]: '0x80a38b1Af51c55a7EC6af75a49e3f51f5FBAB3f8'
 }
 
 export const ROUTER_ADDRESS = contractsSepolia.router02
@@ -26,7 +28,8 @@ export const ROUTER_ADDRESS2: { [chainId in ChainId]: string } = {
   [ChainId.ARBITRUM]: contractsArbitrum.router02,
   [ChainId.SEPOLIA]: contractsSepolia.router02,
   [ChainId.LOCAL]: contractList.router02,
-  [ChainId.AIRDROP]: contractsAirdrop.router02
+  [ChainId.AIRDROP]: contractsAirdrop.router02,
+  [ChainId.LENSSEPOLIA]: contractsLensSepolia.router02
 }
 
 // a list of tokens by chain
@@ -44,6 +47,10 @@ export const AMPL = new Token(ChainId.MAINNET, '0xD46bA6D942050d489DBd938a2C909A
 export const DAI_SEPOLIA = new Token(ChainId.SEPOLIA, '0x2C8dF20048860e0a88564D8c72EF38b2E5486B4D', 18, 'DAI', 'Dai Stablecoin')
 export const USDC_SEPOLIA = new Token(ChainId.SEPOLIA, '0x355781B18969F69401e759EEe848EA4696d44321', 6, 'USDC', 'USD//C')
 export const USDT_SEPOLIA = new Token(ChainId.SEPOLIA, '0x521957098aC7a7AC7eAa3631d10E640310873c00', 6, 'USDT', 'Tether USD')
+
+export const DAI_LENSSEPOLIA = new Token(ChainId.LENSSEPOLIA, contractsLensSepolia.Daitoken, 18, 'DAI', 'Dai Stablecoin')
+export const USDC_LENSSEPOLIA = new Token(ChainId.LENSSEPOLIA, contractsLensSepolia.USDCtoken, 6, 'USDC', 'USD//C')
+export const USDT_LENSSEPOLIA = new Token(ChainId.LENSSEPOLIA, contractsLensSepolia.USDTtoken, 6, 'USDT', 'Tether USD')
 
 export const Air_Social_LOCAL = new Token(ChainId.LOCAL, contractList['Air-Social'], 18, 'Air-Social', 'Air-Social')
 export const Air_Sports_LOCAL = new Token(ChainId.LOCAL, contractList['Air-Sports'], 18, 'Air-Sports', 'Air-Sports')
@@ -66,6 +73,13 @@ export const Air_Art_ARBITRUM  = new Token(ChainId.ARBITRUM , contractsArbitrum[
 export const Air_Finance_ARBITRUM  = new Token(ChainId.ARBITRUM , contractsArbitrum['Air-Finance'], 18, 'Air-Finance', 'Air-Finance')
 export const Air_Commerce_ARBITRUM  = new Token(ChainId.ARBITRUM , contractsArbitrum['Air-Commerce'], 18, 'Air-Commerce', 'Air-Commerce')
 
+export const Air_Social_LENSSEPOLIA = new Token(ChainId.LENSSEPOLIA , contractsArbitrum['Air-Social'], 18, 'Air-Social', 'Air-Social')
+export const Air_Sports_LENSSEPOLIA = new Token(ChainId.LENSSEPOLIA , contractsArbitrum['Air-Sports'], 18, 'Air-Sports', 'Air-Sports')
+export const Air_Game_LENSSEPOLIA = new Token(ChainId.LENSSEPOLIA , contractsArbitrum['Air-Game'], 18, 'Air-Game', 'Air-Game')
+export const Air_Art_LENSSEPOLIA = new Token(ChainId.LENSSEPOLIA , contractsArbitrum['Air-Art'], 18, 'Air-Art', 'Air-Art')
+export const Air_Finance_LENSSEPOLIA = new Token(ChainId.LENSSEPOLIA , contractsArbitrum['Air-Finance'], 18, 'Air-Finance', 'Air-Finance')
+export const Air_Commerce_LENSSEPOLIA = new Token(ChainId.LENSSEPOLIA , contractsArbitrum['Air-Commerce'], 18, 'Air-Commerce', 'Air-Commerce')
+
 const WETH_ONLY: ChainTokenList = {
   [ChainId.MAINNET]: [WETH[ChainId.MAINNET]],
   [ChainId.SEPOLIA]: [WETH[ChainId.SEPOLIA]],
@@ -73,6 +87,7 @@ const WETH_ONLY: ChainTokenList = {
   [ChainId.BASE]: [WETH[ChainId.BASE]],
   [ChainId.LOCAL]: [WETH[ChainId.LOCAL]],
   [ChainId.AIRDROP]: [WETH[ChainId.AIRDROP]],
+  [ChainId.LENSSEPOLIA]: [WETH[ChainId.LENSSEPOLIA]],
 }
 
 // used to construct intermediary pairs for trading
@@ -80,6 +95,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WETH_ONLY,
   [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT, COMP, MKR],
   [ChainId.SEPOLIA]: [...WETH_ONLY[ChainId.SEPOLIA], DAI_SEPOLIA, USDC_SEPOLIA, USDT_SEPOLIA],
+  [ChainId.LENSSEPOLIA]: [...WETH_ONLY[ChainId.LENSSEPOLIA], DAI_LENSSEPOLIA, USDC_LENSSEPOLIA, USDT_LENSSEPOLIA],
 }
 
 /**
@@ -97,6 +113,7 @@ export const SUGGESTED_BASES: ChainTokenList = {
   ...WETH_ONLY,
   [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT],
   [ChainId.SEPOLIA]: [...WETH_ONLY[ChainId.SEPOLIA], DAI_SEPOLIA, USDC_SEPOLIA, USDT_SEPOLIA],
+  [ChainId.LENSSEPOLIA]: [...WETH_ONLY[ChainId.LENSSEPOLIA], DAI_LENSSEPOLIA, USDC_LENSSEPOLIA, USDT_LENSSEPOLIA],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -105,7 +122,8 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT],
   [ChainId.ARBITRUM]: [Air_Social_ARBITRUM, Air_Sports_ARBITRUM, Air_Game_ARBITRUM, Air_Art_ARBITRUM, Air_Finance_ARBITRUM, Air_Commerce_ARBITRUM],
   [ChainId.SEPOLIA]: [Air_Social_SEPOLIA, Air_Sports_SEPOLIA, Air_Game_SEPOLIA, Air_Art_SEPOLIA, Air_Finance_SEPOLIA, Air_Commerce_SEPOLIA],
-  [ChainId.LOCAL]: [Air_Social_LOCAL, Air_Sports_LOCAL, Air_Game_LOCAL, Air_Art_LOCAL, Air_Finance_LOCAL, Air_Commerce_LOCAL]
+  [ChainId.LOCAL]: [Air_Social_LOCAL, Air_Sports_LOCAL, Air_Game_LOCAL, Air_Art_LOCAL, Air_Finance_LOCAL, Air_Commerce_LOCAL],
+  [ChainId.LENSSEPOLIA]: [Air_Social_LENSSEPOLIA, Air_Sports_LENSSEPOLIA, Air_Game_LENSSEPOLIA, Air_Art_LENSSEPOLIA, Air_Finance_LENSSEPOLIA, Air_Commerce_LENSSEPOLIA],
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
@@ -120,6 +138,10 @@ export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } 
   [ChainId.SEPOLIA]: [
     [USDC_SEPOLIA, USDT_SEPOLIA],
     [DAI_SEPOLIA, USDT_SEPOLIA]
+  ],
+  [ChainId.LENSSEPOLIA]: [
+    [USDC_LENSSEPOLIA, USDT_LENSSEPOLIA],
+    [DAI_LENSSEPOLIA, USDT_LENSSEPOLIA]
   ]
 }
 
@@ -249,6 +271,7 @@ export const CHAIN_LIST = [
   { value: 'Airdrop', label: 'Airdrop', icon: '/images/airdrop/chain_airdrop.svg', chainId: ChainId.LOCAL },
   { value: 'Arbitrum', label: 'Arbitrum', icon: '/images/channel/arb.svg', chainId: ChainId.ARBITRUM },
   { value: 'Base', label: 'Base', icon: '/images/channel/arb.svg', chainId: ChainId.BASE },
+  { value: 'LenSepolia', label: 'LenSepolia', icon: '/images/channel/arb.svg', chainId: ChainId.LENSSEPOLIA },
 ]
 
 export const TWITTER_ACTION = [
@@ -296,6 +319,7 @@ export const AddressZero_ETH = {
   [ChainId.SEPOLIA]: new Token(ChainId.SEPOLIA, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
   [ChainId.LOCAL]: new Token(ChainId.MAINNET, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
   [ChainId.AIRDROP]: new Token(ChainId.AIRDROP, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
+  [ChainId.LENSSEPOLIA]: new Token(ChainId.LENSSEPOLIA, ethers.constants.AddressZero, 18, 'ETH', 'ETH'),
 }
 
 export const TEL_URL = 'https://t.me/+zTwxF2bS6a85NzI1'

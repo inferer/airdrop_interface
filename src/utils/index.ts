@@ -128,6 +128,7 @@ const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
   [ChainId.SEPOLIA]: 'sepolia.',
   [ChainId.LOCAL]: 'Local',
   [ChainId.AIRDROP]: 'Airdrop',
+  [ChainId.LENSSEPOLIA]: 'LensSepolia',
 }
 
 export function getRouterAddress(chaidId: ChainId) {
@@ -226,7 +227,7 @@ export function getContract2(address: string, ABI: any): Contract {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   // 创建一个交易签名者，使用钱包和提供者
   const signer = wallet.connect(provider);
-
+  // @ts-ignore
   return new Contract(address, ABI, signer)
 }
 

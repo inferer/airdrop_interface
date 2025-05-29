@@ -188,7 +188,7 @@ export default function WalletModal({
     
     if (connector) {
       if (!chainId) {
-        const hasSetup = await setupNetwork(chainId ?? ChainId.LOCAL)
+        const hasSetup = await setupNetwork(chainId ?? ChainId.LENSSEPOLIA)
         if (hasSetup) {
           // activate(connector)
           activate(connector, undefined, true).catch(async (error) => {

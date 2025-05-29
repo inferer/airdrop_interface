@@ -5,6 +5,7 @@ import sepoliaContractList from '../contractsSepolia'
 import contractsArbitrumList from '../contractsArbitrum'
 import contractsBase from '../contractsBase'
 import contractsAirdrop from '../contractsAirdrop'
+import contractsLensSepolia from '../contractsLensSepolia'
 
 const MULTICALL_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0xeefBa1e63905eF1D7ACbA5a8513c70307C1cE441',
@@ -13,6 +14,7 @@ const MULTICALL_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.SEPOLIA]: sepoliaContractList.multicall,
   [ChainId.LOCAL]: contractList.multicall,
   [ChainId.AIRDROP]: contractsAirdrop.multicall,
+  [ChainId.LENSSEPOLIA]: contractsLensSepolia.multicall,
 }
 
 export { MULTICALL_ABI, MULTICALL_NETWORKS }

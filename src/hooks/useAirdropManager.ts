@@ -302,10 +302,10 @@ export function useAirdropManager() {
   const dispatch = useDispatch<AppDispatch>()
   const { account, chainId } = useActiveWeb3React()
   const airdropList = useUserAirdropConfirmedList()
-  const multi = useMulticallContract()
-  const airdropManager = useAirdropManagerContract()
-  const airdropUserTask = useAirdropUserTaskContract()
-  const airdropReferManager = useAirdropReferManagerContract()
+  const multi: any = useMulticallContract()
+  const airdropManager: any = useAirdropManagerContract()
+  const airdropUserTask: any = useAirdropUserTaskContract()
+  const airdropReferManager: any = useAirdropReferManagerContract()
 
   const handleUpdateAirdropList = useCallback(async () => {
     dispatch(updateAirdropList({ airdropList: [] }))

@@ -99,13 +99,13 @@ export const getLockedAlgAssets = async (multi: Contract, tokenAddress: string, 
 export function useAirdropTokenScore() {
   const dispatch = useDispatch<AppDispatch>()
   const { account, chainId } = useActiveWeb3React()
-  const multi = useMulticallContract()
-  const airdropTokenScore = useAirdropTokenScoreContract()
-  const allAlgToken = useAlgLabelAllTokens()
+  const multi: any = useMulticallContract()
+  const airdropTokenScore: any = useAirdropTokenScoreContract()
+  const allAlgToken: any = useAlgLabelAllTokens()
 
   const handleGetAlgTokenList = useCallback(async () => {
     if (account && multi && chainId) {
-      const algTokens = Object.values(allAlgToken)
+      const algTokens: any = Object.values(allAlgToken)
       if (algTokens.length > 0) {
         const algTokenList = await getUserTokenClaim(multi, algTokens, account, chainId)
         dispatch(updateUserAlgAirdropList({ algAirdropList: algTokenList }))
@@ -226,7 +226,7 @@ export function useAccountTokenSupply(tokenAddress: string, score: number, balan
 
   const { account, chainId } = useActiveWeb3React()
   const multi = useMulticallContract()
-  const airdropTokenScore = useAirdropTokenScoreContract()
+  const airdropTokenScore: any = useAirdropTokenScoreContract()
   useEffect(() => {
     if (account && airdropTokenScore && tokenAddress && score >= 0 && chainId) {
       getLockedAlgAssets(airdropTokenScore, tokenAddress, score * 100, chainId).then((amount) => {

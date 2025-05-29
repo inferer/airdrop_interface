@@ -5,11 +5,13 @@ import contractsSepolia from '../contractsSepolia'
 import { AIRLABEL_TOKEN_LIST_ARBITRUM, AIR_TOKEN_LIST_ARBITRUM, ALGLABEL_TOKEN_LIST_ARBITRUM, ST_TOKEN_LIST_ARBITRUM } from './arbitrum'
 import { AIRLABEL_TOKEN_LIST_BASE, AIR_TOKEN_LIST_BASE, ALGLABEL_TOKEN_LIST_BASE, ST_TOKEN_LIST_BASE } from './base'
 import { AIRLABEL_TOKEN_LIST_AIRDROP, AIR_TOKEN_LIST_AIRDROP, ALGLABEL_TOKEN_LIST_AIRDROP, ST_TOKEN_LIST_AIRDROP } from './airdrop'
+import { AIRLABEL_TOKEN_LIST_LENSSEPOLIA, AIR_TOKEN_LIST_LENSSEPOLIA, ALGLABEL_TOKEN_LIST_LENSSEPOLIA, ST_TOKEN_LIST_LENSSEPOLIA } from './lensSepolia'
 
 export const ST_TOKEN_LIST: TokenInfo[] = [
   ...ST_TOKEN_LIST_ARBITRUM,
   ...ST_TOKEN_LIST_BASE,
   ...ST_TOKEN_LIST_AIRDROP,
+  ...ST_TOKEN_LIST_LENSSEPOLIA,
   {
     "name": "Dai Stablecoin",
     "address": contractsSepolia.Daitoken,
@@ -64,6 +66,7 @@ export const AIR_TOKEN_LIST: TokenInfo[] = [
   ...AIR_TOKEN_LIST_ARBITRUM,
   ...AIR_TOKEN_LIST_BASE,
   ...AIR_TOKEN_LIST_AIRDROP,
+  ...AIR_TOKEN_LIST_LENSSEPOLIA,
   {
     "name": "Dai Stablecoin",
     "address": contractsSepolia.AirDaitoken,
@@ -134,6 +137,7 @@ export const AIRLABEL_TOKEN_LIST: TokenInfo[] = [
   ...AIRLABEL_TOKEN_LIST_ARBITRUM,
   ...AIRLABEL_TOKEN_LIST_BASE,
   ...AIRLABEL_TOKEN_LIST_AIRDROP,
+  ...AIRLABEL_TOKEN_LIST_LENSSEPOLIA,
   {
     "name": "Air-Social",
     "address": contractsSepolia['Air-Social'],
@@ -244,6 +248,7 @@ export const ALGLABEL_TOKEN_LIST: TokenInfo[] = [
   ...ALGLABEL_TOKEN_LIST_ARBITRUM,
   ...ALGLABEL_TOKEN_LIST_BASE,
   ...ALGLABEL_TOKEN_LIST_AIRDROP,
+  ...ALGLABEL_TOKEN_LIST_LENSSEPOLIA,
   {
     "name": "Alg-Social",
     "address": contractsSepolia['Alg-Social'],

@@ -5,6 +5,7 @@ import sepoliaContractList from '../contractsSepolia'
 import contractsArbitrumList from '../contractsArbitrum'
 import contractsBase from '../contractsBase'
 import contractsAirdrop from '../contractsAirdrop'
+import contractsLensSepolia from '../contractsLensSepolia'
 
 const AirdropManager_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '',
@@ -13,6 +14,7 @@ const AirdropManager_NETWORKS: { [chainId in ChainId]: string } = {
   [ChainId.SEPOLIA]: sepoliaContractList.airdropManager,
   [ChainId.LOCAL]: contractList.airdropManager,
   [ChainId.AIRDROP]: contractsAirdrop.airdropManager,
+  [ChainId.LENSSEPOLIA]: contractsLensSepolia.airdropManager,
 }
 
 export { AirdropManager_ABI, AirdropManager_NETWORKS }

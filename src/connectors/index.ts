@@ -19,6 +19,7 @@ export const BASE_BSC_SCAN_URLS = {
   [ChainId.SEPOLIA]: 'https://sepolia-explorer.arbitrum.io',
   [ChainId.LOCAL]: 'https://bscscan.com',
   [ChainId.AIRDROP]: 'https://explorer.inferer.xyz',
+  [ChainId.LENSSEPOLIA]: 'https://explorer.testnet.lens.xyz',
 }
 
 export const BSC_RPC_URLS = [
@@ -49,6 +50,10 @@ export const BSC_RPC_URLS_AIRDROP = [
   'http://124.221.80.199:8545',
 ]
 
+export const BSC_RPC_URLS_LENSSEPOLIA = [
+  'https://rpc.testnet.lens.dev',
+]
+
 export const network = new NetworkConnector({
   urls: { 
     [ChainId.MAINNET]: BSC_RPC_URLS_ABITRUM[0], 
@@ -57,8 +62,9 @@ export const network = new NetworkConnector({
     [ChainId.SEPOLIA]: BSC_RPC_URLS_SEPOLIA[0], 
     [ChainId.LOCAL]: BSC_RPC_URLS_LOCAL[0], 
     [ChainId.AIRDROP]: BSC_RPC_URLS_AIRDROP[0], 
+    [ChainId.LENSSEPOLIA]: BSC_RPC_URLS_LENSSEPOLIA[0], 
   },
-  defaultChainId: ChainId.AIRDROP
+  defaultChainId: ChainId.LENSSEPOLIA
 })
 
 let networkLibrary: Web3Provider | undefined
@@ -67,7 +73,7 @@ export function getNetworkLibrary(): Web3Provider {
 }
 
 export const injected = new InjectedConnector({
-  supportedChainIds: [ChainId.BASE, ChainId.ARBITRUM, ChainId.SEPOLIA, ChainId.LOCAL, ChainId.AIRDROP ]
+  supportedChainIds: [ChainId.BASE, ChainId.ARBITRUM, ChainId.SEPOLIA, ChainId.LOCAL, ChainId.AIRDROP, ChainId.LENSSEPOLIA ]
 })
 
 // mainnet only
@@ -107,11 +113,15 @@ const NETWORK_CONFIG: any = {
     scanURL: BASE_BSC_SCAN_URLS[ChainId.AIRDROP],
     rpcUrls: BSC_RPC_URLS_AIRDROP
   },
+  [ChainId.LENSSEPOLIA]: {
+    name: 'Airdrop Network',
+    scanURL: BASE_BSC_SCAN_URLS[ChainId.LENSSEPOLIA],
+    rpcUrls: BSC_RPC_URLS_LENSSEPOLIA
+  },
 
 }
 
 export const setupNetwork = async (chainId?: number, externalProvider?: any) => {
-  console.log('chainId', chainId)
   const provider = externalProvider || window.ethereum
   if (!chainId || !NETWORK_CONFIG[chainId]) {
     console.error('Invalid chain id')

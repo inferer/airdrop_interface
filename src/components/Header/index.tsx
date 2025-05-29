@@ -170,7 +170,8 @@ const NETWORK_LABELS: { [chainId in ChainId]: string | null } = {
   [ChainId.ARBITRUM]: 'Arbitrum One',
   [ChainId.SEPOLIA]: 'Sepolia',
   [ChainId.LOCAL]: 'Local',
-  [ChainId.AIRDROP]: 'Airdrop'
+  [ChainId.AIRDROP]: 'Airdrop',
+  [ChainId.LENSSEPOLIA]: 'LensSepolia'
 }
 
 export default function Header() {

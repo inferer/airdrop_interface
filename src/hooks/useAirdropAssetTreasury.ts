@@ -164,7 +164,7 @@ export function useAirdropAssetTreasury() {
   const dispatch = useDispatch<AppDispatch>()
   const { account, library, chainId } = useActiveWeb3React()
 
-  const multi = useMulticallContract()
+  const multi: any = useMulticallContract()
   const airLabelAllTokens = useAirLabelAllTokens()
   const algLabelAllTokens = useAlgLabelAllTokens()
   const usdtAllTokens = useUSDTAllTokens()
@@ -385,7 +385,7 @@ export const getFeeOn = async (multi: Contract, chainId: number, source?: string
 
 export function useAirdropAssetTreasuryFeeOn() {
   const { account, library, chainId } = useActiveWeb3React()
-  const multi = useMulticallContract()
+  const multi: any = useMulticallContract()
   const airdropAssetTreasury = useAirdropAssetTreasuryContract()
   const { handleShow } = useShowToast()
   const [feeStatus, setFeeStatus] = useState(0)
