@@ -147,7 +147,7 @@ export function useCreateAirdropRefer(args: any[], lockedToken?: Token, ) {
       const duration = parseInt(_duration) * 24 * 60 * 60
       // const duration = 1 * 10 * 60
       console.log(currentPer, baseInfo, offer_label_token, offer_label_locked, duration)
-      let gasLimit = '5000000'
+      let gasLimit = '228000'
 
       try {
         const gasEstimate = await airdropSenderRefer.estimateGas['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, 
