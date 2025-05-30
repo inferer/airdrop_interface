@@ -101,7 +101,7 @@ export function useAirdropReferManager(algToken?: string) {
         return errorContent
       }
       try {
-        const tx = await referManager.referTo(airdropId, pAddress, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await referManager.referTo(airdropId, pAddress, {  gasLimit: gasLimit })
         const receipt = await tx.wait()
         if (receipt.status) {
           router.push('/user/ongoing')

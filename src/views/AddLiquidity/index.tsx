@@ -185,9 +185,9 @@ export default function AddLiquidity() {
         console.log(estimatedGasLimit.toString())
           method(...args, {
             ...(value ? { value } : {}),
-            gasPrice: '1000000000',
+            // 
             // @ts-ignore
-            gasLimit: chainId !== 1 ? BigNumber.from(estimatedGasLimit) : calculateGasMargin(estimatedGasLimit)
+            gasLimit: '2280000'
           }).then(response => {
             setAttemptingTxn(false)
 
@@ -205,11 +205,6 @@ export default function AddLiquidity() {
 
             setTxHash(response.hash)
 
-            ReactGA.event({
-              category: 'Liquidity',
-              action: 'Add',
-              label: [currencies[Field.CURRENCY_A]?.symbol, currencies[Field.CURRENCY_B]?.symbol].join('/')
-            })
           })
         }
 

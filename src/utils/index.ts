@@ -11,6 +11,7 @@ import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '
 import { TokenAddressMap } from '../state/lists/hooks'
 import { BSC_RPC_URLS_LOCAL } from '../connectors';
 import Web3 from 'web3'
+import bscRpcProvider from './providers';
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -221,6 +222,33 @@ export function getContract3(address: string, ABI: any, library: Web3Provider, a
   // @ts-ignore
   const web3 = new Web3(window.ethereum)
   return new web3.eth.Contract(ABI, address) as any
+  return new Contract(address, ABI, getProviderOrSigner(library, account) as any)
+}
+export function getContract4(address: string, ABI: any, library: Web3Provider, account?: string): Contract {
+  if (!isAddress(address) || address === AddressZero) {
+    throw Error(`Invalid 'address' parameter '${address}'.`)
+  }
+  // @ts-ignore
+  const web3 = new Web3(window.ethereum || bscRpcProvider)
+  const contract = new web3.eth.Contract(ABI, address) as any
+  ABI.map((fun: any) => {
+    if (fun.type === 'function') {
+      if (fun.stateMutability.toLowerCase() === 'view') {
+        contract[fun.name] = (...args: any) => {
+          return contract.methods[fun.name](...args).call()
+        }
+      } else {
+        
+        contract[fun.name] = (...args: any) => {
+          const overrides = args[args.length - 1]; // 最后一个参数
+          const params = args.slice(0, -1);
+          return contract.methods[fun.name](...params).send(overrides)
+        }
+      }
+    }
+  })
+
+  return contract
   return new Contract(address, ABI, getProviderOrSigner(library, account) as any)
 }
 export function getContract2(address: string, ABI: any): Contract {

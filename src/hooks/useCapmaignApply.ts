@@ -73,7 +73,7 @@ export function useCampaignApply(algToken?: string) {
       }
       console.log('gasLimit: ', gasLimit)
       try {
-        const tx = await campaignApply.applyCampaign(campaignId, arwId, bonus, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await campaignApply.applyCampaign(campaignId, arwId, bonus, {  gasLimit: gasLimit })
         console.log(tx)
         const receipt = await tx.wait()
 
@@ -112,7 +112,7 @@ export function useCampaignApply(algToken?: string) {
       }
       console.log('gasLimit: ', gasLimit)
       try {
-        const tx = await campaignApply.updateApplyCampaign(campaignId, arwId, bonus, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await campaignApply.updateApplyCampaign(campaignId, arwId, bonus, {  gasLimit: gasLimit })
         console.log(tx)
         const receipt = await tx.wait()
         if (receipt.status) {
@@ -153,7 +153,7 @@ export function useCampaignApply(algToken?: string) {
       }
       console.log('gasLimit: ', gasLimit)
       try {
-        const tx = await campaignApply.voteCampaign(campaignId, index, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await campaignApply.voteCampaign(campaignId, index, {  gasLimit: gasLimit })
         console.log(tx)
         const receipt = await tx.wait()
         if (receipt.status) {

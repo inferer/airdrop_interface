@@ -35,7 +35,6 @@ export function useCreateCallback(
     currencies,
     inputError: swapInputError
   } = useDerivedSwapInfo()
-
   const swapCalls = useSwapCallArguments(v2Trade, allowedSlippage, deadline, recipientAddressOrName)
   let lockedTokenAir
   let lockedLabel
@@ -121,15 +120,15 @@ export function useCampaignSender(lockedToken?: Token, ) {
         return
       }
       try {
-        const tx = await campaignSender.methods.createCampaign(baseInfo, offer_label_token, offer_label_locked, awardList)
-          .send({from: account, gasLimit: '228000'})
-        console.log(tx)
-        // const tx = await campaignSender['createCampaign'](baseInfo, offer_label_token, offer_label_locked, awardList, { gasPrice: '1000000000', gasLimit: gasLimit, value: isETH ? _offerAmount : '0' })
-        // const receipt = await tx.wait()
-        // if (receipt.status) {
-        //   localStorage.removeItem(INFERER_AIRDROP_SOURCE)
-        //   router.push('/project/campaigns')
-        // }
+        // const tx = await campaignSender.methods.createCampaign(baseInfo, offer_label_token, offer_label_locked, awardList)
+        //   .send({from: account, gasLimit: '228000'})
+        
+        const tx = await campaignSender['createCampaign'](baseInfo, offer_label_token, offer_label_locked, awardList, { gasLimit: gasLimit, value: isETH ? _offerAmount : '0' })
+        const receipt = await tx.wait()
+        if (receipt.status) {
+          localStorage.removeItem(INFERER_AIRDROP_SOURCE)
+          router.push('/project/campaigns')
+        }
       } catch(error) {
         console.log(error)
       }

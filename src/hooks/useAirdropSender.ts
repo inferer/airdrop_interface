@@ -169,7 +169,7 @@ export function useCreateAirdrop(args: any[], lockedToken?: Token, ) {
 
       }
       try {
-        const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit, value: isETH ? lockedAmountA : '0' })
+        const tx = await airdropSender['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, {  gasLimit: gasLimit, value: isETH ? lockedAmountA : '0' })
         const receipt = await tx.wait()
         if (receipt.status) {
           localStorage.removeItem(INFERER_AIRDROP_SOURCE)

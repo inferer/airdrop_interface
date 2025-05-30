@@ -12,7 +12,7 @@ import UNISOCKS_ABI from '../constants/abis/unisocks.json'
 import WETH_ABI from '../constants/abis/weth.json'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
-import { getContract, getContract3 } from '../utils'
+import { getContract, getContract3, getContract4 } from '../utils'
 import { useActiveWeb3React } from './index'
 import { AirdropSender_ABI, AirdropSender_NETWORKS } from '../constants/airdropSender'
 import { AirdropReceiver_ABI, AirdropReceiver_NETWORKS } from '../constants/airdropReceiver'
@@ -46,7 +46,7 @@ function useContract2(address: string | undefined, ABI: any, withSignerIfPossibl
   return useMemo(() => {
     if (!address || !ABI || !library) return null
     try {
-      return getContract3(address, ABI, library, withSignerIfPossible && account ? account : undefined)
+      return getContract(address, ABI, library, withSignerIfPossible && account ? account : undefined)
     } catch (error) {
       console.error('Failed to get contract', error)
       return null

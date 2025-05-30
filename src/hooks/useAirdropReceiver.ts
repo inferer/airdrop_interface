@@ -87,7 +87,7 @@ export function useAirdropReceiver(algToken?: string) {
         return
       }
       try {
-        const tx = await airdropReceiver.confirmTaskMulti(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await airdropReceiver.confirmTaskMulti(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, {  gasLimit: gasLimit })
         const receipt = await tx.wait()
         if (receipt.status) {
           router.push('/user/ongoing')
@@ -145,7 +145,7 @@ export function useAirdropReceiver(algToken?: string) {
         return
       }
       try {
-        const tx = await airdropReceiver.registerTask(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await airdropReceiver.registerTask(airdropId, algToken?.address, airToken, String(accountScore * 100), proof, {  gasLimit: gasLimit })
         const receipt = await tx.wait()
         if (receipt.status) {
           router.push('/contract-demo')
@@ -221,7 +221,7 @@ export function useAirdropReceiver(algToken?: string) {
       }
       console.log('gasLimit: ', gasLimit)
       try {
-        const tx = await airdropReceiver.completeTaskMulti(userAddress, taskIds, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await airdropReceiver.completeTaskMulti(userAddress, taskIds, {  gasLimit: gasLimit })
         console.log(tx)
         const receipt = await tx.wait()
         if (receipt.status) {
@@ -338,7 +338,7 @@ export function useProjectContractDemo() {
         return
       }
       try {
-        const tx = await contractDemo[funName](...parameterValue, { gasPrice: '1000000000', gasLimit: gasLimit })
+        const tx = await contractDemo[funName](...parameterValue, {  gasLimit: gasLimit })
         const receipt = await tx.wait()
         if (receipt.status) {
           // handleShow({ type: 'success', content: `Success.`, title: 'Success' })

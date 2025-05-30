@@ -1,6 +1,6 @@
 import { ChainId } from '@uniswap/sdk'
 import { TokenInfo } from '@uniswap/token-lists'
-import contractsLensSepolia from '../contractsLensSepolia'
+import contractsLensSepolia, { campaignContracts } from '../contractsLensSepolia'
 
 export const ST_TOKEN_LIST_LENSSEPOLIA: TokenInfo[] = [
   {
@@ -114,6 +114,14 @@ export const AIRLABEL_TOKEN_LIST_LENSSEPOLIA: TokenInfo[] = [
     "chainId": ChainId.LENSSEPOLIA,
     "logoURI": "/images/tokens/usdt.png"
   },
+  {
+    "name": "Air-Campaign",
+    "address": campaignContracts['Air-Campaign'],
+    "symbol": "Air-Campaign",
+    "decimals": 18,
+    "chainId": ChainId.LENSSEPOLIA,
+    "logoURI": "/images/tokens/usdt.png"
+  },
 ]
 
 export const ALGLABEL_TOKEN_LIST_LENSSEPOLIA: TokenInfo[] = [
@@ -161,6 +169,14 @@ export const ALGLABEL_TOKEN_LIST_LENSSEPOLIA: TokenInfo[] = [
     "name": "Alg-Commerce",
     "address": contractsLensSepolia['Alg-Commerce'],
     "symbol": "Alg-Commerce",
+    "decimals": 18,
+    "chainId": ChainId.LENSSEPOLIA,
+    "logoURI": "/images/tokens/usdt.png"
+  },
+  {
+    "name": "Alg-Campaign",
+    "address": campaignContracts['Alg-Campaign'],
+    "symbol": "Alg-Campaign",
     "decimals": 18,
     "chainId": ChainId.LENSSEPOLIA,
     "logoURI": "/images/tokens/usdt.png"

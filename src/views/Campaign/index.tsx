@@ -59,7 +59,6 @@ export default function Create() {
   } = useCreateCallback(lockedCurrency, undefined, undefined, null)
   
   const { onCurrencySelection } = useSwapActionHandlers()
-
   const lockedCurrencyBalance = useCurrencyBalance(account ?? undefined, lockedCurrency)
   const airCampaignAmount = useAirCampaignAmount()
   const { uploadStatus, handleUploadStr } = useIry()
