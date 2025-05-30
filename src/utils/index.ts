@@ -10,6 +10,7 @@ import { OWER_ADDRESS, ROUTER_ADDRESS2 } from '../constants'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@uniswap/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
 import { BSC_RPC_URLS_LOCAL } from '../connectors';
+import Web3 from 'web3'
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -211,6 +212,15 @@ export function getContract(address: string, ABI: any, library: Web3Provider, ac
     throw Error(`Invalid 'address' parameter '${address}'.`)
   }
 
+  return new Contract(address, ABI, getProviderOrSigner(library, account) as any)
+}
+export function getContract3(address: string, ABI: any, library: Web3Provider, account?: string): Contract {
+  if (!isAddress(address) || address === AddressZero) {
+    throw Error(`Invalid 'address' parameter '${address}'.`)
+  }
+  // @ts-ignore
+  const web3 = new Web3(window.ethereum)
+  return new web3.eth.Contract(ABI, address) as any
   return new Contract(address, ABI, getProviderOrSigner(library, account) as any)
 }
 export function getContract2(address: string, ABI: any): Contract {

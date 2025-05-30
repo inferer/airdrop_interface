@@ -157,12 +157,15 @@ export function useCreateAirdropRefer(args: any[], lockedToken?: Token, ) {
 
       }
       try {
-        const tx = await airdropSenderRefer['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit, value: isETH ? lockedAmountA : '0' })
-        const receipt = await tx.wait()
-        if (receipt.status) {
-          localStorage.removeItem(INFERER_AIRDROP_SOURCE)
-          router.push('/project/ongoing')
-        }
+        const tx = await airdropSenderRefer.methods.createAirdrop(baseInfo, offer_label_token, offer_label_locked, duration)
+          .send({from: account, gasLimit: '2280000'})
+        console.log(tx)
+        // const tx = await airdropSenderRefer['createAirdrop'](baseInfo, offer_label_token, offer_label_locked, duration, { gasPrice: '1000000000', gasLimit: gasLimit, value: isETH ? lockedAmountA : '0' })
+        // const receipt = await tx.wait()
+        // if (receipt.status) {
+        //   localStorage.removeItem(INFERER_AIRDROP_SOURCE)
+        //   router.push('/project/ongoing')
+        // }
       } catch(error) {
         console.log(error)
       }

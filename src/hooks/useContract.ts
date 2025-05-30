@@ -12,7 +12,7 @@ import UNISOCKS_ABI from '../constants/abis/unisocks.json'
 import WETH_ABI from '../constants/abis/weth.json'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
-import { getContract } from '../utils'
+import { getContract, getContract3 } from '../utils'
 import { useActiveWeb3React } from './index'
 import { AirdropSender_ABI, AirdropSender_NETWORKS } from '../constants/airdropSender'
 import { AirdropReceiver_ABI, AirdropReceiver_NETWORKS } from '../constants/airdropReceiver'
@@ -34,6 +34,19 @@ function useContract(address: string | undefined, ABI: any, withSignerIfPossible
     if (!address || !ABI || !library) return null
     try {
       return getContract(address, ABI, library, withSignerIfPossible && account ? account : undefined)
+    } catch (error) {
+      console.error('Failed to get contract', error)
+      return null
+    }
+  }, [address, ABI, library, withSignerIfPossible, account])
+}
+function useContract2(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
+  const { library, account } = useActiveWeb3React()
+
+  return useMemo(() => {
+    if (!address || !ABI || !library) return null
+    try {
+      return getContract3(address, ABI, library, withSignerIfPossible && account ? account : undefined)
     } catch (error) {
       console.error('Failed to get contract', error)
       return null
@@ -105,7 +118,7 @@ export function useAirdropSenderContract(): Contract | null {
 
 export function useAirdropSenderReferContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId && AirdropSenderRefer_NETWORKS[chainId], AirdropSenderRefer_ABI, true)
+  return useContract2(chainId && AirdropSenderRefer_NETWORKS[chainId], AirdropSenderRefer_ABI, true)
 }
 
 export function useAirdropReceiverContract(): Contract | null {
@@ -145,7 +158,7 @@ export function useContractDemoContract(): Contract | null {
 
 export function useCampaignSenderContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId && CampaignSender_NETWORKS[chainId], CampaignSender_ABI, true)
+  return useContract2(chainId && CampaignSender_NETWORKS[chainId], CampaignSender_ABI, true)
 }
 
 export function useCampaignApplyContract(): Contract | null {
