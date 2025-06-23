@@ -83,7 +83,7 @@ export function useAirdropReferManager(algToken?: string) {
   const handleReferTo2 = useCallback(async (airdropId: string, pAddress: string) => {
     if (referManager && account) {
       setConfirmStatus(1)
-      let gasLimit = '5000000'
+      let gasLimit = '228000'
       try {
         const gasEstimate = await referManager.estimateGas['referTo'](airdropId, pAddress)
         gasLimit = gasEstimate.toString()
@@ -97,8 +97,8 @@ export function useAirdropReferManager(algToken?: string) {
           'You have already referred this airdrop.' : 
           message
         handleShow({ type: 'error', content: errorContent, title: 'Error' })
-        setConfirmStatus(2)
-        return errorContent
+        // setConfirmStatus(2)
+        // return errorContent
       }
       try {
         const tx = await referManager.referTo(airdropId, pAddress, {  gasLimit: gasLimit })
